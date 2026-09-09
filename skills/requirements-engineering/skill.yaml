@@ -1,0 +1,91 @@
+id: SK-DISC-001
+slug: requirements-engineering
+name: Requirements engineering
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 1
+domain: DISC
+
+purpose: >-
+  Turn a vague or partially-specified request into explicit, testable
+  requirements and surface hidden constraints before any design or code work
+  begins.
+scope: >-
+  Functional and non-functional requirement elicitation, acceptance-criteria
+  authoring, constraint and ambiguity surfacing. Does not choose an
+  architecture or technology (solution-architecture) and does not break work
+  into an implementation plan (technical-planning).
+expertise: Senior engineer operating as a requirements analyst / technical lead.
+description: >-
+  Elicit and structure requirements from an ambiguous or high-stakes request:
+  explicit asks, implicit constraints, non-functional requirements, and
+  acceptance criteria. Use when scoping a new feature/system or when a request
+  is under-specified. Not for requests that are already explicit, or for
+  choosing how to build something (that's solution-architecture).
+
+activation_conditions:
+  - The request is under-specified, ambiguous, or open to more than one reasonable interpretation
+  - A new feature or system is being scoped from a short/informal description
+  - The request implies but doesn't state a constraint (scale, compliance, audience, environment)
+  - The user explicitly asks for requirements/acceptance criteria
+non_activation_conditions:
+  - The requirements are already explicit, unambiguous, and narrowly scoped (e.g. "fix this off-by-one on line 42")
+  - A trivial/mechanical change with a single obvious interpretation
+  - The task is choosing HOW to build an already-clear requirement (route to solution-architecture)
+activation_mode: auto
+
+inputs:
+  - name: request
+    description: The user's task/request in its original form.
+    required: true
+  - name: existing-context
+    description: Existing docs, tickets, prior architecture decisions, or conversation history bearing on scope.
+    required: false
+required_context:
+  - The raw request text
+optional_context:
+  - Existing product/technical documentation
+  - Related tickets or prior decisions
+  - Known organizational constraints (compliance regime, target audience, existing stack)
+
+outputs:
+  - name: structured-requirements
+    kind: analysis
+    description: Functional + non-functional requirements, organized and de-duplicated.
+  - name: acceptance-criteria
+    kind: analysis
+    description: Independently verifiable acceptance criteria per requirement.
+  - name: open-questions
+    kind: analysis
+    description: Material ambiguities that were not assumed away, surfaced explicitly.
+
+depends_on_skills: []
+related_skills: [SK-DISC-002, SK-DISC-003, SK-DISC-004]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: engineering-convention
+last_verified: "2026-09-09"
+
+owned_knowledge:
+  - Requirement elicitation method and acceptance-criteria authoring
+decision_framework_present: true
+
+failure_handling:
+  - If the user is unavailable to clarify a blocking ambiguity, state the assumption explicitly and proceed narrowly rather than blocking indefinitely or guessing silently.
+  - If a stated requirement conflicts with a hard constraint already on record, surface the conflict rather than silently resolving it in either direction.
+escalation:
+  - A requirement implying a legal/compliance obligation (data residency, accessibility law, licensing, data retention) is flagged to the user explicitly rather than assumed or quietly dropped.
+verification:
+  - Every acceptance criterion is independently testable (a reviewer could mark it pass/fail without further interpretation).
+  - No requirement states a specific technology/implementation as if it were the constraint itself (that's a decision, not a requirement — flag and separate it).
+  - No scope was invented beyond what was requested or an explicitly stated assumption.
+evaluation_criteria:
+  - Given an ambiguous request, produces acceptance criteria covering the stated goal and raises the material ambiguities a reviewer would flag, without inventing unrequested scope.
+  - Given a request with an implicit non-functional constraint (e.g. "for our enterprise customers"), surfaces it as an explicit requirement rather than missing it.
+  - Given a request that names a technology as if it were a requirement, separates the underlying need from the implementation choice.
+
+adapter_hints: {}

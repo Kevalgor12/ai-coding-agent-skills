@@ -1,0 +1,92 @@
+id: SK-DISC-004
+slug: project-management
+name: Project management
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 1
+domain: DISC
+
+purpose: >-
+  Frame work as trackable items and keep status legible across a
+  longer-running effort — issues/milestones, status summaries, and
+  changelog/release-notes drafting.
+scope: >-
+  Issue/milestone framing, status tracking, and changelog/release-note
+  drafting. Deliberately thin: this library's research covers GitHub issue
+  tracking but no dedicated project-management tooling, so this skill scopes
+  to what's grounded rather than inventing process. Not commit/branch text
+  (that's git-conventions), not git operations/PR mechanics (that's
+  git-workflow), and not the task plan itself (that's technical-planning).
+expertise: Senior engineer keeping a longer effort's status honest and lightweight, not a dedicated PM function.
+description: >-
+  Frame work as issues/milestones, summarize status, and draft changelog or
+  release-note entries for a longer-running effort. Use when an effort spans
+  more than a single change and needs tracking, or when release notes are
+  requested. Not for a one-off change, not for commit/branch text
+  (git-conventions), and not for git operations (git-workflow).
+
+activation_conditions:
+  - The effort is long-running or multi-session and benefits from tracked status
+  - The user asks for issue/milestone framing, a status summary, or release notes/changelog
+  - A completed change needs a changelog entry
+non_activation_conditions:
+  - A one-off, single-session change with nothing to track over time
+  - No issue tracker or changelog convention is in use and none was requested
+  - The ask is about commit/branch text (route to git-conventions) or git operations/PR mechanics (route to git-workflow)
+activation_mode: manual
+
+inputs:
+  - name: work-or-change
+    description: The task plan, completed change, or effort to frame/track.
+    required: true
+  - name: tracker-state
+    description: Existing issue/PR state, if a tracker is in use.
+    required: false
+required_context:
+  - What was done or is planned, at a level someone outside the immediate work could understand
+optional_context:
+  - Existing issue-tracker conventions (labels, templates, milestone structure)
+  - Existing changelog format/history
+
+outputs:
+  - name: issue-or-milestone-draft
+    kind: artifact
+    description: A well-formed issue/milestone description.
+  - name: status-summary
+    kind: analysis
+    description: A concise status update for a longer effort.
+  - name: changelog-entry
+    kind: artifact
+    description: A changelog/release-note entry matching the actual change.
+
+depends_on_skills: []
+related_skills: [SK-CONV-001, SK-CONV-008, SK-INFRA-002, SK-DISC-003]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, git]
+execution_tier: C
+capability_fallbacks:
+  git: "No tracker/GitHub write access → produce advisory issue/milestone/changelog text for the user to file themselves, clearly labeled as not yet filed (Tier A behavior)."
+
+grounding: engineering-convention
+last_verified: "2026-09-09"
+
+owned_knowledge:
+  - Issue/milestone framing and changelog/release-note drafting method
+decision_framework_present: true
+
+failure_handling:
+  - If no tracker is accessible, produce the drafted text as advisory output rather than claiming it was filed.
+  - If the change is too small to be worth tracking, say so rather than manufacturing an issue for it.
+verification:
+  - The changelog entry accurately reflects the actual change, not an idealized description of it.
+  - An issue draft has enough context for someone without the current conversation to act on it.
+escalation:
+  - Posting to an external tracker/PR (outward-facing) is only done with explicit user confirmation; the drafted text is otherwise presented for the user to post themselves.
+evaluation_criteria:
+  - Given a completed change, drafts a changelog entry that matches the change and a well-formed, actionable issue.
+  - Degrades to advisory text (not a claimed filing) when no tracker/GitHub access exists.
+  - Does not manufacture tracking overhead for a change too small to warrant it.
+
+adapter_hints: {}
