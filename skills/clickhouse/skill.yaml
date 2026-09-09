@@ -1,0 +1,268 @@
+id: SK-TECH-clickhouse
+slug: clickhouse
+name: ClickHouse
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-DATA-003]   # database-operations — FORWARD REFERENCE, not yet authored in this library
+
+purpose: >-
+  Apply ClickHouse correctly and version-appropriately as a columnar OLAP
+  store — MergeTree table-engine design, sparse primary-key indexing,
+  partitioning, insert strategy, and SQL-driven RBAC — used to complement,
+  not replace, a transactional (OLTP) primary datastore.
+scope: >-
+  ClickHouse-specific design and operations once ClickHouse is (or is being
+  seriously evaluated as) part of the stack. Does not own the store-shape
+  decision itself — whether a columnar/OLAP store is warranted at all is
+  decided by the parent's parent, data-modeling (SK-DATA-001), which this
+  skill treats as already settled. Generic query-tuning/indexing/transaction
+  method across engines is owned by SK-DATA-003 (database-operations, a
+  forward reference — not yet authored in this library); this skill supplies
+  ClickHouse's concrete specifics only.
+expertise: ClickHouse / OLAP database engineer.
+description: >-
+  ClickHouse-specific columnar OLAP: MergeTree engine family, sparse
+  primary-key indexing (1 mark per ~8,192-row granule), partitioning,
+  batch/async insert strategy, SQL-driven RBAC (5 entity types), and
+  version-gated 26.x behavior (max_insert_threads auto-parallel as of 26.8).
+  Use once analytical load is actually degrading an OLTP primary. Not for
+  the store-shape decision itself (data-modeling), OLTP schema/query design
+  (PostgreSQL/MySQL), or "for analytics later" premature adoption.
+
+activation_conditions:
+  - A ClickHouse client/driver, connection config, or clickhouse-server/clickhouse-local/chDB reference is present in the stack
+  - The task names ClickHouse or a ClickHouse-specific feature (MergeTree, ORDER BY primary key, partitioning key, skip index, async_insert, ClickHouse Keeper)
+  - An existing OLTP primary (PostgreSQL/MySQL) has analytical/aggregate query load that is demonstrably degrading it, and adding ClickHouse as a second store is being evaluated or implemented
+non_activation_conditions:
+  - No analytical load has actually degraded the primary store yet — "we might need analytics later" is premature adoption (route to SK-DATA-001's decision framework instead)
+  - The store-shape decision itself is still open (relational vs. document vs. columnar) — route to SK-DATA-001
+  - The task is OLTP schema or query design against PostgreSQL/MySQL with no ClickHouse in play — route to SK-TECH-postgresql / SK-TECH-mysql
+  - Generic cross-engine query/index/transaction-tuning method with ClickHouse not actually in the stack — route to SK-DATA-003 (forward reference)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The ClickHouse task (table/engine design, insert-strategy sizing, query/skip-index tuning, RBAC setup, version upgrade).
+    required: true
+  - name: workload-and-oltp-context
+    description: The analytical query pattern, current OLTP primary, and evidence that it is actually degraded by analytical load (not just anticipated).
+    required: false
+  - name: ch-version
+    description: The ClickHouse version in use (server, Cloud, or container image tag) — needed for version-correct guidance, notably max_insert_threads behavior.
+    required: false
+required_context:
+  - Evidence that analytical/aggregate load is real and currently degrading (or would clearly degrade) the OLTP primary — not a hypothetical future need.
+optional_context:
+  - The ClickHouse version in use.
+  - Existing table engine, ORDER BY key, and partitioning scheme, if a table already exists.
+  - Insert volume/frequency and current batching approach.
+
+outputs:
+  - name: schema-or-table-ddl
+    kind: edit
+    description: MergeTree-family table DDL (engine choice, ORDER BY/primary key, PARTITION BY, skip indices) reflecting version-correct ClickHouse features.
+  - name: insert-and-query-changes
+    kind: edit
+    description: Insert-strategy changes (batch sizing, async_insert config) or query/skip-index adjustments addressing an observed bottleneck.
+  - name: analysis
+    kind: analysis
+    description: Recommendation on whether ClickHouse adoption is warranted yet, with rationale, or ClickHouse-specific design rationale with the version it targets.
+  - name: commands-run
+    kind: command-run
+    description: clickhouse-client/clickhouse-local SQL or CLI invocations executed to diagnose or verify, when shell is available.
+
+depends_on_skills: []
+related_skills: [SK-TECH-postgresql, SK-TECH-mysql, SK-DATA-001]
+conflicts_with: []
+# ClickHouse is positioned as a complementary OLAP store alongside an OLTP
+# primary, not a mutually-exclusive alternative to PostgreSQL/MySQL — the
+# library's own architecture-patterns research treats "OLTP + separate OLAP"
+# as a standard complementary pattern, not a replacement decision.
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+# Proposing DDL/insert/query changes is advisory (file-only); running
+# clickhouse-client, EXPLAIN, or version-upgrade commands needs shell.
+# No capability_fallbacks block required (Tier B, not C) — degrades to
+# advisory per failure_handling if shell is unavailable.
+
+grounding: official-docs
+source_references:
+  - url: https://clickhouse.com/docs
+    title: "ClickHouse Docs — Overview / Core Concepts"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/get-started/about/deployment-modes
+    title: "ClickHouse — Deployment Modes (Server, Cloud, CLI, clickhouse-local, chDB)"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/about-us/distinctive-features
+    title: "ClickHouse — Distinctive Features"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/en/introduction/features_considered_disadvantages
+    title: "ClickHouse — Features Considered Disadvantages (no general transactions, inefficient point queries)"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/architecture/introduction
+    title: "ClickHouse — Architecture Introduction (replica, shard, Keeper)"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/engines/table-engines/mergetree-family/mergetree
+    title: "ClickHouse — MergeTree Table Engine"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/best-practices
+    title: "ClickHouse — Best Practices Index"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/best-practices/selecting-an-insert-strategy
+    title: "ClickHouse — Selecting an Insert Strategy"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/best-practices/minimize-optimize-joins
+    title: "ClickHouse — Minimize and Optimize JOINs"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/best-practices/choosing-a-partitioning-key
+    title: "ClickHouse — Choosing a Partitioning Key"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/best-practices/use-data-skipping-indices-where-appropriate
+    title: "ClickHouse — Use Data Skipping Indices Where Appropriate"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/optimize/avoid-nullable-columns
+    title: "ClickHouse — Avoid Nullable Columns"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/optimize/query-optimization
+    title: "ClickHouse — Query Optimization Workflow (Diagnose/Isolate/Optimize)"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/best-practices/avoid-mutations
+    title: "ClickHouse — Avoid Mutations"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/knowledgebase/maximum_number_of_tables_and_databases
+    title: "ClickHouse — Maximum Number of Tables and Databases (scale ceilings)"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/operations/access-rights
+    title: "ClickHouse — Access Control and Account Management (RBAC)"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/operations/configuration-files
+    title: "ClickHouse — Configuration Files (config.d/, encrypted_by, from_env)"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/guides/sre/network-ports
+    title: "ClickHouse — Network Ports Reference"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/operations/settings/query-complexity
+    title: "ClickHouse — Restrictions on Query Complexity"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/resources/develop-contribute/contribute/tests
+    title: "ClickHouse — Testing (ClickHouse's own test suite: functional, integration, unit, stress, fuzzing)"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/troubleshooting
+    title: "ClickHouse — Troubleshooting"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/faq/operations/production
+    title: "ClickHouse — FAQ: Which Version to Use in Production (Stable vs. LTS)"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/operations/update
+    title: "ClickHouse — Updating ClickHouse (rolling upgrades, downgrade policy, Keeper)"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/resources/changelogs/oss/2026
+    title: "ClickHouse — 2026 OSS Changelog (26.8 LTS, max_insert_threads breaking change)"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: https://clickhouse.com/docs/migrations/postgresql/overview
+    title: "ClickHouse — Migrating from PostgreSQL (OLTP-to-OLAP framing)"
+    via: research/technologies/clickhouse.md
+    retrieved: "2026-09-09"
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: "Technology Decision Matrix — §2 Database model: PostgreSQL vs. MySQL vs. MongoDB vs. ClickHouse"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-09"
+  - url: research/knowledge-maps/version-matrix.md
+    title: "Version Matrix — ClickHouse row (LTS/Stable tracks, max_insert_threads, skip-index deprecation, Keeper)"
+    via: research/knowledge-maps/version-matrix.md
+    retrieved: "2026-09-09"
+
+covered_versions:
+  clickhouse: ">=26.2 <=26.8"
+version_sensitive_claims:
+  - claim: max_insert_threads default changed from 1 to auto, making INSERT SELECT parallelized by default — a breaking change affecting resulting part creation and row ordering compared to prior versions' single-threaded-by-default behavior.
+    applies_to: ">=26.8"
+    source_ref: research/technologies/clickhouse.md §13; research/knowledge-maps/version-matrix.md
+  - claim: tokenbf_v1/ngrambf_v1 Bloom-filter skip-index types are deprecated.
+    applies_to: ">=26.2"
+    source_ref: research/technologies/clickhouse.md §5; research/knowledge-maps/version-matrix.md
+  - claim: "26.8 is the documented LTS release (dated 2026-08-27); LTS ships twice yearly (historically March/August) with >=1-year support, current and prior LTS overlapping. 26.3 is believed to be the prior LTS line (inference from search metadata, not a directly fetched docs page)."
+    applies_to: "as of research date 2026-09-09"
+    source_ref: research/technologies/clickhouse.md §12; research/knowledge-maps/version-matrix.md
+  - claim: "Stable releases publish monthly; the three most recent get bug-fix support, and Stable (not LTS) is the documented default recommendation for production. Exact support-duration wording is flagged by the source research as obtained via search summary, not a directly fetched policy page, and needs re-verification."
+    applies_to: "as of research date 2026-09-09; Unresolved: exact support-duration figures"
+    source_ref: research/technologies/clickhouse.md §12, Unresolved item 2
+  - claim: 26.8 also changed X-ClickHouse-Format header precedence (now authoritative over FORMAT clause), reinterpreted unquoted JSON numbers in JSONEachRow as Unix timestamps for DateTime columns, removed the library dictionary source, and removed the Apache-Arrow-library-based reader/writer in favor of a native implementation.
+    applies_to: ">=26.8"
+    source_ref: research/technologies/clickhouse.md §13
+  - claim: Cluster node version skew — downgrades are supported only to versions less than one year old, and only if no newer features introduced by the newer version have been used; once used, downgrade is not possible. Nodes in the same cluster differing by more than a year risk instability/data unavailability; use intermediate "stepping stone" versions for large jumps.
+    applies_to: "general policy, current as of research date 2026-09-09"
+    source_ref: research/technologies/clickhouse.md §11
+  - claim: ClickHouse Keeper does not need to be upgraded in lockstep with the ClickHouse server, unless a security fix specifically targets Keeper or Apache ZooKeeper.
+    applies_to: "general policy, current as of research date 2026-09-09"
+    source_ref: research/technologies/clickhouse.md §11
+last_verified: "2026-09-09"
+reverify_triggers:
+  - A new ClickHouse LTS or Stable release changes the max_insert_threads default or the 26.8 breaking-change set again
+  - clickhouse.com/legal/support-services-policy is directly fetched and confirms/corrects the Stable "3 most recent releases" and LTS "1-year overlap" support-duration figures currently flagged Unresolved
+  - The dedicated ClickHouse Keeper overview page is fetched and confirms/refutes the from-scratch Raft-based reimplementation claim
+  - A new ClickHouse year-version line (e.g. 27.x) ships, or a new LTS is designated
+
+owned_knowledge:
+  - ClickHouse columnar storage and MergeTree table-engine mechanics (partitions/parts/granules, wide vs. compact part format, background merges)
+  - ClickHouse sparse primary-key index design (ORDER BY key, granule sizing)
+  - ClickHouse insert-strategy sizing (batch size, async_insert, "too many parts" avoidance)
+  - ClickHouse SQL-driven RBAC entity model (Users/Roles/Row Policies/Settings Profiles/Quotas)
+  # Cross-cutting security/performance/testing depth beyond ClickHouse specifics is NOT owned here.
+
+decision_framework_present: true
+
+failure_handling:
+  - If it is unclear whether analytical load is actually degrading the OLTP primary (vs. anticipated future need), ask rather than recommending ClickHouse adoption preemptively — defer to SK-DATA-001's overengineering guard.
+  - If the ClickHouse version cannot be determined, ask for it or explicitly state the version the guidance assumes — never assume "latest" silently (rule VA-3); this is consequential given the max_insert_threads behavior change at 26.8.
+  - If shell is unavailable or denied, degrade to advisory DDL/query/insert-config output and state that it was not actually executed.
+escalation:
+  - Enabling ALTER TABLE ... UPDATE/DELETE (mutations) at scale, or dropping a partition, requires explicit user confirmation before execution — mutations rewrite whole data parts, cannot be undone once submitted, and persist across restarts unless cancelled.
+  - A cluster upgrade spanning more than a year of releases, or any downgrade attempt after newer-version features have been used, requires an explicit stepping-stone plan and user confirmation before proceeding.
+verification:
+  - The chosen table engine and ORDER BY/primary key match the actual query access pattern, not a default choice.
+  - Insert strategy (batch size or async_insert config) follows the documented sizing guidance rather than many small, frequent inserts.
+  - Every version-specific claim is tagged with the ClickHouse range it holds for.
+  - Nullable(T) usage is justified by a genuine need to distinguish "empty" from "absent," not used reflexively.
+evaluation_criteria:
+  - For a seeded scenario where analytical queries are demonstrably degrading an OLTP primary, recommends adding ClickHouse as a second, complementary store — not a replacement for the OLTP primary.
+  - For a seeded scenario where the analytical need is only hypothetical ("might need it later"), does not recommend adopting ClickHouse (anti-overengineering, QR-4).
+  - Insert-batch-size guidance for a seeded high-frequency-write scenario matches the documented 10,000–100,000-row range or recommends async inserts, not many small synchronous inserts.
+  - Correctly flags the max_insert_threads 26.8 breaking change when the scenario involves upgrading across that boundary.
+  - Does not restate data-modeling's (SK-DATA-001) store-shape decision framework verbatim (rule QR-2) — adds only ClickHouse-specific depth.
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]   # for running clickhouse-client/clickhouse-local; abstract shell -> CC tools
+  cursor:
+    paths: ["**/*.sql", "**/clickhouse/**", "**/migrations/**"]
+  vscode:
+    argument_hint: "<task, e.g. 'design a MergeTree table for event analytics' or 'size the insert batch'>"

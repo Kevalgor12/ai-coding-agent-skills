@@ -1,0 +1,214 @@
+id: SK-TECH-drizzle
+slug: drizzle
+name: Drizzle ORM
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-DATA-002, SK-DATA-006]
+
+purpose: >-
+  Apply Drizzle ORM correctly and version-appropriately — schema-as-TypeScript,
+  SQL-proximity query building, Relational Queries, drizzle-kit migrations, and
+  RLS — while navigating the live split between the stable 0.x line most
+  production code runs and the 1.0.0-rc line the current docs describe.
+scope: >-
+  Drizzle-specific API, configuration, and migration-tooling detail. The
+  general ORM method (N+1 avoidance across ORMs, transaction handling,
+  ORM-selection) belongs to orm-integration (SK-DATA-002); general migration
+  safety mechanics (expand/contract, backfill batching, destructive-op
+  guarding) belong to data-migration (SK-DATA-006). This skill supplies what's
+  Drizzle-specific: the headless/SQL-proximity model, the relations()/RQBv1
+  vs. defineRelations()/RQBv2 version split, drizzle-kit workflows, the RLS
+  API, and PGlite-based testing.
+expertise: TypeScript/SQL engineer maintaining a Drizzle data layer across the v0.x-to-v1 transition.
+description: >-
+  Drizzle ORM-specific schema (pgTable/mysqlTable/sqliteTable), the query
+  builder and Relational Queries API, drizzle-kit migrations, and RLS
+  (withRLS()+pgPolicy()). Use when drizzle-orm/drizzle-kit or a
+  drizzle.config.ts is present, or the task names Drizzle. Critical: npm
+  "latest" is 0.45.2 but the live docs already target v1.0.0-rc — confirm the
+  installed line before trusting current docs. Not for other ORMs (route to
+  their skill) or ORM-neutral method (orm-integration).
+
+activation_conditions:
+  - drizzle-orm and/or drizzle-kit appear in package.json, a lockfile, or an import statement
+  - A drizzle.config.ts file is present in the repo
+  - The task names Drizzle ORM, drizzle-kit, Drizzle Studio, or PGlite-based Drizzle testing specifically
+non_activation_conditions:
+  - The codebase uses Prisma, TypeORM, or Mongoose instead (route to that technology skill)
+  - The question is generic ORM/ODM method with no specific ORM chosen yet (route to orm-integration)
+  - The task is migration safety mechanics (expand/contract, backfill batching) with no Drizzle-specific tooling question (route to data-migration)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Drizzle-specific task (schema definition, query, relation, migration, RLS policy, test setup).
+    required: true
+  - name: installed-version-line
+    description: Which Drizzle line is actually pinned — 0.x stable or 1.0.0-rc/beta — from package.json/lockfile.
+    required: false
+required_context:
+  - Which Drizzle line is pinned (0.x vs 1.0.0-rc/beta) — the v0/v1 API surface differs enough (defineRelations vs relations(), withRLS vs enableRLS(), migration folder format) that guidance is wrong without this.
+optional_context:
+  - Target dialect (PostgreSQL/MySQL/SQLite) and driver (node-postgres, postgres.js, Neon, PGlite, etc.)
+  - Existing drizzle.config.ts content
+
+outputs:
+  - name: schema-or-query-code
+    kind: edit
+    description: Drizzle schema (pgTable/mysqlTable/sqliteTable) or query-builder/Relational-Queries code correct for the confirmed version line.
+  - name: migration-or-policy
+    kind: edit
+    description: drizzle-kit migration files/config, or an RLS policy definition (withRLS()/pgPolicy() or legacy enableRLS()).
+  - name: analysis
+    kind: analysis
+    description: The determined version line and which v0-vs-v1 caveats apply to the task at hand.
+
+depends_on_skills: []
+# Policy fix (2026-09-09, applied consistently with the solution-architecture
+# fix from the DISC-domain batch): depends_on_skills is reserved for hard
+# composition (invoking another skill as a blocking sub-step of this skill's
+# own execution). The relationship to the generic parent skill(s) above is
+# specialization, already fully captured by the `parents` field -- duplicating
+# it into depends_on_skills was redundant and conflated the two relationship
+# types. Cleared here; parents is the single source of truth for this edge.
+related_skills: [SK-TECH-postgresql, SK-TECH-mysql]
+conflicts_with: [SK-TECH-prisma, SK-TECH-typeorm, SK-TECH-mongoose]
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: https://orm.drizzle.team/docs/overview
+    title: "Drizzle ORM — Overview (headless, SQL-proximity, footprint)"
+    via: research/technologies/drizzle.md
+    retrieved: "2026-09-09"
+  - url: https://orm.drizzle.team/docs/sql-schema-declaration
+    title: "Drizzle ORM — SQL Schema Declaration"
+    via: research/technologies/drizzle.md
+    retrieved: "2026-09-09"
+  - url: https://orm.drizzle.team/docs/rqb
+    title: "Drizzle ORM — Relational Queries (RQB)"
+    via: research/technologies/drizzle.md
+    retrieved: "2026-09-09"
+  - url: https://orm.drizzle.team/docs/relations
+    title: "Drizzle ORM — Relations (defineRelations)"
+    via: research/technologies/drizzle.md
+    retrieved: "2026-09-09"
+  - url: https://orm.drizzle.team/docs/v0-v1-changes
+    title: "Drizzle ORM — v0 to v1 Breaking Changes"
+    via: research/technologies/drizzle.md
+    retrieved: "2026-09-09"
+  - url: https://orm.drizzle.team/docs/upgrade-v1
+    title: "Drizzle ORM — Upgrade to v1 Guide"
+    via: research/technologies/drizzle.md
+    retrieved: "2026-09-09"
+  - url: https://orm.drizzle.team/docs/migrations
+    title: "Drizzle ORM — Migrations (drizzle-kit workflows)"
+    via: research/technologies/drizzle.md
+    retrieved: "2026-09-09"
+  - url: https://orm.drizzle.team/docs/faq
+    title: "Drizzle ORM — FAQ (push not recommended for production)"
+    via: research/technologies/drizzle.md
+    retrieved: "2026-09-09"
+  - url: https://orm.drizzle.team/docs/rls
+    title: "Drizzle ORM — Row-Level Security"
+    via: research/technologies/drizzle.md
+    retrieved: "2026-09-09"
+  - url: https://orm.drizzle.team/docs/sql
+    title: "Drizzle ORM — Raw SQL / sql template and sql.raw()"
+    via: research/technologies/drizzle.md
+    retrieved: "2026-09-09"
+  - url: https://orm.drizzle.team/docs/cache
+    title: "Drizzle ORM — Experimental Caching"
+    via: research/technologies/drizzle.md
+    retrieved: "2026-09-09"
+  - url: https://orm.drizzle.team/docs/connect-pglite
+    title: "Drizzle ORM — Connect: PGlite"
+    via: research/technologies/drizzle.md
+    retrieved: "2026-09-09"
+  - url: https://orm.drizzle.team/docs/goodies
+    title: "Drizzle ORM — Goodies (drizzle.mock(), toSQL(), getColumns())"
+    via: research/technologies/drizzle.md
+    retrieved: "2026-09-09"
+  - url: https://orm.drizzle.team/docs/seed-overview
+    title: "Drizzle ORM — drizzle-seed Overview"
+    via: research/technologies/drizzle.md
+    retrieved: "2026-09-09"
+  - url: https://orm.drizzle.team/docs/indexes-constraints
+    title: "Drizzle ORM — Indexes and Constraints"
+    via: research/technologies/drizzle.md
+    retrieved: "2026-09-09"
+  - url: https://registry.npmjs.org/drizzle-orm/latest
+    title: "npm registry — drizzle-orm latest dist-tag"
+    via: research/technologies/drizzle.md
+    retrieved: "2026-09-09"
+  - url: https://github.com/drizzle-team/drizzle-orm/releases
+    title: "GitHub — drizzle-team/drizzle-orm Releases (v1.0.0-rc line)"
+    via: research/technologies/drizzle.md
+    retrieved: "2026-09-09"
+
+covered_versions:
+  drizzle-orm: "0.x (stable/production — where the npm 'latest' dist-tag and most deployed codebases sit, at 0.45.2) and 1.0.0-rc (pre-release — active RC line, newest tagged release 1.0.0-rc.4; the live docs already describe this line, not 0.x)"
+  drizzle-kit: "coupled to drizzle-orm's line for the v1 transition — 0.x paired with drizzle-orm 0.x; the rc tag installs both together during beta/rc"
+  postgresql: ">=15 for unique()'s NULLS NOT DISTINCT option"
+version_sensitive_claims:
+  - claim: "defineRelations() (RQB v2) is the relation-declaration API; the legacy relations() function and RQBv1 are removed entirely."
+    applies_to: "1.0.0-rc / v1 line only"
+    source_ref: "research/technologies/drizzle.md §3, §13"
+  - claim: "relations() + Relational Queries v1 (RQBv1) is the relation-declaration and relational-query API."
+    applies_to: "0.x stable line"
+    source_ref: "research/technologies/drizzle.md §1, §13"
+  - claim: "RLS is enabled via pgTable.withRLS(); the standalone .enableRLS() method is deprecated."
+    applies_to: "1.0.0-rc / v1 line only (0.x uses .enableRLS())"
+    source_ref: "research/technologies/drizzle.md §13"
+  - claim: "Migration folder structure uses the v3 format: journal.json eliminated, SQL files and snapshots grouped per-migration folder, drizzle-kit drop removed."
+    applies_to: "1.0.0-rc / v1 line only"
+    source_ref: "research/technologies/drizzle.md §11, §13; research/knowledge-maps/version-matrix.md (Drizzle ORM row)"
+  - claim: "unique()'s NULLS NOT DISTINCT option is available."
+    applies_to: "PostgreSQL >=15"
+    source_ref: "research/knowledge-maps/version-matrix.md (Drizzle ORM row)"
+  - claim: "getColumns() is the utility function name (renamed from getTableColumns())."
+    applies_to: "1.0.0-rc / v1 line only (0.x uses getTableColumns())"
+    source_ref: "research/technologies/drizzle.md §13"
+  - claim: "drizzle-kit versioning is coupled to drizzle-orm and both are installed together via the rc tag."
+    applies_to: "1.0.0-beta/rc transition period only"
+    source_ref: "research/technologies/drizzle.md §12"
+last_verified: "2026-09-09"
+reverify_triggers:
+  - Drizzle v1.0.0 GA release
+  - The npm latest dist-tag for drizzle-orm moving off the 0.x line
+  - orm.drizzle.team/docs/latest-releases being reconciled with the GitHub releases page (a documented staleness gap existed at research time)
+
+owned_knowledge:
+  - Drizzle schema-as-TypeScript API (pgTable/mysqlTable/sqliteTable, column builders, index/constraint builders)
+  - Drizzle query builder and Relational Queries API, both the v0.x (relations()/RQBv1) and v1 (defineRelations()/RQBv2) forms
+  - drizzle-kit CLI and migration workflow (generate/push/pull/migrate/studio/check) including the v1 migration-folder-format change
+  - Drizzle's RLS API (withRLS()/enableRLS(), pgPolicy(), Neon/Supabase integrations)
+  - Drizzle's v0-to-v1 breaking-change surface and upgrade path
+decision_framework_present: true
+
+failure_handling:
+  - If the installed Drizzle line (0.x vs 1.0.0-rc/beta) cannot be determined from package.json/lockfile, ask before applying any version-sensitive API — never assume the live-docs (v1) surface applies by default (VA-3).
+  - If shell is unavailable, produce advisory schema/migration/RLS-policy code and state explicitly that drizzle-kit was not run to generate or apply it.
+verification:
+  - Every version-sensitive API used (defineRelations vs. relations(), withRLS() vs. enableRLS(), getColumns() vs. getTableColumns()) matches the confirmed installed line.
+  - Any migration output assumes the folder format (pre-v1 journal.json vs. v1 per-migration folders) matching the installed drizzle-kit version.
+  - Any sql.raw() usage is confirmed to carry only trusted, non-user-controlled input, never interpolated user data.
+evaluation_criteria:
+  - Given a seeded package.json pinning drizzle-orm to a 0.x version, produces schema/query code using v0.x-correct APIs (relations(), enableRLS(), getTableColumns()), not v1 APIs.
+  - Given a seeded package.json pinning drizzle-orm to 1.0.0-rc.x, produces code using v1 APIs (defineRelations(), withRLS(), getColumns()).
+  - When the installed line is ambiguous or unstated, proactively flags the v0-vs-v1 discrepancy rather than silently defaulting to whichever the live docs currently show.
+  - For a production migration scenario, recommends generate + migrate rather than push, citing the official production guidance.
+  - Does not restate orm-integration's cross-ORM N+1/selection framework or data-migration's expand/contract method verbatim (QR-2).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]
+  cursor:
+    paths: ["**/schema.ts", "**/drizzle.config.ts", "**/drizzle/**"]
+  vscode:
+    argument_hint: "<task, e.g. 'add a pgPolicy for tenant isolation' or 'upgrade RQBv1 to defineRelations'>"

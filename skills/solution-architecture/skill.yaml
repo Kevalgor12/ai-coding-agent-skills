@@ -64,8 +64,15 @@ outputs:
     kind: analysis
     description: Identified failure modes, cross-cutting concerns (auth/caching/observability/etc.), and open risks.
 
-depends_on_skills: [SK-DISC-001]
-related_skills: [SK-DISC-003, SK-CONV-005]
+depends_on_skills: []
+# Policy fix (2026-09-09, resolves audit "Unresolved question #1" from the
+# DISC-domain audit): depends_on_skills is reserved for hard composition
+# (this skill invokes another as a blocking sub-step of its own execution).
+# The relationship to requirements-engineering is a soft prerequisite — this
+# skill needs its output but degrades gracefully if absent (see
+# required_context + failure_handling below) — so it belongs in
+# related_skills, not depends_on_skills.
+related_skills: [SK-DISC-001, SK-DISC-003, SK-CONV-005]
 conflicts_with: []
 
 required_capabilities: [file-read, file-write]

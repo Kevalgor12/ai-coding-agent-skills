@@ -1,0 +1,213 @@
+id: SK-TECH-mongoose
+slug: mongoose
+name: Mongoose
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-DATA-002, SK-DATA-006]   # orm-integration, data-migration
+
+purpose: >-
+  Apply Mongoose correctly and version-appropriately as MongoDB's ODM —
+  Schema/Model/Document design, middleware hooks, discriminators, change
+  tracking, type casting, and safe document-schema evolution.
+scope: >-
+  Mongoose-specific API, configuration, and behavior for MongoDB object
+  modeling. Specializes orm-integration (generic ODM/ORM usage, cross-ORM N+1
+  and transaction handling — not repeated here) and data-migration (generic
+  migration mechanics — specialized here for schema-less-but-evolving
+  documents). Not general MongoDB server administration with no Mongoose
+  layer in play.
+expertise: Node.js engineer who has run Mongoose against production MongoDB.
+description: >-
+  Mongoose-specific Schema/Model/Document design, middleware hooks,
+  discriminators, change tracking, and type casting on MongoDB. Use when the
+  stack uses Mongoose (mongoose npm package, Schema/Model/Document code,
+  mongoose.connect()). Not for other ODMs/ORMs (orm-integration), generic
+  MongoDB use with no Mongoose layer, or non-Mongoose-specific migration
+  mechanics (data-migration).
+
+activation_conditions:
+  - The `mongoose` npm package is a dependency, or code imports/requires `mongoose`
+  - Code defines a Mongoose `Schema`/`Model` (`new mongoose.Schema(...)`, `mongoose.model(...)`) or calls `mongoose.connect()`/`createConnection()`
+  - The task names Mongoose or a Mongoose-specific feature (middleware/hooks, discriminators, populate, sanitizeFilter, lean(), a Mongoose error like ParallelSaveError/DivergentArrayError)
+non_activation_conditions:
+  - The project uses a different ODM/ORM (TypeORM/Prisma/Drizzle) or the raw MongoDB driver with no Mongoose layer (route to orm-integration, or a MongoDB-driver-specific skill)
+  - The task is generic ORM/ODM selection or cross-ORM N+1/transaction guidance with no store chosen yet (route to orm-integration)
+  - The task is schema/data migration mechanics with nothing Mongoose-specific in question (route to data-migration)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Mongoose-mediated task (schema/model design, middleware/hooks, discriminators, populate, transactions, security hardening, schema evolution).
+    required: true
+  - name: mongoose-and-mongodb-versions
+    description: The pinned Mongoose version and target MongoDB server version — needed for version-correct guidance (compatibility matrix, CVE exposure, 8.x vs 9.x API differences).
+    required: false
+required_context:
+  - Confirmation that Mongoose (not another ODM/ORM or the raw driver) is the data-access layer in use
+optional_context:
+  - Whether the deployment target is serverless (Lambda/Next.js) or a standalone `mongod` vs. replica set/sharded cluster (gates change streams/transactions)
+
+outputs:
+  - name: schema-model-code
+    kind: edit
+    description: Mongoose Schema/Model/Document definitions, middleware/hooks, discriminators, or query code.
+  - name: security-hardening
+    kind: edit
+    description: sanitizeFilter/strict-mode configuration and version-patch guidance addressing CVE-2026-42334.
+  - name: analysis
+    kind: analysis
+    description: Version-correctness and trade-off analysis (schema strictness, middleware vs. application-layer logic, populate vs. aggregation).
+
+depends_on_skills: []
+# Policy fix (2026-09-09, applied consistently with the solution-architecture
+# fix from the DISC-domain batch): depends_on_skills is reserved for hard
+# composition (invoking another skill as a blocking sub-step of this skill's
+# own execution). The relationship to the generic parent skill(s) above is
+# specialization, already fully captured by the `parents` field -- duplicating
+# it into depends_on_skills was redundant and conflated the two relationship
+# types. Cleared here; parents is the single source of truth for this edge.
+related_skills: [SK-TECH-mongodb, SK-DATA-001]
+conflicts_with: [SK-TECH-drizzle, SK-TECH-prisma, SK-TECH-typeorm]
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: https://mongoosejs.com/
+    title: Mongoose — Elegant MongoDB object modeling for Node.js
+    via: research/technologies/mongoose.md
+    retrieved: "2026-09-09"
+  - url: https://mongoosejs.com/docs/guide.html
+    title: Mongoose — Schemas
+    via: research/technologies/mongoose.md
+    retrieved: "2026-09-09"
+  - url: https://mongoosejs.com/docs/models.html
+    title: Mongoose — Models
+    via: research/technologies/mongoose.md
+    retrieved: "2026-09-09"
+  - url: https://mongoosejs.com/docs/documents.html
+    title: Mongoose — Documents
+    via: research/technologies/mongoose.md
+    retrieved: "2026-09-09"
+  - url: https://mongoosejs.com/docs/middleware.html
+    title: Mongoose — Middleware
+    via: research/technologies/mongoose.md
+    retrieved: "2026-09-09"
+  - url: https://mongoosejs.com/docs/discriminators.html
+    title: Mongoose — Discriminators
+    via: research/technologies/mongoose.md
+    retrieved: "2026-09-09"
+  - url: https://mongoosejs.com/docs/populate.html
+    title: Mongoose — Population
+    via: research/technologies/mongoose.md
+    retrieved: "2026-09-09"
+  - url: https://mongoosejs.com/docs/transactions.html
+    title: Mongoose — Transactions
+    via: research/technologies/mongoose.md
+    retrieved: "2026-09-09"
+  - url: https://mongoosejs.com/docs/api/mongoose.html
+    title: Mongoose — mongoose.set() global configuration reference
+    via: research/technologies/mongoose.md
+    retrieved: "2026-09-09"
+  - url: https://mongoosejs.com/docs/tutorials/lean.html
+    title: Mongoose — Lean Option
+    via: research/technologies/mongoose.md
+    retrieved: "2026-09-09"
+  - url: https://mongoosejs.com/docs/jest.html
+    title: Mongoose — Testing Mongoose with Jest
+    via: research/technologies/mongoose.md
+    retrieved: "2026-09-09"
+  - url: https://mongoosejs.com/docs/faq.html
+    title: Mongoose — Frequently Asked Questions
+    via: research/technologies/mongoose.md
+    retrieved: "2026-09-09"
+  - url: https://mongoosejs.com/docs/migrating_to_9.html
+    title: Mongoose — Migrating to Mongoose 9
+    via: research/technologies/mongoose.md
+    retrieved: "2026-09-09"
+  - url: https://mongoosejs.com/docs/compatibility.html
+    title: Mongoose — MongoDB Server Compatibility
+    via: research/technologies/mongoose.md
+    retrieved: "2026-09-09"
+  - url: https://mongoosejs.com/docs/version-support.html
+    title: Mongoose — Version Support
+    via: research/technologies/mongoose.md
+    retrieved: "2026-09-09"
+  - url: https://github.com/Automattic/mongoose/security/advisories/GHSA-wpg9-53fq-2r8h
+    title: "GHSA-wpg9-53fq-2r8h — Mongoose sanitizeFilter $nor bypass (CVE-2026-42334)"
+    via: research/technologies/mongoose.md
+    retrieved: "2026-09-09"
+  - url: https://mongoosejs.com/docs/typescript.html
+    title: Mongoose — TypeScript support
+    via: research/technologies/mongoose.md
+    retrieved: "2026-09-09"
+  - url: https://mongoosejs.com/docs/connections.html
+    title: Mongoose — Connections
+    via: research/technologies/mongoose.md
+    retrieved: "2026-09-09"
+
+covered_versions:
+  mongoose: ">=8.0 <=9.x"
+version_sensitive_claims:
+  - claim: >-
+      sanitizeFilter failed to recursively sanitize inside the $nor operator,
+      allowing NoSQL injection even with sanitizeFilter enabled
+      (CVE-2026-42334, CVSS 7.5).
+    applies_to: "<6.13.9, 7.0.0-7.8.8, 8.0.0-8.22.0, 9.0.0-9.1.5 — patched in ^6.13.9, ^7.8.9, ^8.22.1, ^9.1.6"
+    source_ref: "research/technologies/mongoose.md §7/§13; GHSA-wpg9-53fq-2r8h"
+  - claim: >-
+      Mongoose-to-MongoDB-server version compatibility matrix (which Mongoose
+      major/range works against which MongoDB server major/range).
+    applies_to: "MongoDB 8.x <-> ^8.7.0|^9.0.0; 7.x <-> ^7.4.0|^8.0.0|^9.0.0; 6.x <-> ^7.0.0|^8.0.0|^9.0.0; 5.x/4.4.x/4.2.x <-> ^6.0.0|^7.0.0|^8.0.0; 4.0.x <-> ^6.0.0|^7.0.0|^8.0.0<8.16.0; 3.6.x <-> ^6.0.0|^7.0.0|^8.0.0<8.8.0"
+    source_ref: "research/knowledge-maps/version-matrix.md; research/technologies/mongoose.md §12"
+  - claim: Node.js >= 20.19.0 is required.
+    applies_to: "mongoose 9.x"
+    source_ref: "research/knowledge-maps/version-matrix.md; research/technologies/mongoose.md §12/§13"
+  - claim: updatePipeline (array/aggregation-pipeline update syntax) defaults to disabled/opt-in.
+    applies_to: "mongoose >=9.0.0 (previously always-allowed in 8.x)"
+    source_ref: "research/technologies/mongoose.md §4/§13"
+  - claim: Pre middleware hooks no longer receive a next() callback parameter — async/Promise-only.
+    applies_to: "mongoose >=9.0.0"
+    source_ref: "research/technologies/mongoose.md §11/§13"
+  - claim: TypeScript is officially supported.
+    applies_to: ">=5.11.0"
+    source_ref: "research/technologies/mongoose.md §16"
+  - claim: >-
+      Support-window state: Mongoose 8's stated support window ("through
+      2026-02-01") is in documented tension with 8.24.x patches observed
+      shipping past that date; Mongoose 6 EOL 2027-02-01 (security/requested
+      fixes only until then); Mongoose 5 EOL 2024-03-01, no longer maintained.
+    applies_to: "mongoose 5.x, 6.x, 8.x"
+    source_ref: "research/technologies/mongoose.md §12; research/knowledge-maps/version-matrix.md"
+last_verified: "2026-09-09"
+reverify_triggers:
+  - A new Mongoose major release (10.x) — Document.prototype.validateSync() is already flagged for removal there
+  - Any update to, or new advisory related to, CVE-2026-42334 / GHSA-wpg9-53fq-2r8h
+  - A change to the Mongoose-to-MongoDB-server compatibility matrix at mongoosejs.com/docs/compatibility.html
+  - Resolution of the Mongoose 8 support-window tension (stated EOL vs. continued patches)
+
+owned_knowledge:
+  - Mongoose Schema/Model/Document lifecycle and pre-compilation registration rule
+  - Mongoose middleware/hooks execution model and 8.x->9.x next()-callback removal
+  - Mongoose discriminators, change tracking, and type-casting behavior
+  - Mongoose sanitizeFilter mechanics and CVE-2026-42334 detail
+decision_framework_present: true
+
+failure_handling:
+  - If the pinned Mongoose version isn't known, ask for it or state the covered_versions range the guidance assumes — sanitizeFilter's CVE exposure, updatePipeline's default, and the pre-middleware next() signature all differ materially between 8.x and 9.x.
+  - If shell is unavailable, degrade to advisory schema/config/code output and say that index builds, migrations, or a live-connection check were not run.
+verification:
+  - Schema methods/statics/virtuals/middleware/plugins are registered before mongoose.model() compilation, never after [Source: https://mongoosejs.com/docs/models.html].
+  - Any query filter built from user input either whitelists fields explicitly or relies on a patched (sanitizeFilter-enabled, post-CVE-2026-42334) Mongoose version — never an unpatched version assumed safe by the flag alone.
+  - Any version-specific claim made is tagged with the Mongoose range it holds for.
+evaluation_criteria:
+  - Given a seeded schema/model task, produces methods/statics/middleware as non-arrow functions registered pre-compilation, per the documented `this`-binding and pre-compilation-only registration rules.
+  - Given a query-filter task built from user input, either flags sanitizeFilter's off-by-default status plus CVE-2026-42334's version range, or recommends field whitelisting instead of asserting the flag alone is sufficient.
+  - Given a cross-document read task, correctly distinguishes when `.populate()` suffices vs. when an aggregation pipeline (`$lookup`) is warranted, without restating orm-integration's generic N+1 content verbatim.
+  - Does not duplicate orm-integration's cross-ORM N+1/transaction-handling content or data-migration's generic expand/contract method — only adds Mongoose-specific depth.
+
+adapter_hints: {}

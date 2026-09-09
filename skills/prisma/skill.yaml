@@ -1,0 +1,242 @@
+id: SK-TECH-prisma
+slug: prisma
+name: Prisma
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-DATA-002, SK-DATA-006]   # orm-integration, data-migration
+
+purpose: >-
+  Apply Prisma correctly and version-appropriately — schema-driven client
+  generation, Prisma Migrate, driver-adapter/Rust-free architecture, and the
+  v6/v7/v8(RC) transition, including the current MongoDB support gap.
+scope: >-
+  Prisma-specific mechanics: the schema file to generated-client model, Prisma
+  Migrate CLI/workflow, driver adapters and the Rust-free architecture, and
+  version-gated behavior across v6 (MongoDB), v7 (current stable), and v8
+  (release-candidate, not GA). Generic ORM patterns (N+1 mitigation,
+  transaction handling, ORM selection) are owned by orm-integration; migration
+  safety mechanics (expand/contract, backfill batching, rollback discipline)
+  are owned by data-migration. This skill assumes Prisma has already been
+  chosen and focuses on using it correctly for the pinned major version.
+expertise: TypeScript/Node.js engineer who ships and upgrades Prisma-backed services in production.
+description: >-
+  Prisma's schema-to-generated-client model, Prisma Migrate, driver
+  adapters/Rust-free architecture, and the v6-vs-v7-vs-v8(RC) version split —
+  critically, MongoDB is unsupported in v7. Use when the stack has a
+  schema.prisma/prisma.config.ts file, @prisma/client, or the task names
+  Prisma. Not for other ORMs, generic ORM patterns (orm-integration), or
+  migration safety mechanics (data-migration).
+
+activation_conditions:
+  - A schema.prisma file, a prisma/schema/ directory, or a prisma.config.ts file is present
+  - "@prisma/client or a @prisma/adapter-* package is a project dependency"
+  - The task names Prisma, Prisma Migrate, Prisma Client, or Prisma Postgres/Accelerate/Compute
+non_activation_conditions:
+  - The stack uses a different ORM/ODM (Drizzle, TypeORM, Mongoose) with no Prisma present (route to that skill)
+  - Generic, ORM-agnostic patterns (N+1 mitigation across ORMs, ORM selection itself) not specific to Prisma's API (route to SK-DATA-002 orm-integration)
+  - Migration safety mechanics (expand/contract, backfill batching, rollback discipline) independent of Prisma's own CLI/tooling shape (route to SK-DATA-006 data-migration)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Prisma-specific task (schema design, client query, migration authoring, driver-adapter/config setup, version upgrade).
+    required: true
+  - name: schema-and-version
+    description: The existing schema.prisma/prisma.config.ts and the pinned Prisma major version (from package.json/lockfile).
+    required: false
+required_context:
+  - The Prisma major version in use (v6, v7, or a v8 release candidate) — architecture, CLI shape, config, and MongoDB support all differ materially by major version.
+optional_context:
+  - Which database provider is targeted (this gates MongoDB-on-v7 eligibility specifically).
+  - Deployment target (traditional server vs. serverless/edge) — affects client instantiation and driver-adapter choice.
+
+outputs:
+  - name: schema-or-client-code
+    kind: edit
+    description: schema.prisma/prisma.config.ts changes or Prisma Client query code, version-correct for the pinned major.
+  - name: migration-script
+    kind: edit
+    description: A Prisma Migrate migration (or advisory migration plan) reflecting the pinned major version's CLI/config shape.
+  - name: analysis
+    kind: analysis
+    description: Version/architecture recommendations (e.g. v6-vs-v7 given a MongoDB store, driver-adapter setup) with rationale.
+
+depends_on_skills: []
+# Policy fix (2026-09-09, applied consistently with the solution-architecture
+# fix from the DISC-domain batch): depends_on_skills is reserved for hard
+# composition (invoking another skill as a blocking sub-step of this skill's
+# own execution). The relationship to the generic parent skill(s) above is
+# specialization, already fully captured by the `parents` field -- duplicating
+# it into depends_on_skills was redundant and conflated the two relationship
+# types. Cleared here; parents is the single source of truth for this edge.
+related_skills: [SK-TECH-postgresql, SK-TECH-mysql, SK-TECH-mongodb]
+conflicts_with: [SK-TECH-drizzle, SK-TECH-typeorm, SK-TECH-mongoose]
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+# Tier B: proposing schema/client/migration edits is advisory; running `prisma
+# generate`/`migrate`/`db push` needs shell. No capability_fallbacks block
+# required (Tier B, not C) — degrades to advisory per failure_handling below.
+
+grounding: official-docs
+source_references:
+  - url: https://www.prisma.io/docs/orm/v7/overview/introduction/what-is-prisma
+    title: "Prisma ORM v7 Docs — What is Prisma?"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://www.prisma.io/docs/orm/v7/more/best-practices
+    title: "Prisma ORM v7 Docs — Best Practices"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://www.prisma.io/docs/orm
+    title: "Prisma Docs — ORM overview (Prisma 8 contract model, pre-GA)"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://www.prisma.io/docs/orm/reference/orm-client
+    title: "Prisma Docs — ORM Client reference (Prisma 8 chained query DSL)"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://www.prisma.io/blog/from-rust-to-typescript-a-new-chapter-for-prisma-orm
+    title: "Prisma Blog — From Rust to TypeScript: A New Chapter for Prisma ORM"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://www.prisma.io/docs/orm/v6/prisma-client/setup-and-configuration/no-rust-engine
+    title: "Prisma ORM v6 Docs — No Rust Engine (Preview)"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://www.prisma.io/docs/guides/upgrade-prisma-orm/v7
+    title: "Prisma Docs — Upgrade Guide: v6 to v7"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://www.prisma.io/docs/orm/v7/reference/prisma-config-reference
+    title: "Prisma ORM v7 Docs — prisma.config.ts Reference"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://www.prisma.io/docs/orm/prisma-client/client-extensions
+    title: "Prisma Docs — Client Extensions"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://www.prisma.io/docs/orm/v7/prisma-migrate/understanding-prisma-migrate/limitations-and-known-issues
+    title: "Prisma ORM v7 Docs — Prisma Migrate: Limitations and Known Issues"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://www.prisma.io/docs/orm/prisma-migrate/workflows/development-and-production
+    title: "Prisma Docs — Prisma Migrate: Development and Production Workflows"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://www.prisma.io/docs/orm/prisma-client/testing/unit-testing
+    title: "Prisma Docs — Unit Testing (Prisma ORM v7-scoped)"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://www.prisma.io/docs/orm/prisma-client/testing/integration-testing
+    title: "Prisma Docs — Integration Testing"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://www.prisma.io/docs/orm/v7/reference/system-requirements
+    title: "Prisma ORM v7 Docs — System Requirements"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://www.prisma.io/docs/orm/v7/reference/supported-databases
+    title: "Prisma ORM v7 Docs — Supported Databases"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://www.prisma.io/docs/query-insights
+    title: "Prisma Docs — Query Insights"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/databases-connections/pgbouncer
+    title: "Prisma Docs — Connection Management: PgBouncer"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://github.com/prisma/prisma-client-extensions
+    title: "GitHub — prisma/prisma-client-extensions (Row-Level Security example)"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://www.prisma.io/blog/the-next-evolution-of-prisma-orm
+    title: "Prisma Blog — The Next Evolution of Prisma ORM (Prisma 8 announcement)"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://www.prisma.io/docs/orm/v7/more/releases
+    title: "Prisma ORM v7 Docs — Releases (cadence, maturity levels, SemVer policy)"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: https://github.com/prisma/orm/releases
+    title: "GitHub — prisma/orm Releases (version history via Releases API)"
+    via: research/technologies/prisma.md
+    retrieved: "2026-09-09"
+  - url: research/knowledge-maps/version-matrix.md
+    title: "Version Matrix — Prisma row (Node/TS floors, MongoDB gap, pagination-rename conflict, supported databases)"
+    via: research/knowledge-maps/version-matrix.md
+    retrieved: "2026-09-09"
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: "Technology Decision Matrix — §1 ORM: Mongoose vs. TypeORM vs. Prisma vs. Drizzle ORM"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-09"
+
+covered_versions:
+  prisma-v6: "required when the target store is MongoDB — v7 dropped MongoDB support outright"
+  prisma-v7: "stable, current production recommendation for every non-MongoDB supported database"
+  prisma-v8: "release-candidate only (rc.8 as of 2026-08-26); not GA; architecturally distinct (JSON contract model, chained query-builder DSL) — do not target for production"
+
+version_sensitive_claims:
+  - claim: MongoDB is not supported in Prisma ORM v7; official docs instruct MongoDB users to continue using Prisma ORM v6 until v8 restores support.
+    applies_to: "v7.x (all releases); MongoDB support returns in v8, but the exact RC it lands at is not confirmed"
+    source_ref: research/technologies/prisma.md §11a, §14; research/knowledge-maps/version-matrix.md (Prisma row)
+  - claim: "Prisma 8 rc.7 renamed pagination methods take()/skip() to limit()/offset(), which conflicts with the current live orm-client reference docs example still showing take()/skip() — an unresolved contradiction between two official sources pending v8.0.0 GA."
+    applies_to: "v8.0.0-rc.7 onward; unresolved as of research date 2026-09-09"
+    source_ref: research/technologies/prisma.md §3, §13; research/knowledge-maps/version-matrix.md (Prisma row)
+  - claim: v7 requires Node.js ^20.19.0, ^22.12.0, or ^24.0.0 (Active/Maintenance LTS only) and TypeScript >=5.4 (optional, TS-only); v6 required only Node 16.13/18.x/20.x and TypeScript >=4.7.
+    applies_to: "v7.0.0+ vs. v6.x — do not apply v7 minimums to a v6-pinned project"
+    source_ref: research/technologies/prisma.md §12; research/knowledge-maps/version-matrix.md (Prisma row)
+  - claim: The Rust-free architecture (TS/WASM query compiler + driver adapters) was Preview/Early Access under v6, reached GA as a non-default opt-in at v6.16.0, and became the v7.0.0 default (2025-11-19).
+    applies_to: "v6.16.0 (opt-in GA) vs. v7.0.0+ (default) — do not assume Rust-free behavior on a v6.x project pinned to the classic engine"
+    source_ref: research/technologies/prisma.md §2, §12
+  - claim: Multi-file schema (prisma/schema/ directory) requires v6.7.0+; prisma.config.ts reached GA at v6.13.0.
+    applies_to: ">=6.7.0 (multi-file schema); >=6.13.0 (prisma.config.ts GA)"
+    source_ref: research/technologies/prisma.md §2, §12
+  - claim: "Latest stable release is 7.10.0 (2026-08-25); latest overall release is 8.0.0-rc.8 (2026-08-26), still a release candidate with no stable 8.0.0 GA. The official blog states \"Prisma 7 is still the right choice for your production apps,\" with 12 months of continued v7 support committed."
+    applies_to: "as of research date 2026-09-09 — re-verify before treating as current"
+    source_ref: research/knowledge-maps/version-matrix.md (Prisma row); research/technologies/prisma.md (top section)
+last_verified: "2026-09-09"
+reverify_triggers:
+  - Prisma 8.0.0 GA release
+  - MongoDB support returning in v8
+  - Resolution of the take()/skip() vs. limit()/offset() pagination-naming conflict at v8.0.0 GA
+  - A new Prisma v7 minor/patch that changes documented CLI flags, config shape, or system requirements
+
+owned_knowledge:
+  - Prisma schema-file-to-generated-client mechanics (schema.prisma/PSL, generator/datasource blocks, driver adapters)
+  - Prisma Migrate CLI mechanics and production-migration discipline (migrate dev/deploy/reset, db push)
+  - Prisma's v6/v7/v8 architecture transition and version-gated behavior (Rust-free engine, contract model, MongoDB support)
+decision_framework_present: true
+
+failure_handling:
+  - If the pinned Prisma major version is unknown, ask or check package.json/lockfile before assuming v7 behavior — v6/v7/v8 differ materially in CLI shape, config, and MongoDB support.
+  - If the store is MongoDB, confirm the project is (or will be) pinned to v6 before proceeding; a v7-targeting recommendation against a MongoDB store is wrong regardless of how the task is phrased.
+  - If shell is unavailable/denied, produce advisory schema/migration output and state that `prisma generate`/`migrate`/`db push` was not executed.
+
+escalation:
+  - Running `prisma migrate reset` or any command that drops/recreates the database requires explicit user confirmation before execution (defer to SK-DATA-006 rollout discipline); `migrate dev`/`db push` must never be proposed against production.
+
+verification:
+  - Any Prisma API/CLI/config claim matches the pinned major version (v6, v7, or v8-RC), never assumed "latest" behavior.
+  - A MongoDB-backed project's guidance targets v6, never v7.
+  - Raw-SQL escape hatches (`$queryRaw`/`$executeRaw`) are parameterized/tagged-template; `$queryRawUnsafe`/`$executeRawUnsafe` never receive unsanitized input.
+  - Production migration guidance uses only `prisma migrate deploy`, never `migrate dev`/`db push`.
+
+evaluation_criteria:
+  - For a seeded MongoDB-backed project, correctly recommends staying on Prisma v6 rather than v7, citing the documented support gap.
+  - For a seeded v7 project, produces schema/config using v7's mandatory driver-adapter + prisma.config.ts shape, not v6/pre-v7 patterns.
+  - When v8/RC is in scope, flags the take()/skip() vs. limit()/offset() pagination conflict as unresolved rather than asserting one is correct.
+  - Does not restate generic ORM N+1/transaction/testing-selection method owned by SK-DATA-002, or generic expand/contract migration mechanics owned by SK-DATA-006 (QR-2).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]   # for running prisma generate/migrate/studio; abstract shell → CC tools
+  cursor:
+    paths: ["**/schema.prisma", "**/prisma/**", "**/prisma.config.ts"]
+  vscode:
+    argument_hint: "<task, e.g. 'add a model to schema.prisma' or 'plan the v6 to v7 upgrade'>"

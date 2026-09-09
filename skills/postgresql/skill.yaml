@@ -1,0 +1,240 @@
+id: SK-TECH-postgresql
+slug: postgresql
+name: PostgreSQL
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-DATA-001, SK-DATA-003, SK-DATA-005]   # data-modeling, database-operations (not yet authored), search-integration (not yet authored)
+
+purpose: >-
+  Apply PostgreSQL correctly and version-appropriately: indexing, MVCC/VACUUM,
+  transaction isolation, row-level security, full-text search, replication,
+  and the extension mechanism.
+scope: >-
+  PostgreSQL-specific engineering detail — the generic schema-design method
+  comes from the parent skill (SK-DATA-001); query-tuning/operations depth and
+  search-engine trade-offs are owned by SK-DATA-003 and SK-DATA-005
+  respectively (both forward references — not yet authored in this library).
+expertise: PostgreSQL database engineer.
+description: >-
+  PostgreSQL-specific indexing (B-tree/GIN/GiST/BRIN), MVCC/VACUUM, transaction
+  isolation levels, row-level security, full-text search, replication, and
+  version-gated v18 features (OAuth2 auth, async I/O, protocol 3.2). Use when
+  the stack targets PostgreSQL (postgres:// URL, pg/psycopg/pgx driver, a
+  Postgres-configured ORM, or the task names a PG feature). Not for MySQL or
+  other engines, generic schema design, or ORM mapping mechanics.
+
+activation_conditions:
+  - A postgres:// / postgresql:// connection string or a PG driver (pg, psycopg, pgx, libpq) is present
+  - An ORM/ODM is configured with a PostgreSQL provider/dialect
+  - The task names PostgreSQL or a PG-specific feature (MVCC, RLS, VACUUM, EXPLAIN ANALYZE, tsvector, pg_upgrade, LISTEN/NOTIFY)
+  - A slow query or index question against a known-PostgreSQL database
+non_activation_conditions:
+  - The stack uses MySQL, MongoDB, ClickHouse, or another engine (route to that engine's skill)
+  - No engine has been chosen yet and the question is store-shape/schema design (route to SK-DATA-001)
+  - The question is ORM-mechanics independent of the engine (route to SK-DATA-002)
+  - The task is safely evolving an already-populated schema's migration process, not PostgreSQL feature usage (route to SK-DATA-006)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The PostgreSQL task (schema/DDL change, slow query, transaction/isolation design, RLS policy, full-text search, replication/HA, upgrade).
+    required: true
+  - name: schema-and-workload
+    description: Existing schema, query patterns, and (ideally) EXPLAIN (ANALYZE, BUFFERS) output.
+    required: false
+  - name: pg-version
+    description: The PostgreSQL major version in use (server, container image tag, or manifest).
+    required: false
+required_context:
+  - The PostgreSQL major version in use — needed for version-correct guidance (rule VA-3).
+optional_context:
+  - EXPLAIN (ANALYZE, BUFFERS) output for a slow query.
+  - Existing index definitions and access patterns.
+  - Whether the deployment is self-managed or a managed service (affects what's controllable, e.g. postgresql.conf access).
+
+outputs:
+  - name: schema-or-migration
+    kind: edit
+    description: DDL or migration reflecting version-correct PostgreSQL features, with a rollback path for destructive changes.
+  - name: index-or-query-change
+    kind: edit
+    description: Index definitions or query rewrites addressing an observed EXPLAIN plan.
+  - name: analysis
+    kind: analysis
+    description: Recommendations (index type, isolation level, RLS vs. app-level authz, in-DB FTS vs. dedicated search) with rationale and the PG version they apply to.
+  - name: commands-run
+    kind: command-run
+    description: psql/EXPLAIN/pg_upgrade or other CLI invocations executed to diagnose or verify, when shell is available.
+
+depends_on_skills: []
+# Policy fix (2026-09-09, applied consistently with the solution-architecture
+# fix from the DISC-domain batch): depends_on_skills is reserved for hard
+# composition (invoking another skill as a blocking sub-step of this skill's
+# own execution). The relationship to the generic parent skill(s) above is
+# specialization, already fully captured by the `parents` field -- duplicating
+# it into depends_on_skills was redundant and conflated the two relationship
+# types. Cleared here; parents is the single source of truth for this edge.
+related_skills: [SK-TECH-drizzle, SK-TECH-prisma, SK-TECH-typeorm, SK-DATA-002, SK-DATA-006]
+conflicts_with: [SK-TECH-mysql]   # alternative primary relational engine; do not co-activate for the same engine decision
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+# Proposing DDL/index/query changes is advisory (file-only); running psql,
+# EXPLAIN ANALYZE, or pg_upgrade needs shell. No capability_fallbacks block
+# required (Tier B, not C) — degrades to advisory per failure_handling if
+# shell is unavailable.
+
+grounding: official-docs
+source_references:
+  - url: https://www.postgresql.org/docs/current/mvcc-intro.html
+    title: PostgreSQL — Concurrency Control (MVCC introduction)
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/docs/current/transaction-iso.html
+    title: PostgreSQL — Transaction Isolation Levels
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/docs/current/routine-vacuuming.html
+    title: PostgreSQL — Routine Vacuuming (autovacuum, XID wraparound)
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/docs/current/indexes-types.html
+    title: PostgreSQL — Index Types
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/docs/current/ddl-rowsecurity.html
+    title: PostgreSQL — Row Security Policies
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/docs/current/using-explain.html
+    title: PostgreSQL — Using EXPLAIN
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/docs/current/auth-methods.html
+    title: PostgreSQL — Authentication Methods
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/docs/current/ssl-tcp.html
+    title: PostgreSQL — Secure TCP/IP Connections with SSL
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/docs/current/app-pgdump.html
+    title: PostgreSQL — pg_dump
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/docs/current/pgupgrade.html
+    title: PostgreSQL — pg_upgrade
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/docs/current/high-availability.html
+    title: PostgreSQL — High Availability, Load Balancing, and Replication
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/docs/current/protocol.html
+    title: PostgreSQL — Frontend/Backend Protocol
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/docs/current/monitoring-stats.html
+    title: PostgreSQL — The Cumulative Statistics System
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/docs/current/populate.html
+    title: PostgreSQL — Populating a Database (bulk-load guidance)
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/docs/current/regress.html
+    title: PostgreSQL — Regression Tests
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/docs/current/release-18.html
+    title: PostgreSQL 18 Release Notes
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/about/news/postgresql-18-released-3142/
+    title: PostgreSQL 18 Released (GA announcement, async I/O performance claim)
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/support/versioning/
+    title: PostgreSQL Versioning Policy
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: "Technology Decision Matrix — §2 Database model: PostgreSQL vs. MySQL vs. MongoDB vs. ClickHouse"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-09"
+  - url: research/knowledge-maps/version-matrix.md
+    title: "Version Matrix — PostgreSQL row (protocol 3.2, pg_upgrade, toolchain floor, support window)"
+    via: research/knowledge-maps/version-matrix.md
+    retrieved: "2026-09-09"
+
+covered_versions:
+  postgresql: ">=14 <=18"
+version_sensitive_claims:
+  - claim: Protocol version 3.2 (256-bit cancel-request keys) was introduced in PostgreSQL 18; protocol 3.0 (PG 7.4+) remains supported for backward compatibility.
+    applies_to: "18 (3.2); >=7.4 (3.0, still supported)"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/postgresql.md §3
+  - claim: pg_upgrade supports upgrading from PostgreSQL 9.2+ to the current major, requires binary compatibility, and cannot upgrade clusters with certain OID-reference pseudo-type columns.
+    applies_to: ">=9.2"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/postgresql.md §11
+  - claim: "PG18 raised the minimum toolchain: Python >=3.6.8, OpenSSL >=1.1.1, LLVM >=14; HP-PA/PA-RISC support dropped."
+    applies_to: ">=18"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/postgresql.md §13
+  - claim: As of PG18, pg_upgrade carries forward optimizer statistics, reducing (but not eliminating) the need for a full post-upgrade ANALYZE.
+    applies_to: ">=18"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/postgresql.md §11
+  - claim: OAuth 2.0 (SASL OAUTHBEARER) as a pg_hba.conf authentication method, and the async I/O (AIO) subsystem with B-tree "skip scan", were introduced in PostgreSQL 18.
+    applies_to: ">=18"
+    source_ref: research/technologies/postgresql.md §7, §8
+  - claim: md5 password authentication is deprecated with warnings on CREATE ROLE/ALTER ROLE (silenceable via md5_password_warnings=off); no removal version has been published yet.
+    applies_to: ">=18"
+    source_ref: "research/technologies/postgresql.md §6, §13 (Unresolved: removal version)"
+  - claim: Support window is 5 years per major release post-GA, with minor releases at least every 3 months. As of 2026-09-09, PG14 is nearing EOL (2026-11-12), PG18 is the current stable baseline, and PG19 is in Beta 3 (not GA).
+    applies_to: "as of research date 2026-09-09"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/postgresql.md §12
+last_verified: "2026-09-09"
+reverify_triggers:
+  - A new PostgreSQL major release (currently PG19, in Beta 3 as of 2026-08-13) reaches GA
+  - postgresql.org publishes a removal version for md5 password authentication
+  - Any change to the documented pg_upgrade version-compatibility range or checksum/upgrade requirements
+  - A new protocol version supersedes 3.2
+
+owned_knowledge:
+  - PostgreSQL MVCC/WAL/VACUUM mechanics and XID-wraparound avoidance
+  - PostgreSQL index-type selection (B-tree/GIN/GiST/BRIN/Hash/SP-GiST)
+  - PostgreSQL transaction isolation level selection (Read Committed/Repeatable Read/Serializable)
+  - PostgreSQL row-level security (RLS) policy syntax and fail-closed semantics
+  - PostgreSQL full-text search (tsvector/tsquery + GIN) usage
+  - PostgreSQL replication topologies (physical/logical, sync/async trade-off) and pg_upgrade mechanics
+  # Cross-cutting security/performance/testing depth is NOT owned here — referenced, not restated.
+
+decision_framework_present: true
+
+failure_handling:
+  - If the PostgreSQL major version cannot be determined, ask for it or explicitly state the version the guidance assumes — never assume "latest" silently (rule VA-3).
+  - If shell is unavailable or denied, degrade to advisory DDL/query/index output and state that the migration/EXPLAIN was not actually run.
+  - If EXPLAIN output is unavailable for a "slow query" task, ask for it rather than guessing an index from the query text alone.
+escalation:
+  - A destructive migration (DROP, data-losing ALTER, or a pg_upgrade in link/swap mode that makes the old cluster unusable) requires explicit user confirmation before execution.
+  - Restoring a pg_dump/pg_restore archive from an untrusted source is flagged and confirmed before running — dumps contain superuser code executed on restore.
+verification:
+  - The proposed index type matches the query's actual access pattern (equality/range → B-tree; contains/full-text/jsonb/array → GIN; geometric/nearest-neighbor → GiST; large naturally-ordered tables → BRIN), not chosen by default.
+  - Every version-specific claim is tagged with the PostgreSQL range it holds for.
+  - For a migration, a rollback path exists and destructive operations are flagged for confirmation.
+  - RLS policies handling concurrent modification are checked for the documented subquery race-condition caveat.
+evaluation_criteria:
+  - For a seeded slow query with EXPLAIN (ANALYZE, BUFFERS) output, proposes an index or rewrite that addresses the actual plan, not a guess from the query text.
+  - Chooses a defensible isolation level for a seeded transaction scenario (e.g. Serializable for a scenario needing serialization-anomaly prevention, not defaulted to Read Committed without justification).
+  - Any claim about a version-gated PG18 feature (OAuth2 auth, async I/O, protocol 3.2, pg_upgrade statistics carry-forward) is correctly scoped to ">=18" and not presented as universally true.
+  - Does not restate generic schema-design or ORM-mapping guidance owned by SK-DATA-001/SK-DATA-002 (rule QR-2).
+  - Flags a destructive migration or untrusted pg_dump restore for confirmation rather than executing it silently.
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]   # for running psql/EXPLAIN/pg_upgrade; abstract shell -> CC tools
+  cursor:
+    paths: ["**/*.sql", "**/migrations/**"]
+  vscode:
+    argument_hint: "<task, e.g. 'optimize this slow query' or 'add an RLS policy'>"

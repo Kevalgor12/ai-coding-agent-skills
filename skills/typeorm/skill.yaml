@@ -1,0 +1,214 @@
+id: SK-TECH-typeorm
+slug: typeorm
+name: TypeORM
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-DATA-002, SK-DATA-006]   # orm-integration, data-migration
+
+purpose: >-
+  Apply TypeORM correctly and version-appropriately: its Active Record and
+  Data Mapper duality, DataSource/EntityManager/Repository/QueryRunner
+  architecture, and the live, simultaneously-maintained 0.3.x/1.0 version
+  split.
+scope: >-
+  TypeORM-specific architecture, API surface, configuration, and
+  version-boundary detail. The generic ORM method (N+1 avoidance, transaction
+  discipline, ORM/ODM selection) comes from orm-integration (SK-DATA-002);
+  migration safety mechanics (expand/contract, backfill batching) come from
+  data-migration (SK-DATA-006). This skill supplies TypeORM's concrete,
+  version-correct specifics on top of both.
+expertise: TypeORM-focused Node.js/TypeScript backend engineer.
+description: >-
+  TypeORM's DataSource/EntityManager/Repository/QueryRunner architecture,
+  Active Record vs Data Mapper choice, decorator-driven entities, per-driver
+  isolation levels, and the live 0.3.x-vs-1.0 version split (Node>=20,
+  mysql2-only, better-sqlite3 default, Mongo driver v7+). Use when the stack
+  uses TypeORM specifically. Not for ORM/ODM selection or cross-ORM
+  N+1/transaction method (orm-integration), and not for migration safety
+  mechanics (data-migration).
+
+activation_conditions:
+  - The `typeorm` package, `@Entity`/`@Column` decorators, or a `DataSource` configuration file is present in the codebase
+  - The task names TypeORM specifically, or asks about Active Record vs Data Mapper, EntityManager/Repository/QueryRunner, or its 0.3.x-to-1.0 version boundary
+  - A TypeORM-specific driver, decorator, migration-CLI, or DataSource-configuration question is in play
+non_activation_conditions:
+  - The stack uses a different ORM/ODM (Mongoose, Prisma, Drizzle) or no ORM at all — route to that technology skill, or to orm-integration if no ORM is chosen yet
+  - The question is ORM/ODM selection itself, or cross-ORM N+1/transaction method with no TypeORM-specific API involved — route to orm-integration (SK-DATA-002)
+  - The task is migration safety mechanics (expand/contract sequencing, backfill batching) with no TypeORM-specific API/driver question — route to data-migration (SK-DATA-006)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The TypeORM-specific task (entity/relation design, DataSource/transaction/isolation-level handling, migration-CLI mechanics, or a 0.3.x-to-1.0 upgrade assessment).
+    required: true
+  - name: version-line
+    description: Which TypeORM line (0.3.x or 1.x) and Node.js major version the codebase is pinned to.
+    required: false
+required_context:
+  - Which TypeORM version line (0.3.x or 1.x) the codebase is pinned to — Repository/QueryBuilder method names and driver requirements differ materially between the two live lines.
+optional_context:
+  - Whether Active Record or Data Mapper is already the codebase's convention.
+  - The specific database driver and its version (mysql2, better-sqlite3, the MongoDB driver, mssql, etc.).
+
+outputs:
+  - name: entity-or-repository-code
+    kind: edit
+    description: Entity classes, decorators, and Repository/EntityManager/QueryBuilder usage correct for the pinned TypeORM version line.
+  - name: datasource-or-migration-config
+    kind: edit
+    description: DataSource configuration or migration-CLI-compatible code, version-correct for the line in use.
+  - name: version-line-analysis
+    kind: analysis
+    description: Assessment of whether/when to move from 0.3.x to 1.x, naming the concrete breaking changes and driver swaps that would apply.
+
+depends_on_skills: []
+# Policy fix (2026-09-09, applied consistently with the solution-architecture
+# fix from the DISC-domain batch): depends_on_skills is reserved for hard
+# composition (invoking another skill as a blocking sub-step of this skill's
+# own execution). The relationship to the generic parent skill(s) above is
+# specialization, already fully captured by the `parents` field -- duplicating
+# it into depends_on_skills was redundant and conflated the two relationship
+# types. Cleared here; parents is the single source of truth for this edge.
+related_skills: [SK-TECH-postgresql, SK-TECH-mysql]
+conflicts_with: [SK-TECH-drizzle, SK-TECH-prisma, SK-TECH-mongoose]
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: https://typeorm.io/docs/getting-started/
+    title: TypeORM — Getting Started (core concepts, Active Record/Data Mapper, install requirements)
+    via: research/technologies/typeorm.md
+    retrieved: "2026-09-09"
+  - url: https://typeorm.io/docs/working-with-entity-manager/working-with-repository/
+    title: TypeORM — Working with Repository (EntityManager/Repository/TreeRepository/MongoRepository)
+    via: research/technologies/typeorm.md
+    retrieved: "2026-09-09"
+  - url: https://typeorm.io/docs/entity/entities/
+    title: TypeORM — Entities (columns, composite keys, generated/vector/spatial columns, inheritance)
+    via: research/technologies/typeorm.md
+    retrieved: "2026-09-09"
+  - url: https://typeorm.io/docs/transactions/
+    title: TypeORM — Transactions (QueryRunner, callback-scoped API, per-driver isolation levels)
+    via: research/technologies/typeorm.md
+    retrieved: "2026-09-09"
+  - url: https://typeorm.io/docs/query-builder/caching/
+    title: TypeORM — Query Result Caching
+    via: research/technologies/typeorm.md
+    retrieved: "2026-09-09"
+  - url: https://typeorm.io/docs/performance-optimization/pagination/
+    title: TypeORM — Pagination (offset vs. cursor-based)
+    via: research/technologies/typeorm.md
+    retrieved: "2026-09-09"
+  - url: https://typeorm.io/docs/relations/relations/
+    title: TypeORM — Relations (cascade risk)
+    via: research/technologies/typeorm.md
+    retrieved: "2026-09-09"
+  - url: https://typeorm.io/docs/relations/eager-and-lazy-relations/
+    title: TypeORM — Eager and Lazy Relations
+    via: research/technologies/typeorm.md
+    retrieved: "2026-09-09"
+  - url: https://typeorm.io/docs/data-source/data-source-options/
+    title: TypeORM — Data Source Options (synchronize/dropSchema warnings, full config reference)
+    via: research/technologies/typeorm.md
+    retrieved: "2026-09-09"
+  - url: https://typeorm.io/docs/migrations/why/
+    title: TypeORM — Why Migrations (synchronize vs. migrations rationale)
+    via: research/technologies/typeorm.md
+    retrieved: "2026-09-09"
+  - url: https://typeorm.io/docs/releases/1.0/release-notes/
+    title: TypeORM — 1.0 Release Notes (breaking changes, security hardening, new features)
+    via: research/technologies/typeorm.md
+    retrieved: "2026-09-09"
+  - url: https://typeorm.io/docs/releases/1.0/upgrading-from-0.3/
+    title: TypeORM — Upgrading from 0.3 to 1.0 (upgrade guide, codemod)
+    via: research/technologies/typeorm.md
+    retrieved: "2026-09-09"
+  - url: https://github.com/typeorm/typeorm/security/policy
+    title: TypeORM — Security Policy (vulnerability scope and reporting process)
+    via: research/technologies/typeorm.md
+    retrieved: "2026-09-09"
+  - url: https://github.com/typeorm/typeorm/releases
+    title: TypeORM — GitHub Releases (0.3.x/1.x parallel-line release history)
+    via: research/technologies/typeorm.md
+    retrieved: "2026-09-09"
+  - url: https://typeorm.io/blog/future-of-typeorm
+    title: TypeORM Blog — The Future of TypeORM (governance/maintenance transition)
+    via: research/technologies/typeorm.md
+    retrieved: "2026-09-09"
+  - url: https://typeorm.io/docs/help/supported-platforms/
+    title: TypeORM — Supported Platforms (per-platform runtime limitations)
+    via: research/technologies/typeorm.md
+    retrieved: "2026-09-09"
+
+covered_versions:
+  typeorm-0.3x: "0.3.20-0.3.31+ (still actively backported in parallel with the 1.x line; no announced end-of-support date)"
+  typeorm-1x: ">=1.0.0 (new major, released 2026-05-19; requires Node.js >=20, ES2023 minimum compile target)"
+version_sensitive_claims:
+  - claim: MySQL driver support is limited to `mysql2`; the legacy `mysql` package is dropped.
+    applies_to: ">=1.0.0"
+    source_ref: research/technologies/typeorm.md §13 (via typeorm.io/docs/releases/1.0/release-notes/)
+  - claim: SQLite's default driver switches to `better-sqlite3`; `sqlite3` is no longer supported.
+    applies_to: ">=1.0.0"
+    source_ref: research/technologies/typeorm.md §13 (via typeorm.io/docs/releases/1.0/release-notes/)
+  - claim: MongoDB driver v7+ is required; v5/v6 support is dropped.
+    applies_to: ">=1.0.0"
+    source_ref: research/technologies/typeorm.md §13 (via typeorm.io/docs/releases/1.0/release-notes/)
+  - claim: Node.js >=20 is required (16/18 unsupported); ES2023 is the minimum compile target.
+    applies_to: ">=1.0.0"
+    source_ref: research/technologies/typeorm.md §13 (via typeorm.io/docs/releases/1.0/release-notes/)
+  - claim: "`findOneById()`, `findByIds()`, and `exist()` are removed; use `findOneBy()`, `findBy()`+`In()`, and `exists()`."
+    applies_to: ">=1.0.0"
+    source_ref: research/technologies/typeorm.md §3, §13 (via typeorm.io/docs/releases/1.0/upgrading-from-0.3/)
+  - claim: "`invalidWhereValuesBehavior` defaults to `throw`; `null`/`undefined` in a `where` condition now errors instead of being silently ignored."
+    applies_to: ">=1.0.0"
+    source_ref: research/technologies/typeorm.md §4, §13
+  - claim: TypeScript >=4.5 with `experimentalDecorators`+`emitDecoratorMetadata` is the stated minimum, but the source itself flags this figure as potentially stale given the pace of 2026 changes around the v1.0 line.
+    applies_to: "0.3.x and 1.x (currency unverified)"
+    source_ref: research/technologies/typeorm.md §1; research/knowledge-maps/version-matrix.md (TypeORM row)
+  - claim: The 0.3.x line continued receiving parallel backports (e.g. 0.3.31 on 2026-07-13) after 1.0.0 shipped, with no documented end-of-support date — both lines are simultaneously live.
+    applies_to: "0.3.x, ongoing as of 2026-09-09"
+    source_ref: research/technologies/typeorm.md §12
+  - claim: NativeScript requires 4.x+; Webpack bundling is compulsory since the raw `typeorm/browser` package is unbundled ES7 that won't run without it.
+    applies_to: "NativeScript integration, both lines"
+    source_ref: research/technologies/typeorm.md §14
+last_verified: "2026-09-09"
+reverify_triggers:
+  - A new TypeORM 1.x minor/major release (potential further breaking changes)
+  - Any official statement of a 0.3.x end-of-support date
+  - A change to the stated TypeScript minimum-version requirement on the official Getting Started page
+  - A new officially assigned CVE against TypeORM, or a change to the security policy's stated scope
+
+owned_knowledge:
+  - TypeORM DataSource/EntityManager/Repository/QueryRunner architecture
+  - TypeORM v1.0 breaking-change inventory (removed APIs, driver changes, behavioral defaults)
+  - TypeORM per-driver isolation-level support matrix
+  - TypeORM decorator API catalog and entity feature set (composite keys, generated/vector/spatial columns, inheritance)
+decision_framework_present: true
+
+failure_handling:
+  - If the TypeORM version line (0.3.x vs 1.x) is unknown, ask or check package.json before giving Repository/QueryBuilder/driver guidance — the two lines have materially different API surfaces.
+  - If shell is unavailable, produce advisory entity/DataSource/migration code and state that it was not run against a real DataSource.
+escalation:
+  - Recommending an upgrade from 0.3.x to 1.x is a codebase-wide breaking change (Node floor, driver swaps, removed APIs) — surface the concrete diff and get explicit confirmation before applying the codemod or hand-editing.
+verification:
+  - Any Repository/QueryBuilder API named (e.g. `findOneBy` vs. `findOneById`) matches the version line actually in use.
+  - "The relation-loading strategy avoids N+1 without setting `eager: true` on both sides of the same relation."
+  - "A DataSource config never leaves `synchronize: true` or `dropSchema: true` enabled for a production target."
+evaluation_criteria:
+  - Given a codebase pinned to 0.3.x, does not apply v1.0-only API/driver requirements (or the reverse) without flagging the mismatch.
+  - Correctly follows the existing codebase's Active Record or Data Mapper convention, or gives a reasoned recommendation when greenfield.
+  - For a seeded transaction requiring a non-default isolation level, selects one the active driver actually supports (per the per-driver isolation matrix) rather than an unsupported level that would throw.
+  - Flags the v1.0 security-hardening scope boundary (parameterization covers data values via documented APIs only, not identifier/SQL-expression-position input) rather than overclaiming blanket injection immunity.
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]
+  cursor:
+    paths: ["**/*.entity.ts", "**/migrations/**", "**/data-source.ts", "**/ormconfig*"]
+  vscode:
+    argument_hint: "<task, e.g. 'model this relation' or 'assess moving to TypeORM 1.0'>"

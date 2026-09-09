@@ -21,6 +21,18 @@ not generated speculatively or in bulk.
 | [solution-architecture](solution-architecture/) | `SK-DISC-002` | Discovery | authored, not yet validated/evaluated |
 | [technical-planning](technical-planning/) | `SK-DISC-003` | Discovery | authored, not yet validated/evaluated |
 | [project-management](project-management/) | `SK-DISC-004` | Discovery | authored, not yet validated/evaluated |
+| [data-modeling](data-modeling/) | `SK-DATA-001` | Data (generic) | authored, not yet validated/evaluated |
+| [orm-integration](orm-integration/) | `SK-DATA-002` | Data (generic) | authored, not yet validated/evaluated |
+| [data-migration](data-migration/) | `SK-DATA-006` | Data (generic) | authored, not yet validated/evaluated |
+| [postgresql](postgresql/) | `SK-TECH-postgresql` | Data (technology) | authored, not yet validated/evaluated |
+| [mysql](mysql/) | `SK-TECH-mysql` | Data (technology) | authored, not yet validated/evaluated |
+| [mongodb](mongodb/) | `SK-TECH-mongodb` | Data (technology) | authored, not yet validated/evaluated |
+| [mongoose](mongoose/) | `SK-TECH-mongoose` | Data (technology) | authored, not yet validated/evaluated |
+| [drizzle](drizzle/) | `SK-TECH-drizzle` | Data (technology) | authored, not yet validated/evaluated |
+| [prisma](prisma/) | `SK-TECH-prisma` | Data (technology) | authored, not yet validated/evaluated |
+| [typeorm](typeorm/) | `SK-TECH-typeorm` | Data (technology) | authored, not yet validated/evaluated |
+| [clickhouse](clickhouse/) | `SK-TECH-clickhouse` | Data (technology) | authored, not yet validated/evaluated |
+| [redis](redis/) | `SK-TECH-redis` | Data (technology) | authored, not yet validated/evaluated |
 
 Per the [specification's conformance lifecycle](../core/skill-specification/specification.md#5-conformance--lifecycle),
 a skill needs a passing mechanical validator, an `evaluations/` test, and an
