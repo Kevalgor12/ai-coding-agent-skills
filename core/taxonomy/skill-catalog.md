@@ -701,8 +701,9 @@ researched technology doc.
 | `SK-TECH-mui` | MUI | FE-003, FE-002 | CSS-in-JS, theming, CSP nonce handling |
 | `SK-TECH-html` | HTML | FE-003, FE-004 | Semantic markup, a11y, CSP; **merged with CSS as web-standards** (see analysis) |
 | `SK-TECH-css` | CSS | FE-003 | **Merged with HTML** into `web-standards`; tokens, scoping, container/layer queries |
-| `SK-TECH-express` | Express | BE-001, BE-002 | Middleware pipeline; **no official app-testing guidance** (research gap) |
-| `SK-TECH-fastify` | Fastify | BE-001, BE-002 | Schema-driven validation/serialization, plugins, DI |
+| `SK-TECH-nodejs` | Node.js | BE-001 | **Added post-hoc (2026-09-10)** — missed from the original 44; researched separately in `research/technologies/nodejs.md`. Event loop/libuv runtime underneath Express/Fastify; annual-LTS cadence change starting v27 |
+| `SK-TECH-express` | Express | BE-001, BE-002 | Middleware pipeline; **no official app-testing guidance** (research gap); runs on Node.js (`SK-TECH-nodejs`) |
+| `SK-TECH-fastify` | Fastify | BE-001, BE-002 | Schema-driven validation/serialization, plugins, DI; runs on Node.js (`SK-TECH-nodejs`) |
 | `SK-TECH-go` | Go | BE-001 | Goroutines, explicit errors, parameterized SQL; std-lib testing |
 | `SK-TECH-python` | Python | BE-001, AI-001 | GIL, venvs, exception chaining; broad backend + scripting + AI use |
 | `SK-TECH-typescript` | TypeScript | CONV-003 (+ all TS-based) | Type system; **ECMAScript folded in here** (see analysis) |

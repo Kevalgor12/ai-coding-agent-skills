@@ -1,0 +1,90 @@
+id: SK-BE-001
+slug: backend-architecture
+name: Backend architecture
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: BE
+
+purpose: >-
+  Structure a backend service — layering, middleware, dependency injection,
+  error handling, graceful shutdown, and runtime/framework selection —
+  independent of which language or framework is chosen.
+scope: >-
+  Tech-neutral backend structure and the framework/runtime decision.
+  Specialized by the Node.js/Express/Fastify/Go/Python technology skills.
+  Not database/data-layer design (data-modeling) and not the HTTP contract
+  itself (api-design, graphql-api-design).
+expertise: Senior/principal backend engineer.
+description: >-
+  Structure a backend service — layering, middleware/interceptor design,
+  dependency injection, error handling, graceful shutdown — and choose a
+  runtime/framework when that choice is open. Use when building or
+  structuring a backend service. Not for the HTTP/GraphQL contract itself, or
+  for the data layer.
+
+activation_conditions:
+  - Building or structuring a new backend service
+  - A runtime/framework choice is open (Node.js+Express/Fastify vs. Go vs. Python)
+  - An existing service's layering/error-handling/shutdown behavior needs review or rework
+non_activation_conditions:
+  - Frontend-only work
+  - The task is the HTTP/GraphQL contract itself with structure already settled (route to api-design/graphql-api-design)
+  - Pure data-modeling/schema work with no service-layer question (route to data-modeling)
+activation_mode: auto
+
+inputs:
+  - name: requirements
+    description: Service requirements and constraints (ideally from requirements-engineering/solution-architecture).
+    required: true
+  - name: existing-service
+    description: An existing service's structure, if this is not greenfield.
+    required: false
+required_context:
+  - What the service needs to do and its non-functional constraints (throughput, latency, team language expertise)
+optional_context:
+  - Existing runtime/framework already in use elsewhere in the organization
+  - Deployment target constraints
+
+outputs:
+  - name: runtime-framework-choice
+    kind: analysis
+    description: The recommended runtime/framework with trade-offs, when open.
+  - name: service-structure
+    kind: analysis
+    description: Layering, middleware, DI, error-handling, and shutdown design.
+
+depends_on_skills: []
+related_skills: [SK-DISC-002, SK-BE-002, SK-BE-003, SK-DATA-001]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: "Technology Decision Matrix — §3 Backend framework: Fastify vs. Express"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Backend runtime/framework selection decision framework
+  - Layering/middleware/DI/error-handling/graceful-shutdown method
+decision_framework_present: true
+
+failure_handling:
+  - If requirements are too thin to support a runtime/framework decision, request them or hand off to requirements-engineering rather than assuming a default stack.
+  - If an existing service already has a runtime/framework, work within it unless the user explicitly asks to evaluate a switch.
+verification:
+  - Error handling is consistent across the service, not ad hoc per route/handler.
+  - Shutdown releases held resources (connections, in-flight requests) rather than terminating abruptly.
+  - A runtime/framework recommendation cites the decision-matrix comparison where one exists, not unresearched preference.
+evaluation_criteria:
+  - For a seeded service requirement set, proposes a layered structure with consistent error handling and graceful shutdown; no business logic in the transport layer.
+  - When a framework choice is open between Fastify and Express, cites the documented performance/security/testing differentiators rather than defaulting to familiarity.
+  - Does not recommend a runtime/framework switch for an existing service without explicit user request.
+
+adapter_hints: {}

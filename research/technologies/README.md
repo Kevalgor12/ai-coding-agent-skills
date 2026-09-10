@@ -1,6 +1,6 @@
 # Research: Technologies
 
-This directory contains vendor-neutral research on 44 technologies for the Skill Library project, each researched directly against official documentation. Every technology has a doc at `research/technologies/<slug>.md` covering architecture, configuration, versioning, security, performance, testing, deployment, migration, and more, plus a structured summary (sources, version-sensitive facts, and unresolved questions) rolled up into the registries linked below.
+This directory contains vendor-neutral research on 45 technologies for the Skill Library project, each researched directly against official documentation. Every technology has a doc at `research/technologies/<slug>.md` covering architecture, configuration, versioning, security, performance, testing, deployment, migration, and more, plus a structured summary (sources, version-sensitive facts, and unresolved questions) rolled up into the registries linked below.
 
 **This research is a snapshot as of 2026-09-09.** Technologies in fast-moving ecosystems (JS frameworks, build tooling, AI/ORM libraries, anything mid-major-version-transition) should be re-verified against current official docs before being treated as up to date -- several docs below explicitly flag in-flight breaking changes, pre-GA releases, or documentation-site restructuring that may have moved on since this snapshot was taken.
 
@@ -25,6 +25,7 @@ This directory contains vendor-neutral research on 44 technologies for the Skill
 
 - [Express](./express.md) -- Express's official docs (expressjs.com, redesigned May 2026 on Astro with side-by-side v4.x/v5.x docs) are unusually thorough and current: full API tables, an explicit 4-to-5 migration guide with automated codemods,...
 - [Fastify](./fastify.md) -- Fastify's official docs (fastify.dev) are thorough and version-aware, with a dedicated LTS policy page (6mo full support + 6mo security-only per major) and a formal V4→V5 migration guide listing ~20 breaking changes....
+- [Node.js](./nodejs.md) -- Node.js's official docs remain at nodejs.org, current LTS is v24.21.0 (Krypton) alongside v26.8.2 as Current, with a six-month release cadence about to change: starting with v27 in October 2026 the odd/even...
 
 ### Languages & language specs
 
@@ -94,4 +95,4 @@ This directory contains vendor-neutral research on 44 technologies for the Skill
 
 ## Missing / failed technologies
 
-None. All 44 planned technologies (21 completed in the first research run, 23 completed in the second) produced a written doc and a structured summary; no technology failed outright.
+None. All 44 originally planned technologies (21 completed in the first research run, 23 completed in the second) produced a written doc and a structured summary; Node.js was added as a 45th technology in a follow-up pass after being identified as a gap in the original list. No technology failed outright.

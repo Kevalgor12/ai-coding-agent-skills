@@ -210,6 +210,27 @@ This file registers every version-sensitive fact captured while researching the 
 - 13.4.0 -- App Router static-export support (RSC + Route Handlers) added
 - 13.3.0 -- next export deprecated in favor of output:'export'
 
+## Node.js
+
+- v26.8.2 (Current) -- Current release as of research date (2026-09-10), per nodejs.org/en/download
+- v24.21.0 (Active LTS) -- Current LTS release as of research date, per nodejs.org/en/download
+- v22.x "Jod" -- Initial release 2024-04-24, Active LTS started 2024-10-29, Maintenance started 2025-10-21, EOL 2027-04-30; now in Maintenance LTS
+- v24.x "Krypton" -- Initial release 2025-05-06, Active LTS started 2025-10-28, Maintenance starts 2026-10-20, EOL 2028-04-30; currently Active LTS
+- v26.x -- Initial release 2026-05-05, Active LTS starts 2026-10-28, Maintenance starts 2027-10-20, EOL 2029-04-30; currently Current, last release under the pre-v27 six-month/odd-even cadence
+- v25.x, v23.x, v21.x (odd-numbered) -- Never received LTS status; each became unsupported roughly 6 months after release per the legacy cadence, and all are EOL as of research date
+- Node.js 27+ cadence change (announced 2026-03-10, takes effect Oct 2026) -- Twice-yearly cadence and odd/even LTS split retired in favor of one major release per year: a 6-month Alpha channel (Oct-Mar, semver-major changes allowed), 6-month Current (Apr-Oct), then 30 months of LTS (36 months total support). Node.js 27 begins Alpha Oct 2026, expected Current April 2027, LTS Oct 2027, EOL ~April 2030.
+- v26.0.0 (2026-05-05) breaking changes -- Fully removed: crypto.createCipher()/createDecipher(), http.Server.prototype.writeHeader(), legacy _stream_* internal modules, --experimental-transform-types flag; Temporal API enabled by default; V8 bumped to 14.6.202.33, Undici to 8.0.2, NODE_MODULE_VERSION to 147; GCC 13.2+/Python 3.10+ now required to build
+- v24.0.0 (2025-05-06) breaking changes -- MSVC removed (ClangCL now required on Windows); macOS 13.5+/Xcode 16.1+ required; --experimental-permission renamed to --permission; SlowBuffer, tls.createSecurePair, fs.Dirent.path removed; node:test test()/t.test() no longer return promises (auto-await added); V8 bumped to 13.6, npm bundled version bumped to npm 11
+- v22.0.0 (2024-04-24) breaking changes -- require()-ing synchronous ESM graphs supported; WebSocket client enabled by default as a global; default stream highWaterMark increased; Import Assertions (assert syntax) dropped in favor of Import Attributes (with syntax); V8 bumped to 12.4.254.14 enabling Maglev JIT; --watch marked stable; node --run <script> added
+- Permission Model (node:permissions) -- Introduced v20.0.0 (--experimental-permission), flag renamed to --permission in v24.0.0, Stable as of v23.5.0/v22.13.0
+- node:test built-in test runner -- Available since v18.0.0, became Stable in v20.0.0
+- Native TypeScript type stripping -- Added v22.6.0; --experimental-transform-types added v22.7.0; enabled by default v23.6.0/v22.18.0; became Stable v25.2.0/v24.12.0; --experimental-transform-types flag removed entirely in v26.0.0 (--no-strip-types added same release)
+- import.meta.filename/import.meta.dirname -- Added v21.2.0, became stable v24.0.0; import.meta.main added v24.2.0
+- --env-file flag -- Added v20.6.0, became stable v24.10.0/v22.21.0; --env-file-if-exists added v22.9.0
+- Corepack (npm/Yarn/pnpm bridge) -- Bundled with Node.js from v14.19.0 up to (but not including) v25.0.0; must be installed separately (npm install -g corepack) on Node.js 25.0.0+
+- libuv thread pool -- Default size 4, configurable via UV_THREADPOOL_SIZE up to a maximum of 1024 (raised from 128 in libuv 1.30.0); pool threads gained an 8 MB stack in libuv 1.45.0 (bundled from Node.js 20), which also changed timer-vs-poll-phase ordering
+- CVE-2026-58043 (HIGH, July 29 2026 security release) -- Permission Model path-matching bug allowing over-grant of filesystem access across radix-tree prefix boundaries under --permission, patched in v26.5.1/v24.18.1/v22.23.2 alongside 10 other CVEs (CVE-2026-56846/56847/56848/56850/58039/58040/58041/58042/58044/58045)
+
 ## Nuxt
 
 - 4.5.2 (2026-08-05) -- Latest stable Nuxt release as of research date, per official GitHub releases page

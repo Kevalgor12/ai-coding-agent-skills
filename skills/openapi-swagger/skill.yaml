@@ -1,0 +1,181 @@
+id: SK-TECH-openapi-swagger
+slug: openapi-swagger
+name: OpenAPI & Swagger
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-BE-002, SK-CONV-006]
+
+purpose: >-
+  Author OpenAPI documents correctly (paths/components/securitySchemes,
+  design-first vs. code-first) and configure Swagger's tooling — UI, Editor,
+  Codegen — that consumes and visualizes them, safely and version-appropriately.
+scope: >-
+  OpenAPI document structure/authoring and Swagger UI/Editor/Codegen tooling
+  mechanics (configuration, plugin model, CLI, CVE/EOL history). Not the
+  REST-vs-GraphQL paradigm decision or REST contract design itself
+  (api-design owns both), and not GraphQL schema design (graphql-api-design).
+expertise: API spec/tooling engineer.
+description: >-
+  Author OpenAPI documents (paths/components/securitySchemes) and configure
+  Swagger's UI/Editor/Codegen tooling that consumes them — design-first vs.
+  code-first authoring, mock-server/SDK/server-stub generation, and safe
+  Swagger UI deployment (OAuth config, the documented CVE, EOL policy). Use
+  when writing/reviewing an OpenAPI spec or setting up Swagger tooling. Not
+  for the REST-vs-GraphQL decision, REST contract design itself, or GraphQL.
+
+activation_conditions:
+  - Writing, reviewing, or extending an OpenAPI document (paths/components/securitySchemes)
+  - Setting up or configuring Swagger UI, Swagger Editor, or Swagger Codegen
+  - Deciding design-first vs. code-first OpenAPI authoring, or whether to self-host Swagger UI at all
+  - Generating a mock server, client SDK, or server stub from an existing OpenAPI document
+non_activation_conditions:
+  - The REST-vs-GraphQL paradigm decision, or REST resource/versioning/pagination contract design with no spec-tooling question (route to api-design)
+  - GraphQL schema/resolver design or GraphQL-specific tooling (route to graphql-api-design / SK-TECH-graphql)
+  - Prose documentation unrelated to an API spec, e.g. READMEs/ADRs (route to technical-documentation, SK-CONV-006)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The OpenAPI/Swagger task (author a spec, configure Swagger UI/Editor, generate a client/server/mock, assess CVE/EOL exposure).
+    required: true
+  - name: existing-api-contract
+    description: An existing REST contract/domain model to describe (ideally from api-design), or an existing OpenAPI document to extend/review.
+    required: false
+required_context:
+  - Whether an OpenAPI document already exists or is being authored from scratch (determines design-first vs. code-first framing)
+optional_context:
+  - The Swagger UI/Editor/Codegen version currently deployed (needed to assess CVE/EOL exposure)
+  - Target languages for Codegen/client-SDK generation
+
+outputs:
+  - name: openapi-document
+    kind: edit
+    description: An OpenAPI document (paths/components/securitySchemes) or a diff to an existing one.
+  - name: swagger-tooling-config
+    kind: edit
+    description: Swagger UI/Editor/Codegen configuration (JS init options, Docker/env vars, CLI invocation).
+  - name: analysis
+    kind: analysis
+    description: Design-first-vs-code-first recommendation, or a CVE/EOL exposure assessment for a deployed Swagger UI version.
+
+depends_on_skills: []
+related_skills: [SK-BE-003, SK-TECH-express, SK-TECH-fastify]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: official-docs
+source_references:
+  - url: https://learn.openapis.org/introduction.html
+    title: OpenAPI — Introduction / core concepts
+    via: research/technologies/openapi.md
+    retrieved: "2026-09-10"
+  - url: https://learn.openapis.org/specification/structure.html
+    title: OpenAPI — Document Structure
+    via: research/technologies/openapi.md
+    retrieved: "2026-09-10"
+  - url: https://learn.openapis.org/specification/security.html
+    title: OpenAPI — Describing API Security
+    via: research/technologies/openapi.md
+    retrieved: "2026-09-10"
+  - url: https://learn.openapis.org/best-practices.html
+    title: OpenAPI — Best Practices
+    via: research/technologies/openapi.md
+    retrieved: "2026-09-10"
+  - url: https://learn.openapis.org/upgrading/v3.0-to-v3.1.html
+    title: OpenAPI — Upgrading 3.0 to 3.1
+    via: research/technologies/openapi.md
+    retrieved: "2026-09-10"
+  - url: https://learn.openapis.org/upgrading/v3.1-to-v3.2.html
+    title: OpenAPI — Upgrading 3.1 to 3.2
+    via: research/technologies/openapi.md
+    retrieved: "2026-09-10"
+  - url: https://www.openapis.org/blog/2025/09/23/announcing-openapi-v3-2
+    title: "Announcing OpenAPI v3.2 (official blog)"
+    via: research/technologies/openapi.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/swagger-api/swagger-ui
+    title: swagger-api/swagger-ui (README)
+    via: research/technologies/swagger.md
+    retrieved: "2026-09-10"
+  - url: https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/
+    title: Swagger UI — Configuration
+    via: research/technologies/swagger.md
+    retrieved: "2026-09-10"
+  - url: https://swagger.io/docs/open-source-tools/swagger-ui/usage/oauth2/
+    title: Swagger UI — OAuth2 usage (initOAuth)
+    via: research/technologies/swagger.md
+    retrieved: "2026-09-10"
+  - url: https://swagger.io/docs/open-source-tools/swagger-ui/usage/cors/
+    title: Swagger UI — CORS
+    via: research/technologies/swagger.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/advisories/GHSA-qrmm-w75w-3wpx
+    title: "GHSA-qrmm-w75w-3wpx — Server-side request forgery in SwaggerUI"
+    via: research/technologies/swagger.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/swagger-api/swagger-ui/security
+    title: swagger-api/swagger-ui — Security policy & EOL status
+    via: research/technologies/swagger.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/swagger-api/swagger-codegen/blob/master/README.md
+    title: swagger-api/swagger-codegen README
+    via: research/technologies/swagger.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/swagger-api/swagger-editor
+    title: swagger-api/swagger-editor README
+    via: research/technologies/swagger.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: "Technology Decision Matrix — §7 API spec tooling: OpenAPI vs. GraphQL (plus Swagger)"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  openapi: "3.0-3.2 (current stable 3.2.0)"
+  swagger-tooling: "5.x only (the sole actively patched line; 4.x/3.x/2.x are EOL)"
+version_sensitive_claims:
+  - claim: OAS 3.2.0 adds the OAuth 2.0 Device Authorization Flow and an oauth2MetadataUrl field for automatic OAuth 2.0 Authorization Server Metadata discovery, narrowing the gap with OpenID Connect discovery.
+    applies_to: "OpenAPI 3.2.0"
+    source_ref: research/knowledge-maps/technology-decision-matrix.md §7; research/technologies/openapi.md
+  - claim: 3.0 → 3.1 is a breaking document migration (nullable removed in favor of JSON Schema type arrays, exclusiveMinimum/exclusiveMaximum become direct numeric values, example → examples, file-upload format changes); 3.1 → 3.2 is explicitly non-breaking.
+    applies_to: "OpenAPI 3.0.x → 3.1.x (breaking); 3.1.x → 3.2.0 (non-breaking)"
+    source_ref: research/technologies/openapi.md
+  - claim: Swagger UI's `?url` query-string spec override is disabled by default following GHSA-qrmm-w75w-3wpx.
+    applies_to: "swagger-ui, swagger-ui-dist, swagger-ui-react >= 4.1.3"
+    source_ref: research/technologies/swagger.md
+  - claim: Only the Swagger UI 5.x line receives security patches; 4.x reached EOL August 2023, 3.x reached EOL November 2021, 2.x reached EOL in 2017.
+    applies_to: "Swagger UI 5.x = supported; 4.x/3.x/2.x = unsupported/unpatched"
+    source_ref: research/technologies/swagger.md
+last_verified: "2026-09-10"
+reverify_triggers:
+  - A new OpenAPI Specification minor/major release (past 3.2.0), or the OAS 4.0 "Moonwalk" effort reaching a published spec
+  - A new Swagger UI/Editor/Codegen major-version EOL announcement or a new Swagger CVE/advisory
+  - Official migration guidance appearing between Swagger Codegen and OpenAPI Generator (none exists today)
+
+owned_knowledge:
+  - OpenAPI document object model (paths/components/securitySchemes) and design-first vs. code-first authoring trade-offs
+  - Swagger UI/Editor/Codegen configuration, plugin architecture, and CVE/EOL history
+decision_framework_present: true
+
+failure_handling:
+  - If no OpenAPI document exists and the underlying REST contract itself isn't designed yet, hand off to api-design first rather than authoring a spec against assumptions.
+  - If the deployed Swagger UI/Editor version is unknown, ask for it before asserting CVE/EOL exposure; never assume it is on a patched line.
+  - If shell/network access isn't available to run Codegen or fetch a live spec, degrade to advisory: propose the OpenAPI document and Swagger config as file edits/instructions instead.
+escalation:
+  - A production Swagger UI deployment found on an EOL line (4.x/3.x/2.x) or with `?url` overrides re-enabled is flagged as a security exposure requiring explicit confirmation before treating a fix as optional.
+verification:
+  - The OpenAPI document declares security schemes under components.securitySchemes and references them by name (never inline).
+  - Any Swagger UI production config omits clientSecret from initOAuth() and leaves `?url` query-string overrides disabled unless a stated, controlled need is documented.
+  - The Swagger UI/Editor/Codegen version in use or proposed is on the actively patched line (5.x), or the EOL risk is explicitly flagged.
+evaluation_criteria:
+  - For a seeded REST contract, produces a valid OpenAPI document with correctly structured paths/components/securitySchemes.
+  - Correctly recommends design-first vs. code-first authoring for a seeded scenario (e.g. greenfield API vs. large existing codebase with implicit behavior).
+  - Flags an EOL/unpatched Swagger UI version (4.x/3.x/2.x) and the GHSA-qrmm-w75w-3wpx exposure when a deployed version is in scope.
+  - Does not restate api-design's REST-vs-GraphQL or OpenAPI-vs-GraphQL comparison content (no-duplication).
+
+adapter_hints: {}

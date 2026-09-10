@@ -187,6 +187,17 @@ This file collects every unresolved question, ambiguity, or unverified claim fla
 - Whether Next.js documents first-party mocking utilities for Server Actions/Route Handlers/App Router request context beyond the experimental config-testing helper — no direct evidence found
 - Precise mechanics of the 'previous' (non-Cache-Components) caching model (caching-without-cache-components guide) were not independently fetched
 
+## Node.js
+
+- Exact release dates for the current patch versions (v26.8.2, v24.21.0) were not independently confirmed — nodejs.org/en/download gives version numbers only, and the separately-fetched previous-releases page's per-line 'Last Updated' dates (Sep 09, 2026 for v26; Sep 07, 2026 for v24) were not verified to correspond exactly to those specific patch releases rather than to some other status-change event.
+- Whether nodejs.org or the nodejs/node GitHub org publishes a single consolidated 'breaking changes across all majors' index distinct from each release's own changelog — none was located in this research pass; each major version's changes must be read from its own CHANGELOG_V<N>.md or release blog post.
+- Breaking-change specifics for Node.js v20 and earlier majors were not independently fetched in this pass (only v22.0.0, v24.0.0, and v26.0.0 changelogs/release notes were read in full); consult the corresponding CHANGELOG_V<N>.md files directly if that history is needed.
+- Which npm version ships bundled with Node.js 26.0.0 was not confirmed — only that Node.js 24.0.0 bundled npm 11; the v26.0.0 release notes fetched did not mention an npm version bump.
+- Whether the OpenJS Foundation or Node.js TSC publishes any formal, versioned deprecation-window policy (e.g., a minimum number of releases between runtime-deprecation and removal) was not found; the documented pattern (e.g., crypto.createCipher/createDecipher runtime-deprecated in v22.0.0, fully removed in v26.0.0) was observed but no policy document stating a guaranteed minimum window was located.
+- Whether nodejs.org hosts any official, platform-specific (AWS/GCP/Azure/Vercel) deployment guide beyond the Docker working group's container-focused best practices — none was found in this research pass; absence is not confirmed as complete, only as not located.
+- Corepack's longer-term roadmap (e.g., whether it will ever be re-bundled with Node.js core after its removal from bundling at v25.0.0, or remains permanently a separate install) was not addressed in the README fetched.
+- The precise current status/detail of the OpenJS Foundation's referenced 'AI Coding Assistants Policy' (mentioned in passing on the governance page) was not independently fetched or summarized in this pass.
+
 ## Nuxt
 
 - Whether nuxt.com's docs host has a distinct stable '5.x' URL path yet, since Nuxt 5 was not released as stable at research time.

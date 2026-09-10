@@ -1,0 +1,230 @@
+id: SK-TECH-express
+slug: express
+name: Express
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-BE-001, SK-BE-002]
+
+purpose: >-
+  Apply Express correctly and version-appropriately — middleware pipeline,
+  routing API, error handling, and the 4.x/5.x route-syntax break — as the
+  Express-specific specialization of backend structuring and HTTP API design.
+scope: >-
+  Express implementation detail: middleware/routing API, configuration,
+  version-specific behavior (4.x vs 5.x), and Express-specific hardening.
+  Not the generic backend-structure method (backend-architecture), the HTTP
+  contract method (api-design), or the Fastify-vs-Express framework-choice
+  comparison (already owned by backend-architecture) — only Express-specific
+  depth is added here.
+expertise: Express/Node.js backend engineer.
+description: >-
+  Express-specific middleware pipeline, routing API (app/router/request/response
+  objects), and the 4.x-vs-5.x path-to-regexp route-syntax break. Use when the
+  stack is Express (require/import express, express.Router(), app.listen) or
+  the task names Express specifically. Not for generic backend structuring
+  (backend-architecture), the Fastify-vs-Express framework choice (already
+  covered there), or other Node frameworks (Fastify, Koa, Hapi).
+
+activation_conditions:
+  - "The stack uses Express (require('express')/import express, app.listen, express.Router())"
+  - package.json/lockfile lists express as a dependency
+  - The task names Express specifically (e.g. "add Express middleware", "migrate to Express 5")
+non_activation_conditions:
+  - No framework has been chosen yet / a generic backend-structuring question (route to backend-architecture, SK-BE-001)
+  - The Fastify-vs-Express framework choice itself needs making (already owned by backend-architecture, route there)
+  - The stack uses Fastify, Koa, Hapi, or a non-Node runtime (route to that technology's skill)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Express-specific task (add middleware/routes, fix error handling, migrate 4.x to 5.x, harden security/config).
+    required: true
+  - name: express-version-context
+    description: The Express major version (4.x or 5.x) and Node.js version in use, ideally from package.json/lockfile.
+    required: false
+required_context:
+  - Whether the project is on Express 4.x or 5.x — route syntax and several defaults differ materially between the two
+optional_context:
+  - The Node.js version in use (gates app.query, native .ts execution)
+  - Whether native TypeScript execution or a build step (tsc/esbuild/tsx) is preferred
+
+outputs:
+  - name: middleware-or-route-code
+    kind: edit
+    description: Express middleware/route/error-handler code correct for the project's major version.
+  - name: migration-notes
+    kind: analysis
+    description: 4.x-to-5.x migration guidance when upgrading, including route-syntax and default-behavior changes.
+  - name: hardening-config
+    kind: edit
+    description: Security middleware/config (helmet, trust proxy, session hardening, rate limiting) appropriate to the deployment.
+
+depends_on_skills: []
+related_skills: [SK-TECH-nodejs]
+conflicts_with: [SK-TECH-fastify]
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: https://expressjs.com/en/guide/routing.html
+    title: Express — Routing guide
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/guide/writing-middleware.html
+    title: Express — Writing middleware
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/guide/using-middleware.html
+    title: Express — Using middleware
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/guide/error-handling.html
+    title: Express — Error handling
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/5x/api/application.html
+    title: Express 5.x API — Application
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/5x/api/request.html
+    title: Express 5.x API — Request
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/5x/api/response.html
+    title: Express 5.x API — Response
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/5x/api/router.html
+    title: Express 5.x API — Router
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/5x/api/express.html
+    title: Express 5.x API — express() module and built-in middleware
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/guide/migrating-5.html
+    title: Express — Migrating to Express 5
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/guide/migrating-4.html
+    title: Express — Migrating from Express 3 to Express 4
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/advanced/best-practice-security.html
+    title: Express — Production best practices — security
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/advanced/security-updates.html
+    title: Express — Security updates (historical CVE log by version)
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/advanced/best-practice-performance.html
+    title: Express — Production best practices — performance and reliability
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/advanced/healthcheck-graceful-shutdown.html
+    title: Express — Health checks and graceful shutdown
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/guide/using-template-engines.html
+    title: Express — Using template engines
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/guide/behind-proxies.html
+    title: Express — Behind proxies (trust proxy)
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/starter/installing.html
+    title: Express — Installing (incl. TypeScript setup and native .ts execution)
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/support/
+    title: Express — Version support policy
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+  - url: https://expressjs.com/en/starter/faq.html
+    title: Express — FAQ
+    via: research/technologies/express.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  express-4x: ">=4.22 (latest-4 dist-tag = 4.22.2, published 2026-05-11; still actively patched, Node.js >=0.10 required)"
+  express-5x: ">=5.2 (latest dist-tag = 5.2.1, published 2025-12-01; current npm default, Node.js >=18 required)"
+version_sensitive_claims:
+  - claim: >-
+      Express 5.x's route-matching engine is built on a newer path-to-regexp
+      version requiring named wildcards (*splat / {*splat}) and brace-based
+      optional segments ({.:ext}), replacing 4.x's /*, :file.:ext?, and [a|b]
+      alternation syntax — a real breaking change for non-trivial 4.x routes.
+    applies_to: "5.x (breaking vs. all 4.x and earlier)"
+    source_ref: research/technologies/express.md §3, §11, §13; research/knowledge-maps/version-matrix.md Part 3 Express
+  - claim: >-
+      Node.js version floor is version-line-specific, not one Express-wide
+      number: 5.x requires Node.js >=18; 4.x requires Node.js >=0.10; 3.x
+      (EOL 2015) required Node.js >=0.8.0; 2.x (EOL 2012) required Node.js >=0.4.1.
+    applies_to: "per major line, as stated"
+    source_ref: research/technologies/express.md §12; research/knowledge-maps/version-matrix.md Part 1, Part 3 Express
+  - claim: >-
+      app.query(path, callback), which routes the HTTP QUERY method, requires
+      Node.js >=20.19.3 or >=22.2.0 — a stricter floor than Express 5.x's own
+      Node.js >=18 requirement.
+    applies_to: "5.x only"
+    source_ref: research/technologies/express.md §3
+  - claim: >-
+      Native execution of .ts files (node src/app.ts, no build step) requires
+      Node.js >=22.18.0 (or >=23.6.0 on the v23 line) with TypeScript >=5.8 —
+      a Node.js type-stripping capability, not an Express feature, so it
+      applies the same regardless of the Express major version in use.
+    applies_to: "any Express version; gated by Node.js/TypeScript version, not Express version"
+    source_ref: research/technologies/express.md §4
+  - claim: >-
+      express.urlencoded()'s extended option default flipped from true (4.x)
+      to false (5.x); req.body is undefined (not {}) when no body-parsing
+      middleware ran in 5.x; req.query became a read-only getter with default
+      parser "simple" (was "extended") in 5.x.
+    applies_to: "5.x (changed from 4.x default behavior)"
+    source_ref: research/technologies/express.md §11, §13
+  - claim: >-
+      npm dist-tags: "latest" = 5.2.1 (2025-12-01); "latest-4" = 4.22.2
+      (2026-05-11) — the 4.x line continues receiving patches after 5.x
+      became the npm default, so both lines are simultaneously live and
+      supported, not superseded/abandoned.
+    applies_to: "both lines, as of the research snapshot date"
+    source_ref: research/technologies/express.md §12; research/knowledge-maps/version-matrix.md Part 3 Express
+last_verified: "2026-09-10"
+reverify_triggers:
+  - A new Express major release (6.x) or publication of its migration guide
+  - expressjs.com/en/support/ changing 4.x's status from "Ongoing" to a stated EOL date (a third-party/commercial source already claims an informal maintenance-phase target, unconfirmed officially — see Security/references)
+  - A new path-to-regexp major version altering 5.x route-syntax further
+  - Official confirmation or correction of the Unresolved CVE-2024-51999 (5.2.0→5.2.1) status on an expressjs.com-hosted security page
+
+owned_knowledge:
+  - Express middleware pipeline mechanics and the app/router/request/response API surface
+  - Express 4.x-vs-5.x route-syntax and default-behavior migration specifics
+decision_framework_present: true
+
+failure_handling:
+  - If the Express major version (4.x vs 5.x) cannot be determined, ask or state explicitly which version the guidance assumes — never silently assume "latest"/5.x, since 4.x is still actively maintained and widely deployed (VA-3).
+  - If shell is unavailable, output advisory code/config edits and state that install/build/test commands were not run.
+verification:
+  - Route-path syntax used (wildcards, optional segments, alternatives) matches the project's actual Express major version.
+  - Error-handling middleware (4-arg signature) is registered last, after all other app.use()/route registrations.
+  - Any security-hardening recommendation cites a specific documented CVE/fixed-version rather than a vague "update your dependencies."
+evaluation_criteria:
+  - For a seeded Express 4.x app, does not introduce 5.x-only route syntax (named wildcards, brace optional segments) or 5.x-only defaults (urlencoded extended:false) that would break on 4.x.
+  - For a seeded Express 5.x migration task, correctly identifies the route-syntax, req.body/req.query, and urlencoded-default changes.
+  - For a seeded production-hardening task, recommends helmet, session-cookie renaming, and rate limiting, citing the two named CVEs with their precise fixed versions.
+  - Does not restate the Fastify-vs-Express comparison already owned by backend-architecture (QR-2).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]
+  cursor:
+    paths: ["**/routes/**", "**/middleware/**", "**/app.js", "**/app.ts", "**/server.js", "**/server.ts"]
+  vscode:
+    argument_hint: "<task, e.g. 'add auth middleware' or 'migrate to Express 5'>"

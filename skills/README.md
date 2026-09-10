@@ -33,6 +33,15 @@ not generated speculatively or in bulk.
 | [typeorm](typeorm/) | `SK-TECH-typeorm` | Data (technology) | authored, not yet validated/evaluated |
 | [clickhouse](clickhouse/) | `SK-TECH-clickhouse` | Data (technology) | authored, not yet validated/evaluated |
 | [redis](redis/) | `SK-TECH-redis` | Data (technology) | authored, not yet validated/evaluated |
+| [backend-architecture](backend-architecture/) | `SK-BE-001` | Backend (generic) | authored, not yet validated/evaluated |
+| [api-design](api-design/) | `SK-BE-002` | Backend (generic) | authored, not yet validated/evaluated |
+| [graphql-api-design](graphql-api-design/) | `SK-BE-003` | Backend (generic) | authored, not yet validated/evaluated |
+| [nodejs](nodejs/) | `SK-TECH-nodejs` | Backend (technology) | authored, not yet validated/evaluated — added to the taxonomy post-hoc (2026-09-10) |
+| [express](express/) | `SK-TECH-express` | Backend (technology) | authored, not yet validated/evaluated |
+| [fastify](fastify/) | `SK-TECH-fastify` | Backend (technology) | authored, not yet validated/evaluated |
+| [go](go/) | `SK-TECH-go` | Backend (technology) | authored, not yet validated/evaluated |
+| [python](python/) | `SK-TECH-python` | Backend (technology) | authored, not yet validated/evaluated |
+| [openapi-swagger](openapi-swagger/) | `SK-TECH-openapi-swagger` | Backend (technology) | authored, not yet validated/evaluated |
 
 Per the [specification's conformance lifecycle](../core/skill-specification/specification.md#5-conformance--lifecycle),
 a skill needs a passing mechanical validator, an `evaluations/` test, and an

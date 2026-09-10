@@ -1,0 +1,231 @@
+id: SK-TECH-nodejs
+slug: nodejs
+name: Node.js
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-BE-001]
+
+purpose: >-
+  Apply Node.js correctly and version-appropriately as the runtime underneath
+  a backend service — its module system, event-loop/concurrency model,
+  Permission Model, and release-line policy.
+scope: >-
+  Node.js-runtime specifics: CommonJS/ESM, the event loop and libuv thread
+  pool, worker_threads/child_process/cluster, the Permission Model, node:test,
+  and release-line/version policy. The generic backend-structure method
+  (layering, middleware, DI, centralized error handling, graceful shutdown,
+  and the Node-vs-Go-vs-Python runtime choice) comes from the parent skill
+  (backend-architecture). Framework-level specifics (Express/Fastify routing,
+  middleware ecosystems, schema validation) belong to their own technology
+  skills, not here.
+expertise: Node.js runtime engineer.
+description: >-
+  Node.js runtime specifics: CommonJS vs ESM, the event loop and libuv thread
+  pool, worker_threads/child_process/cluster, the Permission Model, node:test,
+  and release-line/version policy (including the v27 annual-release change).
+  Use when the stack runs on Node.js and the question is runtime-level (module
+  system, concurrency primitive, sandboxing, version support). Not for
+  Express/Fastify framework specifics, generic backend structure (use
+  backend-architecture), or other runtimes (Go, Python).
+
+activation_conditions:
+  - The project targets Node.js (package.json, .nvmrc, a Node engines field, or the task names it)
+  - A CommonJS-vs-ESM, worker_threads-vs-child_process-vs-cluster, or Permission Model decision is open
+  - A Node.js version/upgrade/EOL/security-release question is asked
+  - An event-loop-blocking, memory, or CPU performance issue is suspected in a Node.js process
+non_activation_conditions:
+  - The stack runs on Go, Python, or another non-Node runtime (route to that skill)
+  - The question is Express- or Fastify-specific routing/middleware/plugin behavior with the runtime itself not in question (route to SK-TECH-express or SK-TECH-fastify)
+  - Generic backend layering/middleware/DI/error-handling/shutdown design with no Node.js-specific mechanism involved (route to SK-BE-001)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: >-
+      The Node.js-runtime task (module-system choice, concurrency-primitive
+      choice, Permission Model adoption, version/upgrade impact, or
+      event-loop/performance diagnosis).
+    required: true
+  - name: existing-node-target
+    description: The Node.js version(s) already targeted (package.json "engines", .nvmrc, CI matrix, Docker base image tag), if not greenfield.
+    required: false
+required_context:
+  - The Node.js release line in use or targeted (Current / Active LTS / Maintenance LTS) — needed for version-correct guidance.
+optional_context:
+  - package.json ("type", "engines", dependencies, "exports"/"imports").
+  - Existing profiling/diagnostic output (flame graph, heap snapshot, diagnostics_channel data) for a performance question.
+
+outputs:
+  - name: nodejs-runtime-guidance
+    kind: analysis
+    description: Version-correct guidance on module system, concurrency-primitive choice, Permission Model adoption, or a diagnosed event-loop/performance issue.
+  - name: config-or-flag-change
+    kind: edit
+    description: package.json/tsconfig/CLI-flag or env-file changes reflecting the chosen module system, Permission Model allowlist, or runtime configuration.
+
+depends_on_skills: []
+related_skills: [SK-TECH-express, SK-TECH-fastify]
+conflicts_with: [SK-TECH-go, SK-TECH-python]
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: https://nodejs.org/en/learn/getting-started/introduction-to-nodejs
+    title: "Node.js — Introduction to Node.js"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick
+    title: "Node.js — The Node.js Event Loop, Timers, and process.nextTick()"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://docs.libuv.org/en/v1.x/threadpool.html
+    title: "libuv — Thread pool work scheduling"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://nodejs.org/api/packages.html
+    title: "Node.js API — Modules: Packages"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://nodejs.org/api/esm.html
+    title: "Node.js API — Modules: ECMAScript modules"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://nodejs.org/api/worker_threads.html
+    title: "Node.js API — Worker threads"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://nodejs.org/api/cluster.html
+    title: "Node.js API — Cluster"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://nodejs.org/en/learn/asynchronous-work/dont-block-the-event-loop
+    title: "Node.js — Don't Block the Event Loop (or the Worker Pool)"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://nodejs.org/api/permissions.html
+    title: "Node.js API — Permissions (Permission Model)"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://nodejs.org/en/about/security
+    title: "Node.js — Security (vulnerability reporting/disclosure policy)"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://nodejs.org/en/blog/vulnerability/july-2026-security-releases
+    title: "Node.js Blog — July 2026 Security Releases"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://raw.githubusercontent.com/nodejs/Release/main/README.md
+    title: "nodejs/Release — Release schedule and policy"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://nodejs.org/en/blog/announcements/evolving-the-nodejs-release-schedule
+    title: "Node.js Blog — Evolving the Node.js Release Schedule"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://nodejs.org/en/download
+    title: "Node.js — Download (current Current/LTS versions)"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://nodejs.org/en/blog/release/v26.0.0
+    title: "Node.js Blog — Node.js 26.0.0 Release Notes"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://nodejs.org/api/test.html
+    title: "Node.js API — Test runner (node:test)"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://nodejs.org/api/typescript.html
+    title: "Node.js API — Modules: TypeScript (native type stripping)"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md
+    title: "nodejs/docker-node — Best Practices"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://docs.npmjs.com/cli/v11/commands/npm-ci
+    title: "npm docs — npm ci"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://nodejs.org/learn/getting-started/debugging
+    title: "Node.js — Debugging"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+  - url: https://nodejs.org/en/learn/getting-started/security-best-practices
+    title: "Node.js — Security Best Practices"
+    via: research/technologies/nodejs.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  nodejs: "current: 26.x (26.8.2); active LTS: 24.x 'Krypton' (24.21.0); maintenance LTS: 22.x 'Jod'"
+version_sensitive_claims:
+  - claim: >-
+      Node.js is retiring its twice-yearly odd/even release cadence starting
+      with v27: a 6-month Alpha channel (Oct–Mar, not for production), then
+      6 months as Current (Apr–Oct), then 30 months of LTS — 36 months total
+      support, delivered as one continuous line instead of split odd/even
+      lines. v26 is the last release under the old six-month/odd-even model.
+    applies_to: "v27+ (v27 enters Alpha Oct 2026); v26 is the last release under the prior model"
+    source_ref: "research/technologies/nodejs.md §12, https://nodejs.org/en/blog/announcements/evolving-the-nodejs-release-schedule"
+  - claim: >-
+      CVE-2026-58043 (HIGH): the Permission Model's path-matching logic could
+      over-grant filesystem access across radix-tree prefix boundaries under
+      `--permission`, patched in a coordinated security release alongside 10
+      other CVEs.
+    applies_to: "Node.js lines prior to v26.5.1 / v24.18.1 / v22.23.2 (fixed 2026-07-29)"
+    source_ref: "research/technologies/nodejs.md §7, https://nodejs.org/en/blog/vulnerability/july-2026-security-releases"
+  - claim: >-
+      Node.js 26.0.0 enables the Temporal API by default (a new global) and
+      fully removes (not merely deprecates) crypto.createCipher()/
+      createDecipher(), http.Server.prototype.writeHeader(), and the legacy
+      _stream_* internal modules.
+    applies_to: ">=26.0.0"
+    source_ref: "research/technologies/nodejs.md §13, https://nodejs.org/en/blog/release/v26.0.0"
+  - claim: The Permission Model (--permission) is Stable.
+    applies_to: ">=23.5.0 / >=22.13.0 (flag renamed from --experimental-permission in v24.0.0)"
+    source_ref: "research/technologies/nodejs.md §7/§13, https://nodejs.org/api/permissions.html"
+  - claim: The built-in node:test module is available and Stable.
+    applies_to: "available >=18.0.0; Stable >=20.0.0"
+    source_ref: "research/technologies/nodejs.md §9, https://nodejs.org/api/test.html"
+  - claim: >-
+      Native TypeScript type-stripping progressed from experimental to
+      default-on to Stable, and gained a --no-strip-types opt-out.
+    applies_to: "experimental >=22.6.0; default-on >=23.6.0/22.18.0; Stable >=25.2.0/24.12.0; --no-strip-types added in 26.0.0"
+    source_ref: "research/technologies/nodejs.md §1/§4/§13, https://nodejs.org/api/typescript.html"
+last_verified: "2026-09-10"
+reverify_triggers:
+  - "Node.js v27 release (Oct 2026)"
+  - "Any further coordinated security release touching the Permission Model"
+  - "A Node.js release line transitioning between Current / Active LTS / Maintenance LTS / EOL"
+
+owned_knowledge:
+  - Node.js event-loop phases and libuv worker-thread-pool internals
+  - CommonJS vs ESM module-system mechanics and interop
+  - Node.js concurrency-primitive selection (worker_threads vs child_process vs cluster)
+  - Node.js Permission Model mechanics and documented limitations
+  - Node.js release-line/version-cadence policy (including the v27 annual-release change)
+
+decision_framework_present: true
+
+failure_handling:
+  - If the Node.js release line (Current/Active LTS/Maintenance LTS) cannot be determined, ask for it or explicitly state the line the guidance assumes; never assume "latest" silently (VA-3).
+  - If shell is unavailable/denied, output advisory config/flag/code changes (package.json, tsconfig, CLI flags) and state that nothing was executed or verified.
+verification:
+  - Any Node.js version claim is tagged with the release line/range it applies to.
+  - Permission Model guidance repeats its official "does not provide security against malicious code" caveat rather than presenting it as a sandbox against adversarial dependencies.
+  - CPU-bound work is not routed to worker_threads/child_process/cluster when the actual bottleneck is I/O-bound, and vice versa.
+evaluation_criteria:
+  - For a seeded module-system decision, chooses CommonJS or ESM based on the project's actual constraints (interop needs, existing "type" field, dependency ecosystem) rather than defaulting to one.
+  - For a seeded event-loop-blocking symptom, correctly diagnoses it as blocking (not a memory leak or GC pause) and proposes partitioning/offload per official guidance.
+  - Cites the correct Current/Active-LTS/Maintenance-LTS line as of last_verified, and flags the v27 cadence change when the task touches version/upgrade planning.
+  - Does not restate backend-architecture's runtime-selection framework or its layering/error-handling/shutdown method (QR-2).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]
+  vscode:
+    argument_hint: "<task, e.g. 'should this be ESM or CommonJS' or 'diagnose event-loop blocking'>"

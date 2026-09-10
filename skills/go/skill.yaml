@@ -1,0 +1,219 @@
+id: SK-TECH-go
+slug: go
+name: Go
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-BE-001]   # backend-architecture
+
+purpose: >-
+  Apply Go correctly and version-appropriately — goroutine/channel
+  concurrency, explicit multi-value error handling, the module system,
+  generics, and version-gated toolchain/runtime behavior across Go's
+  rolling two-major support window.
+scope: >-
+  Go-specific language, runtime, and toolchain facts: concurrency primitives
+  (goroutines, channels, select), the (value, error) idiom, go.mod/go.sum/
+  go.work module mechanics, generics since 1.18, GC/GOMEMLIMIT/PGO
+  performance tuning, and standard-library testing. The generic
+  service-structuring method (layering, middleware, DI, shutdown) comes from
+  the parent Layer-3 skill (backend-architecture).
+expertise: Go backend engineer.
+description: >-
+  Go-specific concurrency (goroutines/channels), explicit multi-value error
+  returns, the module system (go.mod/go.sum/go.work), generics (since Go
+  1.18), GOMEMLIMIT/PGO performance tuning, and standard-library testing
+  (go test, benchmarks, fuzzing). Use when the stack is Go (go.mod present,
+  .go files, or the task names Go/goroutines/channels). Not for Node.js or
+  Python backends (use those skills), or generic service structuring (use
+  backend-architecture).
+
+activation_conditions:
+  - A go.mod file or .go source files are present in the repo
+  - The task names Go, goroutines, channels, or a Go-specific tool (go test, go build, go mod, govulncheck)
+  - A Go version/toolchain upgrade or module dependency change is being planned
+non_activation_conditions:
+  - The stack uses Node.js or Python (route to that runtime's skill)
+  - Generic backend layering/middleware/DI decisions with no runtime chosen yet (route to SK-BE-001 backend-architecture)
+  - Database-specific SQL/schema design unrelated to Go's database/sql usage (route to the relevant data skill)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Go task (concurrency design, error-handling pattern, module/dependency change, generics usage, performance tuning, test/fuzz authoring).
+    required: true
+  - name: existing-code
+    description: Existing go.mod, module layout, and any profiling/benchmark output.
+    required: false
+required_context:
+  - The Go version/toolchain in use (go.mod's `go` directive or `go version`) — needed for version-correct guidance given the ~6-month major-release cadence and rolling two-major support window.
+optional_context:
+  - CPU/heap pprof profiles or an existing default.pgo file.
+  - go test -race / -bench output.
+
+outputs:
+  - name: code-or-module-change
+    kind: edit
+    description: Go source or go.mod/go.sum/go.work changes reflecting version-correct Go idioms.
+  - name: concurrency-or-error-handling-design
+    kind: analysis
+    description: Goroutine/channel or worker-pool design, and explicit error-handling pattern, for the task at hand.
+  - name: analysis
+    kind: analysis
+    description: Recommendations (concurrency approach, FIPS-mode applicability, performance tuning) with rationale and the version they apply to.
+
+depends_on_skills: []
+related_skills: []
+conflicts_with: [SK-TECH-nodejs, SK-TECH-python]   # alternative backend runtimes/languages for the same service
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+# Tier B: proposing code/module changes is advisory; running go build/go
+# test/govulncheck/pprof needs shell. No capability_fallbacks block required
+# (Tier B, not C) — degrades to advisory per failure_handling below.
+
+grounding: official-docs
+source_references:
+  - url: https://go.dev/ref/spec
+    title: "The Go Programming Language Specification"
+    via: research/technologies/go.md
+    retrieved: "2026-09-10"
+  - url: https://go.dev/doc/effective_go
+    title: "Effective Go"
+    via: research/technologies/go.md
+    retrieved: "2026-09-10"
+  - url: https://go.dev/doc/faq
+    title: "Frequently Asked Questions (FAQ) — The Go Programming Language"
+    via: research/technologies/go.md
+    retrieved: "2026-09-10"
+  - url: https://go.dev/ref/mod
+    title: "Go Modules Reference"
+    via: research/technologies/go.md
+    retrieved: "2026-09-10"
+  - url: https://go.dev/doc/modules/gomod-ref
+    title: "go.mod file reference"
+    via: research/technologies/go.md
+    retrieved: "2026-09-10"
+  - url: https://go.dev/doc/gc-guide
+    title: "A Guide to the Go Garbage Collector"
+    via: research/technologies/go.md
+    retrieved: "2026-09-10"
+  - url: https://go.dev/doc/pgo
+    title: "Profile-guided optimization"
+    via: research/technologies/go.md
+    retrieved: "2026-09-10"
+  - url: https://go.dev/doc/database/sql-injection
+    title: "Avoiding SQL Injection — The Go database/sql package"
+    via: research/technologies/go.md
+    retrieved: "2026-09-10"
+  - url: https://go.dev/doc/security/fips140
+    title: "Go Cryptographic Module — FIPS 140-3"
+    via: research/technologies/go.md
+    retrieved: "2026-09-10"
+  - url: https://go.dev/security/
+    title: "Go Security — govulncheck, fuzzing, vulnerability database"
+    via: research/technologies/go.md
+    retrieved: "2026-09-10"
+  - url: https://pkg.go.dev/testing
+    title: "Package testing — pkg.go.dev"
+    via: research/technologies/go.md
+    retrieved: "2026-09-10"
+  - url: https://go.dev/doc/articles/race_detector.html
+    title: "Data Race Detector"
+    via: research/technologies/go.md
+    retrieved: "2026-09-10"
+  - url: https://go.dev/doc/diagnostics
+    title: "Diagnostics — profiling, tracing, debugging"
+    via: research/technologies/go.md
+    retrieved: "2026-09-10"
+  - url: https://go.dev/doc/devel/release
+    title: "Release History — The Go Programming Language"
+    via: research/technologies/go.md
+    retrieved: "2026-09-10"
+  - url: https://go.dev/doc/go1compat
+    title: "Go 1 and the Future of Go Programs (compatibility promise)"
+    via: research/technologies/go.md
+    retrieved: "2026-09-10"
+  - url: https://go.dev/doc/go1.26
+    title: "Go 1.26 Release Notes"
+    via: research/technologies/go.md
+    retrieved: "2026-09-10"
+  - url: https://go.dev/doc/go1.27
+    title: "Go 1.27 Release Notes"
+    via: research/technologies/go.md
+    retrieved: "2026-09-10"
+  - url: https://go.dev/doc/modules/major-version
+    title: "Developing a major version update — Go Modules"
+    via: research/technologies/go.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/version-matrix.md
+    title: "Version Matrix — Go row (generics, modules, GOMEMLIMIT, PGO, support policy, FIPS 140-3)"
+    via: research/knowledge-maps/version-matrix.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  go: ">=1.26 <=1.27"
+version_sensitive_claims:
+  - claim: Each Go major release is supported until two newer majors ship (~12 months, given the ~6-month cadence); as of the research date, Go 1.26 and 1.27 are the two supported major lines and Go 1.25 is no longer supported.
+    applies_to: "current as of 2026-09; re-verify on every new Go major release"
+    source_ref: research/technologies/go.md §12; research/knowledge-maps/version-matrix.md
+  - claim: FIPS 140-3-oriented mode (Go Cryptographic Module) ships from Go 1.24+; in FIPS mode crypto/tls is restricted to approved protocols/ciphers; unsupported on OpenBSD, Wasm, AIX, and 32-bit Windows.
+    applies_to: ">=1.24"
+    source_ref: research/technologies/go.md §7, §17; research/knowledge-maps/version-matrix.md
+  - claim: Generics (type parameters) introduced in Go 1.18; self-referential generic type declarations became legal in Go 1.26; generic methods (methods with their own type parameters) added in Go 1.27, though interface methods still cannot declare type parameters.
+    applies_to: ">=1.18 generics; >=1.26 self-referential types; >=1.27 generic methods"
+    source_ref: research/technologies/go.md §1; research/knowledge-maps/version-matrix.md
+  - claim: Module-aware mode is the default since Go 1.16; explicit `require` directives for transitive dependencies (with module-graph pruning) since Go 1.17; the `go` directive became mandatory/enforced as of Go 1.21+ (a toolchain refuses to build a module declaring a newer Go version than it implements).
+    applies_to: ">=1.16 module-aware default; >=1.17 explicit transitive require; >=1.21 mandatory go directive"
+    source_ref: research/technologies/go.md §4; research/knowledge-maps/version-matrix.md
+  - claim: GOMEMLIMIT was introduced in Go 1.19.
+    applies_to: ">=1.19"
+    source_ref: research/technologies/go.md §4, §8
+  - claim: Profile-Guided Optimization required explicit opt-in before Go 1.21; from Go 1.21 onward it is auto-detected and on by default whenever a default.pgo file is present.
+    applies_to: "<1.21 opt-in; >=1.21 default"
+    source_ref: research/technologies/go.md §5, §8
+  - claim: Go 1.26 requires Go 1.24.6 or later to bootstrap-build the toolchain from source.
+    applies_to: "building Go 1.26 from source"
+    source_ref: research/technologies/go.md §12
+  - claim: Go 1.27 raised the minimum supported macOS version to macOS 13 Ventura (dropping macOS 12 support present through 1.26); on Linux, ppc64 now generates ELFv2 binaries by default, requiring Linux 3.13+.
+    applies_to: ">=1.27"
+    source_ref: research/technologies/go.md §13
+last_verified: "2026-09-10"
+reverify_triggers:
+  - A new Go major release, which retires the oldest currently-supported major (per the two-newer-majors support policy) and shifts the covered_versions range
+  - A change to FIPS 140-3 mode's platform support, approved-protocol list, or module certification status
+  - A change to the generics spec (type parameters) or to any GODEBUG opt-out slated for removal per a release's notes
+
+owned_knowledge:
+  - Go goroutine/channel concurrency primitives and worker-pool vs. unbounded-fan-out selection
+  - Go's explicit multi-value (value, error) return idiom
+  - Go module system mechanics (go.mod/go.sum/go.work, Minimal Version Selection)
+  - Go generics (type parameters) usage and its version timeline
+decision_framework_present: true
+
+failure_handling:
+  - If the Go version/toolchain in use cannot be determined, ask for it or state the version the guidance assumes — never assume "latest" silently (VA-3), given the ~6-month release cadence and rolling two-major support window.
+  - If shell is unavailable/denied, degrade to advisory code/module-change output and state that go build/go test/govulncheck were not run.
+  - If a claim would require FIPS mode on a platform the research already documents as unsupported (OpenBSD, Wasm, AIX, 32-bit Windows), say so rather than assert it works there.
+escalation:
+  - Adopting FIPS 140-3 mode for a service is a compliance-scoped, hard-to-reverse decision (narrows crypto/tls protocol/cipher support and drops platform support) — present with trade-offs for explicit confirmation, never enabled unilaterally.
+  - Changing a module's major-version import path (e.g. appending /v2) breaks every consumer's import path — requires explicit confirmation and a stated support policy for the old major version.
+verification:
+  - Every returned error from a called function is checked (or explicitly, deliberately discarded with a stated reason), not silently dropped.
+  - Every spawned goroutine has a clear termination path (channel close, context cancellation, or WaitGroup) — none started with no way for it to end.
+  - Any version-specific claim is tagged with the range it holds for, and the target Go version is confirmed before recommending a version-gated feature.
+evaluation_criteria:
+  - For a seeded concurrency requirement, chooses between raw goroutines+channels and a bounded worker-pool pattern based on the actual concurrency need (unbounded fan-out risk vs. controlled parallelism/backpressure), not by default.
+  - For a seeded function with fallible calls, produces idiomatic (value, error) handling with early return, not ignored errors or panic-for-control-flow.
+  - Correctly gates a generics/module-directive/FIPS claim to the Go version stated in the repo's go.mod, not an assumed "latest."
+  - Does not restate generic backend-layering method owned by SK-BE-001, or manufacture a Node.js/Go/Python comparative performance ranking not present in the research (QR-2).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]   # for go build/go test/govulncheck/pprof; abstract shell → CC tools
+  cursor:
+    paths: ["**/*.go", "go.mod", "go.sum", "go.work"]
+  vscode:
+    argument_hint: "<task, e.g. 'design a bounded worker pool for this job queue' or 'add generics to this function'>"

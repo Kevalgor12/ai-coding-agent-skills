@@ -684,6 +684,46 @@ This file registers every official documentation source consulted while research
 - https://nextjs.org/blog/next-16-3 -- Next.js 16.3 release notes: new APIs, Instant Navigations, experimental features
 - https://vercel.com/changelog/next-js-may-2026-security-release -- May 2026 coordinated security release: 13 advisories, affected/patched versions, CVE-2026-23870
 
+## Node.js
+
+- https://raw.githubusercontent.com/nodejs/Release/main/README.md -- Official release schedule and policy: LTS/Current/Maintenance definitions, cadence, backport rules
+- https://nodejs.org/en/about/previous-releases -- Release schedule table, cross-checked against the GitHub Release repo
+- https://nodejs.org/en/download -- Current Current (v26.8.2) and LTS (v24.21.0) version numbers
+- https://nodejs.org/en/blog/announcements/evolving-the-nodejs-release-schedule -- Official announcement of the v27+ annual release-cadence change (Alpha/Current/LTS timeline)
+- https://nodejs.org/en/about/security -- Security policy: vulnerability reporting via HackerOne, disclosure process, embargo timeline
+- https://nodejs.org/en/blog/vulnerability/july-2026-security-releases -- Worked example security release with full CVE list across 26.x/24.x/22.x
+- https://nodejs.org/en/about/governance -- Project governance: Collaborators, Technical Steering Committee, OpenJS Foundation relationship
+- https://nodejs.org/en/learn/getting-started/introduction-to-nodejs -- Core concepts/architecture overview: V8, single-threaded event loop, non-blocking I/O
+- https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick -- Event loop phases, process.nextTick vs setImmediate
+- https://nodejs.org/en/learn/asynchronous-work/dont-block-the-event-loop -- Official guidance on blocking-the-event-loop anti-patterns and mitigations
+- https://nodejs.org/en/learn/getting-started/security-best-practices -- Documented vulnerability classes (ReDoS, prototype pollution, timing attacks, etc.) and mitigations
+- https://nodejs.org/learn/getting-started/debugging -- --inspect/--inspect-brk, Chrome DevTools/IDE integration, inspector security caveats
+- https://nodejs.org/en/learn/diagnostics/flame-graphs -- CPU profiling / flame graph guidance (--perf-basic-prof, 0x)
+- https://nodejs.org/en/learn/diagnostics/memory/using-heap-profiler -- Heap profiling guidance (allocation timeline vs sampling profiler)
+- https://nodejs.org/api/esm.html -- ECMAScript Modules implementation and CommonJS/ESM interop
+- https://nodejs.org/api/packages.html -- package.json fields (type, main, exports, imports) and conditional exports
+- https://nodejs.org/api/permissions.html -- Permission Model reference: flags, restricted resources, limitations
+- https://nodejs.org/api/test.html -- node:test built-in test runner API and stance
+- https://nodejs.org/api/worker_threads.html -- worker_threads module
+- https://nodejs.org/api/cluster.html -- cluster module: primary/worker architecture, load-distribution caveats
+- https://nodejs.org/api/cli.html -- CLI flags, NODE_OPTIONS, environment variables, TypeScript flags
+- https://nodejs.org/api/diagnostics_channel.html -- diagnostics_channel module
+- https://nodejs.org/api/util.html -- util module
+- https://nodejs.org/api/fs.html -- fs module (callback/promise/sync API styles)
+- https://nodejs.org/api/stream.html -- stream module: Readable/Writable/Duplex/Transform, backpressure, Web Streams interop
+- https://nodejs.org/api/http.html -- http module: server/client, Agent/keep-alive
+- https://nodejs.org/api/path.html -- path module: win32/posix namespaces
+- https://nodejs.org/api/process.html -- process global object: env, argv, signals, report
+- https://nodejs.org/api/typescript.html -- Native TypeScript type-stripping support, flags, and limitations
+- https://nodejs.org/en/blog/release/v26.0.0 -- Node.js 26.0.0 official release notes (breaking changes, Temporal API, V8/Undici bumps)
+- https://raw.githubusercontent.com/nodejs/node/main/doc/changelogs/CHANGELOG_V24.md -- Node.js 24.0.0 changelog: breaking changes, semver-major commits
+- https://raw.githubusercontent.com/nodejs/node/main/doc/changelogs/CHANGELOG_V22.md -- Node.js 22.0.0 changelog: breaking changes, semver-major commits
+- https://docs.libuv.org/en/v1.x/threadpool.html -- libuv thread pool internals: default size, UV_THREADPOOL_SIZE, which ops use it
+- https://github.com/nodejs/corepack#readme -- Corepack (npm/Yarn/pnpm bridge): purpose, bundling history, deprecation from core at v25
+- https://github.com/nodejs/docker-node/blob/main/docs/BestPractices.md -- Official Docker working group best practices: multi-stage builds, non-root user, PID 1 signal handling
+- https://docs.npmjs.com/cli/v11/configuring-npm/npmrc -- npm's official .npmrc configuration hierarchy (four precedence levels)
+- https://docs.npmjs.com/cli/v11/commands/npm-ci -- npm ci documentation: frozen-install contract, CI/deployment use case
+
 ## Nuxt
 
 - https://nuxt.com/docs/4.x/getting-started/introduction -- Core concepts, mission statement, key features overview
@@ -1342,7 +1382,7 @@ Each domain below is counted once per technology that cites it (not once per URL
 
 | Domain | Technologies citing it |
 |---|---|
-| github.com | 26 |
+| github.com | 27 |
 | registry.npmjs.org | 9 |
 | raw.githubusercontent.com | 6 |
 | developer.mozilla.org | 4 |
@@ -1351,7 +1391,7 @@ Each domain below is counted once per technology that cites it (not once per URL
 | developers.google.com | 2 |
 | docs.github.com | 2 |
 | github.blog | 2 |
-| nodejs.org | 2 |
+| nodejs.org | 3 |
 | vitest.dev | 2 |
 | www.npmjs.com | 2 |
 | www.w3.org | 2 |
@@ -1368,6 +1408,8 @@ Each domain below is counted once per technology that cites it (not once per URL
 | devtools.vite.dev | 1 |
 | devtools.vuejs.org | 1 |
 | docs.docker.com | 1 |
+| docs.libuv.org | 1 |
+| docs.npmjs.com | 1 |
 | docs.opensearch.org | 1 |
 | docs.python.org | 1 |
 | ecma-international.org | 1 |
