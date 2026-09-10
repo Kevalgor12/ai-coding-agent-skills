@@ -1,0 +1,86 @@
+id: SK-FE-003
+slug: styling-systems
+name: Styling systems
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: FE
+
+purpose: >-
+  Architect styling — design-token/theme structure, responsive strategy,
+  style scoping/encapsulation, and dark-mode strategy — independent of
+  which styling tool is used.
+scope: >-
+  Tech-neutral styling architecture. Specialized by the Tailwind CSS,
+  Sass, web-standards (CSS), shadcn/ui, and MUI technology skills for
+  implementation depth. Not visual/interaction-design judgment itself
+  (ui-ux-design) and not accessibility depth (web-accessibility).
+expertise: Senior/principal frontend engineer with styling-architecture experience.
+description: >-
+  Architect styling — design-token/theme structure, responsive strategy,
+  style scoping/encapsulation, and dark-mode strategy, and choose a
+  styling tool when that choice is open. Use when setting up or
+  restructuring how an app is styled. Not for visual/interaction-design
+  judgment (ui-ux-design) or a one-off style tweak with an established
+  system already in place.
+
+activation_conditions:
+  - Setting up or restructuring how an app is styled
+  - A design-token/theme architecture is being designed
+  - A styling-tool choice is open (Tailwind vs. Sass vs. plain CSS vs. a component library)
+non_activation_conditions:
+  - A one-off style tweak with an established system already in place
+  - Visual/interaction-design judgment with styling architecture already settled (route to ui-ux-design)
+activation_mode: auto
+
+inputs:
+  - name: design-system-brand
+    description: The design system or brand constraints, if any.
+    required: false
+  - name: chosen-styling-tool
+    description: The styling tool already in use, if this is not a tool-selection decision.
+    required: false
+outputs:
+  - name: styling-architecture
+    kind: analysis
+    description: Token/theme structure, responsive strategy, scoping approach, and dark-mode strategy, with rationale.
+
+depends_on_skills: []
+related_skills: [SK-FE-002, SK-FE-004, SK-TECH-tailwindcss, SK-TECH-sass, SK-TECH-web-standards, SK-TECH-shadcn-ui, SK-TECH-mui]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: official-docs
+source_references:
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: "Technology Decision Matrix — §8 Component library: MUI vs. shadcn/ui; §9 Styling: Sass vs. Tailwind CSS vs. plain CSS"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/concept-knowledge-map.md
+    title: "Concept Knowledge Map — D. Styling, Design Systems & UI Components (Design System/Theming, Responsive Design, Dark Mode Theming)"
+    via: research/knowledge-maps/concept-knowledge-map.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Styling-tool selection decision framework (Sass vs. Tailwind vs. plain CSS; MUI vs. shadcn/ui)
+  - Design-token/theme architecture method (runtime vs. build-time theming)
+  - Style scoping/encapsulation and dark-mode strategy design
+decision_framework_present: true
+
+failure_handling:
+  - If design-system/brand constraints aren't stated, ask rather than assume a token structure.
+  - If a styling tool is already in place, work within it unless the user explicitly asks to evaluate a switch.
+verification:
+  - The token/theme architecture supports theming, dark mode, and responsive behavior without duplicated magic values scattered across the codebase.
+  - A styling-tool recommendation cites the documented structural differentiators (distribution model, runtime cost, patch policy) rather than unresearched preference.
+  - Style scoping avoids specificity wars — a documented, consistent encapsulation approach, not ad hoc overrides.
+evaluation_criteria:
+  - Produces a token/theme architecture supporting theming, dark mode, and responsive behavior without duplicated magic values.
+  - When a styling-tool choice is open, cites the documented structural/security/performance differentiators (e.g. MUI's installed-dependency vs. shadcn/ui's copy-in-source model) rather than defaulting to familiarity.
+  - Does not recommend a styling-tool switch for an established system without explicit user request.
+
+adapter_hints: {}

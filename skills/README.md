@@ -79,6 +79,8 @@ not generated speculatively or in bulk.
 | [caching-strategy](caching-strategy/) | `SK-DATA-004` | Data (generic) | authored, not yet validated/evaluated |
 | [performance-engineering](performance-engineering/) | `SK-QA-003` | QA (generic) | authored, not yet validated/evaluated |
 | [seo-optimization](seo-optimization/) | `SK-GROW-001` | Growth (generic, unified with Google SEO tech content) | authored, not yet validated/evaluated |
+| [ui-ux-design](ui-ux-design/) | `SK-FE-002` | Frontend (generic) | authored, not yet validated/evaluated |
+| [styling-systems](styling-systems/) | `SK-FE-003` | Frontend (generic) | authored, not yet validated/evaluated |
 
 Per the [specification's conformance lifecycle](../core/skill-specification/specification.md#5-conformance--lifecycle),
 a skill needs a passing mechanical validator, an `evaluations/` test, and an
