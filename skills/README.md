@@ -100,6 +100,9 @@ not generated speculatively or in bulk.
 | [model-selection](model-selection/) | `SK-AI-006` | AI/LLM (generic) | authored, not yet validated/evaluated |
 | [llm-evaluation](llm-evaluation/) | `SK-AI-007` | AI/LLM (generic) | authored, not yet validated/evaluated |
 | [ai-security](ai-security/) | `SK-AI-008` | AI/LLM (generic) | authored, not yet validated/evaluated |
+| [skill-router](skill-router/) | `SK-ORCH-001` | Orchestration (Layer 0) | authored, not yet validated/evaluated — reference implementation of [core/orchestrator/](../core/orchestrator/) |
+| [capability-adapter](capability-adapter/) | `SK-ORCH-002` | Orchestration (Layer 0) | authored, not yet validated/evaluated — the vendor-neutrality enforcement point |
+| [workflow-composer](workflow-composer/) | `SK-ORCH-003` | Orchestration (Layer 0) | authored, not yet validated/evaluated — hard-composes `SK-ORCH-001` |
 
 Per the [specification's conformance lifecycle](../core/skill-specification/specification.md#5-conformance--lifecycle),
 a skill needs a passing mechanical validator, an `evaluations/` test, and an
