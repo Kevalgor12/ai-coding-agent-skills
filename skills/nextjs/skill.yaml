@@ -1,0 +1,233 @@
+id: SK-TECH-nextjs
+slug: nextjs
+name: Next.js
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-FE-001, SK-FE-005, SK-GROW-001]   # frontend-architecture, rendering-strategy, seo-optimization
+
+purpose: >-
+  Apply Next.js correctly and version-appropriately — App Router vs Pages
+  Router mechanics, file-based routing, the Cache Components/Partial
+  Prerendering model, Server Actions, and the CLI/upgrade path — including
+  the version-critical May 2026 security advisories.
+scope: >-
+  Next.js-specific implementation depth. The generic frontend-structure
+  method comes from SK-FE-001; the rendering-mode decision method comes from
+  SK-FE-005 (not yet authored); SEO mechanics come from SK-GROW-001 (not yet
+  authored). The Next.js-vs-Nuxt meta-framework comparison is already owned
+  by SK-FE-001 and is not repeated here.
+expertise: Next.js/full-stack React framework engineer.
+description: >-
+  Next.js-specific implementation: App Router vs Pages Router mechanics,
+  file-based routing conventions, the Cache Components/Partial Prerendering
+  model, Server Actions, and CLI/upgrade paths. Use when the stack uses
+  Next.js (next.config.js/.mjs/.ts, an app/ or pages/ directory, "next" in
+  package.json) or the task names a Next.js feature. Next.js 13-14 have no
+  direct patch for the May 2026 security advisories — version-check first.
+  Not for open framework selection or generic SEO strategy.
+
+activation_conditions:
+  - A next.config.js/.mjs/.ts file, or "next" in package.json/lockfile, is present
+  - The project uses Next.js's app/ or pages/ directory routing conventions
+  - The task names Next.js, App Router, Pages Router, or a Next.js-specific feature (Server Actions, Cache Components, Turbopack, proxy.ts, Route Handlers)
+  - A Next.js version upgrade, security-patch check, or major-version migration is requested
+non_activation_conditions:
+  - The stack uses a different meta-framework (Nuxt, Remix, SvelteKit, Astro) — route to that skill
+  - The framework/meta-framework choice is still open (route to SK-FE-001, or SK-FE-005 once authored)
+  - Generic React component/hook/state work with no Next.js-specific mechanism involved (route to SK-TECH-react)
+  - Pure SEO/content strategy with no rendering-mechanism question (route to SK-GROW-001 once authored)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Next.js task (routing/rendering, caching config, Server Actions, security upgrade, deployment, testing).
+    required: true
+  - name: project-context
+    description: The project's current Next.js version, router (App/Pages), and next.config.js, if this is not greenfield.
+    required: false
+required_context:
+  - The project's actual installed Next.js version — needed before any version-gated recommendation, especially security guidance.
+optional_context:
+  - Whether Cache Components (cacheComponents: true) is already enabled.
+  - The deployment target (Node server, Docker, static export, a specific Adapter).
+
+outputs:
+  - name: nextjs-code-or-config
+    kind: edit
+    description: App Router/Pages Router code, next.config.js changes, Server Actions, Route Handlers, or proxy.ts.
+  - name: version-or-security-analysis
+    kind: analysis
+    description: Version/upgrade recommendation, explicitly flagging whether the project falls in the no-direct-patch 13-14 window.
+
+depends_on_skills: []
+related_skills: [SK-TECH-react]
+conflicts_with: [SK-TECH-nuxt]
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+# Tier B: proposing code/config is advisory; running next build/dev, codemods,
+# or next upgrade needs shell.
+
+grounding: official-docs
+source_references:
+  - url: https://nextjs.org/docs
+    title: Next.js Docs — Introduction
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+  - url: https://nextjs.org/docs/app/getting-started/server-and-client-components
+    title: Next.js Docs — Server and Client Components
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+  - url: https://nextjs.org/docs/app/getting-started/installation
+    title: Next.js Docs — Installation
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+  - url: https://nextjs.org/docs/app/getting-started/caching
+    title: Next.js Docs — Caching (Cache Components)
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+  - url: https://nextjs.org/docs/app/api-reference
+    title: Next.js Docs — API Reference (App Router)
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+  - url: https://nextjs.org/docs/app/api-reference/config/next-config-js
+    title: Next.js Docs — next.config.js Options
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+  - url: https://nextjs.org/docs/app/guides/upgrading/version-16
+    title: Next.js Docs — Upgrading to Version 16
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+  - url: https://nextjs.org/docs/app/getting-started/upgrading
+    title: Next.js Docs — Upgrading (CLI, canary channel)
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+  - url: https://nextjs.org/docs/app/guides/data-security
+    title: Next.js Docs — Data Security
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+  - url: https://nextjs.org/docs/app/guides/content-security-policy
+    title: Next.js Docs — Content Security Policy
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+  - url: https://nextjs.org/docs/app/guides/static-exports
+    title: Next.js Docs — Static Exports
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+  - url: https://nextjs.org/docs/app/guides/testing
+    title: Next.js Docs — Testing
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+  - url: https://nextjs.org/docs/app/guides/production-checklist
+    title: Next.js Docs — Production Checklist
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+  - url: https://nextjs.org/support-policy
+    title: Next.js — Version and Support Policy
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+  - url: https://nextjs.org/blog/next-16-3
+    title: Next.js Blog — Next.js 16.3
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+  - url: https://vercel.com/changelog/next-js-may-2026-security-release
+    title: Vercel Changelog — Next.js May 2026 Security Release
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+  - url: https://nextjs.org/docs/architecture/supported-browsers
+    title: Next.js Docs — Supported Browsers
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  nextjs: ">=15.5.18 (or >=16.2.6) recommended given the May 2026 forced-upgrade advisory"
+version_sensitive_claims:
+  - claim: >-
+      Next.js 13 and 14 (all versions) received NO DIRECT PATCH in the May
+      2026 coordinated security release covering 13 advisories; the only
+      remediation is upgrading to >=15.5.18 or >=16.2.6. This is the single
+      most important version-gated fact in this skill.
+    applies_to: "13.x, 14.x (all versions, unpatched)"
+    source_ref: research/technologies/nextjs.md §7, §13; version-matrix.md §Next.js
+  - claim: react-server-dom-* patched to 19.0.6 / 19.1.7 / 19.2.6 in the same May 2026 release.
+    applies_to: "react-server-dom-* 19.0.x-19.2.x"
+    source_ref: research/technologies/nextjs.md §7
+  - claim: Minimum Node.js 20.9.0 required; Node 18 support dropped.
+    applies_to: ">=16.0 (also stated as current floor as of 16.3.4)"
+    source_ref: research/knowledge-maps/version-matrix.md §Next.js
+  - claim: Minimum TypeScript 5.1.0; TypeScript 7 (typescript@^7) is opt-in via useTypeScriptCli for ~10x faster type checking.
+    applies_to: ">=16.3 for useTypeScriptCli"
+    source_ref: research/knowledge-maps/version-matrix.md §Next.js
+  - claim: App Router uses React canary releases bundled by Next.js; Pages Router uses whatever React version package.json declares.
+    applies_to: "current (App Router vs Pages Router, all recent majors)"
+    source_ref: research/technologies/nextjs.md §1
+  - claim: SRI-based experimental CSP added in v14.0.0; nonce/CSP-header parsing "recommended" since v13.4.20.
+    applies_to: ">=14.0.0 (SRI), >=13.4.20 (nonce parsing)"
+    source_ref: research/knowledge-maps/version-matrix.md §Next.js
+  - claim: next export deprecated v13.3.0, removed v14.0.0, replaced by output:'export'; App Router static export added v13.4.0.
+    applies_to: ">=13.3.0 deprecated, >=14.0.0 removed, >=13.4.0 App Router support"
+    source_ref: research/knowledge-maps/version-matrix.md §Next.js
+  - claim: next upgrade CLI requires Next.js >=16.1.0; earlier versions must use npx @next/codemod@canary upgrade latest.
+    applies_to: ">=16.1.0 for the CLI command itself"
+    source_ref: research/knowledge-maps/version-matrix.md §Next.js
+  - claim: Async next.config.js functions supported since v12.1.0.
+    applies_to: ">=12.1.0"
+    source_ref: research/knowledge-maps/version-matrix.md §Next.js
+  - claim: next typegen CLI introduced in 15.5.
+    applies_to: ">=15.5"
+    source_ref: research/knowledge-maps/version-matrix.md §Next.js
+  - claim: >-
+      Synchronous access to cookies()/headers()/draftMode()/params/searchParams
+      is a hard error in v16 (was a deprecated-but-working shim in v15).
+    applies_to: ">=16.0"
+    source_ref: research/technologies/nextjs.md §13
+  - claim: Turbopack is the default bundler for next dev and next build (no --turbopack flag needed); a project with a custom Webpack config fails next build unless it opts back to --webpack.
+    applies_to: ">=16.0"
+    source_ref: research/technologies/nextjs.md §13
+  - claim: middleware.ts/middleware() renamed to proxy.ts/proxy(); the Edge runtime is not supported in proxy (always runs on Node.js runtime).
+    applies_to: ">=16.0"
+    source_ref: research/technologies/nextjs.md §13
+last_verified: "2026-09-10"
+reverify_triggers:
+  - A new Next.js security advisory or coordinated security release (the May 2026 advisory list and patched-version set must be re-checked against current docs)
+  - A new Next.js major release (currently 16.x is Active LTS; 15.x is Maintenance LTS)
+  - Next.js 15.x's Maintenance LTS window lapsing (2 years post its Oct 21, 2024 release)
+  - A stable/breaking change to the Cache Components model or Partial Prerendering behavior
+  - A change to next upgrade / next typegen CLI behavior or minimum-version requirements
+
+owned_knowledge:
+  - Next.js App Router mechanics (Server/Client Component split, RSC Payload, hydration sequence)
+  - Next.js file-system routing conventions (app/ and pages/ directories, route/layout/loading/error/route-handler files)
+  - Next.js Cache Components model ("use cache", cacheLife/cacheTag, Partial Prerendering)
+  - The May 2026 Next.js coordinated security release (13-advisory breakdown, exact patched versions)
+  - Next.js CLI and upgrade/codemod mechanics (next upgrade, next typegen, @next/codemod)
+
+decision_framework_present: true
+
+failure_handling:
+  - If the installed Next.js version cannot be determined (no package.json/lockfile visible), ask for it or explicitly state the version the guidance assumes before giving any version-gated recommendation — never assume "latest" silently.
+  - If the project is found to be on Next.js 13 or 14, state plainly that no direct patch exists for the May 2026 advisories and that upgrading to >=15.5.18 or >=16.2.6 is required, surfacing this before continuing unrelated work.
+  - If shell is unavailable/denied, degrade to advisory code/config output and state that next build/next dev/codemods were not actually run.
+escalation:
+  - A major-version upgrade (13→14→15→16) touching Server Actions, the middleware→proxy rename, or the caching-model change is a breaking-change set — present the upgrade-guide/codemod plan for explicit confirmation before running it against a production app.
+  - Discovering mid-task that a project is on unpatched Next.js 13/14 is a security-relevant finding — surface it explicitly rather than folding it silently into other work.
+verification:
+  - App Router and Pages Router conventions are not mixed in ways the docs warn against; the correct React-version source (canary vs package.json) is used for the router in play.
+  - Any version-gated API/config/CLI claim made matches the project's actual Next.js version, not an assumed "latest."
+  - A proposed static export (output:'export') does not rely on a feature the docs list as unsupported in that mode.
+evaluation_criteria:
+  - For a seeded project on Next.js 13 or 14, identifies that no direct patch exists and recommends the correct upgrade target (>=15.5.18 or >=16.2.6).
+  - For a seeded App Router task, correctly distinguishes canary-React behavior from Pages Router's package.json-declared React version.
+  - For a seeded scenario, chooses App Router vs Pages Router, or static export vs full SSR/Docker/Adapter deployment, with a defensible rationale rather than a default.
+  - Does not restate the Next.js-vs-Nuxt comparison already owned by SK-FE-001 (QR-2).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]   # for next dev/build/typegen/upgrade and codemods
+  cursor:
+    paths: ["**/next.config.*", "**/app/**", "**/pages/**", "**/proxy.ts", "**/middleware.ts"]
+  vscode:
+    argument_hint: "<task, e.g. 'add a Server Action' or 'check for the May 2026 security advisories'>"

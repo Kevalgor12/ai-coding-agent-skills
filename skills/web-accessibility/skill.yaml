@@ -1,0 +1,101 @@
+id: SK-FE-004
+slug: web-accessibility
+name: Web accessibility
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: FE
+
+purpose: >-
+  Ensure user interfaces are accessible — semantic markup as the foundation,
+  framework/component-library accessibility primitives, and accessibility-
+  aware testing — spanning HTML, component libraries, and test tooling.
+scope: >-
+  Cross-cutting accessibility: semantic HTML foundations, how component
+  libraries (MUI/shadcn) build in accessibility, and accessibility-oriented
+  testing (Playwright). Deliberately does not claim WCAG-success-criterion-
+  level conformance depth — that is a documented research gap in this
+  library (see Knowledge), not something this skill invents.
+expertise: Senior frontend engineer with accessibility practice experience.
+description: >-
+  Ensure UI markup and components are accessible — semantic HTML as the
+  foundation, component-library accessibility primitives, and
+  accessibility-aware testing via Playwright's role-based locators. Use when
+  building user-facing UI or auditing for accessibility. Honest about scope:
+  does not provide WCAG-success-criterion-level conformance depth, which is
+  a documented research gap, not covered here.
+
+activation_conditions:
+  - Building user-facing UI markup or components
+  - An accessibility audit or review is requested
+  - Choosing between semantic markup and ARIA-patched generic elements
+non_activation_conditions:
+  - Backend/non-UI work
+  - A request for formal WCAG conformance certification/audit depth beyond what this skill's grounded scope covers (state the gap explicitly rather than fabricating conformance claims)
+activation_mode: auto
+
+inputs:
+  - name: ui-markup-or-components
+    description: The markup/components being built or reviewed.
+    required: true
+  - name: target-standard
+    description: A stated accessibility target (e.g. a WCAG level), if the user has one.
+    required: false
+required_context:
+  - The markup or component structure to assess
+optional_context:
+  - A specific stated accessibility target/standard
+  - Whether automated testing (Playwright) is part of the workflow
+
+outputs:
+  - name: accessible-markup
+    kind: edit
+    description: Markup/components using semantic elements and correct ARIA-as-supplement usage.
+  - name: accessibility-findings
+    kind: analysis
+    description: Review findings on markup/component accessibility, with what's in and out of this skill's grounded scope stated explicitly.
+
+depends_on_skills: []
+related_skills: [SK-FE-001, SK-TECH-web-standards, SK-TECH-mui, SK-TECH-shadcn-ui, SK-TECH-playwright]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: official-docs
+source_references:
+  - url: https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Accessibility/HTML
+    title: "MDN — HTML: A good basis for accessibility (semantic markup guidance)"
+    via: research/technologies/html.md
+    retrieved: "2026-09-10"
+  - url: https://html.spec.whatwg.org/multipage/introduction.html
+    title: "WHATWG HTML Living Standard — HTML as a semantic-level markup language for accessible pages"
+    via: research/technologies/html.md
+    retrieved: "2026-09-10"
+  - url: https://validator.w3.org/nu/about.html
+    title: "W3C Nu Html Checker — validates markup for accessibility/usability/interoperability/security concerns"
+    via: research/technologies/html.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Semantic-HTML-as-accessibility-foundation method
+  - Accessibility-aware testing via role-based locators
+decision_framework_present: true
+
+failure_handling:
+  - If asked for WCAG-success-criterion-level conformance auditing beyond this skill's grounded scope, state that gap explicitly rather than fabricating conformance-level guidance.
+  - If a target standard/level isn't stated, default to semantic-HTML-first practice (the one well-grounded baseline) rather than assuming a specific WCAG level.
+verification:
+  - Semantic elements are used where a native equivalent exists, before reaching for ARIA.
+  - Images have meaningful alt text (or explicit empty alt for decorative images).
+  - Interactive elements are reachable/operable via native keyboard support, not reconstructed with div+JS.
+escalation:
+  - A legal/compliance accessibility requirement (e.g. ADA/AODA/EN 301 549) is flagged to the user directly rather than assumed satisfied by this skill's grounded scope.
+evaluation_criteria:
+  - On a fixture with div-itis (clickable divs, missing alt text, heading-hierarchy violations), identifies and fixes the issues using semantic HTML.
+  - Correctly applies the "native semantics before ARIA" principle rather than reaching for ARIA roles where a native element would do.
+  - Explicitly states when a request exceeds this skill's grounded scope (formal WCAG conformance) rather than fabricating an assessment.
+
+adapter_hints: {}

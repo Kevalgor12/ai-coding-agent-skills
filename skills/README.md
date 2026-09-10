@@ -42,6 +42,19 @@ not generated speculatively or in bulk.
 | [go](go/) | `SK-TECH-go` | Backend (technology) | authored, not yet validated/evaluated |
 | [python](python/) | `SK-TECH-python` | Backend (technology) | authored, not yet validated/evaluated |
 | [openapi-swagger](openapi-swagger/) | `SK-TECH-openapi-swagger` | Backend (technology) | authored, not yet validated/evaluated |
+| [frontend-architecture](frontend-architecture/) | `SK-FE-001` | Frontend (generic) | authored, not yet validated/evaluated |
+| [web-accessibility](web-accessibility/) | `SK-FE-004` | Frontend (generic) | authored, not yet validated/evaluated |
+| [react](react/) | `SK-TECH-react` | Frontend (technology) | authored, not yet validated/evaluated |
+| [nextjs](nextjs/) | `SK-TECH-nextjs` | Frontend (technology) | authored, not yet validated/evaluated |
+| [vue](vue/) | `SK-TECH-vue` | Frontend (technology) | authored, not yet validated/evaluated |
+| [nuxt](nuxt/) | `SK-TECH-nuxt` | Frontend (technology) | authored, not yet validated/evaluated |
+| [angular](angular/) | `SK-TECH-angular` | Frontend (technology) | authored, not yet validated/evaluated |
+| [typescript](typescript/) | `SK-TECH-typescript` | Frontend (technology) | authored, not yet validated/evaluated |
+| [web-standards](web-standards/) | `SK-TECH-web-standards` | Frontend (technology) | authored, not yet validated/evaluated — merged HTML+CSS per taxonomy analysis |
+| [sass](sass/) | `SK-TECH-sass` | Frontend (technology) | authored, not yet validated/evaluated |
+| [tailwindcss](tailwindcss/) | `SK-TECH-tailwindcss` | Frontend (technology) | authored, not yet validated/evaluated |
+| [mui](mui/) | `SK-TECH-mui` | Frontend (technology) | authored, not yet validated/evaluated |
+| [shadcn-ui](shadcn-ui/) | `SK-TECH-shadcn-ui` | Frontend (technology) | authored, not yet validated/evaluated |
 
 Per the [specification's conformance lifecycle](../core/skill-specification/specification.md#5-conformance--lifecycle),
 a skill needs a passing mechanical validator, an `evaluations/` test, and an

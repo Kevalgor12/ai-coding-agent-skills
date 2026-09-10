@@ -334,7 +334,7 @@ Execution tier (A/B/C) is per [README.md](README.md#vendor-neutrality-model-how-
 - **Non-activation conditions:** Backend/non-UI work.
 - **Dependencies:** Related to `SK-TECH-playwright` (a11y-tree automation) for verification.
 - **Conflicts:** None.
-- **Related:** `SK-FE-002`, `SK-TECH-html`, `SK-TECH-shadcn-ui`, `SK-TECH-mui`.
+- **Related:** `SK-FE-002`, `SK-TECH-web-standards`, `SK-TECH-shadcn-ui`, `SK-TECH-mui`.
 - **Evaluation requirements:** On a fixture with a11y defects (missing labels, non-semantic elements, low contrast), identifies and fixes them; produced markup passes an automated a11y check.
 - **Tier:** A (author) / C (browser-based verification).
 
@@ -699,8 +699,7 @@ researched technology doc.
 | `SK-TECH-sass` | Sass | FE-003 | `@use`/`@forward` module system; deprecation management |
 | `SK-TECH-shadcn-ui` | shadcn/ui | FE-003, FE-002 | Copy-in source model (not a dep); supply-chain pinning; needs Tailwind |
 | `SK-TECH-mui` | MUI | FE-003, FE-002 | CSS-in-JS, theming, CSP nonce handling |
-| `SK-TECH-html` | HTML | FE-003, FE-004 | Semantic markup, a11y, CSP; **merged with CSS as web-standards** (see analysis) |
-| `SK-TECH-css` | CSS | FE-003 | **Merged with HTML** into `web-standards`; tokens, scoping, container/layer queries |
+| `SK-TECH-web-standards` | Web Standards (HTML & CSS) | FE-003, FE-004 | **Merge of HTML + CSS** (see analysis) — semantic markup, DOM, cascade/specificity, custom properties, Baseline-tracked modern CSS (`@container`, `@property`, native nesting), CSP-relevant sinks |
 | `SK-TECH-nodejs` | Node.js | BE-001 | **Added post-hoc (2026-09-10)** — missed from the original 44; researched separately in `research/technologies/nodejs.md`. Event loop/libuv runtime underneath Express/Fastify; annual-LTS cadence change starting v27 |
 | `SK-TECH-express` | Express | BE-001, BE-002 | Middleware pipeline; **no official app-testing guidance** (research gap); runs on Node.js (`SK-TECH-nodejs`) |
 | `SK-TECH-fastify` | Fastify | BE-001, BE-002 | Schema-driven validation/serialization, plugins, DI; runs on Node.js (`SK-TECH-nodejs`) |

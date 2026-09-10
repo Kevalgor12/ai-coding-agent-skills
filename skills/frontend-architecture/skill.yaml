@@ -1,0 +1,91 @@
+id: SK-FE-001
+slug: frontend-architecture
+name: Frontend architecture
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: FE
+
+purpose: >-
+  Structure a frontend application — component architecture, state
+  management, data flow, routing — and choose a framework when that choice
+  is open, independent of which framework is eventually used.
+scope: >-
+  Tech-neutral frontend structure and the framework-selection decision.
+  Specialized by the React/Vue/Angular/Next.js/Nuxt technology skills. Not
+  styling itself (styling-systems, not yet authored), not accessibility
+  depth (web-accessibility), and not the rendering-mode decision
+  (rendering-strategy, not yet authored).
+expertise: Senior/principal frontend engineer.
+description: >-
+  Structure a frontend application — components, state management, data
+  flow, routing — and choose a framework (React/Vue/Angular, and a
+  meta-framework on top) when that choice is open. Use when building or
+  structuring a frontend app or feature. Not for styling specifics,
+  accessibility depth, or the SSR/SSG rendering-mode decision.
+
+activation_conditions:
+  - Building or structuring a new frontend application or non-trivial feature
+  - A framework/meta-framework choice is open
+  - An existing frontend's component/state structure needs review or rework
+non_activation_conditions:
+  - Pure styling work with structure already settled (route to styling-systems, not yet authored)
+  - Backend-only work
+  - A framework choice already fixed, with a purely technology-specific question (route to the matching technology skill)
+activation_mode: auto
+
+inputs:
+  - name: requirements
+    description: UI/feature requirements and constraints (ideally from requirements-engineering/solution-architecture).
+    required: true
+  - name: existing-app
+    description: An existing frontend's structure, if this is not greenfield.
+    required: false
+required_context:
+  - What the UI needs to do and its non-functional constraints (SEO need, team framework expertise, interactivity level)
+optional_context:
+  - Existing framework already in use elsewhere in the organization
+  - Whether a meta-framework (SSR/SSG) capability is needed
+
+outputs:
+  - name: framework-choice
+    kind: analysis
+    description: The recommended framework/meta-framework with trade-offs, when open.
+  - name: component-state-structure
+    kind: analysis
+    description: Component decomposition, state-management strategy, and data-fetching pattern.
+
+depends_on_skills: []
+related_skills: [SK-DISC-002, SK-FE-004, SK-TECH-typescript]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: "Technology Decision Matrix — §4 Frontend framework: React vs. Vue vs. Angular; §5 Meta-framework: Next.js vs. Nuxt"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Frontend framework/meta-framework selection decision framework
+  - Component/state-management/data-flow/routing structure method
+decision_framework_present: true
+
+failure_handling:
+  - If requirements are too thin to support a framework decision, request them or hand off to requirements-engineering rather than assuming a default.
+  - If a framework is already in place, work within it unless the user explicitly asks to evaluate a switch.
+verification:
+  - Component boundaries reflect real reuse/ownership seams, not arbitrary splitting.
+  - State management scope (local/shared/global) matches actual sharing needs, not a default-to-global habit.
+  - A framework recommendation cites the decision-matrix comparison where one exists, not unresearched preference.
+evaluation_criteria:
+  - For a seeded UI requirement set, proposes a component/state structure that satisfies the requirements without prop-drilling anti-patterns or an unjustified global store.
+  - When a framework choice is open, cites the documented security/testing/compiler differentiators rather than defaulting to familiarity.
+  - Does not recommend a framework switch for an existing app without explicit user request.
+
+adapter_hints: {}

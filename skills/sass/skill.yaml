@@ -1,0 +1,247 @@
+id: SK-TECH-sass
+slug: sass
+name: Sass
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-FE-003]   # styling-systems — not yet authored in this library; forward reference
+
+purpose: >-
+  Apply Sass correctly and version-appropriately: the @use/@forward module
+  system, mixins, selector inheritance, built-in sass:* modules, and migrating
+  off the deprecated @import syntax and the end-of-life LibSass/Node
+  Sass/Ruby Sass implementations onto Dart Sass.
+scope: >-
+  Sass-language and Dart-Sass-specific engineering detail — the module
+  system, built-in functions, CLI/build integration, and
+  implementation/version migration. The generic styling-architecture method
+  (design tokens, scoping strategy, utility-vs-authored-CSS choice) comes
+  from the parent skill SK-FE-003 (styling-systems, not yet authored in this
+  library — forward reference).
+expertise: Sass/CSS-preprocessing engineer.
+description: >-
+  Sass-specific stylesheet authoring: the @use/@forward module system,
+  mixins, functions, selector inheritance (@extend), control flow, and
+  built-in sass:* modules, using Dart Sass (the only actively maintained
+  implementation). Use when .scss/.sass files, a sass/sass-embedded
+  dependency, or a Sass-specific construct is present, or the task names
+  Sass/SCSS. Not for Less/Stylus/plain CSS, framework component-styling
+  APIs, or Tailwind-only utility-class work with no Sass files involved.
+
+activation_conditions:
+  - .scss or .sass files are present in the project
+  - A sass or sass-embedded devDependency, or a bundler's Sass-preprocessing config (e.g. a "scss"/"sass" loader or plugin option), is present
+  - The task names Sass/SCSS or a Sass-specific construct (@use, @forward, @mixin, @extend, sass:math, sass:color, etc.)
+  - A legacy node-sass, libsass, or ruby-sass dependency is found and needs migrating
+non_activation_conditions:
+  - The stack uses another preprocessor/methodology (Less, Stylus, plain CSS, CSS Modules) with no Sass files present (route to that tool or SK-TECH-web-standards)
+  - The question is about a UI framework's own component-styling API (CSS-in-JS, styled-components-style theming) rather than Sass language mechanics (route to that framework's skill)
+  - The question is purely about Tailwind CSS utility classes with no Sass files, @use, or Sass dependency present (route to SK-TECH-tailwindcss)
+  - Generic styling-architecture decisions (tokens, scoping strategy, picking a styling approach at all) with no Sass in play yet (route to SK-FE-003)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Sass task (new stylesheet architecture, @import migration, mixin/function authoring, module configuration, build-tool integration, legacy-implementation migration).
+    required: true
+  - name: existing-stylesheets
+    description: Existing .scss/.sass files and their @use/@import dependency graph, if any.
+    required: false
+  - name: build-tool-context
+    description: The bundler/build tool compiling Sass (CLI, Vite/webpack loader, a Dart/JS API integration) and its Sass package (sass vs. sass-embedded vs. a legacy Node Sass/LibSass install).
+    required: false
+required_context: []
+optional_context:
+  - The Dart Sass version in use (CLI --version or package.json), for version-gated guidance.
+  - Whether the project still depends on node-sass, libsass, or ruby sass (all EOL/deprecated).
+
+outputs:
+  - name: stylesheet-edit
+    kind: edit
+    description: New or modified .scss/.sass files using the module system, mixins, functions, selector inheritance, or control flow as appropriate.
+  - name: migration-edit
+    kind: edit
+    description: "@import-to-@use/@forward conversions (ideally via sass-migrator), or a Node Sass/LibSass-to-Dart Sass dependency migration, with namespacing resolved."
+  - name: analysis
+    kind: analysis
+    description: Recommendations (module system vs. legacy @import, Dart Sass vs. any remaining legacy implementation, sass vs. sass-embedded package choice, Sass vs. plain modern CSS) with rationale and the version they apply to.
+
+depends_on_skills: []
+# Specialization of SK-FE-003 is already captured by `parents` above; this is
+# not a hard blocking sub-step invocation, so it does not belong here too
+# (spec §2.5 — do not conflate parents with depends_on_skills).
+related_skills: [SK-TECH-web-standards]
+conflicts_with: []
+# Deliberately empty, not [SK-TECH-tailwindcss]: Sass and Tailwind CSS are a
+# styling-APPROACH choice a project makes independently, not a hard mutual
+# exclusion. They can and do coexist (utility classes plus authored
+# preprocessor CSS). Tailwind v4 itself declines to support using Sass as a
+# PostCSS-style preprocessing *step* ahead of it, but that is a build-order
+# constraint on one specific integration pattern, not a same-decision
+# conflict at the skill-composition level this field governs.
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+# Sass compilation is normally a build step (CLI/bundler-driven), not an
+# interactive shell judgment call the way running a service or DB migration
+# is. This skill's own outputs are .scss/.sass edits, module/config
+# structure, and migration analysis — advisory, file-only work. Actually
+# running `sass --watch`, `sass-migrator`, or a build to verify compiles is
+# the surrounding build-tool skill's/user's job, not this skill's.
+
+grounding: official-docs
+source_references:
+  - url: https://sass-lang.com/documentation/
+    title: Sass Documentation (home / current reference target)
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: https://sass-lang.com/documentation/syntax/
+    title: Sass — Syntax (SCSS vs. indented syntax)
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: https://sass-lang.com/documentation/values/
+    title: Sass — Values (SassScript data types)
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: https://sass-lang.com/documentation/at-rules/
+    title: Sass — At-Rules (overview)
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: https://sass-lang.com/documentation/at-rules/use/
+    title: Sass — @use
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: https://sass-lang.com/documentation/modules/
+    title: Sass — Built-In Modules
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: https://sass-lang.com/dart-sass/
+    title: Dart Sass (implementation overview)
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: https://sass-lang.com/documentation/js-api/
+    title: Sass — JavaScript API
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: https://sass-lang.com/documentation/cli/dart-sass/
+    title: Sass — Dart Sass CLI
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: https://sass-lang.com/documentation/cli/migrator/
+    title: Sass — Sass Migrator CLI
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: https://sass-lang.com/documentation/breaking-changes/
+    title: Sass — Breaking Changes (index)
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: https://sass-lang.com/documentation/breaking-changes/import/
+    title: "Sass — Breaking Changes: @import"
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: https://sass-lang.com/blog/security-alert-tar-permissions/
+    title: "Sass — Security Alert: Tar Permissions"
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: https://sass-lang.com/blog/libsass-is-deprecated/
+    title: Sass — LibSass Is Deprecated
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: https://sass-lang.com/blog/node-sass-is-end-of-life/
+    title: Sass — Node Sass Is End of Life
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: https://sass-lang.com/install/
+    title: Sass — Install
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/sass/dart-sass/releases
+    title: dart-sass — Releases
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: https://sass-lang.com/blog/announcing-dart-sass/
+    title: Announcing Dart Sass (historical performance claim, vendor-sourced)
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: https://sass-lang.com/blog/node-fibers-discontinued/
+    title: Node Fibers Discontinued (async render() performance note)
+    via: research/technologies/sass.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/version-matrix.md
+    title: "Version Matrix — Sass row (deprecation timelines, EOL dates, security-bug version range)"
+    via: research/knowledge-maps/version-matrix.md
+    retrieved: "2026-09-10"
+  - url: https://tailwindcss.com/docs/compatibility
+    title: "Tailwind CSS — Compatibility (Sass/Less/Stylus preprocessor support dropped in v4)"
+    via: research/technologies/tailwind.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  dart-sass: ">=1.80 <=1.104 (must migrate off Node Sass/LibSass/Ruby Sass — all EOL/deprecated, no supported version range)"
+version_sensitive_claims:
+  - claim: The legacy JS API (render()/renderSync()) is deprecated but "will continue to be supported until the release of version 2.0.0 of the sass package" (not yet released).
+    applies_to: "current Dart Sass releases, until a future sass npm package 2.0.0 ships"
+    source_ref: research/technologies/sass.md §3; research/knowledge-maps/version-matrix.md
+  - claim: "@import began emitting deprecation warnings at Dart Sass 1.80.0; the deprecation period runs until Dart Sass 3.0.0, which will not release sooner than two years after 1.80.0. @import still works today but is on a long, dated deprecation track."
+    applies_to: ">=1.80.0, through the deprecation window ending no earlier than two years post-1.80.0 at Dart Sass 3.0.0"
+    source_ref: research/technologies/sass.md §11, §13; research/knowledge-maps/version-matrix.md
+  - claim: The tar-permissions security bug (incorrect Unix file permissions on release archives) affected the sass-embedded npm package before 1.54.5 and the RubyGems non-native package before 1.56.2. npm `sass`, Homebrew, and Chocolatey installs were unaffected.
+    applies_to: "sass-embedded npm <1.54.5; RubyGems non-native package <1.56.2"
+    source_ref: research/technologies/sass.md §7; research/knowledge-maps/version-matrix.md
+  - claim: Node Sass reached end-of-life 2024-07-24 (npm package deprecated, GitHub repo archived); LibSass and Ruby Sass were both declared deprecated 2020-10-26.
+    applies_to: "Node Sass: EOL as of 2024-07-24; LibSass/Ruby Sass: deprecated as of 2020-10-26"
+    source_ref: research/technologies/sass.md §11-12; research/knowledge-maps/version-matrix.md
+  - claim: The current Dart Sass reference target is 1.104.0 (as of the 2026-09-09 research date), with recent releases shipping roughly every 1-4 weeks — treat "latest" as a moving target, not a fixed version.
+    applies_to: "as of research date 2026-09-09; re-check before citing a specific current version"
+    source_ref: research/technologies/sass.md §12; research/knowledge-maps/version-matrix.md
+  - claim: The breaking-changes catalogue lists 25+ dated entries pinned to specific releases (e.g. adjacent compound selectors at 1.100.0, the legacy if() function at 1.95.0, @import at 1.80.0, legacy JS API/Color API deprecations at 1.79.0).
+    applies_to: "cumulative through 1.104.0; new entries are added on an ongoing basis"
+    source_ref: research/technologies/sass.md §13
+last_verified: "2026-09-10"
+reverify_triggers:
+  - Dart Sass 3.0.0 releases (removes @import support, treating it as plain-CSS @import only)
+  - A future sass npm package 2.0.0 releases (removes the legacy render()/renderSync() JS API)
+  - A new dated entry is added to the official Breaking Changes index
+  - LibSass's exact EOL date is confirmed (currently unresolved/unconfirmed per research)
+  - SK-FE-003 (styling-systems) is authored, to re-check parent-relationship accuracy
+
+owned_knowledge:
+  - Sass module system (@use/@forward) semantics, namespacing, and !default + with(...) configuration
+  - Sass built-in sass:* modules (math/string/color/list/map/selector/meta) and their role vs. legacy global functions
+  - Sass CLI compilation flags and Sass Migrator subcommands (module, division, color, if())
+  - Sass implementation history and deprecation timeline (Dart Sass vs. LibSass/Node Sass/Ruby Sass)
+  # Cross-cutting security/performance/testing depth is NOT owned here — referenced, not restated.
+
+decision_framework_present: true
+
+failure_handling:
+  - If it is unclear whether a codebase can tolerate the @import deprecation-warning noise from a bulk migration, default to recommending @use/@forward for new code and leave existing @import in place pending a scheduled migration — never silently rewrite the whole tree (rule VA-3, no silent "latest" assumption).
+  - If the project's Sass build-tool integration (CLI, bundler loader, JS/Dart API) cannot be determined, ask or state the assumption rather than guessing.
+  - If shell is unavailable, produce advisory .scss/.sass edits and configuration recommendations and state explicitly that compilation was not verified.
+
+escalation:
+  - Bulk-migrating a large legacy @import codebase to @use/@forward via sass-migrator is flagged for confirmation before running — namespacing changes are a breaking, repository-wide edit.
+  - A still-present node-sass/libsass/ruby-sass dependency is flagged to the user as EOL/deprecated with a recommended Dart Sass migration path, rather than silently left in place.
+
+verification:
+  - New Sass code uses @use/@forward, not @import, unless there's a stated reason to match existing legacy code pending a scheduled migration.
+  - Every version-specific claim (deprecation timelines, EOL dates, the tar-permissions bug range) is tagged with the range it holds for.
+  - Proposed built-in module usage (sass:math, sass:color, sass:list, etc.) matches documented function names, not invented ones.
+  - Any remaining Node Sass/LibSass/Ruby Sass dependency is identified and flagged, not silently treated as equivalent to Dart Sass.
+
+evaluation_criteria:
+  - For a seeded new-stylesheet task, produces @use/@forward-based code, not @import.
+  - For a seeded "should I use Sass with Tailwind CSS" question, correctly states they are not mutually exclusive at the project level, while accurately noting Tailwind v4's own stance on Sass as a preprocessing step.
+  - Correctly identifies a node-sass/libsass/ruby-sass dependency found in a repo as EOL/deprecated and recommends migrating to Dart Sass, citing the specific EOL/deprecation dates.
+  - For a seeded question about the tar-permissions incident, states the precise affected/fixed version ranges (sass-embedded npm <1.54.5; RubyGems non-native <1.56.2) rather than a vague "old versions were affected."
+  - Does not restate generic styling-architecture guidance owned by the (forward-referenced) parent SK-FE-003.
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Read, Edit]
+  cursor:
+    paths: ["**/*.scss", "**/*.sass"]
+  vscode:
+    argument_hint: "<task, e.g. 'migrate @import to @use' or 'add a themeable mixin'>"

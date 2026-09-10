@@ -1,0 +1,218 @@
+id: SK-TECH-typescript
+slug: typescript
+name: TypeScript
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-CONV-003]
+
+purpose: >-
+  Apply TypeScript correctly and version-appropriately — its structural,
+  gradually-strict type system, tsconfig configuration, and the 6.0/7.0
+  breaking-defaults transition — as a specialization of language-agnostic
+  code quality.
+scope: >-
+  TypeScript-the-language and its compiler (`tsc`): type-system fundamentals,
+  tsconfig configuration, module/target selection, declaration-file authoring,
+  and the version-specific behavior of TypeScript 5.9 through 7.0. ECMAScript
+  language-spec behavior is folded into this skill rather than authored
+  separately. Not idiomatic-naming/structure conventions in general (owned by
+  the parent, SK-CONV-003), not any single framework's TypeScript usage
+  patterns (React/Vue/Angular/Node skills), and not build-tool configuration
+  beyond `tsc` itself (Vite/bundler skills).
+expertise: TypeScript/JavaScript language and tooling engineer.
+description: >-
+  TypeScript's type system, tsconfig configuration, declaration files, and the
+  TypeScript 6.0/7.0 breaking-defaults and Go-native-compiler transition. Use
+  when the codebase has a tsconfig.json, .ts/.tsx files, or the task is about
+  TypeScript types, compiler options, or migration/upgrade between TypeScript
+  versions. Not for general code-quality conventions independent of language
+  (use code-quality), or a specific framework's own TypeScript integration
+  patterns (use that framework's skill).
+
+activation_conditions:
+  - A tsconfig.json, .ts, .tsx, .mts, or .cts file is present in the task's scope
+  - The task asks about TypeScript types, generics, compiler options, or declaration files
+  - The task is a TypeScript version upgrade/migration (e.g. adopting 6.0's new defaults, or evaluating a move to 7.0)
+  - A JS-to-TS migration is requested
+non_activation_conditions:
+  - The codebase is plain JavaScript with no TypeScript adoption planned
+  - The task is purely about generic naming/structure/readability independent of language (route to SK-CONV-003)
+  - The task is a specific framework's own TypeScript integration mechanics with the type system itself not in question (route to that framework's skill, e.g. SK-TECH-react, SK-TECH-vue, SK-TECH-nodejs)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The TypeScript task (type-system question, tsconfig change, declaration authoring, version upgrade).
+    required: true
+  - name: existing-tsconfig
+    description: The project's current tsconfig.json and TypeScript version, if one exists.
+    required: false
+required_context:
+  - The TypeScript major/minor version in use (from package.json or `tsc --version`) — needed for version-correct guidance given the 5.9/6.0/7.0 breaking changes.
+optional_context:
+  - Whether the project embeds the Compiler API programmatically (blocks a 7.0 upgrade until 7.1).
+  - The target runtime host (Node/bundler/browser) driving `module`/`moduleResolution` choice.
+
+outputs:
+  - name: tsconfig-or-type-change
+    kind: edit
+    description: A tsconfig.json change, type annotation, or declaration file reflecting version-correct TypeScript behavior.
+  - name: migration-plan
+    kind: analysis
+    description: A sequenced plan for adopting new defaults or upgrading TypeScript major versions, with the version each step targets.
+  - name: analysis
+    kind: analysis
+    description: Recommendations on type-system usage or configuration with rationale and the version they apply to.
+
+depends_on_skills: []
+related_skills: [SK-TECH-react, SK-TECH-vue, SK-TECH-angular, SK-TECH-nodejs]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+# Tier B: proposing type/config changes is advisory; running tsc/checking
+# compiler output needs shell.
+
+grounding: official-docs
+source_references:
+  - url: https://www.typescriptlang.org/docs/handbook/2/basic-types.html
+    title: TypeScript Handbook — Basic Types, type erasure, strictness
+    via: research/technologies/typescript.md
+    retrieved: "2026-09-10"
+  - url: https://www.typescriptlang.org/docs/handbook/type-compatibility.html
+    title: TypeScript Handbook — Type Compatibility (structural typing, documented unsoundness)
+    via: research/technologies/typescript.md
+    retrieved: "2026-09-10"
+  - url: https://www.typescriptlang.org/tsconfig/
+    title: TypeScript — tsconfig / compiler options reference
+    via: research/technologies/typescript.md
+    retrieved: "2026-09-10"
+  - url: https://devblogs.microsoft.com/typescript/announcing-typescript-6-0/
+    title: Announcing TypeScript 6.0
+    via: research/technologies/typescript.md
+    retrieved: "2026-09-10"
+  - url: https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/
+    title: Announcing TypeScript 7.0 (native, Go-based compiler)
+    via: research/technologies/typescript.md
+    retrieved: "2026-09-10"
+  - url: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-9.html
+    title: TypeScript 5.9 Release Notes
+    via: research/technologies/typescript.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/microsoft/TypeScript/wiki/Using-the-Compiler-API
+    title: Using the Compiler API (flagged as valid through TS 6.0 only)
+    via: research/technologies/typescript.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/microsoft/TypeScript/wiki/Performance
+    title: TypeScript Wiki — Performance (compiler diagnostics, tsconfig tuning)
+    via: research/technologies/typescript.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/microsoft/TypeScript/wiki/TypeScript-Design-Goals
+    title: TypeScript Wiki — Design Goals (and non-goals)
+    via: research/technologies/typescript.md
+    retrieved: "2026-09-10"
+  - url: https://www.typescriptlang.org/docs/handbook/declaration-files/do-s-and-don-ts.html
+    title: TypeScript Handbook — Declaration Files, Do's and Don'ts
+    via: research/technologies/typescript.md
+    retrieved: "2026-09-10"
+  - url: https://www.typescriptlang.org/docs/handbook/enums.html
+    title: TypeScript Handbook — Enums (const enum pitfalls, as-const alternative)
+    via: research/technologies/typescript.md
+    retrieved: "2026-09-10"
+  - url: https://www.typescriptlang.org/docs/handbook/decorators.html
+    title: TypeScript Handbook — Decorators (legacy vs. stage-3 ECMAScript decorators)
+    via: research/technologies/typescript.md
+    retrieved: "2026-09-10"
+  - url: https://www.typescriptlang.org/docs/handbook/migrating-from-javascript.html
+    title: TypeScript Handbook — Migrating from JavaScript
+    via: research/technologies/typescript.md
+    retrieved: "2026-09-10"
+  - url: https://www.typescriptlang.org/docs/handbook/project-references.html
+    title: TypeScript Handbook — Project References
+    via: research/technologies/typescript.md
+    retrieved: "2026-09-10"
+  - url: https://nodejs.org/api/typescript.html
+    title: Node.js docs — native TypeScript type stripping (Node's documented behavior, not TypeScript's)
+    via: research/technologies/typescript.md
+    retrieved: "2026-09-10"
+  - url: https://www.npmjs.com/package/typescript
+    title: typescript — npm package (current published version)
+    via: research/technologies/typescript.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  typescript: ">=6.0 <=7.0"
+version_sensitive_claims:
+  - claim: >-
+      TypeScript 6.0 changed long-standing defaults: strict->true,
+      module->esnext, target->floating es2025, types->[] (no longer
+      auto-including @types/*, so most Node.js projects need explicit
+      "types": ["node"]), noUncheckedSideEffectImports->true,
+      libReplacement->false.
+    applies_to: ">=6.0"
+    source_ref: research/technologies/typescript.md (Section 4/13); research/knowledge-maps/version-matrix.md
+  - claim: >-
+      TypeScript 7.0 ships with no programmatic Compiler API at all, delaying
+      tools that embed the compiler (Vue, Angular, Svelte tooling cited by
+      the announcement) until a planned TypeScript 7.1.
+    applies_to: ">=7.0 <7.1"
+    source_ref: research/technologies/typescript.md (Section 3/13); research/knowledge-maps/version-matrix.md
+  - claim: The Compiler API wiki page's documented surface is valid only for TypeScript 6.0 and earlier; 7.1 is promised "a completely different API."
+    applies_to: "<=6.0 (wiki content); 7.1 unreleased at research time"
+    source_ref: research/technologies/typescript.md (Section 3)
+  - claim: noUncheckedSideEffectImports was added in 5.6; rewriteRelativeImportExtensions was added in 5.7.
+    applies_to: ">=5.6 (noUncheckedSideEffectImports); >=5.7 (rewriteRelativeImportExtensions)"
+    source_ref: research/technologies/typescript.md (Section 4)
+  - claim: ArrayBuffer is no longer a supertype of typed-array types in lib.d.ts, which can surface new errors around Buffer/typed-array interop.
+    applies_to: ">=5.9"
+    source_ref: research/technologies/typescript.md (Section 4/13)
+  - claim: Stage-3 ECMAScript decorators are available without experimentalDecorators, alongside the older flag-gated legacy decorator implementation.
+    applies_to: ">=5.0"
+    source_ref: research/technologies/typescript.md (Section 16)
+  - claim: --module node20 models Node 20 behavior and implies target es2023, and (unlike nodenext) is not expected to gain new behavior in future releases.
+    applies_to: ">=5.9"
+    source_ref: research/technologies/typescript.md (Section 4)
+  - claim: TypeScript 7.0 deliberately adopts 6.0's new defaults/behavior for compatibility rather than introducing another wave of changes; the intended upgrade path is 6.0 first, then 7.0.
+    applies_to: ">=6.0 <=7.0"
+    source_ref: research/technologies/typescript.md (Section 11)
+last_verified: "2026-09-10"
+reverify_triggers:
+  - TypeScript 7.1 release (restores a Compiler API)
+  - Any new TypeScript major/minor that changes compiler-option defaults again
+  - The Architectural-Overview wiki page being confirmed updated (or not) for the Go-native (7.0) implementation
+
+owned_knowledge:
+  - TypeScript type-system fundamentals (structural typing, documented unsoundness, type erasure)
+  - TypeScript compiler configuration (tsconfig.json, module/target/moduleResolution selection)
+  - TypeScript version-transition behavior (5.9 -> 6.0 -> 7.0 breaking changes and migration sequencing)
+  # ECMAScript language-spec behavior is folded in here per taxonomy, not owned separately.
+  # General code-quality/readability conventions are owned by the parent, SK-CONV-003.
+
+decision_framework_present: true
+
+failure_handling:
+  - If the TypeScript major/minor version cannot be determined, ask for it or state the version the guidance assumes; never assume "latest" silently (VA-3) given how much changed across 5.9/6.0/7.0.
+  - If shell is unavailable/denied, degrade to advisory tsconfig/type-annotation output and state that `tsc` was not actually run to confirm it compiles.
+  - If a project embeds the Compiler API and is being evaluated for a 7.0 upgrade, flag the 7.1-Compiler-API gap explicitly rather than silently recommending the upgrade.
+escalation:
+  - A tsconfig change that would newly fail the build across a large existing codebase (e.g. enabling strict, or the 6.0 default flip) requires the user's explicit go-ahead before applying, given how disruptive it can be.
+verification:
+  - Any TypeScript-version-specific claim is tagged with the version range it holds for.
+  - "`tsc --noEmit` (or the project's equivalent type-check command) is proposed or run to confirm a change actually type-checks, not just visually plausible."
+  - A recommendation to upgrade to TypeScript 7.0 explicitly checks whether the project depends on the programmatic Compiler API.
+evaluation_criteria:
+  - For a seeded project on TypeScript <6.0, produces a migration plan that sequences the 6.0 default changes before any 7.0 upgrade, per the documented adoption path.
+  - For a seeded question about upgrading to TypeScript 7.0, correctly flags the missing Compiler API as a blocker when the project embeds the compiler programmatically.
+  - Does not restate generic naming/structure/readability guidance owned by the parent skill (QR-2).
+  - Any type-system, tsconfig, or CLI claim in the output resolves to a `source_references` entry.
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]
+  cursor:
+    paths: ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts", "**/tsconfig*.json"]
+  vscode:
+    argument_hint: "<task, e.g. 'adopt TypeScript 6.0 defaults' or 'evaluate upgrading to TypeScript 7.0'>"
