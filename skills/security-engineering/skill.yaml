@@ -1,0 +1,95 @@
+id: SK-QA-002
+slug: security-engineering
+name: Security engineering
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: QA
+
+purpose: >-
+  Identify and mitigate security risks — injection, XSS, CORS/CSRF, SSRF,
+  secrets/credential handling, transport security, sandboxing/isolation,
+  supply-chain/dependency risk, denial of service, error-handling/
+  information disclosure, and prototype pollution — across the stack.
+scope: >-
+  The cross-cutting security skill, consuming the security knowledge map
+  built from 44 researched technologies. Technology skills reference this
+  skill rather than re-documenting security. Authentication/authorization
+  specifically (sessions, tokens, OAuth2/OIDC, RBAC/RLS, MFA) is owned by
+  authentication-authorization; this skill covers the remaining OWASP-
+  aligned risk categories and defers to that skill for auth depth.
+expertise: Senior/principal application-security engineer.
+description: >-
+  Threat-model a change and apply mitigations for injection, XSS, CORS/
+  CSRF, SSRF, secrets hygiene, transport security, sandboxing/isolation,
+  supply-chain/dependency risk, DoS, and information disclosure. Use for
+  security-sensitive code, a security review, or when handling untrusted
+  input or secrets. Treats CVE/version-specific claims as time-sensitive
+  and re-verifiable rather than permanently settled. Auth/authz depth is
+  owned by authentication-authorization.
+
+activation_conditions:
+  - Writing or reviewing security-sensitive code (handling untrusted input, secrets, or a trust boundary)
+  - A security review is explicitly requested
+  - A dependency/supply-chain check is needed
+  - A change touches a documented CVE-affected version range
+non_activation_conditions:
+  - No trust boundary or sensitive data is involved
+  - The request is specifically authentication/authorization design (route to authentication-authorization for depth; this skill still applies its general risk categories where relevant)
+activation_mode: auto
+
+inputs:
+  - name: code-architecture-or-change
+    description: The code, architecture, or change being reviewed or built.
+    required: true
+  - name: threat-context
+    description: What's untrusted (input source, deployment exposure, data sensitivity).
+    required: false
+outputs:
+  - name: security-findings
+    kind: analysis
+    description: Identified risks per category (injection, XSS, CSRF, SSRF, secrets, transport, supply-chain, DoS, disclosure) with severity/rationale.
+  - name: mitigations
+    kind: edit
+    description: Concrete mitigations applied or proposed, matched to the identified risk.
+
+depends_on_skills: []
+related_skills: [SK-CONV-007, SK-BE-005, SK-QA-003]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: official-docs
+source_references:
+  - url: research/knowledge-maps/security-knowledge-map.md
+    title: "Security Knowledge Map — full 14-section breakdown (secrets, injection, XSS, CORS/CSRF, auth, transport, sandboxing, supply-chain, DoS, SSRF, error handling, prototype pollution, compliance, gaps) plus time-sensitive CVE watch list, across 44 researched technologies"
+    via: research/knowledge-maps/security-knowledge-map.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Threat-modeling method across the OWASP-aligned risk categories this library has researched
+  - CVE/version-specific-claim re-verification discipline (never present a CVE watch-list entry as permanently current)
+decision_framework_present: true
+
+failure_handling:
+  - If the threat context (what's untrusted, deployment exposure) isn't clear, ask rather than assume a worst-case or best-case posture.
+  - If a CVE/version-specific claim is being relied on for a live decision, state that it must be re-verified against current advisories rather than treating this skill's research snapshot (dated 2026-09) as still accurate.
+  - If a request is specifically about authentication/authorization design, route the auth-specific depth to authentication-authorization while still applying this skill's general risk categories.
+verification:
+  - Every mitigation is matched to a specifically identified risk, not applied generically without cause.
+  - Any CVE or version-specific security claim is flagged as time-sensitive and due for re-verification, never presented as permanently settled.
+  - Secrets/credentials are never logged, committed, or exposed to a client bundle inappropriately.
+  - Defense is layered (e.g. output encoding + sanitization + CSP for XSS) rather than relying on a single control.
+escalation:
+  - A finding involving an actively-exploitable, currently-unpatched vulnerability in production is escalated immediately, not queued as a routine finding.
+  - A CVE-bound claim older than this skill's research snapshot is flagged for independent re-verification before being acted on.
+evaluation_criteria:
+  - On a fixture with seeded vulnerabilities (injection, XSS, exposed secret), identifies each and proposes a correct mitigation.
+  - Treats CVE claims as time-sensitive and re-verifiable, never asserting a "fixed in" version without a re-verification caveat.
+  - Correctly routes auth-specific design questions to authentication-authorization while still applying its own general risk categories where they overlap.
+  - Applies layered defense (not a single control) for XSS/injection-class findings.
+
+adapter_hints: {}

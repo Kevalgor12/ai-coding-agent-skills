@@ -73,6 +73,8 @@ not generated speculatively or in bulk.
 | [testing-strategy](testing-strategy/) | `SK-QA-001` | QA (generic) | authored, not yet validated/evaluated |
 | [jest-vitest](jest-vitest/) | `SK-TECH-jest-vitest` | QA (technology) | authored, not yet validated/evaluated |
 | [playwright](playwright/) | `SK-TECH-playwright` | QA (technology) | authored, not yet validated/evaluated |
+| [security-engineering](security-engineering/) | `SK-QA-002` | QA (generic) | authored, not yet validated/evaluated |
+| [authentication-authorization](authentication-authorization/) | `SK-BE-005` | Backend (generic) | authored, not yet validated/evaluated |
 
 Per the [specification's conformance lifecycle](../core/skill-specification/specification.md#5-conformance--lifecycle),
 a skill needs a passing mechanical validator, an `evaluations/` test, and an

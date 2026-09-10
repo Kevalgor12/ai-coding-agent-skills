@@ -1,0 +1,91 @@
+id: SK-BE-005
+slug: authentication-authorization
+name: Authentication & authorization
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: BE
+
+purpose: >-
+  Design authentication and authorization as one coherent capability —
+  session vs. token model, OAuth2/OIDC flows, safe JWT handling, RBAC and
+  database row-level security, and MFA — independent of stack.
+scope: >-
+  Auth/authz across the stack. Created to fill a documented gap: this
+  library's concept map found auth fragmented across JWT/OAuth2/MFA/
+  session/RBAC research with no unifying skill. Specialized by framework
+  auth-middleware content in technology skills, and by database-level
+  RLS/RBAC mechanisms. General injection/XSS/CSRF/secrets-hygiene risk is
+  owned by security-engineering, referenced here rather than repeated.
+expertise: Senior/principal engineer with identity/access-control experience.
+description: >-
+  Design authentication and authorization — session vs. token model,
+  OAuth2/OIDC flows, safe JWT handling, RBAC and database row-level
+  security, and MFA. Use for any authentication or authorization work.
+  Avoids the common pitfalls (secrets in tokens, missing expiry, broken
+  flows). Not for the general injection/XSS/CSRF/secrets-hygiene risk
+  categories, which are owned by security-engineering.
+
+activation_conditions:
+  - Any authentication work (login, session, token issuance/validation)
+  - Any authorization work (RBAC, row-level security, permission checks)
+  - An OAuth2/OIDC flow is being designed or integrated
+  - An existing auth/authz design needs review (token handling, expiry, flow correctness)
+non_activation_conditions:
+  - No trust boundary is involved
+  - The general injection/XSS/CSRF/secrets-hygiene risk categories, with no auth-specific question (route to security-engineering)
+activation_mode: auto
+
+inputs:
+  - name: auth-requirements
+    description: What needs authenticating/authorizing, and the threat context.
+    required: true
+  - name: stack
+    description: The framework/database/identity-provider context, if already chosen.
+    required: false
+outputs:
+  - name: auth-design
+    kind: analysis
+    description: Session/token model choice, flow design, and RBAC/RLS structure, with trade-offs.
+  - name: implementation-guidance
+    kind: edit
+    description: Concrete auth/authz implementation guidance or code, avoiding the documented common pitfalls.
+
+depends_on_skills: []
+related_skills: [SK-BE-002, SK-BE-003, SK-QA-002, SK-DATA-003]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: official-docs
+source_references:
+  - url: research/knowledge-maps/security-knowledge-map.md
+    title: "Security Knowledge Map — §5 Authentication & Authorization (database/backend auth mechanisms, ORM-level RLS, application/API-level authentication)"
+    via: research/knowledge-maps/security-knowledge-map.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Session-vs-token model selection method
+  - OAuth2/OIDC flow design and safe JWT handling
+  - RBAC/row-level-security design across database and ORM layers
+decision_framework_present: true
+
+failure_handling:
+  - If the auth requirement's threat context isn't clear (session length, token audience, who's authorizing what), ask rather than assume a default model.
+  - If the request is really about general injection/XSS/CSRF/secrets hygiene with no auth-specific angle, route to security-engineering.
+verification:
+  - Tokens have a stated expiry and refresh strategy — never issued to live indefinitely by default.
+  - No secrets or sensitive data embedded inside a JWT payload.
+  - Authorization checks are least-privilege by default, not broad-then-restricted.
+  - The claim-propagation contract between the connection layer, the database/RLS layer, and the session-issuing layer is stated explicitly, not left implicit — this library's research shows no single technology documents that end-to-end contract.
+escalation:
+  - A production auth-flow change (login, session invalidation, token-issuance logic) is presented with trade-offs for explicit confirmation, given the blast radius of getting it wrong.
+evaluation_criteria:
+  - For a seeded auth requirement, produces a design with correct token expiry/refresh, no secrets in JWTs, and least-privilege authorization.
+  - Flags OWASP-relevant auth risks (broken flows, missing expiry, secrets-in-tokens) rather than missing them.
+  - States the claim-propagation contract across connection/RLS/session layers explicitly when more than one is in play.
+
+adapter_hints: {}
