@@ -52,7 +52,7 @@ depends_on_skills: [SK-QA-002, SK-QA-003, SK-CONV-002, SK-CONV-003]
 related_skills: [SK-CONV-001, SK-CONV-004, SK-CONV-005, SK-CONV-008]
 conflicts_with: []
 
-required_capabilities: [file-read, shell]
+required_capabilities: [file-read]
 execution_tier: A
 
 grounding: mixed

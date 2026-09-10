@@ -70,7 +70,7 @@ depends_on_skills: []
 related_skills: [SK-AI-002, SK-AI-003, SK-AI-004, SK-AI-005, SK-AI-006, SK-AI-007, SK-AI-008, SK-QA-004]
 conflicts_with: []
 
-required_capabilities: [file-read, file-write]
+required_capabilities: [file-read, file-write, shell]
 execution_tier: B
 
 grounding: official-docs
