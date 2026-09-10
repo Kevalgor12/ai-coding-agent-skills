@@ -60,6 +60,8 @@ not generated speculatively or in bulk.
 | [websocket-api](websocket-api/) | `SK-TECH-websocket-api` | Backend/Realtime (technology) | authored, not yet validated/evaluated |
 | [socketio](socketio/) | `SK-TECH-socketio` | Backend/Realtime (technology) | authored, not yet validated/evaluated |
 | [webrtc](webrtc/) | `SK-TECH-webrtc` | Backend/Realtime (technology) | authored, not yet validated/evaluated |
+| [search-integration](search-integration/) | `SK-DATA-005` | Data (generic) | authored, not yet validated/evaluated |
+| [opensearch](opensearch/) | `SK-TECH-opensearch` | Data (technology) | authored, not yet validated/evaluated |
 
 Per the [specification's conformance lifecycle](../core/skill-specification/specification.md#5-conformance--lifecycle),
 a skill needs a passing mechanical validator, an `evaluations/` test, and an
