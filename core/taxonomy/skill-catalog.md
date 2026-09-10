@@ -598,18 +598,18 @@ Execution tier (A/B/C) is per [README.md](README.md#vendor-neutrality-model-how-
 - **Evaluation requirements:** For a seeded perf issue, identifies the dominant cost from evidence (not a guess) and proposes a change targeting it; refuses to micro-optimize a non-bottleneck.
 - **Tier:** A/B.
 
-### SK-QA-004 · observability  *(research-gap — see analysis)*
+### SK-QA-004 · observability
 - **Purpose:** Instrument systems for logging, metrics, and tracing so production behavior is diagnosable.
-- **Scope:** Observability design. **Flagged:** the concept map found near-zero researched grounding (only Docker log aggregation, OpenSearch log analytics) — this skill needs a dedicated research pass before authoring.
-- **Responsibilities:** Structured logging; meaningful metrics; distributed tracing; actionable alerting; avoid log noise / PII leakage in logs.
+- **Scope:** Observability design — structured logging, metrics, distributed tracing, error monitoring, alerting. Specialized by the OpenTelemetry, Prometheus, Grafana, and Sentry technology skills. **Resolved gap** (2026-09-10): a dedicated research pass on these four technologies closed the near-zero-grounding gap flagged at original taxonomy design. **Not resolved**: application-level reliability/resilience *patterns* (retries, circuit breakers, timeouts, bulkheads, graceful degradation) remain a distinct, still-open research gap — see [taxonomy-analysis.md](taxonomy-analysis.md#missing-capabilities). Observability (visibility into system behavior) and resilience (behavior under failure) are related but genuinely different disciplines; this skill does not fabricate resilience-pattern guidance to fill that separate gap.
+- **Responsibilities:** Structured logging; meaningful metrics; distributed tracing; error monitoring; actionable alerting; avoid log noise / PII leakage in logs.
 - **Inputs:** System; SLOs/failure modes of concern.
 - **Outputs:** Instrumentation plan/changes.
 - **Activation conditions:** Making a system diagnosable in production; debugging a production issue.
-- **Non-activation conditions:** Local/throwaway code.
-- **Dependencies:** Related `SK-TECH-opensearch`, `SK-TECH-docker`; **needs new research** (no APM/tracing tech researched).
+- **Non-activation conditions:** Local/throwaway code; a request for resilience/fault-tolerance *patterns* rather than observability instrumentation (a separate, still-open research gap).
+- **Dependencies:** Specialized by `SK-TECH-opentelemetry|prometheus|grafana|sentry`; related `SK-TECH-opensearch`, `SK-TECH-docker`.
 - **Conflicts:** None.
 - **Related:** `SK-QA-003`, `SK-INFRA-003`.
-- **Evaluation requirements:** (Deferred until research exists.) Provisionally: produces structured logs with correlation IDs and metrics tied to stated SLOs, without logging secrets/PII.
+- **Evaluation requirements:** Produces structured logs with correlation IDs and metrics tied to stated SLOs, without logging secrets/PII; correctly declines to answer a resilience-pattern request as if it were covered by this skill's grounded scope.
 - **Tier:** B.
 
 ## Growth
@@ -712,6 +712,10 @@ researched technology doc.
 | `SK-TECH-redis` | Redis | DATA-004, BE-004, DATA-005 | Cache/pub-sub/vector; the multi-role data-layer tech |
 | `SK-TECH-clickhouse` | ClickHouse | DATA-003 | Columnar OLAP, sparse indexing, materialized views |
 | `SK-TECH-opensearch` | OpenSearch | DATA-005, QA-004 | Full-text + vector search; log analytics (observability tie-in) |
+| `SK-TECH-opentelemetry` | OpenTelemetry | QA-004 | **Added post-hoc (2026-09-10)** — closes the observability research gap; researched in `research/technologies/opentelemetry.md`. Vendor-neutral traces/metrics/logs instrumentation standard; multi-repo, per-signal stability, explicitly not a backend/storage/visualization system itself |
+| `SK-TECH-prometheus` | Prometheus | QA-004 | **Added post-hoc (2026-09-10)** — pull-based metrics, PromQL, not natively clustered/HA; `promtool test rules` unit testing |
+| `SK-TECH-grafana` | Grafana | QA-004 | **Added post-hoc (2026-09-10)** — visualization/dashboarding layer over Prometheus/OpenSearch/other data sources; unified alerting extends Prometheus Alertmanager |
+| `SK-TECH-sentry` | Sentry | QA-004 | **Added post-hoc (2026-09-10)** — error monitoring/tracing/session replay; JS SDK runs on OpenTelemetry internally since v8; not a Prometheus-style metrics platform |
 | `SK-TECH-drizzle` | Drizzle ORM | DATA-002, DATA-006 | SQL-first TS ORM, edge-ready; **v1 RC vs v0.x stable version caveat** |
 | `SK-TECH-prisma` | Prisma | DATA-002, DATA-006 | Schema-driven client, migrations; **v8 docs contradict on a rename** |
 | `SK-TECH-typeorm` | TypeORM | DATA-002, DATA-006 | Active-Record + Data-Mapper; N+1 pitfalls |

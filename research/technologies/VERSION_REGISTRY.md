@@ -1,6 +1,6 @@
 # Version Registry
 
-This file registers every version-sensitive fact captured while researching the 44 technologies in this Skill Library project -- specific release numbers, dates, deprecations, breaking-change milestones, and support-window boundaries that a skill or agent should be aware of before treating guidance as current. Facts are grouped by technology in the order captured during research.
+This file registers every version-sensitive fact captured while researching the 49 technologies in this Skill Library project -- specific release numbers, dates, deprecations, breaking-change milestones, and support-window boundaries that a skill or agent should be aware of before treating guidance as current. Facts are grouped by technology in the order captured during research.
 
 ## Angular
 
@@ -120,6 +120,14 @@ This file registers every version-sensitive fact captured while researching the 
 - Indexing API v3 -- Restricted to JobPosting and BroadcastEvent(VideoObject) content types only.
 - Core Web Vitals: INP + LCP + CLS (current trio) -- INP (Interaction to Next Paint, <200ms) is the current responsiveness metric; industry-reported to have replaced First Input Delay (FID) in March 2024. Current official CWV page shows no FID reference, consistent with retirement, though no explicit migration notice was found on the page itself.
 - Named ranking updates through 2026-08-18 -- Per official status.search.google.com history: August 2026 spam update, June 2026 spam update, May 2026 core update, March 2026 core update, March 2026 spam update, February 2026 Discover update. This list will be superseded by future entries on the same live page.
+
+## Grafana
+
+- Grafana 13 (current major, 13.2 most recent minor) -- Minor releases ship every other month; majors ship yearly (April/May); patches at least monthly. Each minor supported 9 months; the final minor of a major line gets 15 months. No "LTS" branding found despite the similar-shaped policy.
+- Grafana 13.0.0 -- Image Renderer plugin support fully removed; `grafana-cli`/`grafana-server` hyphenated commands replaced by `grafana cli`/`grafana server` subcommands; deprecated numeric `id`-based data source APIs disabled by default (uid-based required); `enable_gzip` HTTP compression flipped to enabled by default; Alertmanager status endpoint now requires `alert.notifications.system-status:read`.
+- Grafana 11.0.0 -- Legacy dashboard alerting removed entirely (v10.4 was the last version supporting it) -- the single largest recent breaking change, altering the alerting data model, folder permissions, and notification-channel compatibility for every dashboard on the legacy system.
+- Grafana 13.2.0 (scheduled) -- `@grafana/runtime`'s `config.apps`/`config.panels` properties scheduled for removal.
+- Feature maturity lifecycle (version-independent) -- Experimental / Private preview / Public preview / General Availability, orthogonal to the version-support-window policy above; a GA-version release can still contain an Experimental-maturity feature.
 
 ## GraphQL
 
@@ -261,6 +269,15 @@ This file registers every version-sensitive fact captured while researching the 
 - 2.19.x -- Latest 2.x maintenance line; 2.19.6 released 02 Jul 2026; 2.x stays in maintenance until 4.0 reaches GA
 - 1.x -- End-of-life; maintenance ended 6 May 2025 per official releases/support policy page
 
+## OpenTelemetry
+
+- No single unified "OpenTelemetry version" -- API, SDK, Semantic Conventions, and contrib components each version independently under SemVer 2.0.0; stability is tracked per-signal, not per-SDK, so a language's traces can be Stable while its logs are still Development in the same package release.
+- Per-language, per-signal stability matrix (as of research date) -- Traces: Stable in C++/.NET/Go/Java/JS/PHP/Python/Ruby/Swift, Beta in Rust, Development in Kotlin. Metrics: Stable in C++/.NET/Go/Java/JS/PHP, Development in Erlang-Elixir/Ruby/Swift, Beta in Rust. Logs: Stable in C++/.NET/PHP only, Release Candidate in Go, Development in Java/JS/Python/Ruby/Swift/Kotlin, Beta in Rust.
+- Stability guarantees once a component is Stable -- API: minimum 3 years of support after the next major ships. SDK/contrib: minimum 1 year each. Minor upgrades within a stable major line are guaranteed non-breaking.
+- OpenTelemetry JS SDK v2.0.0 -- Minimum Node.js raised to `^18.19.0 || >=20.6.0` (drops 14/16/early 18-20); minimum TypeScript raised to 5.0.4; `parentSpanId` replaced by `parentSpanContext`; `instrumentationLibrary` renamed `instrumentationScope`; `Resource` class made private in favor of factory functions.
+- OpenCensus repository archival (2023-07-31) -- Hard breaking change for any project still directly depending on OpenCensus client libraries; the documented OpenCensus bridge is the only forward-compatible migration path.
+- Approximate current releases (exact dates unconfirmed, re-verify before relying on them) -- Collector core/contrib ~v1.66.0/v0.160.0; JS SDK ~v2.11.0; Python ~v1.44.0/v0.65b0; Go ~v1.46.0 stable with v1.47.0-rc.1 (Logs API/SDK) in testing.
+
 ## Playwright
 
 - 1.63 -- Current stable as of 2026-09-09. Added test locks, cross-frame locators, locator.visible(), aria/screen snapshots in traces. Removed support for Ubuntu 20.04. Deprecated experimental component-testing packages (@playwright/experimental-ct-react/-vue) in favor of new stable stories/galleries model with fixtures.mount().
@@ -287,6 +304,17 @@ This file registers every version-sensitive fact captured while researching the 
 - v6.13.0 -- prisma.config.ts reached GA
 - v6.16.0 -- Rust-free ORM and driver adapters reached GA as an available (non-default) option
 - v3.x.x onward -- SemVer policy in effect: MAJOR breaks only GA features, MINOR can break opt-in Preview/EA features only
+
+## Prometheus
+
+- 3.14.0 -- Current stable release as of 2026-08-17, confirmed via the project's own maintained changelog and the doc-tree sitemap (which independently lists version-pinned trees for 3.14/3.13/3.5).
+- SemVer since 1.0.0 -- Breaking changes indicated by major-version increments; Prometheus is now on its 3.x line (3.0.0 released 2024-11-14).
+- LTS policy -- New minor release cycle every 6 weeks; regular minors stop receiving bugfixes after that window. Designated LTS releases get bug/security/doc fixes for one year. Documented LTS lines: 2.37 (2022-07-14, EOL 2023-07-31), 2.45 (2023-06-23, EOL 2024-07-31), 2.53 (2024-06-16, EOL 2025-07-31) -- all EOL at research time -- plus 3.5 (2025-07-14, supported until 2026-07-31) and 3.13 (2026-07-01, supported until 2027-07-31), both Supported at research time.
+- Prometheus 3.0.0 (2024-11-14) -- First major version in 7 years. Removed `discovery.k8s.io/v1beta1` EndpointSlice and `networking.k8s.io/v1beta1` Ingress support in Kubernetes SD; removed deprecated `storage.tsdb.allow-overlapping-blocks`/`alertmanager.timeout`/`storage.tsdb.retention` flags; complete web UI rewrite (old UI recoverable via `--enable-feature=old-ui`, missing exemplar display and heatmaps at 3.0).
+- TSDB on-disk format (v2.55 boundary) -- A Prometheus v3 TSDB can only be read by Prometheus v2.55+; downgrading below v2.55 loses persistent TSDB data. Docs recommend upgrading to 2.55 first, confirming stability, before jumping to v3.
+- PromQL v2→v3 semantic changes -- The `.` regex metacharacter began matching newlines (affects any `.*`/`.+` pattern in queries or relabel rules); range-selector/lookback boundary semantics changed from closed-closed to open-closed.
+- Log format change at v3 -- Switched from `go-kit/log` to Go's standard `log/slog`, changing the on-disk/stdout log line format -- a breaking change for anything parsing Prometheus's own log output.
+- API stability for 3.x -- Query language/data model, alerting/recording rules, exposition format, v1 HTTP API (excluding experimental endpoints), config file format (excluding SD/remote read/write), and the OTLP receiver endpoint are all documented Stable. Explicitly unstable: `double_exponential_smoothing`, remote read, server-side HTTPS/basic-auth, most SD integrations, internal Go package APIs, the exact on-disk TSDB format, and log-line format.
 
 ## Python
 
@@ -334,6 +362,16 @@ This file registers every version-sensitive fact captured while researching the 
 - 1.79.0 -- Legacy JS API deprecated; Color API and color-function deprecations begin
 - 3.0.0 (future/unreleased) -- Target version for full @import removal; commitment states it will not release sooner than 2 years after 1.80.0
 - 2.0.0 of npm 'sass' package (future/unreleased) -- Target for removal of legacy render()/renderSync() JS API
+
+## Sentry
+
+- JS SDK 10.74.0 (stable, released 2026-09-09) -- Current stable release of the JavaScript SDK monorepo (`@sentry/node`, `@sentry/browser`, framework packages); 11.0.0-beta.2 also published, indicating v11 is in active beta.
+- Python SDK 2.69.1 (released 2026-09-08) -- Current stable `sentry-sdk` release on PyPI; classifiers declare Python 3.6-3.15 support, no narrower floor found for the SDK itself.
+- Node.js runtime floor (JS/Node SDK) -- Minimum 18.0.0, with 18.19.0+ or 19.9.0+ recommended "for optimal support and future TracingChannel features."
+- SDK v9.0.0 -- Node.js minimum raised to 18.0.0; TypeScript minimum raised to 5.0.4; Prisma <6.x dropped; **Metrics API removed entirely** (not merely deprecated); Hub-era APIs (`getCurrentHub()`, `Hub`, `getCurrentHubShim()`) fully removed; `@sentry/utils` folded into `@sentry/core`.
+- SDK v10.0.0 -- `BaseClient` removed (use `Client`); `hasTracingEnabled` removed (use `hasSpansEnabled`); OpenTelemetry dependency floor raised to 2.x/0.20x.x (projects unable to move to OTel v2 must stay on v9 or adopt `@sentry/node-core`); AWS Lambda Layer renamed to `SentryNodeServerlessSDKv10`.
+- SDK v8.0.0 -- Node.js minimum raised to 14.18.0; `startTransaction`/`span.startChild` removed from the custom tracing API; initialization-ordering requirement introduced (Sentry must be imported before any other package).
+- No consolidated SDK×runtime×framework compatibility matrix -- Version floors were assembled from the migration-guide series and current-install pages rather than one authoritative table; re-derive per-project rather than assuming a single source covers it.
 
 ## shadcn/ui
 

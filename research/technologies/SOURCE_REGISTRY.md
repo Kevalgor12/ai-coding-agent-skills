@@ -1,6 +1,6 @@
 # Source Registry
 
-This file registers every official documentation source consulted while researching the 44 technologies in this Skill Library project. It exists so anyone auditing or extending a technology's research doc can see exactly which primary sources were used, without re-opening every individual `research/technologies/<slug>.md` file. Sources are grouped by technology in the order they were cited during research; the final section aggregates all distinct source domains across the whole project, ranked by how many technologies cite them.
+This file registers every official documentation source consulted while researching the 49 technologies in this Skill Library project. It exists so anyone auditing or extending a technology's research doc can see exactly which primary sources were used, without re-opening every individual `research/technologies/<slug>.md` file. Sources are grouped by technology in the order they were cited during research; the final section aggregates all distinct source domains across the whole project, ranked by how many technologies cite them.
 
 ## Angular
 
@@ -427,6 +427,50 @@ This file registers every official documentation source consulted while research
 - https://developers.google.com/webmaster-tools/v1/how-tos/all-your-data -- Search Analytics API row limits and query-cost guidance.
 - https://status.search.google.com/products/rGHU1u87FJnkP6W2GwMi/history -- Official live status dashboard listing dated ranking/core/spam algorithm updates.
 
+## Grafana
+
+- https://grafana.com/docs/grafana/latest/introduction/ -- core concepts, what Grafana is
+- https://grafana.com/docs/grafana/latest/dashboards/ -- dashboards/panels overview
+- https://grafana.com/docs/grafana/latest/dashboards/variables/ -- template variables, types
+- https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/view-dashboard-json-model/ -- dashboard JSON model, V1/V2 resource schemas
+- https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/best-practices/ -- dashboard design best practices / anti-patterns
+- https://grafana.com/docs/grafana/latest/datasources/ -- data source model, supported types
+- https://grafana.com/docs/grafana/latest/datasources/prometheus/ -- Prometheus data source integration
+- https://grafana.com/docs/grafana/latest/datasources/tempo/ -- Tempo data source integration
+- https://grafana.com/docs/grafana/latest/fundamentals/exemplars/ -- exemplars, metrics-to-traces linking
+- https://grafana.com/docs/grafana/latest/administration/plugin-management/ -- plugin system, types, sandboxing
+- https://grafana.com/docs/grafana/latest/administration/roles-and-permissions/ -- org/team roles, RBAC, data source permissions
+- https://grafana.com/docs/grafana/latest/administration/data-source-management/ -- query/resource caching, data source permission tiers
+- https://grafana.com/docs/grafana/latest/administration/provisioning/ -- YAML-based provisioning of dashboards/data sources
+- https://grafana.com/docs/grafana/latest/administration/organization-management/ -- multi-org isolation model
+- https://grafana.com/docs/grafana/latest/administration/stats-and-license/ -- admin stats/diagnostics page
+- https://grafana.com/docs/grafana/latest/developers/http_api/ -- HTTP API coverage, /api → /apis deprecation
+- https://grafana.com/docs/grafana/latest/as-code/ -- dashboards-as-code tooling (Terraform, Ansible, Operator, Grizzly)
+- https://grafana.com/docs/grafana/latest/alerting/ -- alerting landing page
+- https://grafana.com/docs/grafana/latest/alerting/fundamentals/ -- alert rules, contact points, notification policies, Prometheus alerting model
+- https://grafana.com/docs/grafana/latest/alerting/fundamentals/alertmanager/ -- built-in Grafana Alertmanager vs. external Alertmanager
+- https://grafana.com/docs/grafana/latest/alerting/best-practices/ -- alert fatigue, threshold tuning, ownership
+- https://grafana.com/docs/grafana/latest/alerting/set-up/migrating-alerts/ -- legacy-to-unified alerting migration
+- https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/ -- grafana.ini structure, env var overrides, auth provider sections
+- https://grafana.com/docs/grafana/latest/setup-grafana/installation/docker/ -- Docker deployment, images, env vars, compose example
+- https://grafana.com/docs/grafana/latest/setup-grafana/installation/ -- Grafana Cloud vs. self-managed, sizing/caching note
+- https://grafana.com/docs/grafana/latest/setup-grafana/set-up-for-high-availability/ -- HA architecture, shared DB, alerting HA semantics
+- https://grafana.com/docs/grafana/latest/setup-grafana/configure-security/configure-database-encryption/ -- secret encryption, envelope encryption, KMS integration
+- https://grafana.com/docs/grafana/latest/upgrade-guide/ -- general upgrade guidance
+- https://grafana.com/docs/grafana/latest/upgrade-guide/when-to-upgrade/ -- release cadence, support windows, recommended upgrade strategy
+- https://grafana.com/docs/grafana/latest/whatsnew/ -- release notes index, current version
+- https://grafana.com/docs/grafana/latest/whatsnew/whats-new-in-v13-0/ -- v13.0 breaking changes and deprecations
+- https://grafana.com/docs/release-life-cycle/ -- feature maturity lifecycle (Experimental/Preview/GA)
+- https://grafana.com/docs/grafana/latest/panels-visualizations/ -- panels/visualizations section index
+- https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/ -- Query Inspector tool
+- https://grafana.com/docs/grafana/latest/troubleshooting/ -- debug logging, log locations, common issues
+- https://grafana.com/docs/grafana/latest/cli/ -- Grafana CLI command reference
+- https://grafana.com/security/security-advisories/ -- published CVE advisories
+- https://grafana.com/grafana/plugins/grafana-sentry-datasource/ -- official Sentry data source plugin
+- https://grafana.com/docs/opentelemetry/ -- OpenTelemetry support strategy, LGTM-component naming (without the acronym)
+- https://grafana.com/docs/grafana-cloud/send-data/otlp/ -- OTLP ingestion into Loki/Mimir/Tempo
+- https://grafana.com/docs/loki/latest/get-started/ -- Loki overview (checked for LGTM-stack terminology; not found)
+
 ## GraphQL
 
 - https://graphql.org/learn/ -- GraphQL introduction and learning hub
@@ -807,6 +851,50 @@ This file registers every official documentation source consulted while research
 - https://github.com/opensearch-project/OpenSearch/issues/3351 -- Official project-tracked meta-issue listing OpenSearch 3.0 breaking changes
 - https://github.com/opensearch-project/opensearch-testcontainers -- Official Testcontainers module for integration testing against real OpenSearch instances
 
+## OpenTelemetry
+
+- https://opentelemetry.io/docs/what-is-opentelemetry/ -- core definition, three pillars, explicit backend/frontend-out-of-scope statement, CNCF/merger history
+- https://opentelemetry.io/docs/concepts/components/ -- API vs. SDK vs. Collector distinction
+- https://opentelemetry.io/docs/concepts/signals/traces/ -- spans, trace context, span kind/status
+- https://opentelemetry.io/docs/concepts/signals/metrics/ -- metric instruments, cardinality limits
+- https://opentelemetry.io/docs/concepts/signals/logs/ -- logs signal, stability-by-language, log/trace correlation
+- https://opentelemetry.io/docs/concepts/context-propagation/ -- W3C Trace Context, Baggage, propagation mechanics
+- https://opentelemetry.io/docs/concepts/instrumentation/ -- zero-code vs. code-based instrumentation
+- https://opentelemetry.io/docs/concepts/sampling/ -- head vs. tail sampling
+- https://opentelemetry.io/docs/specs/otlp/ -- OTLP protocol, transports, ports, encoding, stability
+- https://opentelemetry.io/docs/specs/semconv/ -- semantic conventions overview
+- https://opentelemetry.io/docs/specs/semconv/general/naming/ -- attribute naming rules
+- https://opentelemetry.io/docs/specs/semconv/resource/ -- resource semantic conventions (service.name, telemetry.sdk.*)
+- https://opentelemetry.io/docs/specs/otel/versioning-and-stability/ -- versioning/stability guarantees, LTS windows
+- https://opentelemetry.io/docs/specs/otel/compatibility/prometheus_and_openmetrics/ -- Prometheus/OpenMetrics translation rules
+- https://opentelemetry.io/docs/languages/ -- per-language, per-signal stability matrix
+- https://opentelemetry.io/docs/languages/js/getting-started/nodejs/ -- Node.js SDK setup, auto-instrumentation
+- https://opentelemetry.io/docs/languages/js/instrumentation/ -- manual instrumentation API, testing-gap check
+- https://opentelemetry.io/docs/languages/python/getting-started/ -- Python zero-code + manual instrumentation
+- https://opentelemetry.io/docs/languages/go/getting-started/ -- Go SDK bootstrap, manual instrumentation emphasis
+- https://opentelemetry.io/docs/languages/sdk-configuration/general/ -- OTEL_SERVICE_NAME, OTEL_TRACES_SAMPLER, OTEL_PROPAGATORS, etc.
+- https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/ -- OTLP exporter env vars (endpoint/headers/timeout/protocol)
+- https://opentelemetry.io/docs/collector/ -- Collector docs site map
+- https://opentelemetry.io/docs/collector/architecture/ -- receivers/processors/exporters, pipelines, agent/gateway
+- https://opentelemetry.io/docs/collector/configuration/ -- Collector YAML structure, env var substitution
+- https://opentelemetry.io/docs/collector/deploy/ -- deployment pattern summaries (agent/gateway/other)
+- https://opentelemetry.io/docs/collector/scaling/ -- scaling guidance, metrics to monitor, Target Allocator
+- https://opentelemetry.io/docs/collector/resiliency/ -- sending queues, WAL persistence, Kafka message queue
+- https://opentelemetry.io/docs/collector/troubleshooting/ -- debug exporter, internal telemetry, zPages
+- https://opentelemetry.io/docs/security/ -- Collector security hub page
+- https://opentelemetry.io/docs/security/config-best-practices/ -- secret storage, TLS/auth, localhost-binding default
+- https://opentelemetry.io/docs/security/handling-sensitive-data/ -- data minimization, redaction/attribute/filter/transform processors, hashing caveat
+- https://opentelemetry.io/docs/compatibility/migration/ -- OpenTracing shim, OpenCensus bridge, Jaeger migration
+- https://opentelemetry.io/ecosystem/vendors/ -- vendor/backend directory (Grafana, Sentry, Prometheus, Jaeger, Datadog, etc.)
+- https://opentelemetry.io/blog/2026/go-logs-api-sdk-rc/ -- Go Logs API/SDK release-candidate announcement
+- https://github.com/open-telemetry -- organization page, multi-repo structure
+- https://github.com/open-telemetry/opentelemetry-specification/releases -- spec release history
+- https://github.com/open-telemetry/opentelemetry-collector/releases -- Collector core release history
+- https://raw.githubusercontent.com/open-telemetry/opentelemetry-js/main/CHANGELOG.md -- JS SDK v2.0.0 breaking-change inventory
+- https://github.com/open-telemetry/opentelemetry-js/releases -- JS SDK release history
+- https://github.com/open-telemetry/opentelemetry-python/releases -- Python SDK release history
+- https://github.com/open-telemetry/opentelemetry-go/releases -- Go SDK release history
+
 ## Playwright
 
 - https://playwright.dev/docs/intro -- Overview, core concepts, system requirements (Node/OS support)
@@ -915,6 +1003,48 @@ This file registers every official documentation source consulted while research
 - https://www.prisma.io/docs/guides/integrations/neon-accelerate -- Neon + Prisma Accelerate integration guide
 - https://www.prisma.io/docs/ai/tools/mcp-server -- Official Prisma MCP server docs: capabilities, supported AI clients, safety guardrails
 - https://www.prisma.io/docs/llms.txt -- Official machine-readable documentation index used to map the current docs tree
+
+## Prometheus
+
+- https://prometheus.io/docs/introduction/overview/ -- core concepts, architecture, ecosystem components
+- https://prometheus.io/docs/introduction/comparison/ -- pull-vs-push framing, architecture-independence stance vs. Graphite/InfluxDB/OpenTSDB/Nagios/Sensu
+- https://prometheus.io/docs/introduction/faq/ -- pull-vs-push rationale, HA answer, scaling claims, logs-vs-metrics scoping, stability/semver policy
+- https://prometheus.io/docs/introduction/release-cycle/ -- LTS policy, release cadence, LTS release table
+- https://prometheus.io/docs/concepts/data_model/ -- time series/label data model, metric naming rules
+- https://prometheus.io/docs/concepts/metric_types/ -- Counter/Gauge/Histogram/Summary, native vs. classic histograms
+- https://prometheus.io/docs/concepts/jobs_instances/ -- job/instance model, auto-generated scrape metrics
+- https://prometheus.io/docs/prometheus/latest/getting_started/ -- hello-world config, reload/shutdown signals
+- https://prometheus.io/docs/prometheus/latest/configuration/configuration/ -- prometheus.yml structure, scrape_config, relabeling, remote_write, alertmanager_config, http_config
+- https://prometheus.io/docs/prometheus/latest/configuration/https/ -- --web.config.file, TLS/basic-auth server config
+- https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/ -- rule file/group syntax, promtool check rules
+- https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/ -- for/keep_firing_for, templating
+- https://prometheus.io/docs/prometheus/latest/configuration/unit_testing_rules/ -- promtool test rules format
+- https://prometheus.io/docs/prometheus/latest/feature_flags/ -- experimental feature flag catalog
+- https://prometheus.io/docs/prometheus/latest/federation/ -- /federate endpoint, hierarchical/cross-service federation
+- https://prometheus.io/docs/prometheus/latest/http_sd/ -- HTTP service discovery contract
+- https://prometheus.io/docs/prometheus/latest/management_api/ -- /-/healthy, /-/ready, /-/reload, /-/quit
+- https://prometheus.io/docs/prometheus/latest/migration/ -- Prometheus 3.0 migration guide
+- https://prometheus.io/docs/prometheus/latest/prometheus_agent/ -- Agent mode
+- https://prometheus.io/docs/prometheus/latest/querying/basics/ -- PromQL selectors, modifiers, duration expressions, staleness
+- https://prometheus.io/docs/prometheus/latest/querying/api/ -- HTTP API, OpenAPI spec, instant/range query params, remote read scalability
+- https://prometheus.io/docs/prometheus/latest/stability/ -- API stability guarantees (stable vs. unstable surfaces for 3.x)
+- https://prometheus.io/docs/prometheus/latest/storage/ -- local TSDB layout/compaction/retention, remote storage overview, backfilling
+- https://prometheus.io/docs/prometheus/latest/command-line/prometheus/ -- server CLI flags (storage, web, query, rules)
+- https://prometheus.io/docs/prometheus/latest/command-line/promtool/ -- promtool subcommands (check, test, tsdb, debug, query)
+- https://prometheus.io/docs/alerting/latest/overview/ -- two-part alerting pipeline
+- https://prometheus.io/docs/alerting/latest/high_availability/ -- Alertmanager gossip cluster design, fail-open, operational flags
+- https://prometheus.io/docs/practices/naming/ -- metric/label naming conventions, high-cardinality-label caution, base units
+- https://prometheus.io/docs/practices/rules/ -- recording-rule naming/aggregation conventions
+- https://prometheus.io/docs/practices/alerting/ -- alerting philosophy and symptom-based design
+- https://prometheus.io/docs/practices/remote_write/ -- remote-write queue architecture and tuning parameters
+- https://prometheus.io/docs/instrumenting/exposition_formats/ -- Prometheus text exposition format
+- https://prometheus.io/docs/instrumenting/pushing/ -- Pushgateway rationale
+- https://prometheus.io/docs/operating/security/ -- security model, threat model, TLS/basic-auth, CSRF/CORS, disclosure policy
+- https://prometheus.io/docs/operating/integrations/ -- remote storage integrations list (Thanos, Cortex, Grafana Mimir, etc.)
+- https://prometheus.io/docs/visualization/grafana/ -- Grafana data source setup and integration detail
+- https://prometheus.io/docs/guides/opentelemetry/ -- OTLP receiver configuration, target_info, translation strategies, delta handling
+- https://raw.githubusercontent.com/prometheus/prometheus/main/CHANGELOG.md -- version/release-date confirmation, 3.0.0 and 3.14.0 change entries (project-maintained changelog, mirrored to GitHub)
+- https://prometheus.io/sitemap.xml -- doc-tree version confirmation (3.14/3.13/3.5 version trees alongside `latest`)
 
 ## Python
 
@@ -1040,6 +1170,48 @@ This file registers every official documentation source consulted while research
 - https://github.com/sass/dart-sass/releases -- Dart Sass release history with dates and per-release behavioral/breaking notes
 - https://sass-lang.com/blog/announcing-dart-sass/ -- Historical Dart Sass performance benchmarks vs Ruby Sass/LibSass (referenced via search summary)
 - https://sass-lang.com/blog/node-fibers-discontinued/ -- Sync vs async render() performance note (referenced via search summary)
+
+## Sentry
+
+- https://docs.sentry.io/product/issues/ -- issue/event grouping, fingerprinting, quota-per-event model
+- https://docs.sentry.io/concepts/key-terms/tracing/ -- tracing key terms: traces, spans, transactions
+- https://docs.sentry.io/product/session-replay/ -- Session Replay product overview
+- https://docs.sentry.io/product/explore/logs/ -- Sentry Logs product overview and retention-by-plan
+- https://docs.sentry.io/platforms/javascript/guides/node/ -- Node.js SDK overview, install, init, capture
+- https://docs.sentry.io/platforms/python/ -- Python SDK overview, install, init, capture
+- https://docs.sentry.io/platforms/python/integrations/ -- Python SDK framework/library integrations
+- https://docs.sentry.io/platforms/python/configuration/options/ -- Python SDK configuration options reference
+- https://docs.sentry.io/platforms/javascript/guides/node/configuration/options/ -- JS/Node SDK configuration options reference
+- https://docs.sentry.io/platforms/javascript/guides/node/configuration/releases/ -- release configuration and purpose
+- https://docs.sentry.io/platforms/javascript/guides/node/configuration/sampling/ -- tracing sample-rate/sampler configuration
+- https://docs.sentry.io/platforms/javascript/guides/node/configuration/environments/ -- environment option, enabled option, disabling the SDK
+- https://docs.sentry.io/platforms/javascript/sourcemaps/ -- source map upload workflow, Debug IDs
+- https://docs.sentry.io/platforms/javascript/guides/node/enriching-events/breadcrumbs/ -- breadcrumbs concept and API
+- https://docs.sentry.io/platforms/javascript/guides/node/data-management/sensitive-data/ -- PII scrubbing guidance, beforeSend pattern
+- https://docs.sentry.io/platforms/javascript/guides/node/performance/ -- SDK performance/high-throughput guidance
+- https://docs.sentry.io/platforms/javascript/guides/node/profiling/ -- profiler overhead trade-off
+- https://docs.sentry.io/platforms/javascript/guides/node/troubleshooting/ -- debug mode, "why isn't my error showing up" checklist
+- https://docs.sentry.io/platforms/javascript/guides/node/migration/ -- JS SDK migration-guide series index
+- https://docs.sentry.io/platforms/javascript/guides/node/migration/v7-to-v8/ -- v7→v8 breaking changes
+- https://docs.sentry.io/platforms/javascript/guides/node/migration/v8-to-v9/ -- v8→v9 breaking changes
+- https://docs.sentry.io/platforms/javascript/guides/node/migration/v9-to-v10/ -- v9→v10 breaking changes
+- https://docs.sentry.io/platforms/javascript/guides/node/opentelemetry/ -- Node SDK/OpenTelemetry relationship
+- https://docs.sentry.io/platforms/javascript/guides/nextjs/ -- official Next.js integration guide
+- https://docs.sentry.io/platforms/javascript/guides/express/ -- official Express integration guide
+- https://docs.sentry.io/platforms/javascript/guides/fastify/ -- official Fastify integration guide
+- https://docs.sentry.io/product/sentry-basics/dsn-explainer/ -- DSN structure and public/secret status
+- https://docs.sentry.io/product/relay/ -- Relay architecture and PII-scrubbing layering
+- https://docs.sentry.io/product/data-management-settings/scrubbing/ -- server-side default and advanced data scrubbing
+- https://docs.sentry.io/security-legal-pii/security/ -- security/compliance program index (SOC2, ISO 27001)
+- https://docs.sentry.io/api/events/ -- Web API issue-management endpoints
+- https://docs.sentry.io/product/releases/ -- release tracking, commit association, deploy notifications
+- https://docs.sentry.io/product/releases/setup/release-automation/ -- CI/CD release-automation platform list
+- https://docs.sentry.io/product/releases/setup/release-automation/github-actions/ -- getsentry/action-release GitHub Action
+- https://docs.sentry.io/product/alerts/ -- alert rules, triggers/filters/actions, notification integrations
+- https://docs.sentry.io/pricing/quotas/ -- quota consumption, sampling's effect on billable volume
+- https://develop.sentry.dev/self-hosted/ -- self-hosted vs. SaaS deployment, licensing, minimum requirements
+- https://github.com/getsentry/sentry-javascript/releases -- current JS SDK version (10.74.0 stable / 11.0.0-beta.2)
+- https://pypi.org/project/sentry-sdk/ -- current Python SDK version (2.69.1) and Python-version classifiers
 
 ## shadcn/ui
 
@@ -1382,16 +1554,16 @@ Each domain below is counted once per technology that cites it (not once per URL
 
 | Domain | Technologies citing it |
 |---|---|
-| github.com | 27 |
+| github.com | 29 |
+| raw.githubusercontent.com | 9 |
 | registry.npmjs.org | 9 |
-| raw.githubusercontent.com | 6 |
 | developer.mozilla.org | 4 |
 | firefox-source-docs.mozilla.org | 3 |
+| nodejs.org | 3 |
 | api.github.com | 2 |
 | developers.google.com | 2 |
 | docs.github.com | 2 |
 | github.blog | 2 |
-| nodejs.org | 3 |
 | vitest.dev | 2 |
 | www.npmjs.com | 2 |
 | www.w3.org | 2 |
@@ -1403,6 +1575,7 @@ Each domain below is counted once per technology that cites it (not once per URL
 | code.visualstudio.com | 1 |
 | dev.mysql.com | 1 |
 | devblogs.microsoft.com | 1 |
+| develop.sentry.dev | 1 |
 | developers.googleblog.com | 1 |
 | devguide.python.org | 1 |
 | devtools.vite.dev | 1 |
@@ -1412,11 +1585,13 @@ Each domain below is counted once per technology that cites it (not once per URL
 | docs.npmjs.com | 1 |
 | docs.opensearch.org | 1 |
 | docs.python.org | 1 |
+| docs.sentry.io | 1 |
 | ecma-international.org | 1 |
 | en.wikipedia.org | 1 |
 | expressjs.com | 1 |
 | fastify.dev | 1 |
 | go.dev | 1 |
+| grafana.com | 1 |
 | graphql.org | 1 |
 | html.spec.whatwg.org | 1 |
 | jestjs.io | 1 |
@@ -1426,12 +1601,15 @@ Each domain below is counted once per technology that cites it (not once per URL
 | nextjs.org | 1 |
 | nuxt.com | 1 |
 | opensearch.org | 1 |
+| opentelemetry.io | 1 |
 | orm.drizzle.team | 1 |
 | packaging.python.org | 1 |
 | peps.python.org | 1 |
 | pinia.vuejs.org | 1 |
 | pkg.go.dev | 1 |
 | playwright.dev | 1 |
+| prometheus.io | 1 |
+| pypi.org | 1 |
 | react.dev | 1 |
 | redis.io | 1 |
 | router.vuejs.org | 1 |

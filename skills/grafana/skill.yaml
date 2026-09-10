@@ -1,0 +1,248 @@
+id: SK-TECH-grafana
+slug: grafana
+name: Grafana
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-QA-004]
+
+purpose: >-
+  Apply Grafana correctly and version-appropriately as the visualization/
+  dashboarding/alerting layer over external data sources, specializing the
+  observability parent skill with Grafana's dashboard/panel/variable model,
+  data-source plugin architecture, unified alerting, and provisioning-as-code.
+scope: >-
+  Grafana-specific implementation: dashboards, panels, template variables,
+  the data-source plugin model (no universal query language), unified
+  alerting and its relationship to Prometheus Alertmanager, exemplars,
+  dashboards-as-code/provisioning, RBAC, secret encryption, and version/
+  breaking-change history. Does not cover signal-selection method, alert-
+  design method, or cardinality/PII discipline — owned by the observability
+  parent (SK-QA-004). Does not cover PromQL/Prometheus internals
+  (SK-TECH-prometheus) or OTLP instrumentation (SK-TECH-opentelemetry).
+expertise: Grafana dashboard/alerting engineer.
+description: >-
+  Grafana-specific dashboard/panel/variable mechanics, data-source plugin
+  model, unified alerting vs. Prometheus Alertmanager, and dashboards-as-
+  code/provisioning. Use when the stack includes Grafana (grafana.ini,
+  docker image grafana/grafana(-enterprise), provisioning/ dashboards,
+  Grafana data-source config) or the task names Grafana dashboards/alerts.
+  Not for generic observability method (use observability), PromQL/
+  Prometheus internals, or OpenTelemetry instrumentation.
+
+activation_conditions:
+  - A Grafana config file, Docker image (grafana/grafana or grafana/grafana-enterprise), or provisioning/ directory is present in the repo
+  - The task names Grafana dashboards, panels, variables, alerting, or data sources
+  - A dashboard JSON file or Terraform/Ansible/Grizzly/Operator config targeting Grafana is being authored or reviewed
+non_activation_conditions:
+  - No Grafana instance, config, or dashboard artifact is present and the task doesn't name Grafana
+  - The task is about PromQL query authoring or Prometheus server/scrape config with no Grafana visualization/alerting concern (route to SK-TECH-prometheus)
+  - The task is about OpenTelemetry instrumentation/collection with no Grafana visualization concern (route to SK-TECH-opentelemetry)
+  - The task is signal-selection, alert-design method, or cardinality/PII discipline in the abstract, not Grafana-specific mechanics (route to SK-QA-004)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Grafana task (dashboard/panel design, variable setup, alert rule/routing, data-source config, provisioning, upgrade).
+    required: true
+  - name: grafana-version
+    description: The Grafana major.minor version in use (from grafana.ini, Docker image tag, or Grafana Cloud), needed for version-correct guidance.
+    required: false
+outputs:
+  - name: dashboard-or-provisioning-change
+    kind: edit
+    description: Dashboard JSON, provisioning YAML, or as-code (Terraform/Ansible/Grizzly) config for dashboards/data sources.
+  - name: alert-rule-or-routing-change
+    kind: edit
+    description: Grafana-managed alert rule or notification-policy/Alertmanager routing config.
+  - name: analysis
+    kind: analysis
+    description: Recommendations on data-source choice, variable design, alerting-engine routing, or upgrade risk, with the version they apply to.
+
+depends_on_skills: []
+related_skills: [SK-TECH-prometheus, SK-TECH-opentelemetry]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: https://grafana.com/docs/grafana/latest/introduction/
+    title: Grafana — Introduction (what Grafana is, plugin-connected data sources)
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/dashboards/
+    title: Grafana — Dashboards and panels overview
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/dashboards/variables/
+    title: Grafana — Template variables (eight variable types)
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/best-practices/
+    title: Grafana — Dashboard best practices (anti-duplication, focused panels)
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/view-dashboard-json-model/
+    title: Grafana — Dashboard JSON model (Classic/V1/V2 resource schemas)
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/datasources/
+    title: Grafana — Data sources (plugin model, no universal query language)
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/datasources/prometheus/
+    title: Grafana — Prometheus data source integration
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/fundamentals/exemplars/
+    title: Grafana — Exemplars (Prometheus metrics-to-Tempo-traces linking)
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/alerting/fundamentals/
+    title: Grafana — Alerting fundamentals
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/alerting/fundamentals/alertmanager/
+    title: Grafana — Built-in Grafana Alertmanager vs. external Alertmanager
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/alerting/set-up/migrating-alerts/
+    title: Grafana — Legacy dashboard alerting to unified alerting migration
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/administration/provisioning/
+    title: Grafana — Provisioning (YAML-based dashboards/data sources, allowUiUpdates)
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/as-code/
+    title: Grafana — Dashboards/observability as code (Terraform, Ansible, Operator, Grizzly)
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/administration/roles-and-permissions/
+    title: Grafana — Roles, permissions, teams, RBAC, data-source permissions
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/setup-grafana/configure-security/configure-database-encryption/
+    title: Grafana — Data-source secret encryption (envelope encryption, AES-CFB/GCM, KMS)
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/security/security-advisories/
+    title: Grafana Labs — Security advisories (CVE-2026-27876 RCE via sqlExpressions, others)
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/administration/data-source-management/
+    title: Grafana — Query/resource caching, data-source permission tiers
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/cli/
+    title: Grafana — CLI command reference (plugins, admin; no dashboard/provisioning validation subcommand)
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/upgrade-guide/when-to-upgrade/
+    title: Grafana — Release cadence, support windows, recommended upgrade strategy
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/whatsnew/whats-new-in-v13-0/
+    title: Grafana — What's new in v13.0 (breaking changes, migration-risk bug)
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/release-life-cycle/
+    title: Grafana — Feature maturity lifecycle (Experimental/Preview/GA)
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/opentelemetry/
+    title: Grafana — OpenTelemetry support strategy, Loki/Mimir/Tempo component naming
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: https://grafana.com/docs/grafana/latest/setup-grafana/set-up-for-high-availability/
+    title: Grafana — High-availability architecture, alerting HA semantics
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  grafana: ">=11.0 <=13.2 (legacy dashboard alerting removed at 11.0.0; current major is 13, 13.2 most recent documented minor)"
+
+version_sensitive_claims:
+  - claim: >-
+      Legacy dashboard alerting was removed entirely in Grafana v11.0.0
+      (v10.4 was the last version supporting it); installing v11 before
+      migrating legacy alerts risks existing alerts becoming inaccessible
+      or lost.
+    applies_to: ">=11.0.0"
+    source_ref: research/technologies/grafana.md (Section 11, Section 13)
+  - claim: >-
+      A migration bug in v13.0.0 may cause dashboards and folders to be
+      lost when upgrading from v12.x with Git Sync enabled — a real,
+      serious upgrade-risk warning, not a hypothetical.
+    applies_to: "=13.0.0 (upgrading from >=12.0 with Git Sync enabled)"
+    source_ref: research/technologies/grafana.md (Section 11, Section 13)
+  - claim: >-
+      Grafana 13.0.0 removed Image Renderer plugin support entirely,
+      switched default rendering auth from opaque tokens to JWTs, replaced
+      hyphenated `grafana-cli`/`grafana-server` with `grafana cli`/`grafana
+      server` subcommands, disabled numeric id-based data source APIs by
+      default (uid required), and flipped `enable_gzip` to enabled-by-default.
+    applies_to: ">=13.0.0"
+    source_ref: research/technologies/grafana.md (Section 13)
+  - claim: >-
+      Dashboard JSON has three coexisting representations since v12.2.0
+      (pre-v12.2.0 Classic model, V1 Resource, V2 Resource); as-code
+      tooling is fully compatible only with V2.
+    applies_to: ">=12.2.0"
+    source_ref: research/technologies/grafana.md (Section 5, Section 14)
+  - claim: >-
+      The Prometheus data source is preinstalled but, as of 13.2, packaged
+      as a standalone plugin rather than built into the Grafana codebase,
+      updatable independently of full Grafana releases.
+    applies_to: ">=13.2"
+    source_ref: research/technologies/grafana.md (Section 16)
+  - claim: >-
+      `/api` HTTP endpoints are being deprecated in favor of `/apis` starting
+      in Grafana 13, though legacy `/api` endpoints remain operational during
+      the transition.
+    applies_to: ">=13.0"
+    source_ref: research/technologies/grafana.md (Section 3, Section 13)
+last_verified: "2026-09-10"
+reverify_triggers:
+  - A new Grafana major release (annual, April/May cadence)
+  - A new minor release changing the current-major support tier (bi-monthly cadence)
+  - Resolution or expansion of the v13.0.0 Git-Sync dashboard/folder-loss migration bug
+  - A new critical/high CVE published on grafana.com/security/security-advisories/
+  - The dashboard JSON V1/V2 resource model changing as-code tooling compatibility
+
+owned_knowledge:
+  - Dashboard/panel/variable mechanics (eight variable types) and the data-source plugin model with no universal query language
+  - Unified alerting architecture: Grafana Alertmanager (extends Prometheus Alertmanager) vs. external Alertmanager routing
+  - Grafana provisioning-as-code mechanics (file-based YAML provisioning, Terraform/Ansible/Operator/Grizzly)
+  - Grafana version/support-window policy and the v11.0.0/v13.0.0 breaking-change and migration-risk specifics
+decision_framework_present: true
+
+failure_handling:
+  - If the Grafana major.minor version cannot be determined, ask for it or state the version the guidance assumes; never assume "latest" silently, especially around the v11.0.0 alerting removal and v13.0.0 breaking changes.
+  - If shell is unavailable/denied, degrade to advisory dashboard JSON/provisioning YAML/alert-rule output and say that provisioning, CLI, or upgrade commands were not run.
+  - If the request is actually about signal-selection, alert-design method, or cardinality/PII discipline rather than Grafana mechanics, defer to the observability parent (SK-QA-004) rather than restating its content here.
+escalation:
+  - Upgrading across the legacy-alerting boundary (any version <11.0.0 to >=11.0.0) requires explicit user confirmation and a completed Upgrade with Preview / Simple Upgrade migration before the upgrade proceeds — legacy alerts can become inaccessible or lost otherwise.
+  - Upgrading from a v12.x instance with Git Sync enabled to v13.0.0 requires flagging the documented dashboard/folder-loss migration bug and confirming a backup/rollback path before proceeding.
+verification:
+  - A provisioned dashboard's source-of-truth JSON file matches what's live in Grafana (no undetected UI-edit drift that a provisioning reconciliation would silently overwrite).
+  - Proposed dashboards use template variables instead of copy-pasted near-duplicates.
+  - Any alerting-routing recommendation correctly distinguishes rule evaluation (always in Grafana) from notification routing (built-in Grafana Alertmanager or external Alertmanager).
+  - Any version-specific claim (breaking change, migration risk, deprecation) is tagged with the range it holds for and matches the target Grafana version.
+evaluation_criteria:
+  - For a seeded dashboard-design task, proposes panels/variables matched to the data, using variables to avoid dashboard duplication rather than copy-pasting.
+  - For a seeded alerting task, correctly routes notification delivery through the built-in Grafana Alertmanager or an external Alertmanager as appropriate, without conflating that choice with rule evaluation (which always happens in Grafana).
+  - For a seeded upgrade scenario crossing v11.0.0 or landing on v13.0.0 from v12.x with Git Sync, surfaces the correct documented migration risk before proceeding.
+  - Does not restate the observability parent's signal-selection, alert-fatigue-cause, or cardinality/PII guidance verbatim (QR-2); only adds Grafana-specific mechanics.
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]
+  cursor:
+    paths: ["**/provisioning/**", "**/dashboards/**/*.json", "**/grafana.ini", "**/*.tf"]
+  vscode:
+    argument_hint: "<task, e.g. 'add a dashboard variable' or 'route alerts to an external Alertmanager'>"

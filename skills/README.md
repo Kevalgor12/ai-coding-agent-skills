@@ -87,6 +87,11 @@ not generated speculatively or in bulk.
 | [legacy-modernization](legacy-modernization/) | `SK-CONV-005` | Conventions (generic) | authored, not yet validated/evaluated |
 | [code-review](code-review/) | `SK-CONV-007` | Conventions (generic) | authored, not yet validated/evaluated |
 | [technical-documentation](technical-documentation/) | `SK-CONV-006` | Conventions (generic) | authored, not yet validated/evaluated |
+| [observability](observability/) | `SK-QA-004` | QA (generic) | authored, not yet validated/evaluated — closes a research gap held from taxonomy design |
+| [opentelemetry](opentelemetry/) | `SK-TECH-opentelemetry` | QA (technology) | authored, not yet validated/evaluated |
+| [prometheus](prometheus/) | `SK-TECH-prometheus` | QA (technology) | authored, not yet validated/evaluated |
+| [grafana](grafana/) | `SK-TECH-grafana` | QA (technology) | authored, not yet validated/evaluated |
+| [sentry](sentry/) | `SK-TECH-sentry` | QA (technology) | authored, not yet validated/evaluated |
 
 Per the [specification's conformance lifecycle](../core/skill-specification/specification.md#5-conformance--lifecycle),
 a skill needs a passing mechanical validator, an `evaluations/` test, and an

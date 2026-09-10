@@ -1,0 +1,248 @@
+id: SK-TECH-sentry
+slug: sentry
+name: Sentry
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-QA-004]
+
+purpose: >-
+  Apply Sentry correctly and version-appropriately — SDK architecture and init
+  ordering, the four product surfaces (errors, tracing, Session Replay, Logs),
+  DSN mechanics, release/source-map workflow, and the JS SDK's deep dependency
+  on OpenTelemetry.
+scope: >-
+  Sentry-specific SDK implementation depth (JS/Node and Python SDKs), release/
+  source-map CI workflow, DSN and layered PII-scrubbing architecture, and
+  major-version migration history. The generic signal-selection method,
+  PII-scrubbing pattern, and sampling-tuning guidance come from the parent
+  skill (`SK-QA-004`, observability) and are not repeated here. Not metrics
+  storage/PromQL (`SK-TECH-prometheus`), dashboarding (`SK-TECH-grafana`), or
+  vendor-neutral instrumentation standards (`SK-TECH-opentelemetry`) — Sentry
+  composes with OpenTelemetry rather than replacing it.
+expertise: Senior/principal engineer operating Sentry error/trace/session monitoring in production.
+description: >-
+  Sentry-specific error monitoring, tracing, Session Replay, and trace-connected
+  Logs — SDK init ordering, DSN mechanics, release/source-map workflow, layered
+  PII scrubbing, and the JS SDK's OpenTelemetry-backed tracing (v8+). Use when
+  @sentry/* (Node/browser/framework) or Python sentry-sdk is present, or the
+  task names Sentry, fingerprinting, Session Replay, or Sentry Logs. Not for
+  generic observability method or metrics/dashboards (use prometheus/grafana).
+
+activation_conditions:
+  - An `@sentry/*` package (node, browser, nextjs, react, express, fastify, profiling-node, ...) is present in package.json
+  - The Python `sentry-sdk` package is present in requirements/pyproject
+  - A Sentry DSN is configured (`SENTRY_DSN` env var, `dsn` init option, or `instrument.(js|mjs)`/`sentry.*.config.ts` files)
+  - The task names Sentry, issue fingerprinting, Session Replay, Sentry Logs, release/source-map upload, or a Sentry SDK migration (v7→v8, v8→v9, v9→v10)
+non_activation_conditions:
+  - Generic signal-selection, PII-scrubbing-pattern, or sampling-tuning guidance with no Sentry SDK involved (route to `SK-QA-004`, observability)
+  - Metrics storage, PromQL, or scrape-config work (route to `SK-TECH-prometheus`)
+  - Dashboarding/visualization work with no Sentry product surface involved (route to `SK-TECH-grafana`)
+  - Vendor-neutral instrumentation-standard design with Sentry not in the stack (route to `SK-TECH-opentelemetry`)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Sentry-specific task (SDK init/config, release/source-map setup, PII-scrubbing hook, alert routing, SDK major-version migration).
+    required: true
+  - name: sdk-and-version
+    description: Which Sentry SDK (JS/Node, Python, framework-specific) and its current version, if known.
+    required: false
+outputs:
+  - name: sdk-config
+    kind: edit
+    description: Sentry.init()/sentry_sdk.init() configuration, instrumentation-file ordering, beforeSend/beforeSendTransaction hooks.
+  - name: release-pipeline-change
+    kind: edit
+    description: Release/source-map upload wiring (sentry-cli, bundler plugin, Sentry Wizard, or getsentry/action-release CI step).
+  - name: analysis
+    kind: analysis
+    description: Findings on SDK version compatibility, sampling/profiling trade-offs, or migration breaking-change impact, tagged with the version range each claim applies to.
+
+depends_on_skills: []
+related_skills: [SK-TECH-opentelemetry]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: https://docs.sentry.io/product/issues/
+    title: "Sentry — Issues (fingerprinting, quota-per-event model)"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/concepts/key-terms/tracing/
+    title: "Sentry — Tracing key terms (traces, spans, transactions)"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/product/session-replay/
+    title: "Sentry — Session Replay product overview"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/product/explore/logs/
+    title: "Sentry — Logs (trace-connected, plan-tier retention)"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/platforms/javascript/guides/node/
+    title: "Sentry — Node.js SDK overview, install, init ordering"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/platforms/python/
+    title: "Sentry — Python SDK overview, install, init"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/platforms/javascript/guides/node/configuration/options/
+    title: "Sentry — JS/Node SDK configuration options reference"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/platforms/python/configuration/options/
+    title: "Sentry — Python SDK configuration options reference"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/product/sentry-basics/dsn-explainer/
+    title: "Sentry — DSN explainer (structure, public/secret status)"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/platforms/javascript/guides/node/configuration/releases/
+    title: "Sentry — Release configuration"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/platforms/javascript/sourcemaps/
+    title: "Sentry — Source map upload workflow, Debug IDs"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/product/releases/setup/release-automation/github-actions/
+    title: "Sentry — getsentry/action-release GitHub Action"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/product/releases/setup/release-automation/
+    title: "Sentry — Release automation across CI/CD platforms"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/platforms/javascript/guides/node/opentelemetry/
+    title: "Sentry — Node SDK / OpenTelemetry relationship"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/platforms/javascript/guides/node/migration/v7-to-v8/
+    title: "Sentry — JS/Node SDK v7→v8 migration guide"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/platforms/javascript/guides/node/migration/v8-to-v9/
+    title: "Sentry — JS/Node SDK v8→v9 migration guide"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/platforms/javascript/guides/node/migration/v9-to-v10/
+    title: "Sentry — JS/Node SDK v9→v10 migration guide"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/platforms/javascript/guides/node/data-management/sensitive-data/
+    title: "Sentry — PII scrubbing guidance, beforeSend/beforeSendTransaction"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/product/relay/
+    title: "Sentry — Relay architecture and layered PII scrubbing"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/product/data-management-settings/scrubbing/
+    title: "Sentry — Server-side default and Advanced Data Scrubbing"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/platforms/javascript/guides/node/configuration/sampling/
+    title: "Sentry — Tracing sample-rate/sampler configuration"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/platforms/javascript/guides/node/profiling/
+    title: "Sentry — Profiler eager-mode CPU-overhead trade-off"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/platforms/javascript/guides/node/configuration/environments/
+    title: "Sentry — enabled option caveat, conditional Sentry.init() for disabling"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/platforms/javascript/guides/nextjs/
+    title: "Sentry — Official Next.js integration guide"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/platforms/javascript/guides/express/
+    title: "Sentry — Official Express integration guide"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/platforms/javascript/guides/fastify/
+    title: "Sentry — Official Fastify integration guide"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/platforms/javascript/guides/node/troubleshooting/
+    title: "Sentry — Troubleshooting (debug mode, missing-event checklist, source-map failure signatures)"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://docs.sentry.io/pricing/quotas/
+    title: "Sentry — Quota management and sampling's effect on billable volume"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/getsentry/sentry-javascript/releases
+    title: "Sentry JavaScript SDK — release history (current version)"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+  - url: https://pypi.org/project/sentry-sdk/
+    title: "sentry-sdk (Python) — PyPI package page (current version, Python classifiers)"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  sentry-javascript: ">=8.0.0 <=10.74.0 (11.0.0-beta.2 in active beta, not GA)"
+  sentry-python: "2.69.1 (current on PyPI; classifiers declare Python 3.6-3.15 support)"
+version_sensitive_claims:
+  - claim: The previously-shipped custom Metrics API was removed entirely from the JS/Node SDK (not merely deprecated) — the strongest evidence Sentry is not a Prometheus-style metrics platform.
+    applies_to: "sentry-javascript >=9.0.0"
+    source_ref: research/technologies/sentry.md (Section 13, v8→v9 migration guide)
+  - claim: The SDK's internal OpenTelemetry dependency floor was raised to OTel 2.x/0.20x.x; projects unable to adopt OTel v2 are directed to stay on Sentry SDK v9 or adopt @sentry/node-core.
+    applies_to: "sentry-javascript >=10.0.0"
+    source_ref: research/technologies/sentry.md (Section 13, v9→v10 migration guide)
+  - claim: Node.js minimum runtime raised to 18.0.0 (18.19.0+/19.9.0+ recommended for TracingChannel features).
+    applies_to: "sentry-javascript >=9.0.0"
+    source_ref: research/technologies/sentry.md (Sections 11-13)
+  - claim: Node.js minimum runtime raised to 14.18.0, and the require/import-before-any-other-package initialization-ordering requirement was introduced.
+    applies_to: "sentry-javascript >=8.0.0"
+    source_ref: research/technologies/sentry.md (Section 11/13, v7→v8 migration guide)
+  - claim: sendDefaultPii is deprecated on the JS/Node SDK in favor of a dataCollection option (Python SDK's send_default_pii is unaffected).
+    applies_to: "sentry-javascript >=11.0.0-beta.2 (deprecation announced; removal targeted for v11)"
+    source_ref: research/technologies/sentry.md (Section 4)
+last_verified: "2026-09-10"
+reverify_triggers:
+  - Sentry JavaScript SDK v11.0.0 reaches general availability (currently 11.0.0-beta.2)
+  - A new JS/Node SDK major-version migration guide is published (post-v10)
+  - The Python SDK publishes an itemized major-version breaking-changes/migration guide (none found as of this research pass)
+  - The default server-side data-scrubbing field list becomes documented (currently Unresolved per research)
+
+owned_knowledge:
+  - Sentry SDK architecture and initialization-ordering requirement (instrument.js-first)
+  - DSN structure and public/secret status
+  - Release tracking and source-map/Debug-ID upload workflow
+  - Sentry JS/Node SDK major-version breaking-change history (v7→v8→v9→v10→v11-beta)
+  - The specific depth of the Sentry↔OpenTelemetry dependency relationship
+decision_framework_present: true
+
+failure_handling:
+  - If the Sentry SDK/version in use can't be determined, ask or explicitly state the version range the guidance assumes (JS SDK 8.x-10.x current stable, v11 in beta; Python SDK 2.x) rather than assuming "latest" silently (VA-3).
+  - If shell is unavailable, output advisory Sentry.init()/sentry_sdk.init() config and CI workflow snippets, and state that no CLI upload, release creation, or migration was executed.
+verification:
+  - SDK initialization happens before any other module import/require (Node/JS instrument.js-first ordering) per the documented requirement.
+  - Any beforeSend/beforeSendTransaction PII-scrubbing hook is present before enabling sendDefaultPii or attaching user/request context.
+  - Release/source-map steps produce Debug IDs and run before the corresponding deploy, not after.
+  - Every version-specific claim made is tagged with the SDK major-version range it applies to.
+evaluation_criteria:
+  - For a seeded Node.js/Express or Fastify service, produces an instrument.js-first Sentry.init() with correct ordering and the documented framework error-handler wiring (setupExpressErrorHandler/setupFastifyErrorHandler).
+  - Correctly distinguishes when Sentry's own tracing is sufficient vs. when broader OpenTelemetry instrumentation is the right call, per the decision framework.
+  - Does not restate observability's signal-selection method, PII-scrubbing pattern, or sampling-tuning guidance already owned by SK-QA-004 (QR-2).
+  - Any claim about a v8/v9/v10 breaking change is correctly scoped to the version range it applies to.
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]
+  cursor:
+    paths: ["**/instrument.*", "**/sentry.*.config.*", "**/sentry.properties"]
+  vscode:
+    argument_hint: "<task, e.g. 'wire up Sentry release + source maps in CI' or 'migrate SDK v9 to v10'>"

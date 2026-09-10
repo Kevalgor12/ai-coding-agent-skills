@@ -1,6 +1,6 @@
 # Unresolved Items
 
-This file collects every unresolved question, ambiguity, or unverified claim flagged during research across the 44 technologies in this Skill Library project. These are gaps the researching agent explicitly declined to guess at -- conflicting official sources, pages that 404'd, facts sourced only from search summaries rather than direct fetches, or genuinely undocumented behavior. Treat these as known open questions to re-verify before relying on the adjacent claims in each technology's `research/technologies/<slug>.md` doc. Items are grouped by technology; technologies with no unresolved items are omitted.
+This file collects every unresolved question, ambiguity, or unverified claim flagged during research across the 49 technologies in this Skill Library project. These are gaps the researching agent explicitly declined to guess at -- conflicting official sources, pages that 404'd, facts sourced only from search summaries rather than direct fetches, or genuinely undocumented behavior. Treat these as known open questions to re-verify before relying on the adjacent claims in each technology's `research/technologies/<slug>.md` doc. Items are grouped by technology; technologies with no unresolved items are omitted.
 
 ## Angular
 
@@ -113,6 +113,18 @@ This file collects every unresolved question, ambiguity, or unverified claim fla
 - Whether a single dedicated official 'site move / domain migration' step-by-step guide page currently exists and what it says beyond the general canonicalization/redirect signals confirmed in the canonicalization doc.
 - Whether Search Central docs still carry an explicit callout/migration notice about INP replacing FID, versus having simply dropped FID from current pages over time.
 
+## Grafana
+
+- Whether "dashboards as code" workflows are documented as primarily using the HTTP API's dashboard-update endpoints versus exclusively file-based provisioning or third-party as-code tools — the docs describe multiple coexisting paths without a stated preference.
+- Exact HTTP API authentication mechanisms (API tokens vs. service accounts vs. basic auth) were not confirmed with quoted text from the `developers/http_api/` page itself.
+- Whether `[auth.saml]` (or an Enterprise-specific SAML config) has its own documented `grafana.ini` section name — SAML's existence is implied by a security advisory but its exact configuration surface was not directly confirmed.
+- Whether Grafana publishes an aggregate/historical CVE count or an explicit disclosure-process SLA (acknowledgment/embargo timelines).
+- The precise set of tabs/data exposed by the Query Inspector tool — confirmed only at the level of "lets you view and optimize your query," not itemized tab-by-tab.
+- **The literal term "LGTM stack" was not found verbatim in any official grafana.com/docs page fetched** — the four-component architecture (Loki, Grafana, Tempo, Mimir) is fully documented under OpenTelemetry/OTLP ingestion pages, just not under that acronym; skill content should describe the components explicitly rather than assuming "LGTM stack" resolves to a specific official docs anchor.
+- Whether Tempo's trace data format is explicitly documented as OpenTelemetry-based on the Tempo data-source page itself — this fact was established via the separate OpenTelemetry/OTLP docs rather than the Tempo page directly.
+- No dedicated "reference org/folder structure for a growing engineering team" governance playbook was located beyond the isolation-boundary and RBAC primitives.
+- Dashboard/query sizing guidance (how many panels or concurrent queries is "too many" for a single Grafana instance) was not located.
+
 ## GraphQL
 
 - Whether the ~6-month spec release cadence stated in the October 2016 release notes is still operative — the ~4-year gap between October 2021 and September 2025 editions suggests it wasn't maintained as planned, but no current-cadence statement was found in reachable docs.
@@ -223,6 +235,15 @@ This file collects every unresolved question, ambiguity, or unverified claim fla
 - Full quoted breaking-changes catalogue across all 2.x minor versions on the consolidated docs.opensearch.org/latest/breaking-changes/ page — only the 3.0 GitHub-issue-tracked list was fully retrieved
 - Whether the '50% RAM heap, ~32GB cap' JVM sizing guidance appears in those exact terms on a current docs.opensearch.org page vs. only in search-engine-indexed snippets of that domain — treated as inference pending direct-page confirmation
 
+## OpenTelemetry
+
+- Exact calendar release dates for the current Collector, JS, Python, and Go SDK releases — version numbers were captured with reasonable confidence, but this session's tooling returned apparently-inconsistent years across separate fetches of the same GitHub release pages, so specific dates were deliberately omitted rather than asserted.
+- Whether a dedicated official "testing your OpenTelemetry instrumentation" guide exists anywhere on `opentelemetry.io` beyond the Node.js instrumentation page checked — the most likely single page was checked and found not to cover testing, but the full site was not exhaustively searched.
+- The full pros/cons comparison table on `/docs/collector/deploy/` and the full contents of `/docs/collector/distributions/` — only the pages' framing/table-of-contents was retrieved, not their complete body content.
+- Numeric SDK-instrumentation performance overhead (e.g. added per-request latency) from `/docs/collector/benchmarks/` — page exists in the docs but was not fetched in this pass.
+- **Grafana- and Sentry-specific technical integration detail** — `opentelemetry.io`'s own vendor/ecosystem page confirms both are OTLP-compatible backends but does not itself document the integration mechanics; that material lives on each vendor's own documentation site, outside OpenTelemetry's own docs. This is why the Grafana and Sentry research docs, not this one, carry the integration-mechanics detail.
+- A consolidated, cross-repository OpenTelemetry governance page (CNCF Governance Committee, Technical Committee, per-language SIGs) was not found; only the multi-repo *structure* was confirmed via `github.com/open-telemetry` directly, not the formal governance/decision-making process.
+
 ## Playwright
 
 - Exact publish dates for recent releases (v1.60-v1.63): a GitHub releases fetch returned '2024' years which contradicts the current date context (2026) and a separate web search implying 2026 dates with matching month/day -- likely a tool/summarization artifact, but not independently confirmed via a verbatim page read.
@@ -288,6 +309,17 @@ This file collects every unresolved question, ambiguity, or unverified claim fla
 - Exact LibSass end-of-life date (~October 2025) was surfaced only via a search-engine summary of sass-lang.com content, not independently re-fetched and quoted from a primary page — treat as unconfirmed pending direct verification of the source page.
 - Whether sass-lang.com documents any numeric limits (max recursion depth, max nesting depth) was not found in pages retrieved; could not confirm absence vs. simply not being surfaced by the fetches performed.
 - Full list of older breaking-changes entries (versions 1.0.0-1.55.0) was not individually re-fetched; only summarized as 'also listed' per the breaking-changes index page summary.
+
+## Sentry
+
+- The precise, itemized list of field names/patterns redacted by Sentry's *default* server-side data scrubber (as opposed to the SDK-side `beforeSend` pattern and the opt-in Advanced Data Scrubbing rules, both documented in detail) was not extracted from the fetched page content — only that such a default exists, and that Advanced Data Scrubbing is a separate, configurable layer.
+- A Python SDK (`sentry-sdk`) major-version migration guide, and a Python-specific breaking-changes history analogous to the detailed JS v7→v8/v8→v9/v9→v10 series, was not located/fetched.
+- The exact SSL/TLS protocol versions, cipher suites, and plan-by-plan data-retention windows referenced from the `security-legal-pii` index page were not independently fetched.
+- Whether docs.sentry.io publishes a single consolidated SDK-version × language-runtime × framework-version compatibility matrix; version floors here were assembled from multiple pages rather than one authoritative table.
+- Numeric SDK performance-overhead benchmarks (CPU/memory/latency cost of stack-trace capture, breadcrumb recording, or tracing) — only qualitative guidance and one named trade-off (eager profiler mode's constant CPU overhead) were found.
+- A dedicated official guide or first-party plugin for testing Sentry-instrumented application code (asserting on captured events in Jest/pytest/etc.) — the closest documented pattern is conditional `Sentry.init()` skipping plus `debug: true`.
+- Exact authentication-token scopes required per Sentry Web API endpoint, beyond the one "Organization Token" reference found in the release-automation/GitHub Actions context.
+- [Inference, not confirmed in docs] Sentry's positioning as "not a metrics/logging platform in the Prometheus/OpenTelemetry sense" is inferred from two separate documented facts — the SDK's Metrics API being removed entirely in v9, and Logs' plan-tier-gated 7/14/30-day retention — rather than from any single page that states this boundary explicitly by name-checking Prometheus or OpenTelemetry Metrics.
 
 ## shadcn/ui
 

@@ -1,0 +1,103 @@
+id: SK-QA-004
+slug: observability
+name: Observability
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: QA
+
+purpose: >-
+  Instrument systems for logging, metrics, distributed tracing, and error
+  monitoring so production behavior is diagnosable — independent of which
+  observability technology is used.
+scope: >-
+  Observability design — structured logging, metrics, distributed tracing,
+  error monitoring, actionable alerting. Specialized by the OpenTelemetry,
+  Prometheus, Grafana, and Sentry technology skills for implementation
+  depth. Not application-level reliability/resilience patterns (retries,
+  circuit breakers, timeouts, bulkheads) — a genuinely distinct, still-open
+  research gap this skill does not fabricate guidance for. Not deep
+  performance-tuning method (performance-engineering) or deployment
+  strategy (deployment-release).
+expertise: Senior/principal engineer with production-observability experience.
+description: >-
+  Instrument systems for logging, metrics, tracing, and error monitoring —
+  choose the right signal(s) for the diagnostic need, avoid high-cardinality
+  and PII-leakage pitfalls, and design actionable alerting. Use when making
+  a system diagnosable in production or debugging a production issue.
+  Explicitly does not cover resilience/fault-tolerance patterns (retries,
+  circuit breakers), a separate, still-unresearched gap in this library.
+
+activation_conditions:
+  - Making a system diagnosable in production
+  - Debugging a production issue that needs logging/metrics/tracing evidence
+  - Adding or reviewing an observability instrumentation layer
+non_activation_conditions:
+  - Local/throwaway code with no production diagnosability need
+  - A request for resilience/fault-tolerance patterns (retries, circuit breakers, timeouts, bulkheads) rather than observability instrumentation — a separate, still-open research gap not covered here
+activation_mode: auto
+
+inputs:
+  - name: system
+    description: The system/service needing observability instrumentation.
+    required: true
+  - name: slos-or-failure-modes
+    description: The SLOs or failure modes of concern, if known.
+    required: false
+outputs:
+  - name: instrumentation-plan
+    kind: analysis
+    description: What to log/measure/trace and why, matched to the actual diagnostic need.
+  - name: instrumentation-changes
+    kind: edit
+    description: Logging, metrics, or tracing instrumentation applied to the system.
+
+depends_on_skills: []
+related_skills: [SK-QA-003, SK-INFRA-003, SK-TECH-opentelemetry, SK-TECH-prometheus, SK-TECH-grafana, SK-TECH-sentry]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: research/technologies/opentelemetry.md
+    title: "OpenTelemetry Research — instrumentation/collection standard, explicitly not a backend/storage/visualization system"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: research/technologies/prometheus.md
+    title: "Prometheus Research — pull-based metrics model, cardinality guardrails, alerting practices"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: research/technologies/grafana.md
+    title: "Grafana Research — visualization/dashboarding layer, alert-fatigue anti-patterns"
+    via: research/technologies/grafana.md
+    retrieved: "2026-09-10"
+  - url: research/technologies/sentry.md
+    title: "Sentry Research — error monitoring/tracing/session-replay, PII-scrubbing discipline"
+    via: research/technologies/sentry.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Signal-selection method (logging vs. metrics vs. tracing vs. error monitoring, matched to the diagnostic need)
+  - Cardinality and PII-leakage avoidance discipline
+  - Alert-design method (actionable, owned, pruned) avoiding alert fatigue
+decision_framework_present: true
+
+failure_handling:
+  - If SLOs/failure modes of concern aren't stated, ask rather than instrument reflexively.
+  - If the request is actually about resilience/fault-tolerance patterns, state that gap explicitly rather than answering as if it were observability instrumentation.
+verification:
+  - No secrets or PII are logged or attached as span/metric attributes without explicit scrubbing.
+  - High-cardinality values (raw user IDs, full URLs with query strings, unbounded label sets) are not attached as metric labels/attributes without a stated reason.
+  - Every alert has a clear owner and a stated action it triggers — no ownerless or non-actionable alerts.
+escalation:
+  - A request for resilience/fault-tolerance-pattern guidance (retries, circuit breakers, timeouts) is escalated as a research gap requiring a dedicated pass, not answered from general knowledge.
+evaluation_criteria:
+  - Produces structured logs with correlation IDs and metrics tied to stated SLOs, without logging secrets/PII.
+  - Correctly declines to answer a resilience-pattern request as if it were covered by this skill's grounded scope.
+  - Avoids high-cardinality label/attribute pitfalls and alert-fatigue anti-patterns in proposed instrumentation.
+
+adapter_hints: {}

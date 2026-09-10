@@ -1,0 +1,210 @@
+id: SK-TECH-prometheus
+slug: prometheus
+name: Prometheus
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-QA-004]
+
+purpose: >-
+  Apply Prometheus correctly and version-appropriately — PromQL, the four
+  metric types, scrape/cardinality configuration, and its single-node
+  storage/HA architecture — specializing the observability parent skill
+  with Prometheus-specific, cited implementation depth.
+scope: >-
+  Prometheus-specific implementation: PromQL mechanics (selectors,
+  modifiers, subqueries, staleness), precise metric-type semantics
+  (Counter/Gauge/Histogram/Summary, native vs. classic histograms),
+  config-level cardinality guardrails, the not-clustered/not-natively-HA
+  local-storage architecture and its federation/remote-write scaling
+  paths, Alertmanager HA operational rules, native OTLP receiver and
+  Grafana data-source integration, and promtool-based testing. The
+  generic cross-technology method (signal selection, cardinality/PII
+  discipline as a concept, alert-design philosophy) is owned by the
+  parent skill (SK-QA-004) and is not repeated here.
+expertise: Prometheus / metrics-observability engineer.
+description: >-
+  Prometheus-specific PromQL, scrape/relabel config, the four metric
+  types (Counter/Gauge/Histogram/Summary, native vs. classic
+  histograms), cardinality guardrails, non-HA storage architecture,
+  Alertmanager HA, and promtool testing. Use when prometheus.yml, a
+  Prometheus server, /metrics scraping, PromQL, or Alertmanager is in
+  play. Not for OpenTelemetry instrumentation, Grafana dashboards, or
+  generic signal-selection/alert-design method (SK-QA-004).
+
+activation_conditions:
+  - A prometheus.yml config, a running/deployed Prometheus server, or a scraped /metrics endpoint is present in the stack
+  - The task names Prometheus, PromQL, Alertmanager, promtool, or a Prometheus client library
+  - Instrumenting application code with Counter/Gauge/Histogram/Summary metrics intended for Prometheus scraping
+non_activation_conditions:
+  - The stack has no Prometheus component and none is requested (route to the generic observability skill or the relevant sibling tech skill)
+  - The task is OpenTelemetry instrumentation/collector configuration with no Prometheus backend involved (route to SK-TECH-opentelemetry)
+  - The task is Grafana dashboard/panel/alerting-UI authoring rather than the Prometheus server or PromQL itself (route to SK-TECH-grafana)
+  - Generic signal-selection, cardinality-discipline-as-a-concept, or alert-design philosophy with no Prometheus specifics needed (route to SK-QA-004)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Prometheus-related task (scrape/relabel config, PromQL query, alerting/recording rule, client-library instrumentation, HA/federation design, version-upgrade planning).
+    required: true
+  - name: prometheus-version
+    description: The Prometheus major/minor version in use (server --version, image tag, or config), especially relevant across the v2.55/v3.0 TSDB-format boundary.
+    required: false
+outputs:
+  - name: prometheus-config-or-rules
+    kind: edit
+    description: prometheus.yml scrape/relabel/remote_write config, recording/alerting rule files, or promtool unit-test files.
+  - name: promql-query
+    kind: edit
+    description: A PromQL instant/range query, subquery, or recording-rule expression.
+  - name: analysis
+    kind: analysis
+    description: Version-correct recommendations (metric-type choice, cardinality guardrail, HA/federation stance, upgrade risk) with citations.
+
+depends_on_skills: []
+related_skills: [SK-TECH-opentelemetry, SK-TECH-grafana, SK-QA-003]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: https://prometheus.io/docs/introduction/overview/
+    title: "Prometheus — Overview (pull model, Pushgateway, ecosystem components)"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: https://prometheus.io/docs/introduction/faq/
+    title: "Prometheus — FAQ (pull-vs-push rationale, HA answer, scaling claims, semver policy)"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: https://prometheus.io/docs/concepts/data_model/
+    title: "Prometheus — Data Model (time series, labels, le/quantile normalization at v3)"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: https://prometheus.io/docs/concepts/metric_types/
+    title: "Prometheus — Metric Types (Counter/Gauge/Histogram/Summary, native vs. classic histograms)"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: https://prometheus.io/docs/prometheus/latest/querying/basics/
+    title: "Prometheus — Querying Basics (PromQL selectors, modifiers, subqueries, staleness, query cost)"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: https://prometheus.io/docs/prometheus/latest/configuration/configuration/
+    title: "Prometheus — Configuration (scrape_config, per-scrape cardinality limits, relabeling)"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: https://prometheus.io/docs/prometheus/latest/storage/
+    title: "Prometheus — Storage (local TSDB, not-clustered/not-HA limitation, remote storage)"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: https://prometheus.io/docs/practices/naming/
+    title: "Prometheus — Metric and Label Naming (high-cardinality-label CAUTION)"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: https://prometheus.io/docs/prometheus/latest/command-line/promtool/
+    title: "Prometheus — promtool (check config/rules/metrics, tsdb analyze, debug)"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: https://prometheus.io/docs/prometheus/latest/configuration/unit_testing_rules/
+    title: "Prometheus — Unit Testing for Rules (promtool test rules)"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: https://prometheus.io/docs/operating/security/
+    title: "Prometheus — Security Model (public-exposure DoS risk, threat model, CSRF)"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: https://prometheus.io/docs/prometheus/latest/configuration/https/
+    title: "Prometheus — TLS and Basic Authentication (--web.config.file, experimental status)"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: https://prometheus.io/docs/alerting/latest/high_availability/
+    title: "Alertmanager — High Availability (gossip cluster, no load balancer, fail-open)"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: https://prometheus.io/docs/visualization/grafana/
+    title: "Prometheus — Grafana Visualization (native data source since Grafana 2.5.0)"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: https://prometheus.io/docs/guides/opentelemetry/
+    title: "Prometheus — OpenTelemetry Guide (OTLP receiver, target_info, translation strategies)"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: https://prometheus.io/docs/prometheus/latest/migration/
+    title: "Prometheus — 3.0 Migration Guide (TSDB v2.55 boundary, PromQL regex/lookback changes, log format)"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: https://prometheus.io/docs/prometheus/latest/stability/
+    title: "Prometheus — API Stability Guarantees (stable vs. unstable surfaces for 3.x)"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: https://prometheus.io/docs/introduction/release-cycle/
+    title: "Prometheus — Release Cycle and LTS Policy"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+  - url: https://raw.githubusercontent.com/prometheus/prometheus/main/CHANGELOG.md
+    title: "Prometheus — CHANGELOG (version/release-date confirmation, 3.0.0 and 3.14.0 entries)"
+    via: research/technologies/prometheus.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  prometheus: ">=3.5 <=3.14 (LTS lines 3.5 and 3.13 currently supported)"
+version_sensitive_claims:
+  - claim: >-
+      A Prometheus v3 TSDB can only be read by Prometheus v2.55 or newer;
+      downgrading below v2.55 loses persistent TSDB data. Upgrade to 2.55
+      first and confirm stability before jumping to v3.
+    applies_to: "TSDB read-compatibility boundary at v2.55; relevant for any upgrade crossing the v2.x -> v3.0 boundary"
+    source_ref: research/technologies/prometheus.md (Section 13, "TSDB on-disk format compatibility")
+  - claim: >-
+      PromQL's "." regex metacharacter began matching newlines (affecting
+      any ".*"/".+" pattern in queries or relabel rules), and range-selector
+      /lookback boundary semantics changed from closed-closed to open-closed.
+    applies_to: ">=3.0.0 (breaking change from pre-3.0 PromQL semantics)"
+    source_ref: research/technologies/prometheus.md (Sections 11 and 13)
+  - claim: >-
+      Prometheus's log output switched from go-kit/log to Go's standard
+      log/slog, changing the on-disk/stdout log line format — breaking for
+      anything parsing Prometheus's own log output.
+    applies_to: ">=3.0.0"
+    source_ref: research/technologies/prometheus.md (Section 13, "Log format change")
+last_verified: "2026-09-10"
+reverify_triggers:
+  - A new Prometheus major release (4.0)
+  - A new LTS line designated beyond 3.13 (next slated ~2027-06 per the release-cycle doc)
+  - Any change to the OTLP receiver's documented stable/experimental status
+  - Any change to native TLS/basic-auth's documented "experimental" status
+
+owned_knowledge:
+  - PromQL syntax and evaluation mechanics (selectors, modifiers, duration expressions, subqueries, staleness)
+  - Prometheus's four metric types' precise semantics, including native vs. classic histograms and Summary's non-aggregatable client-side quantiles
+  - Prometheus config-level cardinality guardrails (sample_limit/label_limit/label_value_length_limit/target_limit) and promtool cardinality analysis
+  - Prometheus's local-storage/non-HA architecture stance and its federation/remote-write scaling paths
+  - Alertmanager HA operational configuration (all instances configured directly in Prometheus, never a load balancer)
+decision_framework_present: true
+
+failure_handling:
+  - If the Prometheus major/minor version in use is unknown, ask or explicitly state the version the guidance assumes — never assume "latest" silently — and flag the v2.55/v3.0 TSDB-read-compatibility boundary before recommending any upgrade.
+  - If shell is unavailable, degrade to advisory config/PromQL/promtool output and state that promtool/reload/scrape was not actually executed.
+  - If the request is actually generic signal-selection, cardinality-as-a-concept, or alert-design philosophy with no Prometheus specifics, defer to SK-QA-004 rather than restating it.
+escalation:
+  - A request to plan a v2.x -> v3.0 upgrade requires explicit confirmation of the current version before recommending the upgrade path, given the documented risk of irreversibly losing persistent TSDB data below v2.55.
+verification:
+  - Every PromQL/config/CLI/behavior claim carries a "[Source: <url>]" citation resolvable to source_references.
+  - Every version-specific claim states the range it applies to, especially the TSDB v2.55 boundary and the v2->v3 regex/lookback semantic changes.
+  - A proposed Alertmanager HA configuration lists every instance directly in Prometheus's alerting.alertmanagers block, never behind a load balancer.
+  - A scrape config with realistic cardinality risk sets sample_limit/label_limit/label_value_length_limit/target_limit rather than relying on convention alone.
+evaluation_criteria:
+  - For a seeded metric-instrumentation task, chooses Counter vs. Gauge correctly per the value's semantics (monotonic-only vs. can-decrease) and recommends native histograms over classic histograms when the client library supports them.
+  - For a seeded HA/scale question, correctly states that local storage is not clustered/replicated and recommends federation or remote-write to a long-term-storage backend rather than implying Prometheus alone scales horizontally.
+  - For a seeded Alertmanager-HA configuration task, configures all instances directly in Prometheus rather than behind a load balancer.
+  - For a seeded alerting/recording-rule authoring task, proposes promtool test rules coverage rather than declaring the rule correct without a test.
+  - Does not restate the generic signal-selection/cardinality/alert-design synthesis already owned by SK-QA-004 (no-duplication).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]
+  vscode:
+    argument_hint: "<task, e.g. 'write a scrape config with cardinality limits' or 'design an Alertmanager HA cluster'>"

@@ -1,0 +1,278 @@
+id: SK-TECH-opentelemetry
+slug: opentelemetry
+name: OpenTelemetry
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-QA-004]
+
+purpose: >-
+  Instrument code with the OpenTelemetry API/SDK and operate the
+  OpenTelemetry Collector correctly for the specific per-language,
+  per-signal stability level actually in use.
+scope: >-
+  OpenTelemetry-specific implementation depth: API/SDK/Collector
+  architecture, OTLP wire protocol, context propagation, semantic
+  conventions, and the per-language/per-signal stability matrix. The
+  generic signal-selection method, cardinality/PII discipline, and
+  alert-design method come from the parent skill (observability,
+  SK-QA-004) and are not repeated here.
+expertise: Observability/instrumentation engineer specializing in OpenTelemetry.
+description: >-
+  OpenTelemetry-specific instrumentation via the API/SDK and Collector —
+  OTLP protocol, W3C Trace Context propagation, semantic conventions, and
+  the per-language/per-signal stability matrix (e.g. JS/Python logs still
+  Development). Use when instrumenting code with OpenTelemetry or
+  configuring/deploying the Collector. Not for signal-selection method or
+  cardinality/PII/alerting synthesis (use observability), or
+  backend-specific config (use prometheus/grafana/sentry).
+
+activation_conditions:
+  - The task involves instrumenting code with the OpenTelemetry API/SDK (traces, metrics, or logs)
+  - Configuring, deploying, or troubleshooting the OpenTelemetry Collector
+  - OTLP endpoints, exporters, or `@opentelemetry/*` / `opentelemetry-*` packages are present in the codebase
+  - Migrating instrumentation from OpenTracing or OpenCensus to OpenTelemetry
+non_activation_conditions:
+  - Deciding which observability signal to use for a diagnostic need, or designing alerting/cardinality/PII discipline in the abstract (route to observability, SK-QA-004)
+  - Prometheus-specific PromQL/scrape-config work with no OpenTelemetry SDK/Collector involved (route to prometheus)
+  - Grafana dashboard/alerting-rule authoring with no OTLP ingestion involved (route to grafana)
+  - Sentry SDK configuration/issue-triage work not going through OpenTelemetry (route to sentry)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The instrumentation or Collector task (add tracing/metrics/logs to a service, configure/deploy a Collector, migrate from OpenTracing/OpenCensus).
+    required: true
+  - name: language-and-stack
+    description: The language/runtime and framework being instrumented — package names, auto-instrumentation availability, and signal stability all differ per language.
+    required: true
+  - name: existing-otel-version
+    description: Currently pinned OpenTelemetry API/SDK/Collector versions, if any (for accurate migration/breaking-change guidance).
+    required: false
+outputs:
+  - name: instrumentation-code
+    kind: edit
+    description: API/SDK instrumentation (auto- and/or manual) added to the target service, using correct semantic-convention attribute names.
+  - name: collector-config
+    kind: edit
+    description: Collector YAML configuration (receivers/processors/exporters/pipelines) for the chosen deployment topology.
+  - name: analysis
+    kind: analysis
+    description: Stability/version-applicability assessment and, if relevant, a migration plan (OpenTracing/OpenCensus bridge, major-version upgrade).
+
+depends_on_skills: []
+related_skills: [SK-TECH-prometheus, SK-TECH-grafana, SK-TECH-sentry]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: https://opentelemetry.io/docs/what-is-opentelemetry/
+    title: "OpenTelemetry — What is OpenTelemetry?"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/concepts/components/
+    title: "OpenTelemetry — Components (API, SDK, Collector)"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/concepts/signals/traces/
+    title: "OpenTelemetry — Traces"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/concepts/signals/metrics/
+    title: "OpenTelemetry — Metrics"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/concepts/signals/logs/
+    title: "OpenTelemetry — Logs"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/concepts/context-propagation/
+    title: "OpenTelemetry — Context Propagation (W3C Trace Context, Baggage)"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/concepts/instrumentation/
+    title: "OpenTelemetry — Instrumentation (zero-code vs. code-based)"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/specs/otlp/
+    title: "OpenTelemetry Protocol (OTLP) Specification"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/specs/semconv/general/naming/
+    title: "OpenTelemetry Semantic Conventions — Naming"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/specs/otel/versioning-and-stability/
+    title: "OpenTelemetry — Versioning and Stability"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/languages/
+    title: "OpenTelemetry — Language SDKs (per-language, per-signal stability matrix)"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/collector/architecture/
+    title: "OpenTelemetry Collector — Architecture"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/collector/deploy/
+    title: "OpenTelemetry Collector — Deployment Patterns"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/collector/scaling/
+    title: "OpenTelemetry Collector — Scaling"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/collector/resiliency/
+    title: "OpenTelemetry Collector — Resiliency (sending queues, WAL, Kafka)"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/collector/troubleshooting/
+    title: "OpenTelemetry Collector — Troubleshooting (debug exporter, zPages)"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/security/config-best-practices/
+    title: "OpenTelemetry Security — Configuration Best Practices"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/security/handling-sensitive-data/
+    title: "OpenTelemetry Security — Handling Sensitive Data"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/compatibility/migration/
+    title: "OpenTelemetry — Migrating from OpenTracing/OpenCensus/Jaeger"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/ecosystem/vendors/
+    title: "OpenTelemetry — Vendor/Backend Ecosystem Directory"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/docs/specs/otel/compatibility/prometheus_and_openmetrics/
+    title: "OpenTelemetry — Prometheus and OpenMetrics Compatibility"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://opentelemetry.io/blog/2026/go-logs-api-sdk-rc/
+    title: "OpenTelemetry Blog — Go Logs API/SDK Reaches Release Candidate"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+  - url: https://raw.githubusercontent.com/open-telemetry/opentelemetry-js/main/CHANGELOG.md
+    title: "opentelemetry-js CHANGELOG (v2.0.0 breaking changes)"
+    via: research/technologies/opentelemetry.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  opentelemetry-spec-api-sdk: >-
+    No single unified "OpenTelemetry version" exists — the API, SDK,
+    Semantic Conventions, and contrib components each version
+    independently under SemVer 2.0.0, and stability is tracked per
+    signal (traces/metrics/logs) per language, not per SDK release as a
+    whole. See version_sensitive_claims for the per-language matrix this
+    skill's guidance is correct for.
+  opentelemetry-collector: "~1.66.0 core / ~0.160.0 contrib (approximate; exact release date Unresolved)"
+  opentelemetry-js: "~2.11.0 (approximate; exact release date Unresolved)"
+  opentelemetry-python: "~1.44.0 / 0.65b0 (approximate; exact release date Unresolved)"
+  opentelemetry-go: "~1.46.0 stable; 1.47.0-rc.1 for Logs API/SDK (approximate; exact release date Unresolved)"
+
+version_sensitive_claims:
+  - claim: >-
+      Traces are Stable in C++, .NET, Go, Java, JavaScript, PHP, Python,
+      Ruby, Swift; Beta in Rust; Development in Kotlin.
+    applies_to: "current per-language SDKs as of this research (2026-09-10)"
+    source_ref: research/technologies/opentelemetry.md (Section 12, opentelemetry.io/docs/languages/)
+  - claim: >-
+      Metrics are Stable in C++, .NET, Go, Java, JavaScript, PHP;
+      Development in Erlang/Elixir, Ruby, Swift; Beta in Rust.
+    applies_to: "current per-language SDKs as of this research (2026-09-10)"
+    source_ref: research/technologies/opentelemetry.md (Section 12, opentelemetry.io/docs/languages/)
+  - claim: >-
+      Logs are Stable ONLY in C++, .NET, and PHP; Release Candidate in
+      Go; Development in Java, JavaScript, Python, Ruby, Swift, Kotlin;
+      Beta in Rust. This means JavaScript and Python — languages this
+      skill library heavily uses elsewhere — have Stable traces/metrics
+      but NOT-yet-stable logs: the non-breaking-minor-upgrade guarantee
+      does not yet apply to their logs signal.
+    applies_to: "current per-language SDKs as of this research (2026-09-10)"
+    source_ref: research/technologies/opentelemetry.md (Section 12, opentelemetry.io/docs/languages/)
+  - claim: >-
+      Once a component is Stable, the API gets a minimum of 3 years of
+      support after the NEXT major ships; SDK and contrib each get a
+      minimum of 1 year; minor upgrades within a stable major line are
+      guaranteed non-breaking.
+    applies_to: "Stable-status components only — does not apply to Development/Beta/RC-status signals"
+    source_ref: research/technologies/opentelemetry.md (Section 12, opentelemetry.io/docs/specs/otel/versioning-and-stability/)
+  - claim: >-
+      OpenTelemetry JS SDK v2.0.0 raised minimum Node.js to
+      `^18.19.0 || >=20.6.0`, minimum TypeScript to 5.0.4, and
+      compilation target to ES2022; renamed/relocated `parentSpanId` to
+      `parentSpanContext` and `instrumentationLibrary` to
+      `instrumentationScope`; and made the `Resource` class private in
+      favor of factory functions (`resourceFromAttributes()`, etc.).
+    applies_to: "opentelemetry-js >=2.0.0 (breaking relative to 1.x)"
+    source_ref: research/technologies/opentelemetry.md (Section 13, opentelemetry-js CHANGELOG.md)
+  - claim: >-
+      Relying on Experimental-status semantic conventions carries
+      standing breaking-change risk even on a Stable SDK/API — stability
+      of the SDK does not protect against attribute-shape churn in
+      conventions that are themselves still Experimental.
+    applies_to: "any semantic convention not marked Stable, regardless of SDK/API stability"
+    source_ref: research/technologies/opentelemetry.md (Section 6/13, opentelemetry.io/docs/languages/)
+  - claim: >-
+      OpenCensus's GitHub repositories (with one Python exception) were
+      archived 2023-07-31, ending upstream development; the documented
+      OpenTracing shim / OpenCensus bridge is the only forward-compatible
+      migration path for projects still directly depending on OpenCensus
+      client libraries.
+    applies_to: "any project depending on OpenCensus client libraries, from 2023-07-31 onward"
+    source_ref: research/technologies/opentelemetry.md (Section 11/13, opentelemetry.io/docs/compatibility/migration/)
+  - claim: >-
+      The Collector's own receiver endpoints default to binding
+      `localhost` rather than `0.0.0.0`, starting in Collector version
+      0.110.0, specifically to close a documented DoS anti-pattern
+      (CWE-1327) by default.
+    applies_to: "opentelemetry-collector >=0.110.0 (prior versions defaulted to 0.0.0.0 on some components)"
+    source_ref: research/technologies/opentelemetry.md (Section 6/7, opentelemetry.io/docs/security/config-best-practices/)
+last_verified: "2026-09-10"
+reverify_triggers:
+  - Go Logs API/SDK reaches stable v1 (currently v1.47.0-rc.1)
+  - JavaScript or Python Logs signal reaches Stable status
+  - Exact current release dates are confirmed for Collector/JS/Python/Go (currently Unresolved)
+  - A new OpenTelemetry JS/Python/Go major version ships (new breaking-change inventory needed)
+  - The Collector's default receiver-binding behavior changes again
+
+owned_knowledge:
+  - OpenTelemetry API/SDK/Collector architecture and component responsibilities
+  - OTLP wire protocol mechanics (gRPC/HTTP transports, ports, encoding)
+  - W3C Trace Context propagation format and the Baggage mechanism
+  - Semantic-conventions naming rules
+  - The per-language, per-signal OpenTelemetry stability matrix
+
+decision_framework_present: true
+
+failure_handling:
+  - If the target language/runtime isn't stated, ask before proposing instrumentation — package names, auto-instrumentation availability, and signal stability all differ per language.
+  - If shell is unavailable/denied, output advisory instrumentation code/Collector YAML and state explicitly that it was not run or validated.
+  - If a claim depends on the exact current release version and the pinned version is unknown, state the guidance's assumed version range rather than asserting "latest" (VA-3).
+escalation:
+  - A Collector config change affecting a shared/production pipeline (e.g. relaxing a receiver bind address, changing sampling that affects retention/cost elsewhere) requires explicit user confirmation before applying.
+  - A project still directly depending on OpenCensus is escalated to confirm migration scope before proceeding, since OpenCensus repos are archived and the bridge is the only forward-compatible path, not a simple config change.
+
+verification:
+  - Instrumentation emits `service.name` and other required resource attributes.
+  - Any semantic convention used that is still Experimental-status is flagged as carrying standing breaking-change risk, even on a Stable SDK.
+  - Collector receiver endpoints are bound to localhost or a specific interface, not `0.0.0.0`, unless explicitly justified.
+  - Any signal-stability claim (e.g. "logs are stable in X") is checked against the per-language matrix for the actual language in use, not assumed.
+evaluation_criteria:
+  - For a seeded Node.js or Python instrumentation task, correctly flags logs as non-Stable (Development) while treating traces/metrics as Stable, and states this as an actionable caveat.
+  - For a seeded Collector config task, does not bind a receiver to `0.0.0.0` without explicit justification.
+  - Correctly declines to restate signal-selection/cardinality/PII/alerting method owned by the parent observability skill (SK-QA-004), referencing it instead.
+  - Every OTLP/API/config claim in the output carries a source marker resolvable to `source_references`.
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]
+  vscode:
+    argument_hint: "<task, e.g. 'add tracing to this Express route' or 'configure a gateway Collector'>"
