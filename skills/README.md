@@ -75,6 +75,9 @@ not generated speculatively or in bulk.
 | [playwright](playwright/) | `SK-TECH-playwright` | QA (technology) | authored, not yet validated/evaluated |
 | [security-engineering](security-engineering/) | `SK-QA-002` | QA (generic) | authored, not yet validated/evaluated |
 | [authentication-authorization](authentication-authorization/) | `SK-BE-005` | Backend (generic) | authored, not yet validated/evaluated |
+| [database-operations](database-operations/) | `SK-DATA-003` | Data (generic) | authored, not yet validated/evaluated |
+| [caching-strategy](caching-strategy/) | `SK-DATA-004` | Data (generic) | authored, not yet validated/evaluated |
+| [performance-engineering](performance-engineering/) | `SK-QA-003` | QA (generic) | authored, not yet validated/evaluated |
 
 Per the [specification's conformance lifecycle](../core/skill-specification/specification.md#5-conformance--lifecycle),
 a skill needs a passing mechanical validator, an `evaluations/` test, and an

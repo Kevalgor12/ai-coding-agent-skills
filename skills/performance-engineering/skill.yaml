@@ -1,0 +1,89 @@
+id: SK-QA-003
+slug: performance-engineering
+name: Performance engineering
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: QA
+
+purpose: >-
+  Diagnose and improve performance — profiling methodology, the dominant-
+  cost-first discipline, horizontal scaling, build/CI performance, and
+  cross-stack performance patterns — across frontend, backend, database,
+  and infrastructure layers.
+scope: >-
+  Cross-cutting performance. Consumes the performance knowledge map built
+  from 44 researched technologies. Database-specific performance
+  (indexing, N+1, connection pooling) is owned by database-operations;
+  caching design is owned by caching-strategy; per-technology performance
+  mechanics (bundle size, rendering, build tooling) are owned by each
+  technology's own skill — this skill holds the cross-cutting diagnostic
+  discipline and the patterns only visible across sources, not a repeat
+  of any single technology's own performance page.
+expertise: Senior/principal performance engineer.
+description: >-
+  Diagnose performance from evidence, not guesswork — profile before
+  optimizing, address the dominant cost, know when caching vs. tuning is
+  the right lever, and recognize cross-stack performance patterns (the
+  "disable a dev-mode default before shipping" pattern, Redis as
+  connective tissue, real-time transports' shared backpressure hazard).
+  Use when a performance problem or budget is in play. Database/caching-
+  specific depth comes from database-operations/caching-strategy.
+
+activation_conditions:
+  - A performance problem or budget is in play
+  - A diagnostic (profiling, benchmarking) is needed before optimizing
+  - A horizontal-scaling or capacity decision is needed
+non_activation_conditions:
+  - No performance concern
+  - Premature optimization the user didn't ask for
+  - Database indexing/N+1/pooling specifically (route to database-operations) or caching design specifically (route to caching-strategy)
+activation_mode: auto
+
+inputs:
+  - name: perf-symptom-or-target
+    description: The performance symptom, budget, or target.
+    required: true
+  - name: profiling-data
+    description: Profiling/benchmark data, if available.
+    required: false
+outputs:
+  - name: performance-findings
+    kind: analysis
+    description: The dominant cost identified from evidence, with prioritized changes.
+
+depends_on_skills: []
+related_skills: [SK-QA-001, SK-CONV-004, SK-DATA-003, SK-DATA-004, SK-FE-005]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: research/knowledge-maps/performance-knowledge-map.md
+    title: "Performance Knowledge Map — §16 Profiling/Monitoring/Benchmarking Tooling, §17 Cross-Cutting Synthesis, §18 What This Data Does Not Cover"
+    via: research/knowledge-maps/performance-knowledge-map.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Measure-before-optimizing / dominant-cost-first diagnostic discipline
+  - Cross-stack performance patterns (dev-mode-default, Redis-as-connective-tissue, real-time backpressure, native-rewrite trend)
+decision_framework_present: true
+
+failure_handling:
+  - If no profiling/benchmark evidence is available, gather it before proposing a change rather than guessing at the bottleneck.
+  - If a request is really about database-specific or caching-specific performance, route to database-operations/caching-strategy for depth.
+  - If this library's research is silent on a specific vendor/product (e.g. a named CDN vendor, a message queue), state that gap rather than inventing guidance.
+verification:
+  - The identified dominant cost is backed by evidence (a profile, a benchmark, a measured symptom), not a guess.
+  - No micro-optimization is proposed for a component that isn't the measured bottleneck.
+  - A proposed fix is checked against known cross-stack patterns (e.g. a dev-mode default left on) before assuming a deeper architectural cause.
+evaluation_criteria:
+  - For a seeded perf issue, identifies the dominant cost from evidence (not a guess) and proposes a change targeting it.
+  - Refuses to micro-optimize a non-bottleneck.
+  - Recognizes when a symptom matches a known cross-stack pattern (dev-mode default, connection-pool exhaustion, real-time backpressure) rather than treating it as novel.
+
+adapter_hints: {}

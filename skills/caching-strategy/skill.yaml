@@ -1,0 +1,83 @@
+id: SK-DATA-004
+slug: caching-strategy
+name: Caching strategy
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: DATA
+
+purpose: >-
+  Design caching across the stack — what to cache, where (client/CDN/app/
+  ORM/database), invalidation strategy, and TTLs/eviction — independent of
+  which caching technology is used.
+scope: >-
+  Cross-cutting caching design. This library's research shows caching
+  spanning Redis, ORMs (TypeORM/Drizzle query-result caching), Next.js/
+  Nuxt rendering-layer caching, and Docker/CI build-layer caching. Related
+  to SK-TECH-redis for Redis-specific implementation depth. Not database
+  query optimization itself (database-operations) and not the rendering-
+  mode decision (rendering-strategy, not yet authored).
+expertise: Senior/principal engineer with caching-architecture experience.
+description: >-
+  Design caching — choose the layer(s) (client/CDN/app/ORM/database),
+  design the invalidation strategy (the hard part), and set TTLs/eviction
+  avoiding stale-data and thundering-herd pitfalls. Use when performance/
+  scale needs caching or a cache layer is being added. Redis-specific
+  implementation depth comes from the redis technology skill.
+
+activation_conditions:
+  - Performance or scale needs caching
+  - A cache layer is being added or reviewed
+  - An existing cache's invalidation strategy is suspected of serving stale data
+non_activation_conditions:
+  - No caching need
+  - Database query/index optimization with no caching question (route to database-operations)
+activation_mode: auto
+
+inputs:
+  - name: access-latency-requirements
+    description: Read/write access patterns and latency requirements.
+    required: true
+  - name: data-volatility
+    description: How often the underlying data actually changes.
+    required: true
+outputs:
+  - name: caching-design
+    kind: analysis
+    description: Cache layer(s), invalidation strategy, and TTL/eviction policy, with rationale.
+
+depends_on_skills: []
+related_skills: [SK-DATA-003, SK-QA-003, SK-TECH-redis]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: official-docs
+source_references:
+  - url: research/knowledge-maps/performance-knowledge-map.md
+    title: "Performance Knowledge Map — §1 Caching Strategy (query-result/ORM caching, application/HTTP-layer caching, Redis as caching infrastructure, build/tooling caching)"
+    via: research/knowledge-maps/performance-knowledge-map.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Cache-layer selection method (client/CDN/app/ORM/database)
+  - Invalidation-strategy design (the genuinely hard part of caching)
+  - Redis-as-connective-tissue pattern recognition across data/API/realtime layers
+decision_framework_present: true
+
+failure_handling:
+  - If data-volatility/access-pattern information isn't available, ask rather than guessing a TTL.
+  - If the target ORM/framework has no documented first-party caching story, state that gap rather than inventing one.
+verification:
+  - Every proposed cache has a stated invalidation strategy, not just a TTL as a substitute for invalidation.
+  - The cache layer chosen matches the actual access pattern and data volatility, not a reflexive default.
+  - Thundering-herd risk is addressed for any cache with a hard expiry on hot data.
+evaluation_criteria:
+  - For a seeded read-heavy workload, proposes a cache layer plus invalidation that avoids serving stale data past its stated tolerance.
+  - Correctly identifies when Redis (or an equivalent) is warranted vs. when a simpler in-process/HTTP-layer cache suffices.
+  - Does not propose a cache without an accompanying invalidation strategy.
+
+adapter_hints: {}
