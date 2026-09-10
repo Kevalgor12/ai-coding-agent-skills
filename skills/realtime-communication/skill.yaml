@@ -1,0 +1,104 @@
+id: SK-BE-004
+slug: realtime-communication
+name: Realtime communication
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: BE
+
+purpose: >-
+  Choose and design a realtime transport — WebSocket, Socket.IO, WebRTC, or
+  SSE — and its connection lifecycle, horizontal-scaling, and handshake-auth
+  strategy, independent of which transport is eventually used.
+scope: >-
+  Tech-neutral realtime-transport selection and connection/scaling/auth
+  design. Specialized by the WebSocket API, Socket.IO, and WebRTC technology
+  skills. Not a request/response API (api-design, graphql-api-design), not
+  message-broker/event-streaming architecture (Kafka/RabbitMQ/SQS-style
+  async messaging is a documented research gap in this library — see
+  taxonomy-analysis.md's merge notes — do not fabricate that depth here).
+expertise: Senior/principal backend engineer with realtime-systems experience.
+description: >-
+  Select a realtime transport (WebSocket, Socket.IO, WebRTC, or SSE) and
+  design its connection lifecycle, reconnection, horizontal-scaling, and
+  handshake-authentication strategy. Use when a feature needs bidirectional,
+  streaming, or low-latency push communication. Not for request/response
+  APIs, and not for message-broker/event-streaming architecture, which this
+  library has not researched.
+
+activation_conditions:
+  - A feature needs bidirectional, streaming, or server-push communication
+  - A realtime transport choice is open (WebSocket vs. Socket.IO vs. WebRTC vs. SSE)
+  - An existing realtime layer's reconnection, scaling, or handshake-auth design needs review
+non_activation_conditions:
+  - Plain request/response HTTP suffices (route to api-design)
+  - GraphQL subscriptions design with the schema already GraphQL-shaped (route to graphql-api-design for the schema; this skill still owns the transport-selection judgment underneath)
+  - Async message-broker/event-streaming architecture (Kafka/RabbitMQ/SQS) — a documented research gap, not fabricated here
+activation_mode: auto
+
+inputs:
+  - name: requirements
+    description: The realtime requirement — latency sensitivity, media vs. discrete events, expected connection scale.
+    required: true
+  - name: existing-realtime-layer
+    description: An existing realtime transport's design, if this is not greenfield.
+    required: false
+required_context:
+  - Whether the need is peer-to-peer media/data or server-mediated events
+  - Expected concurrent-connection scale and whether the service runs on multiple instances
+optional_context:
+  - Existing transport already in use elsewhere in the organization
+  - Client platform constraints (browser-only vs. native/non-browser clients)
+
+outputs:
+  - name: transport-choice
+    kind: analysis
+    description: The recommended realtime transport with trade-offs, when open.
+  - name: connection-scaling-auth-design
+    kind: analysis
+    description: Connection lifecycle/reconnection strategy, horizontal-scaling approach (sticky sessions/pub-sub adapter), and handshake-auth design.
+
+depends_on_skills: []
+related_skills: [SK-BE-001, SK-BE-002, SK-TECH-redis]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: "Technology Decision Matrix — §6 Realtime networking: WebSocket API vs. Socket.IO vs. WebRTC"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/security-knowledge-map.md
+    title: "Security Knowledge Map — realtime-transport CORS/Origin/masking/DTLS-SRTP sections and synthesis"
+    via: research/knowledge-maps/security-knowledge-map.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/performance-knowledge-map.md
+    title: "Performance Knowledge Map — §8 Real-Time Transport Overhead"
+    via: research/knowledge-maps/performance-knowledge-map.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Realtime-transport selection decision framework
+  - Connection lifecycle/reconnection/horizontal-scaling/handshake-auth method
+decision_framework_present: true
+
+failure_handling:
+  - If the realtime requirement is too thin to support a transport decision (latency need, media-vs-events, expected scale unknown), request it rather than assuming a default transport.
+  - If a transport is already in place, work within it unless the user explicitly asks to evaluate a switch.
+  - If the request is actually async message-broker/event-streaming architecture, state that gap explicitly rather than answering with realtime-transport guidance that doesn't fit.
+verification:
+  - Reconnection/connection-lifecycle handling is explicit, not left implicit.
+  - A horizontal-scaling story (sticky sessions and/or a pub-sub adapter) is addressed whenever more than one server instance is in play.
+  - Handshake authentication is designed independently of CORS/Origin checks, since neither is a complete access control on its own.
+  - A transport recommendation cites the documented differentiators (§6 comparison) rather than unresearched preference.
+evaluation_criteria:
+  - For seeded realtime scenarios (video call vs. live dashboard vs. chat/notifications), selects a defensible transport and addresses reconnection plus multi-instance scaling.
+  - Correctly declines to answer an async message-broker/event-streaming request as if it were a realtime-transport question.
+  - Does not recommend a transport switch for an existing realtime layer without explicit user request.
+
+adapter_hints: {}

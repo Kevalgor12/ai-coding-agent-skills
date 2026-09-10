@@ -55,6 +55,11 @@ not generated speculatively or in bulk.
 | [tailwindcss](tailwindcss/) | `SK-TECH-tailwindcss` | Frontend (technology) | authored, not yet validated/evaluated |
 | [mui](mui/) | `SK-TECH-mui` | Frontend (technology) | authored, not yet validated/evaluated |
 | [shadcn-ui](shadcn-ui/) | `SK-TECH-shadcn-ui` | Frontend (technology) | authored, not yet validated/evaluated |
+| [realtime-communication](realtime-communication/) | `SK-BE-004` | Backend/Realtime (generic) | authored, not yet validated/evaluated |
+| [threejs](threejs/) | `SK-TECH-threejs` | Frontend (technology) | authored, not yet validated/evaluated |
+| [websocket-api](websocket-api/) | `SK-TECH-websocket-api` | Backend/Realtime (technology) | authored, not yet validated/evaluated |
+| [socketio](socketio/) | `SK-TECH-socketio` | Backend/Realtime (technology) | authored, not yet validated/evaluated |
+| [webrtc](webrtc/) | `SK-TECH-webrtc` | Backend/Realtime (technology) | authored, not yet validated/evaluated |
 
 Per the [specification's conformance lifecycle](../core/skill-specification/specification.md#5-conformance--lifecycle),
 a skill needs a passing mechanical validator, an `evaluations/` test, and an

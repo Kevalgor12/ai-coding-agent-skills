@@ -1,0 +1,234 @@
+id: SK-TECH-socketio
+slug: socketio
+name: Socket.IO
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-BE-004]
+
+purpose: >-
+  Apply Socket.IO's event-based API, namespaces/rooms, middleware, and
+  transport/version specifics correctly, specializing the parent
+  realtime-communication skill's transport-selection and
+  connection-lifecycle/scaling/auth framework with concrete Socket.IO
+  implementation depth.
+scope: >-
+  Socket.IO-specific implementation: the event-emitter API (Server/
+  Namespace/Socket/Engine classes), namespaces and rooms, the io.use()
+  middleware pattern, Engine.IO transport negotiation, multi-node adapter
+  selection, and the v3→v4 upgrade boundary. Does not repeat the parent
+  skill's WebSocket-vs-Socket.IO-vs-WebRTC transport comparison or its
+  generic connection-lifecycle/scaling/auth decision framework — see
+  SK-BE-004 for that.
+expertise: Socket.IO-focused backend/realtime engineer.
+description: >-
+  Socket.IO-specific event-emitter API, namespaces/rooms, io.use()
+  middleware, Engine.IO transport negotiation, multi-node adapters, and the
+  v3→v4 upgrade boundary. Use when the stack has a socket.io/socket.io-client
+  dependency or the task names Socket.IO, namespaces, or rooms. Not for raw
+  WebSocket API code (use websocket-api) or an open realtime-transport choice
+  (use realtime-communication).
+
+activation_conditions:
+  - A socket.io / socket.io-client dependency, import, or require is present in the stack
+  - The task names Socket.IO, namespaces, rooms, io.use() middleware, or a Socket.IO adapter
+  - An existing Socket.IO server/client needs a version upgrade, scaling-adapter choice, engine choice, or Admin UI setup
+non_activation_conditions:
+  - The stack uses only the raw WebSocket API with no Socket.IO dependency (route to SK-TECH-websocket-api)
+  - The realtime transport choice itself is still open (route to SK-BE-004)
+  - The task is WebRTC peer-to-peer media/data with no Socket.IO involvement (route to the WebRTC technology skill)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Socket.IO task (namespace/room design, middleware auth, multi-node scaling-adapter choice, engine choice, version upgrade, Admin UI setup).
+    required: true
+  - name: existing-socketio-setup
+    description: Existing server/client Socket.IO code, version, and deployment topology (single vs. multi-instance), if not greenfield.
+    required: false
+required_context:
+  - The Socket.IO major/minor version in use (server and client) — several documented options (connectionStateRecovery, io.engine.use(), SocketData typing, WebTransport) only exist from specific minor versions onward.
+optional_context:
+  - Whether the deployment runs multiple server instances (determines whether an adapter/sticky-session story is needed — design owned by SK-BE-004, adapter choice by this skill).
+  - Whether TypeScript is in use (changes how typed events are declared).
+
+outputs:
+  - name: socketio-implementation
+    kind: edit
+    description: Namespace/room design, io.use() middleware, server/client event handlers, or Manager/Socket client configuration.
+  - name: scaling-adapter-config
+    kind: edit
+    description: Multi-node adapter setup (Redis/MongoDB/PostgreSQL) and its Socket.IO-side configuration.
+  - name: analysis
+    kind: analysis
+    description: Version-upgrade guidance, engine-choice recommendation (ws vs. µWebSockets.js), or Admin UI auth configuration review.
+
+depends_on_skills: []
+related_skills: [SK-TECH-websocket-api, SK-TECH-redis]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: https://socket.io/docs/v4/
+    title: "Socket.IO — Introduction"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/how-it-works/
+    title: "Socket.IO — How it works (Engine.IO vs. Socket.IO, transport negotiation)"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/namespaces/
+    title: "Socket.IO — Namespaces"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/rooms/
+    title: "Socket.IO — Rooms"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/middlewares/
+    title: "Socket.IO — Middlewares (auth, Express integration)"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/server-api/
+    title: "Socket.IO — Server API"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/client-api/
+    title: "Socket.IO — Client API"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/emit-cheatsheet/
+    title: "Socket.IO — Emit cheatsheet"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/server-options/
+    title: "Socket.IO — Server options"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/using-multiple-nodes/
+    title: "Socket.IO — Using multiple nodes"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/redis-adapter/
+    title: "Socket.IO — Redis adapter"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/connection-state-recovery/
+    title: "Socket.IO — Connection state recovery"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/admin-ui/
+    title: "Socket.IO — Admin UI"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/handling-cors/
+    title: "Socket.IO — Handling CORS"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/testing/
+    title: "Socket.IO — Testing"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/client-installation/
+    title: "Socket.IO — Client installation (bundle sizes, browser support)"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/logging-and-debugging/
+    title: "Socket.IO — Logging and debugging"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/server-installation/
+    title: "Socket.IO — Server installation (Node.js version, WS engines)"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/migrating-from-3-x-to-4-0/
+    title: "Socket.IO — Migrating from 3.x to 4.0"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/migrating-from-2-x-to-3-0/
+    title: "Socket.IO — Migrating from 2.x to 3.0"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/troubleshooting-connection-issues/
+    title: "Socket.IO — Troubleshooting connection issues"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+  - url: https://socket.io/docs/v4/changelog/
+    title: "Socket.IO — Changelog"
+    via: research/technologies/socketio.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  socket.io: ">=4.6 (Node.js server >=10)"
+version_sensitive_claims:
+  - claim: The 3.x→4.0 breaking changes (immutable io.to()/io.in() broadcast operators, wsEngine option shape, invalid socket.to().broadcast.emit()) are server-side only; v3 and v4 clients remain protocol-compatible with each other.
+    applies_to: "3.x→4.0 boundary"
+    source_ref: research/technologies/socketio.md (§11 Migration; version-matrix.md "v3↔v4 client/server compatibility")
+  - claim: connectionStateRecovery, cleanupEmptyChildNamespaces, and addTrailingSlash server options were added in v4.6.0; io.engine.use() (Express-style HTTP middleware) was also added in v4.6.0.
+    applies_to: ">=4.6.0"
+    source_ref: research/technologies/socketio.md (§4, §5, §12); version-matrix.md
+  - claim: As of v4.1.3, the heartbeat mechanism became server-initiated (server sends PING) to mitigate browser tab-throttling causing spurious disconnects.
+    applies_to: ">=4.1.3"
+    source_ref: research/technologies/socketio.md (§2); version-matrix.md
+  - claim: InterServerEvents typing and serverSideEmit() were added in v4.1.0.
+    applies_to: ">=4.1.0"
+    source_ref: research/technologies/socketio.md (§5, §12); version-matrix.md
+  - claim: SocketData typing and the µWebSockets.js engine binding were added in v4.4.0.
+    applies_to: ">=4.4.0"
+    source_ref: research/technologies/socketio.md (§5, §8, §12); version-matrix.md
+  - claim: WebTransport support was added in v4.7.0.
+    applies_to: ">=4.7.0"
+    source_ref: research/technologies/socketio.md (§12); version-matrix.md
+  - claim: Redis Sharded Pub/Sub as an adapter topology requires Redis 7.0+.
+    applies_to: "Redis >=7.0 for sharded Pub/Sub topology"
+    source_ref: research/technologies/socketio.md (§10); version-matrix.md
+  - claim: The Admin UI is compatible with Socket.IO v4 servers and v3.1.0+ servers.
+    applies_to: ">=3.1.0 servers"
+    source_ref: research/technologies/socketio.md (§15); version-matrix.md
+  - claim: allowEIO3 (default false) enables backward compatibility with Socket.IO v2 clients / Engine.IO v3 protocol.
+    applies_to: "opt-in compatibility flag, all v4.x"
+    source_ref: research/technologies/socketio.md (§4); version-matrix.md
+  - claim: Minimum supported Node.js version for the server package is Node.js 10; older versions are not supported.
+    applies_to: "Node.js >=10"
+    source_ref: research/technologies/socketio.md (§10); version-matrix.md
+last_verified: "2026-09-10"
+reverify_triggers:
+  - A new Socket.IO major version (5.0) release or its breaking-changes/migration guide
+  - Any change to the documented multi-node adapter list or the connection-state-recovery adapter-support matrix (currently: MongoDB and Redis Streams support it, plain Redis Pub/Sub does not)
+  - Any change to the Admin UI's documented production-auth requirement
+  - Any change to the Node.js/browser support floor
+
+owned_knowledge:
+  - Socket.IO event-emitter API surface (Server/Namespace/Socket/Engine classes, emit/broadcast/ack patterns)
+  - Socket.IO namespaces and rooms mechanics
+  - Socket.IO io.use()/io.engine.use() middleware pattern
+  - Socket.IO multi-node adapter selection (Redis vs. MongoDB vs. PostgreSQL) and WS-engine choice (ws vs. µWebSockets.js vs. Bun engine)
+  - Socket.IO v2→v3 and v3→v4 breaking-change boundaries
+
+decision_framework_present: true
+
+failure_handling:
+  - If the Socket.IO major/minor version in use cannot be determined, ask or explicitly state the version the guidance targets (this skill targets >=4.6); never assume the latest release (4.8.x) silently.
+  - If shell is unavailable/denied, produce advisory code/config and state that install/build/test commands were not run.
+  - If the actual need is raw-WebSocket-only code or the realtime transport choice itself is still open, defer to SK-TECH-websocket-api or SK-BE-004 respectively rather than assuming Socket.IO is the right fit.
+verification:
+  - Middleware auth (io.use()) validates handshake.auth/headers/cookies on every connect AND reconnect attempt, not only the initial connect.
+  - A recommended multi-node adapter's documented limitations (Redis: no persistence, no connectionStateRecovery support, silently degrades broadcasts to local-only if Redis is unavailable) are stated alongside the recommendation, not omitted.
+  - Any version-gated API/option used in generated code is tagged with the version it was added in and checked against the stated covered_versions.
+  - If Admin UI instrumentation is added, production auth (not disabled auth) is configured.
+evaluation_criteria:
+  - For a seeded auth requirement, proposes an io.use() middleware that validates socket.handshake.auth on connect and reconnect, rejecting via next(new Error(...)), rather than only checking at the initial handshake.
+  - For a seeded multi-instance scaling requirement that also needs connection-state recovery, selects MongoDB or Redis Streams (not the plain Redis Pub/Sub adapter) and states why, citing the documented adapter-support differences.
+  - Correctly states the v3→v4 breaking changes as server-side only, with v3/v4 client protocol-compatibility preserved.
+  - Does not restate the parent skill's WebSocket-vs-Socket.IO-vs-WebRTC comparison table or its generic connection-lifecycle/scaling/auth framework (QR-2).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]
+  vscode:
+    argument_hint: "<task, e.g. 'add room-based auth middleware' or 'pick a scaling adapter'>"

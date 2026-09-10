@@ -1,0 +1,234 @@
+id: SK-TECH-webrtc
+slug: webrtc
+name: WebRTC
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-BE-004]   # realtime-communication (transport selection + connection/scaling/auth method)
+
+purpose: >-
+  Implement WebRTC's peer-to-peer connection mechanics correctly:
+  RTCPeerConnection/ICE/STUN/TURN establishment, SDP offer/answer and perfect
+  negotiation, RTCDataChannel usage, and the mandatory DTLS-SRTP security
+  model — the concrete WebRTC-specific specialization of the parent skill's
+  transport method for the peer-to-peer case.
+scope: >-
+  WebRTC-specific implementation detail only. The transport-selection
+  judgment (WebRTC vs. WebSocket/Socket.IO/SSE) and the generic
+  connection-lifecycle/scaling/handshake-auth framework are owned by the
+  parent skill (SK-BE-004, realtime-communication) and not repeated here.
+  This skill covers what's structurally unique to WebRTC's peer-to-peer
+  model: out-of-band signaling (which WebRTC does not itself provide),
+  ICE/STUN/TURN mechanics, SDP negotiation, RTCDataChannel configuration, and
+  WebRTC-specific security/performance/testing depth.
+expertise: WebRTC / real-time-media engineer.
+description: >-
+  WebRTC-specific peer-to-peer implementation: RTCPeerConnection/ICE/STUN/TURN
+  connection establishment, SDP offer/answer and the perfect-negotiation
+  pattern, RTCDataChannel usage, mandatory DTLS-SRTP security, and the
+  Plan-B-to-Unified-Plan SDP history. Use when integrating RTCPeerConnection,
+  getUserMedia/getDisplayMedia, or RTCDataChannel for true peer-to-peer
+  media/data. Not for choosing among realtime transports (realtime-
+  communication) or server-mediated WebSocket/Socket.IO implementation.
+
+activation_conditions:
+  - The task integrates RTCPeerConnection, getUserMedia/getDisplayMedia feeding a peer connection, or RTCDataChannel
+  - The task names WebRTC mechanics (ICE, STUN, TURN, SDP offer/answer, signaling for a peer connection, DTLS-SRTP)
+  - An existing WebRTC integration's negotiation, NAT-traversal/TURN, or data-channel design needs review
+non_activation_conditions:
+  - The peer-to-peer-vs-server-mediated transport choice is still open (route to SK-BE-004 first)
+  - The need is server-mediated realtime (broadcast/discrete events) with no peer-to-peer requirement (route to socketio or websocket-api)
+  - Only camera/mic capture UI or permissions (Media Capture and Streams API) are involved with no RTCPeerConnection in play
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The WebRTC implementation task (peer connection setup, signaling design, ICE/TURN configuration, data channel usage, renegotiation, codec/privacy configuration).
+    required: true
+  - name: signaling-transport
+    description: The out-of-band signaling transport already chosen or available (WebSocket, HTTP polling, etc.) — WebRTC does not define one itself.
+    required: false
+  - name: existing-peer-connection-code
+    description: Existing RTCPeerConnection/signaling code, if this is not greenfield.
+    required: false
+required_context:
+  - Whether an out-of-band signaling transport already exists or needs to be built, since WebRTC does not provide one itself
+optional_context:
+  - Target browser/platform matrix (for codec-support and legacy Plan-B-SDP concerns)
+  - Whether TURN infrastructure is already provisioned or needs deployment
+  - Whether IP-address privacy from the remote peer is a hard requirement (drives iceTransportPolicy)
+
+outputs:
+  - name: peer-connection-signaling-design
+    kind: analysis
+    description: RTCPeerConnection configuration (iceServers, iceTransportPolicy), ICE/TURN setup, and the signaling message-flow design.
+  - name: code
+    kind: edit
+    description: RTCPeerConnection/data-channel implementation (perfect-negotiation logic, ICE-restart handling, data-channel configuration).
+  - name: analysis
+    kind: analysis
+    description: Recommendations on iceTransportPolicy, codec selection, and P2P-vs-server-mediated infrastructure trade-offs, with rationale.
+
+depends_on_skills: []
+# depends_on_skills is reserved for hard, blocking sub-step composition, not
+# specialization. This skill's relationship to SK-BE-004 is "I am the
+# WebRTC-specific version of that skill's method" — already fully captured by
+# `parents` above. Listing SK-BE-004 here too would be redundant and assert a
+# stronger claim (blocking invocation) than specialization actually is — see
+# specification.md §2.5, and the explicit warning that this exact mistake was
+# made by 7 of 9 technology skills in an earlier batch.
+related_skills: []
+# No other skill in this library's current catalog has a strong documented
+# relationship to WebRTC specifically (source data records no `alternativesTo`
+# for it) — left empty rather than forcing one.
+conflicts_with: []
+# Per technology-decision-matrix.md §6, WebRTC "carries no recorded
+# alternativesTo" and appears in the realtime-networking comparison only
+# because it shares that category with WebSocket/Socket.IO, not because any
+# source frames it as a substitute for a server-mediated transport
+# (peer-to-peer vs. server-mediated are structurally different, not
+# competing options for the same decision).
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+# Proposing RTCPeerConnection/signaling code and configuration is advisory
+# (file-only); a signaling-server implementation, running a local TURN
+# server, or executing the CI/headless fake-media test flags needs shell.
+# No capability_fallbacks block required (Tier B, not C) — degrades to
+# advisory per failure_handling if shell is unavailable.
+
+grounding: official-docs
+source_references:
+  - url: https://www.w3.org/TR/webrtc/
+    title: "WebRTC 1.0: Real-Time Communication Between Browsers (W3C Recommendation)"
+    via: research/technologies/webrtc.md
+    retrieved: "2026-09-10"
+  - url: https://w3c.github.io/webrtc-pc/
+    title: WebRTC 1.0 — Living Editor's Draft
+    via: research/technologies/webrtc.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API
+    title: MDN — WebRTC API overview
+    via: research/technologies/webrtc.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Connectivity
+    title: MDN — WebRTC connectivity (offer/answer, ICE candidates, controlling/controlled agent)
+    via: research/technologies/webrtc.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Session_lifetime
+    title: MDN — Lifetime of a WebRTC session (signaling scope, ICE restart)
+    via: research/technologies/webrtc.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Perfect_negotiation
+    title: "MDN — Establishing a connection: the perfect negotiation pattern"
+    via: research/technologies/webrtc.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Signaling_and_video_calling
+    title: MDN — Signaling and video calling
+    via: research/technologies/webrtc.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Using_data_channels
+    title: MDN — Using WebRTC data channels
+    via: research/technologies/webrtc.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/getStats
+    title: MDN — RTCPeerConnection.getStats()
+    via: research/technologies/webrtc.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/WebRTC_codecs
+    title: MDN — Codecs used by WebRTC
+    via: research/technologies/webrtc.md
+    retrieved: "2026-09-10"
+  - url: https://webrtc.org/getting-started/overview
+    title: webrtc.org — Getting Started overview
+    via: research/technologies/webrtc.md
+    retrieved: "2026-09-10"
+  - url: https://webrtc.org/getting-started/turn-server
+    title: webrtc.org — Getting Started, TURN server
+    via: research/technologies/webrtc.md
+    retrieved: "2026-09-10"
+  - url: https://webrtc.org/getting-started/unified-plan-transition-guide
+    title: webrtc.org — Plan B to Unified Plan transition guide
+    via: research/technologies/webrtc.md
+    retrieved: "2026-09-10"
+  - url: https://webrtc.org/getting-started/testing
+    title: webrtc.org — Getting Started, Testing (CI/headless flags)
+    via: research/technologies/webrtc.md
+    retrieved: "2026-09-10"
+  - url: https://www.w3.org/groups/wg/webrtc/
+    title: W3C Web Real-Time Communications Working Group (charter)
+    via: research/technologies/webrtc.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/webrtc/adapter
+    title: "adapter.js / webrtc-adapter — cross-browser shim (now a read-only fork)"
+    via: research/technologies/webrtc.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  webrtc: "1.0 (W3C Recommendation, published 2025-03-13); the living Editor's Draft (w3c.github.io/webrtc-pc/) continues to evolve separately from the fixed Recommendation text; working group chartered through 2026-09-30"
+version_sensitive_claims:
+  - claim: >-
+      Chrome's Plan B → Unified Plan SDP-semantics transition: M65
+      (Unified Plan behind an experimental flag) → M69/Sept 2018 (GA,
+      default still Plan B) → M72/Jan 2019 (default switched to Unified
+      Plan) → M93 (Canary starts throwing on `sdpSemantics: "plan-b"`) →
+      M96 (throws across all channels including Stable).
+    applies_to: "Chrome-specific milestones M65–M96; binding (plan-b throws) for all Chrome >=M96"
+    source_ref: research/technologies/webrtc.md §12-13; webrtc.org/getting-started/unified-plan-transition-guide
+  - claim: "AV1 video-codec support at Chrome 113+ and Firefox 136+; HEVC/H.265 support at Chrome 136+."
+    applies_to: "point-in-time as captured 2026-09-09 (Chrome >=113/136, Firefox >=136); MDN compatibility tables update continuously and must be re-checked before treating these as current"
+    source_ref: research/technologies/webrtc.md §8, §12; MDN WebRTC_codecs
+  - claim: "Firefox for Android versions 68–72 lacked H.264 support, due to Google Play store requirements."
+    applies_to: "Firefox for Android 68–72"
+    source_ref: research/technologies/webrtc.md §14; MDN WebRTC_codecs
+  - claim: "Safari VP8 support was added at Safari 12.1+."
+    applies_to: ">=12.1"
+    source_ref: research/technologies/webrtc.md §12; MDN WebRTC_codecs
+last_verified: "2026-09-10"
+reverify_triggers:
+  - The WebRTC Working Group's charter (through 2026-09-30) is renewed or lapses — confirm status
+  - A periodic codec-support-by-browser-version re-check (AV1/HEVC/VP9 gates shift frequently and are explicitly flagged point-in-time)
+  - A Chrome/Firefox SDP-semantics-class breaking change comparable to Plan B → Unified Plan is announced
+  - The W3C publishes a WebRTC 1.0 errata/new Recommendation revision, or the editor's draft diverges materially from the 2025-03-13 Recommendation text
+
+owned_knowledge:
+  - RTCPeerConnection/ICE/STUN/TURN connection-establishment mechanics (candidate gathering/exchange, controlling/controlled agent)
+  - SDP offer/answer negotiation and the perfect-negotiation pattern (polite/impolite roles, glare handling)
+  - The Plan B → Unified Plan SDP-semantics history
+  - RTCDataChannel configuration and limits (negotiated/id, message-size ceiling, head-of-line-blocking mitigation)
+  # Cross-cutting security/performance/testing depth is NOT owned here — the
+  # generic transport-comparison/DTLS-SRTP/backpressure synthesis is owned by
+  # SK-BE-004; referenced, not restated.
+
+decision_framework_present: true
+
+failure_handling:
+  - If no out-of-band signaling transport exists yet, treat building one as an explicit task rather than assuming it's already solved — WebRTC does not define signaling itself.
+  - If shell is unavailable or denied, degrade to advisory RTCPeerConnection/signaling code and configuration guidance, and state that no signaling server, TURN deployment, or headless test run was actually executed.
+  - If the target browser/platform matrix is unknown, do not assert codec-support or Plan-B/Unified-Plan-compatibility claims as universal — state the assumption or ask.
+escalation:
+  - Deploying dedicated TURN infrastructure (self-hosted, e.g. coturn, vs. a managed provider) is a real cost/operations decision — present the trade-off and get confirmation rather than provisioning unilaterally.
+  - "Forcing `iceTransportPolicy` to relay-only for every connection trades connection reliability/latency and TURN bandwidth cost for IP-address privacy — a product-level decision, not defaulted silently either way."
+  - "Legacy code still specifying the plan-b `sdpSemantics` value is broken on modern Chrome (throws since M96) — flagged for explicit migration confirmation rather than silently patched around."
+verification:
+  - Signaling messages carry enough peer identification (target/peer id) to work as a plain message router, independent of whatever transport was chosen for signaling.
+  - Perfect-negotiation state (`makingOffer`, polite/impolite role, `isSettingRemoteAnswerPending`) is implemented symmetrically for both peers, not asymmetric caller/callee-specific logic.
+  - ICE-restart handling exists for `iceConnectionState === "failed"`.
+  - When a data channel is used, message sizing and `bufferedamountlow` monitoring are addressed.
+  - Every version-specific claim (Plan-B/Unified-Plan timeline, codec-by-browser-version) is tagged with the range it holds for.
+evaluation_criteria:
+  - For a seeded peer-to-peer feature request, produces a working perfect-negotiation implementation (not ad hoc caller/callee logic) with ICE-restart handling.
+  - Configures `iceServers` with both STUN and TURN, and makes an explicit `iceTransportPolicy` recommendation given the stated IP-privacy/latency requirement.
+  - "Correctly flags legacy plan-b `sdpSemantics` code as broken on modern Chrome rather than treating it as still viable."
+  - Does not restate SK-BE-004's WebSocket-vs-Socket.IO-vs-WebRTC transport comparison or its generic connection-lifecycle/scaling/handshake-auth framework (rule QR-2).
+  - Any codec-support-by-browser-version claim is flagged as point-in-time/subject to re-verification, not asserted as permanently current.
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]   # for a signaling-server implementation and headless/CI test flags
+  cursor:
+    paths: ["**/*.ts", "**/*.js", "**/signaling/**"]
+  vscode:
+    argument_hint: "<task, e.g. 'implement peer connection negotiation' or 'add a TURN fallback'>"

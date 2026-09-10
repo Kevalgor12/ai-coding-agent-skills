@@ -1,0 +1,252 @@
+id: SK-TECH-threejs
+slug: threejs
+name: Three.js
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-FE-001]   # frontend-architecture (authored)
+
+purpose: >-
+  Apply Three.js correctly and version-appropriately — the scene-graph/
+  renderer/camera/geometry/material object model, WebGLRenderer-vs-
+  WebGPURenderer choice, the r-number (non-semver) versioning scheme, and
+  GPU resource disposal.
+scope: >-
+  Three.js-specific facts and mechanics: the scene-graph object model,
+  WebGLRenderer/WebGPURenderer architecture and TSL, BufferGeometry/
+  Material/Texture lifecycle and disposal, the r-number versioning scheme
+  and its module-loading/WebGL2 version floors, and the official upgrade
+  cadence. The generic frontend structuring/framework-selection method
+  comes from the parent Layer-3 skill (SK-FE-001, frontend-architecture)
+  and is not repeated here.
+expertise: Frontend engineer specializing in WebGL/WebGPU 3D graphics with Three.js.
+description: >-
+  Three.js 3D graphics: scene-graph/renderer/camera/geometry/material
+  model, WebGLRenderer-vs-WebGPURenderer choice, r-number versioning (no
+  semver — e.g. r186), WebGL2 floor since r163, module loading since r147,
+  and GPU resource disposal. Use when the stack has a `three` dependency,
+  WebGL/WebGPU 3D scene work, or the task names Three.js, a Three.js class,
+  or TSL. Not for generic frontend structure (frontend-architecture),
+  2D-only Canvas/SVG visualization, or a different WebGL/3D library.
+
+activation_conditions:
+  - A `three` npm dependency, or an import from 'three'/'three/webgpu'/'three/addons', is present
+  - The task involves building or modifying a WebGL/WebGPU 3D scene, mesh, or rendering pipeline in the browser
+  - The task names Three.js, a Three.js class (Scene, Mesh, BufferGeometry, WebGLRenderer, WebGPURenderer), or TSL
+  - A Three.js r-number upgrade, WebGLRenderer-vs-WebGPURenderer choice, or GPU-memory/disposal question is being evaluated
+non_activation_conditions:
+  - No Three.js dependency/import, and the task is generic frontend component/state structure with no 3D rendering involved (route to SK-FE-001)
+  - 2D-only visualization using Canvas 2D, SVG, or a charting library with no WebGL/scene-graph involved
+  - A different WebGL/3D library (Babylon.js, PlayCanvas, raw WebGL) with no Three.js involved — this skill's content is Three.js-specific, not portable
+  - Backend-only or non-browser rendering work
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Three.js task (scene/mesh authoring, renderer selection, asset loading, GPU-memory/disposal issue, r-number upgrade).
+    required: true
+  - name: existing-scene-or-config
+    description: Existing scene-graph code, renderer configuration, asset-loading pipeline, and the currently installed Three.js r-number.
+    required: false
+required_context:
+  - The installed Three.js r-number (not a semver string) — required because the API surface, renderer defaults, and color-space behavior differ across r-number ranges and cannot be inferred from a "major.minor.patch" reading of the version.
+optional_context:
+  - Target browser/device support matrix (WebGL2 vs. WebGPU availability).
+  - Whether a build tool (e.g. Vite) is in use vs. the no-build import-map/CDN path.
+
+outputs:
+  - name: scene-or-renderer-edit
+    kind: edit
+    description: Scene-graph, renderer, material, or asset-loading code reflecting version-correct Three.js APIs.
+  - name: migration-edit
+    kind: edit
+    description: r-number upgrade changes (e.g. color-space, Clock→Timer, module-loading) applied per the official Migration Guide.
+  - name: analysis
+    kind: analysis
+    description: A WebGLRenderer-vs-WebGPURenderer, Three.js-vs-simpler-visualization, or upgrade-cadence recommendation with rationale and the r-number range it applies to.
+
+depends_on_skills: []
+# Deliberately empty — per spec §2.5, do NOT conflate with `parents`. This
+# skill's relationship to SK-FE-001 (frontend-architecture) is specialization
+# ("I am a more specific version of that skill's method"), already fully
+# captured by `parents` above. Putting SK-FE-001 here too would assert a
+# stronger claim (hard, blocking sub-step invocation) than specialization
+# actually is. This exact mistake happened in an earlier batch of this
+# project (see audits/2026-09-09-data-domain-validation.md) and has not
+# recurred since agents were warned explicitly — not repeating it here.
+related_skills: []
+# Empty: no other skill currently in this library's catalog has a strong,
+# documented relationship to Three.js specifically.
+conflicts_with: []
+# Deliberately empty, not [Babylon.js/PlayCanvas-style entry]: per this
+# project's technology-decision-matrix.md §12 (3D graphics section),
+# Three.js is the only 3D-graphics technology actually profiled in this
+# research. Babylon.js/PlayCanvas are named only via the *absence* of an
+# official "migrating from" guide in Three.js's own docs — not as documented
+# alternatives — so no conflict is invented against an unresearched
+# technology.
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+# Tier A: Three.js scene/asset authoring is advisory/file-only — editing
+# scene-graph, renderer, and asset-loading code, and reasoning about
+# renderer/version-upgrade tradeoffs. It is not fundamentally
+# shell-execution-dependent (unlike e.g. running a migration or EXPLAIN
+# against a live database), consistent with other authoring-focused
+# technology skills in this project.
+
+grounding: official-docs
+source_references:
+  - url: https://threejs.org/docs/
+    title: "Three.js Docs — API reference index and category structure"
+    via: research/technologies/threejs.md
+    retrieved: "2026-09-10"
+  - url: https://threejs.org/manual/#en/fundamentals
+    title: "Three.js Manual — Fundamentals (scene graph, renderer, camera, mesh, hello-cube example)"
+    via: research/technologies/threejs.md
+    retrieved: "2026-09-10"
+  - url: https://threejs.org/docs/pages/WebGLRenderer.html.md
+    title: "Three.js Docs — WebGLRenderer (WebGL 2 requirement since r163, API surface, .info)"
+    via: research/technologies/threejs.md
+    retrieved: "2026-09-10"
+  - url: https://threejs.org/docs/pages/WebGPURenderer.html.md
+    title: "Three.js Docs — WebGPURenderer (Renderer base class, Backend, TSL)"
+    via: research/technologies/threejs.md
+    retrieved: "2026-09-10"
+  - url: https://threejs.org/manual/#en/webgpurenderer
+    title: "Three.js Manual — WebGPURenderer (experimental status, TSL, setAnimationLoop, unsupported ShaderMaterial/EffectComposer)"
+    via: research/technologies/threejs.md
+    retrieved: "2026-09-10"
+  - url: https://threejs.org/docs/pages/Object3D.html.md
+    title: "Three.js Docs — Object3D (base scene-graph class, matrix/matrixWorld)"
+    via: research/technologies/threejs.md
+    retrieved: "2026-09-10"
+  - url: https://threejs.org/docs/pages/BufferGeometry.html.md
+    title: "Three.js Docs — BufferGeometry (the only geometry representation)"
+    via: research/technologies/threejs.md
+    retrieved: "2026-09-10"
+  - url: https://threejs.org/manual/#en/how-to-update-things
+    title: "Three.js Manual — How to Update Things (buffer resizing, material needsUpdate/shader recompile)"
+    via: research/technologies/threejs.md
+    retrieved: "2026-09-10"
+  - url: https://threejs.org/manual/#en/installation
+    title: "Three.js Manual — Installation (npm+build-tool vs. import-map/CDN, community TS types)"
+    via: research/technologies/threejs.md
+    retrieved: "2026-09-10"
+  - url: https://threejs.org/manual/#en/color-management
+    title: "Three.js Manual — Color Management (ColorManagement.enabled, outputColorSpace/Texture.colorSpace)"
+    via: research/technologies/threejs.md
+    retrieved: "2026-09-10"
+  - url: https://threejs.org/manual/#en/cleanup
+    title: "Three.js Manual — Cleanup (manual GPU-resource disposal, 4-6meg per 1024x1024 texture)"
+    via: research/technologies/threejs.md
+    retrieved: "2026-09-10"
+  - url: https://threejs.org/manual/#en/rendering-on-demand
+    title: "Three.js Manual — Rendering on Demand"
+    via: research/technologies/threejs.md
+    retrieved: "2026-09-10"
+  - url: https://threejs.org/manual/#en/optimize-lots-of-objects
+    title: "Three.js Manual — Optimizing Lots of Objects (draw-call cost, mergeGeometries)"
+    via: research/technologies/threejs.md
+    retrieved: "2026-09-10"
+  - url: https://threejs.org/docs/pages/Clock.html.md
+    title: "Three.js Docs — Clock (deprecated since r183)"
+    via: research/technologies/threejs.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/mrdoob/three.js/wiki/Migration-Guide
+    title: "Three.js GitHub Wiki — Migration Guide (per-version breaking changes, 10-release upgrade policy)"
+    via: research/technologies/threejs.md
+    retrieved: "2026-09-10"
+  - url: https://raw.githubusercontent.com/mrdoob/three.js/dev/SECURITY.md
+    title: "Three.js GitHub — SECURITY.md (private-disclosure policy, 90-day fix window)"
+    via: research/technologies/threejs.md
+    retrieved: "2026-09-10"
+  - url: https://raw.githubusercontent.com/mrdoob/three.js/dev/.github/CONTRIBUTING.md
+    title: "Three.js GitHub — CONTRIBUTING.md (contributor-facing test/test-e2e commands)"
+    via: research/technologies/threejs.md
+    retrieved: "2026-09-10"
+  - url: https://api.github.com/repos/mrdoob/three.js/releases
+    title: "GitHub Releases API — Three.js release/tag/date ground truth (r186 current stable)"
+    via: research/technologies/threejs.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/version-matrix.md
+    title: "Version Matrix — Three.js row (r-number scheme, WebGL2/module-loading floors)"
+    via: research/knowledge-maps/version-matrix.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/security-knowledge-map.md
+    title: "Security Knowledge Map — Three.js SECURITY.md entry and cross-origin-asset documentation gap"
+    via: research/knowledge-maps/security-knowledge-map.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/performance-knowledge-map.md
+    title: "Performance Knowledge Map — Three.js texture-memory cost and no-build-tool CDN install path"
+    via: research/knowledge-maps/performance-knowledge-map.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: "Technology Decision Matrix — §12 3D graphics (Three.js as the only profiled 3D-graphics technology)"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  threejs: >-
+    r-number release scheme, no semver (r186 = npm 0.186.0); WebGL 2
+    required (WebGLRenderer) since r163; reference point r186, the current
+    stable release per research/technologies/threejs.md §12.
+version_sensitive_claims:
+  - claim: >-
+      WebGLRenderer requires WebGL 2; WebGL 1 support is not available.
+      "WebGL 1 is not supported since r163."
+    applies_to: ">=r163"
+    source_ref: research/technologies/threejs.md §12; threejs.org/docs/pages/WebGLRenderer.html.md
+  - claim: >-
+      Color-management overhaul: WebGLRenderer.outputEncoding replaced by
+      outputColorSpace, Texture.encoding replaced by Texture.colorSpace,
+      ColorManagement.enabled defaults to true. The single largest
+      visually-breaking change in the migration guide's history.
+    applies_to: "r152 onward (multi-release rollout)"
+    source_ref: research/technologies/threejs.md §13; github.com/mrdoob/three.js/wiki/Migration-Guide
+  - claim: >-
+      Non-module global-namespace <script> loading is obsolete; ES-module
+      loading (npm+bundler or an import map) is the only supported way to
+      load Three.js. Legacy UMD/global build files were removed entirely.
+    applies_to: "obsolete since r147; legacy build files removed at r160→r161"
+    source_ref: research/technologies/threejs.md §4, §13
+  - claim: Clock is deprecated in favor of Timer; Timer moved into core (no longer a separate add-on import).
+    applies_to: "Clock deprecated at r182→r183; Timer moved into core at r178→r179"
+    source_ref: research/technologies/threejs.md §3, §13
+last_verified: "2026-09-10"
+reverify_triggers:
+  - A new Three.js r-number release that changes WebGLRenderer/WebGPURenderer default behavior or overhauls the color-management system again
+  - WebGPURenderer graduating out of its documented "experimental" status in the official manual
+  - Confirmation of whether first-party TypeScript types have been added to the `three` package (currently community-maintained per the Installation page)
+
+owned_knowledge:
+  - Three.js scene-graph / renderer / camera / geometry / material object model
+  - WebGLRenderer-vs-WebGPURenderer architecture and TSL
+  - Three.js's r-number versioning scheme and the 10-release deprecation/upgrade policy
+  - GPU resource disposal patterns (geometry/material/texture memory lifecycle)
+decision_framework_present: true
+
+failure_handling:
+  - If the installed r-number cannot be determined, ask for it or explicitly state the r-number range the guidance assumes — never assume "latest" silently, and never infer compatibility from an r-number as if it were a semver string (VA-3).
+  - If shell is unavailable, degrade to advisory scene/renderer code edits and state that a build/dev-server run was not performed.
+escalation:
+  - Upgrading across the r152+ color-management overhaul, the r163 WebGL2 floor, or the r147 module-loading change requires explicit user confirmation before applying, since the Migration Guide documents visual-appearance regressions and hard compatibility breaks, not just renamed properties.
+verification:
+  - Every version-specific claim (WebGL2 floor, color-space APIs, Clock/Timer, module loading) is tagged with the r-number range it holds for.
+  - Geometries/materials/textures created and later replaced or removed are explicitly disposed via .dispose().
+  - A renderer choice (WebGLRenderer vs. WebGPURenderer) states its rationale and, if WebGPURenderer is chosen, its documented experimental status.
+evaluation_criteria:
+  - For a seeded scene that loads/replaces textures or geometry at runtime, flags or adds explicit .dispose() calls rather than leaving GPU resources unreclaimed.
+  - For a seeded "which renderer" question, does not default to WebGPURenderer without stating its experimental status and the automatic WebGL2-fallback behavior.
+  - For a seeded upgrade scenario crossing r147, r152, or r163, correctly identifies the applicable breaking change (module loading, color-space, or WebGL2 floor) rather than treating the version as a semver-shaped string.
+  - Does not restate generic frontend component/state-structure or framework-selection guidance owned by SK-FE-001 (QR-2).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]   # for running a dev server/build; abstract shell → CC tools
+  cursor:
+    paths: ["**/*.{js,ts,jsx,tsx}", "**/three/**"]
+  vscode:
+    argument_hint: "<task, e.g. 'set up a WebGLRenderer scene' or 'plan the r-number upgrade'>"
