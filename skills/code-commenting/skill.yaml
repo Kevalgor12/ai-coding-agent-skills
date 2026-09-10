@@ -1,0 +1,88 @@
+id: SK-CONV-002
+slug: code-commenting
+name: Code commenting
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 2
+domain: CONV
+
+purpose: >-
+  Write useful, natural code comments that explain what code cannot say
+  for itself, and actively prevent comment noise — including the specific
+  noise patterns AI-generated code introduces (step narration, tool
+  signatures, decorative banners, restated-obvious comments).
+scope: >-
+  Comment content and placement in source the agent writes or edits. Not
+  prose documentation (technical-documentation). Mandated first-class
+  skill per this library's taxonomy ruling, alongside git-conventions —
+  every code-producing skill in this library composes with it rather than
+  inventing its own commenting convention.
+expertise: Senior engineer with strong code-hygiene discipline.
+description: >-
+  Write useful in-code comments that explain what code cannot say for
+  itself — the why, non-obvious constraints, invariants, workarounds for
+  specific bugs — and actively prevent comment noise: phase/step
+  narration, AI/tool signatures, decorative banners, and comments that
+  merely restate the code. Use whenever writing or substantially editing
+  source code, or reviewing it for comment quality. Not for prose
+  documentation (technical-documentation).
+
+activation_conditions:
+  - Writing or substantially editing source code
+  - Reviewing code specifically for comment quality
+  - Cleaning up AI-generated or auto-generated code artifacts
+non_activation_conditions:
+  - Authoring prose documentation, READMEs, or markdown (route to technical-documentation)
+  - A file whose established style legitimately uses banner conventions (respect the local norm)
+activation_mode: auto
+
+inputs:
+  - name: code-being-written-or-edited
+    description: The code being authored or edited.
+    required: true
+  - name: existing-comment-conventions
+    description: The file's existing comment style and density, if this is not greenfield.
+    required: false
+outputs:
+  - name: comments
+    kind: edit
+    description: Comments inserted, edited, or removed in source, or review findings flagging comment noise.
+
+depends_on_skills: []
+related_skills: [SK-CONV-003, SK-CONV-006, SK-CONV-007]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: core/taxonomy/taxonomy-analysis.md
+    title: "Taxonomy Analysis — mandated-skill ruling for code-commenting (first-class, alongside git-conventions)"
+    via: core/taxonomy/taxonomy-analysis.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - The-why-not-the-what comment-content discipline
+  - AI/generated-code comment-noise detection and removal (step narration, tool signatures, decorative banners)
+  - Match-the-file's-existing-style method
+decision_framework_present: true
+
+failure_handling:
+  - If a file's established style legitimately uses a convention this skill would otherwise flag (e.g. banner comments), respect the local norm rather than imposing a default.
+  - If it's unclear whether a comment carries real information or is noise, err toward removing rather than leaving ambiguous noise in place.
+verification:
+  - Every comment kept explains something the code cannot say for itself (why, a non-obvious constraint, an invariant, a workaround), not what the code already says plainly.
+  - No phase/step-narration comments, AI/tool signatures or attribution, or decorative banners are introduced.
+  - A stale or redundant comment is deleted rather than "fixed" to match code that changed around it.
+escalation:
+  - None — this skill composes with every code-producing skill and has no escalation path of its own beyond the code-producing skill's own escalation rules.
+evaluation_criteria:
+  - Given code with a genuinely non-obvious constraint, produces a why comment.
+  - Given obvious code, produces no restating comment.
+  - Flags/removes step-narration, AI signatures, decorative bars, and obvious-restatement comments in a review fixture.
+  - Preserves and matches a file's legitimate existing comment style.
+
+adapter_hints: {}

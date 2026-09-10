@@ -1,0 +1,94 @@
+id: SK-CONV-005
+slug: legacy-modernization
+name: Legacy modernization
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 2
+domain: CONV
+
+purpose: >-
+  Safely evolve legacy/outdated code toward current practice and
+  supported versions — assessing current vs. target state, planning
+  incremental steps with rollback points, and applying breaking-change
+  migrations using researched breaking-change data.
+scope: >-
+  Incremental modernization, dependency/version upgrades, strangler-style
+  migration. Consumes the version matrix and per-technology breaking-
+  change data already gathered across this library's technology skills.
+  Not greenfield code, and not a routine minor-version bump with no
+  breaking changes.
+expertise: Senior/principal engineer with migration/upgrade experience.
+description: >-
+  Safely evolve legacy code toward current practice and supported
+  versions — assess current vs. target state, plan incremental steps with
+  rollback points, and apply breaking-change migrations using researched
+  version data. Use when upgrading a major version, modernizing outdated
+  patterns, or migrating off a deprecated approach. Avoids big-bang
+  rewrites unless justified. Not for greenfield code or a routine
+  no-breaking-changes minor bump.
+
+activation_conditions:
+  - Upgrading a major version
+  - Modernizing outdated patterns
+  - Migrating off a deprecated approach
+non_activation_conditions:
+  - Greenfield code with no legacy state to assess
+  - A routine minor-version bump with no breaking changes
+activation_mode: auto
+
+inputs:
+  - name: legacy-code
+    description: The code/system being modernized.
+    required: true
+  - name: target-versions
+    description: The target version(s)/practice being migrated to.
+    required: true
+required_context:
+  - The current state and the target state
+  - Documented breaking changes between them (this library's version-matrix and per-technology breaking-changes sections, where the technology is covered)
+outputs:
+  - name: modernization-plan
+    kind: analysis
+    description: A staged plan addressing documented breaking changes, sequenced with verification/rollback points.
+  - name: applied-changes
+    kind: edit
+    description: Incremental modernization changes applied, when execution is authorized.
+
+depends_on_skills: [SK-CONV-004, SK-QA-001]
+related_skills: [SK-DISC-002, SK-DATA-006]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: mixed
+source_references:
+  - url: research/knowledge-maps/version-matrix.md
+    title: "Version Matrix — cross-technology breaking-change patterns (e.g. React 19 RSC CVEs, Next.js 13-14 forced-upgrade advisory, Angular per-major TypeScript/Node floors, Vue 2 EOL)"
+    via: research/knowledge-maps/version-matrix.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Current-vs-target-state assessment method
+  - Incremental staged-migration planning with rollback points
+  - Strangler-pattern-over-big-bang-rewrite discipline
+decision_framework_present: true
+
+failure_handling:
+  - If the target technology's breaking-change data isn't covered by this library's research, state that gap rather than inventing migration guidance.
+  - If a big-bang rewrite is proposed, require explicit justification before proceeding — the default is incremental.
+verification:
+  - Every documented breaking change between current and target state is addressed in the plan, not silently skipped.
+  - Each staged step has a rollback point.
+  - Behavior-preservation for each incremental step is verified via refactoring's method, not assumed.
+escalation:
+  - A major-version upgrade or migration with production impact is presented with the staged plan and rollback points for explicit confirmation before execution begins.
+  - A proposed big-bang rewrite (versus incremental/strangler migration) requires explicit justification and confirmation, since it's a significant, harder-to-reverse choice than staged migration.
+evaluation_criteria:
+  - For a seeded major-version upgrade, produces a plan that addresses the documented breaking changes for that version and sequences steps with verification/rollback points.
+  - Does not propose a big-bang rewrite without explicit justification.
+  - States plainly when the target technology's breaking-change data isn't covered by this library's research.
+
+adapter_hints: {}

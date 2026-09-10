@@ -81,6 +81,11 @@ not generated speculatively or in bulk.
 | [seo-optimization](seo-optimization/) | `SK-GROW-001` | Growth (generic, unified with Google SEO tech content) | authored, not yet validated/evaluated |
 | [ui-ux-design](ui-ux-design/) | `SK-FE-002` | Frontend (generic) | authored, not yet validated/evaluated |
 | [styling-systems](styling-systems/) | `SK-FE-003` | Frontend (generic) | authored, not yet validated/evaluated |
+| [code-commenting](code-commenting/) | `SK-CONV-002` | Conventions (generic, mandated first-class) | authored, not yet validated/evaluated |
+| [code-quality](code-quality/) | `SK-CONV-003` | Conventions (generic) | authored, not yet validated/evaluated |
+| [refactoring](refactoring/) | `SK-CONV-004` | Conventions (generic) | authored, not yet validated/evaluated |
+| [legacy-modernization](legacy-modernization/) | `SK-CONV-005` | Conventions (generic) | authored, not yet validated/evaluated |
+| [code-review](code-review/) | `SK-CONV-007` | Conventions (generic) | authored, not yet validated/evaluated |
 
 Per the [specification's conformance lifecycle](../core/skill-specification/specification.md#5-conformance--lifecycle),
 a skill needs a passing mechanical validator, an `evaluations/` test, and an
