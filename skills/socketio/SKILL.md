@@ -289,7 +289,7 @@ acknowledgement tests assert on the ack-callback payload or use
 helper reduces event/Promise boilerplate. Ensure the connection is fully
 established before asserting. [Source: https://socket.io/docs/v4/testing/]
 Deep test-strategy method is owned by
-[testing-strategy](../../core/taxonomy/skill-catalog.md).
+[testing-strategy](../testing-strategy/SKILL.md).
 
 ## Failure handling
 

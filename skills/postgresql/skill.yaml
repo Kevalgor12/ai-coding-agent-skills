@@ -6,7 +6,7 @@ skill_version: "0.1.0"
 kind: technology
 layer: 4
 domain: TECH
-parents: [SK-DATA-001, SK-DATA-003, SK-DATA-005]   # data-modeling, database-operations (not yet authored), search-integration (not yet authored)
+parents: [SK-DATA-001, SK-DATA-003, SK-DATA-005]   # data-modeling, database-operations, search-integration
 
 purpose: >-
   Apply PostgreSQL correctly and version-appropriately: indexing, MVCC/VACUUM,
@@ -15,8 +15,8 @@ purpose: >-
 scope: >-
   PostgreSQL-specific engineering detail — the generic schema-design method
   comes from the parent skill (SK-DATA-001); query-tuning/operations depth and
-  search-engine trade-offs are owned by SK-DATA-003 and SK-DATA-005
-  respectively (both forward references — not yet authored in this library).
+  search-engine trade-offs are owned by SK-DATA-003 (database-operations) and
+  SK-DATA-005 (search-integration) respectively.
 expertise: PostgreSQL database engineer.
 description: >-
   PostgreSQL-specific indexing (B-tree/GIN/GiST/BRIN), MVCC/VACUUM, transaction

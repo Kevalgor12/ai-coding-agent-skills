@@ -68,6 +68,10 @@ source_references:
     title: "Testing Knowledge Map — full layer-by-layer breakdown (unit/integration/e2e/component/visual/load/contract) across 44 technologies, plus Notable Gaps section"
     via: research/knowledge-maps/testing-knowledge-map.md
     retrieved: "2026-09-10"
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: "Technology Decision Matrix — §1 ORM testing-philosophy divergence (Mongoose vs. Prisma vs. Drizzle)"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-10"
 last_verified: "2026-09-10"
 
 owned_knowledge:

@@ -22,10 +22,10 @@ strategy, and SQL-driven RBAC. It does **not** own the question of *whether*
 a columnar store is warranted at all — that decision belongs to
 [data-modeling](../data-modeling/SKILL.md) (`SK-DATA-001`), which this skill
 treats as already settled. Generic cross-engine query-tuning/indexing/
-transaction method is owned by `SK-DATA-003` (database-operations), the
-skill's formal taxonomy parent — a **forward reference**: `SK-DATA-003` is
-not yet authored anywhere in this library, so this skill supplies
-ClickHouse's concrete specifics standalone rather than delegating to it.
+transaction method is owned by
+[database-operations](../database-operations/SKILL.md) (`SK-DATA-003`), the
+skill's formal taxonomy parent; this skill supplies ClickHouse's concrete
+specifics on top of that method rather than restating it.
 
 ## When to use / When not to use
 
@@ -43,8 +43,8 @@ analytics later" is premature adoption; this is the domain's central
 overengineering trap, see Anti-patterns). Route a still-open store-shape
 question to `SK-DATA-001`; route OLTP schema/query design with no ClickHouse
 in play to `SK-TECH-postgresql`/`SK-TECH-mysql`; route generic cross-engine
-tuning method with ClickHouse not actually in the stack to `SK-DATA-003`
-(forward reference).
+tuning method with ClickHouse not actually in the stack to
+[database-operations](../database-operations/SKILL.md) (`SK-DATA-003`).
 
 ## Knowledge
 

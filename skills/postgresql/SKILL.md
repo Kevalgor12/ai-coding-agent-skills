@@ -20,8 +20,8 @@ look like and which store shape fits the workload lives in the parent skill,
 supplies PostgreSQL's concrete, version-correct implementation of that model.
 Query-tuning/operations depth (`SK-DATA-003`, database-operations) and the
 in-DB-search-vs-dedicated-engine escalation path (`SK-DATA-005`,
-search-integration) are forward references to skills not yet authored in this
-library.
+search-integration) are owned by those sibling Layer-3 skills and referenced,
+not restated, here.
 
 ## When to use / When not to use
 
@@ -128,7 +128,7 @@ transaction models, documented anti-patterns) is pre-researched in
    based privileges — it supplements them [Source: postgresql.org/docs/current/ddl-rowsecurity.html].
 4. **In-DB full-text vs. a dedicated search engine:** `tsvector`/`tsquery` +
    GIN covers moderate full-text needs without operating a second system.
-   Escalate to a dedicated engine (`SK-DATA-005`, forward reference) only
+   Escalate to a dedicated engine (`SK-DATA-005`, search-integration) only
    once relevance-tuning or scale requirements exceed what GIN-backed FTS
    documents supporting — don't add a search engine "in case."
 5. **Isolation level:** Read Committed (the default) is correct for most
@@ -187,7 +187,7 @@ transaction models, documented anti-patterns) is pre-researched in
   single-tenant app.
 - In-DB full-text search avoids operating a second system but tops out below
   a dedicated search engine on relevance-tuning features and scale (see
-  `SK-DATA-005`, forward reference).
+  `SK-DATA-005`, search-integration).
 - Synchronous replication trades write throughput for zero data loss on
   failover; asynchronous trades potential data loss/stale reads for
   performance — every HA topology makes this choice consciously

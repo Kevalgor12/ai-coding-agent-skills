@@ -6,7 +6,7 @@ skill_version: "0.1.0"
 kind: technology
 layer: 4
 domain: TECH
-parents: [SK-BE-001, SK-AI-001]   # backend-architecture (authored); llm-application-engineering (forward reference — research-gap, not yet authored in this library)
+parents: [SK-BE-001, SK-AI-001]   # backend-architecture; llm-application-engineering
 
 purpose: >-
   Apply Python correctly and version-appropriately: the GIL and its
@@ -15,9 +15,8 @@ purpose: >-
 scope: >-
   Python-language-and-runtime engineering detail — the generic backend
   structure method comes from the parent skill (SK-BE-001); Python's role in
-  LLM/agent application engineering is owned by SK-AI-001, a forward
-  reference not yet authored in this library (a documented research gap, not
-  an oversight).
+  LLM/agent application engineering is owned by SK-AI-001
+  (llm-application-engineering) and is not repeated here.
 expertise: Python backend/platform engineer.
 description: >-
   Python-specific engineering: the GIL and its free-threading evolution (PEP
@@ -36,7 +35,7 @@ activation_conditions:
 non_activation_conditions:
   - The stack uses another language/runtime (Node.js, Go, etc.) with no Python component (route to that technology skill)
   - The question is generic backend structure with no language chosen yet (route to SK-BE-001)
-  - The task is LLM/agent-application design itself (prompt engineering, RAG, agent orchestration) rather than Python-the-language mechanics (route to SK-AI-001 once authored; currently a documented research gap)
+  - The task is LLM/agent-application design itself (prompt engineering, RAG, agent orchestration) rather than Python-the-language mechanics (route to SK-AI-001, llm-application-engineering)
   - Pure data-science/ML modeling questions with no language-mechanics component
 activation_mode: auto
 
@@ -212,7 +211,7 @@ evaluation_criteria:
   - For a seeded CPU-bound workload, recommends multiprocessing or a free-threaded build (with the compatibility-audit caveat) rather than defaulting to threading under the standard GIL.
   - For a seeded I/O-bound workload, recommends asyncio or threading rather than reaching for free-threaded builds or sub-interpreters unnecessarily (anti-overengineering).
   - Any claim about a version-gated 3.12/3.13/3.14 feature (free-threading support level, sub-interpreter stdlib exposure, GC behavior, ProcessPoolExecutor default) is correctly scoped to its version/patch range, not presented as universally true.
-  - Does not restate generic backend-structure guidance owned by SK-BE-001, or fabricate LLM/agent-application-specific content that belongs to the not-yet-authored SK-AI-001 (rule QR-2).
+  - Does not restate generic backend-structure guidance owned by SK-BE-001, or fabricate LLM/agent-application-specific content that belongs to SK-AI-001 (llm-application-engineering) (rule QR-2).
   - Recommends venv + pyproject.toml for dependency isolation/packaging rather than a shared/system interpreter, unless the existing project already uses another documented approach.
 
 adapter_hints:

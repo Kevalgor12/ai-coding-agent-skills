@@ -2,7 +2,7 @@ id: SK-TECH-drizzle
 slug: drizzle
 name: Drizzle ORM
 spec_version: "1.0"
-skill_version: "0.1.0"
+skill_version: "0.1.1"
 kind: technology
 layer: 4
 domain: TECH

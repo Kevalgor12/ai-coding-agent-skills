@@ -19,9 +19,8 @@ virtual environments/packaging, and exception chaining. The generic
 backend-structure method (layering, DI, error handling, shutdown) comes from
 the parent skill ([backend-architecture](../backend-architecture/SKILL.md),
 `SK-BE-001`). Python's role specifically in LLM/agent application engineering
-belongs to `SK-AI-001` — a forward reference to a skill not yet authored in
-this library (a documented research gap, not an oversight); no LLM-specific
-content is assumed here.
+belongs to [`SK-AI-001`](../llm-application-engineering/SKILL.md)
+(llm-application-engineering); no LLM-specific content is assumed here.
 
 ## When to use / When not to use
 
@@ -33,7 +32,7 @@ chaining). **Do not use** for another language/runtime with no Python
 component (route to that technology skill), for the generic backend-structure
 decision with no language chosen yet (route to `SK-BE-001`), or for
 LLM/agent-application design itself (prompt engineering, RAG, agent
-orchestration — route to `SK-AI-001` once authored).
+orchestration — route to `SK-AI-001`, llm-application-engineering).
 
 ## Knowledge
 

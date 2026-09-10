@@ -6,7 +6,7 @@ skill_version: "0.1.0"
 kind: technology
 layer: 4
 domain: TECH
-parents: [SK-DATA-003]   # database-operations — FORWARD REFERENCE, not yet authored in this library
+parents: [SK-DATA-003]   # database-operations
 
 purpose: >-
   Apply ClickHouse correctly and version-appropriately as a columnar OLAP
@@ -19,9 +19,8 @@ scope: >-
   decision itself — whether a columnar/OLAP store is warranted at all is
   decided by the parent's parent, data-modeling (SK-DATA-001), which this
   skill treats as already settled. Generic query-tuning/indexing/transaction
-  method across engines is owned by SK-DATA-003 (database-operations, a
-  forward reference — not yet authored in this library); this skill supplies
-  ClickHouse's concrete specifics only.
+  method across engines is owned by SK-DATA-003 (database-operations); this
+  skill supplies ClickHouse's concrete specifics only.
 expertise: ClickHouse / OLAP database engineer.
 description: >-
   ClickHouse-specific columnar OLAP: MergeTree engine family, sparse
@@ -40,7 +39,7 @@ non_activation_conditions:
   - No analytical load has actually degraded the primary store yet — "we might need analytics later" is premature adoption (route to SK-DATA-001's decision framework instead)
   - The store-shape decision itself is still open (relational vs. document vs. columnar) — route to SK-DATA-001
   - The task is OLTP schema or query design against PostgreSQL/MySQL with no ClickHouse in play — route to SK-TECH-postgresql / SK-TECH-mysql
-  - Generic cross-engine query/index/transaction-tuning method with ClickHouse not actually in the stack — route to SK-DATA-003 (forward reference)
+  - Generic cross-engine query/index/transaction-tuning method with ClickHouse not actually in the stack — route to SK-DATA-003 (database-operations)
 activation_mode: auto
 
 inputs:

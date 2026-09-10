@@ -80,6 +80,10 @@ source_references:
     title: "Performance Knowledge Map — OpenSearch shard sizing, JVM heap, and cluster-tuning sections"
     via: research/knowledge-maps/performance-knowledge-map.md
     retrieved: "2026-09-10"
+  - url: research/knowledge-maps/concept-knowledge-map.md
+    title: "Concept Knowledge Map — Full-Text Search / Vector-Semantic Search sections (PostgreSQL, Redis, OpenSearch scope comparison)"
+    via: research/knowledge-maps/concept-knowledge-map.md
+    retrieved: "2026-09-10"
 last_verified: "2026-09-10"
 
 owned_knowledge:

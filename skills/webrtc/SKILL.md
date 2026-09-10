@@ -256,7 +256,7 @@ candidates
 governed by the separate Media Capture and Streams API's consent model,
 referenced rather than redefined by WebRTC 1.0 (same source). Cross-cutting
 threat modeling beyond this is owned by
-[security-engineering](../../core/taxonomy/skill-catalog.md).
+[security-engineering](../security-engineering/SKILL.md).
 
 ## Performance
 
@@ -300,7 +300,7 @@ conformance at Recommendation time — WPT is the spec's own official
 cross-browser conformance mechanism
 [Source: https://www.w3.org/TR/webrtc/]. Deep test-strategy method beyond
 this WebRTC-specific CI setup is owned by
-[testing-strategy](../../core/taxonomy/skill-catalog.md).
+[testing-strategy](../testing-strategy/SKILL.md).
 
 ## Failure handling
 

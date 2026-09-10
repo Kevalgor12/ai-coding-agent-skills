@@ -148,6 +148,29 @@ Mongoose/TypeORM/Prisma/Drizzle comparison itself.
 4. **Simplest first:** for local iteration, `push` is genuinely the fastest
    loop — just never let it reach a database that matters.
 
+## Workflow
+
+1. Confirm the installed Drizzle line (0.x vs. 1.0.0-rc/beta) from
+   `package.json`/the lockfile before touching any version-sensitive API —
+   never assume the live docs' line applies.
+2. Author/edit the schema directly in TypeScript (`pgTable`/`mysqlTable`/
+   `sqliteTable`) as the single source of truth for both type inference and
+   migrations.
+3. Declare relations for Relational Queries with the API matching the
+   confirmed line — `relations()`/RQBv1 on 0.x, `defineRelations()`/RQBv2 on
+   v1 — and add `with` clauses explicitly per query (relation loading is
+   never implicit).
+4. Choose a migration path deliberately: `push` for local/prototyping only,
+   or `generate` + `migrate` (versioned SQL files reviewed and committed) for
+   anything touching a database with real data.
+5. If the target is PostgreSQL and per-row access control is needed, add RLS
+   (`withRLS()`/`pgPolicy()` on v1, `.enableRLS()` on 0.x) rather than relying
+   solely on application-layer filtering.
+6. Hand off migration *safety* sequencing (expand/contract, backfill
+   batching, destructive-op confirmation) to
+   [data-migration](../data-migration/SKILL.md) — this skill only supplies
+   the Drizzle-specific tooling shape.
+
 ## Engineering rules
 
 - Confirm the installed Drizzle line before writing or trusting any

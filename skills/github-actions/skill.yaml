@@ -132,17 +132,18 @@ source_references:
     via: research/technologies/github-actions.md
     retrieved: "2026-09-10"
 
-covered_versions: >-
-  GitHub Actions the product is a continuously-deployed SaaS with no discrete
-  release version [Source: docs.github.com/en/actions]; version-sensitive
-  facts attach to sub-components instead: actions/upload-artifact and
-  actions/download-artifact >=4 (v3 blocked on GitHub.com as of 2025-01-30;
-  v4 unsupported on GHES, so GHES stays on v3); JavaScript action runtime
-  node20 (being removed from GitHub-hosted runners 2026-09-16) or node24
-  (forced default from 2026-06-02); self-hosted runner agent >=2.329.0
-  (older versions lost config.sh access starting 2026-03-16). Honestly thin
-  beyond these dated boundaries — the research found no single numbered
-  "GitHub Actions version" to pin against.
+covered_versions:
+  github-actions: >-
+    The product is a continuously-deployed SaaS with no discrete release
+    version [Source: docs.github.com/en/actions]; version-sensitive facts
+    attach to sub-components instead: actions/upload-artifact and
+    actions/download-artifact >=4 (v3 blocked on GitHub.com as of 2025-01-30;
+    v4 unsupported on GHES, so GHES stays on v3); JavaScript action runtime
+    node20 (being removed from GitHub-hosted runners 2026-09-16) or node24
+    (forced default from 2026-06-02); self-hosted runner agent >=2.329.0
+    (older versions lost config.sh access starting 2026-03-16). Honestly thin
+    beyond these dated boundaries — the research found no single numbered
+    "GitHub Actions version" to pin against.
 version_sensitive_claims:
   - claim: "actions/upload-artifact and actions/download-artifact v3 are blocked on GitHub.com; v4 is required, uses a new content-addressable storage backend (~10x faster downloads), and is not supported on GHES."
     applies_to: "v3 blocked from 2025-01-30; v4 required on GitHub.com since; GHES remains on v3 until GHES support ships"

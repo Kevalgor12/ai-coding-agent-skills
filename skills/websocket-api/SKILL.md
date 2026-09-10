@@ -229,7 +229,7 @@ repeated HTTP polling would incur — RFC 6455 itself provides no
 throughput/latency benchmarks
 [Source: https://www.rfc-editor.org/rfc/rfc6455.html]. Deep performance
 method is owned by
-[performance-engineering](../../core/taxonomy/skill-catalog.md).
+[performance-engineering](../performance-engineering/SKILL.md).
 
 ## Testing
 
@@ -246,7 +246,7 @@ WebSocket frame inspector (filter `WS`, per-frame `Data`/`Size`/`OpCode`/
 `MaskBit`/`FinBit`) useful for manual verification
 [Source: https://firefox-source-docs.mozilla.org/devtools-user/network_monitor/inspecting_web_sockets/index.html].
 Deep test-strategy method is owned by
-[testing-strategy](../../core/taxonomy/skill-catalog.md).
+[testing-strategy](../testing-strategy/SKILL.md).
 
 ## Failure handling
 

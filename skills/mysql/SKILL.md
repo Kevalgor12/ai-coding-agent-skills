@@ -18,7 +18,7 @@ version-gated upgrade hazards. The *method* for designing the schema itself
 comes from the parent skill ([data-modeling](../data-modeling/SKILL.md));
 this skill supplies MySQL's concrete facts on top of that method. Deeper
 query/index-tuning procedure beyond MySQL-specific facts belongs to
-database-operations (not yet authored in this library).
+[database-operations](../database-operations/SKILL.md) (`SK-DATA-003`).
 
 ## When to use / When not to use
 

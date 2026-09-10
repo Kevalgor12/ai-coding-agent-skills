@@ -19,7 +19,7 @@ The generic backend-structure method (layering, middleware, DI, centralized
 error handling, graceful shutdown, and the Node-vs-Go-vs-Python choice) comes
 from the parent skill, [backend-architecture](../backend-architecture/SKILL.md)
 (`SK-BE-001`); this skill supplies the Node.js runtime specifics underneath
-it. Framework-level behavior belongs to the forthcoming `SK-TECH-express` and
+it. Framework-level behavior belongs to the `SK-TECH-express` and
 `SK-TECH-fastify` skills, not here.
 
 ## When to use / When not to use
@@ -349,6 +349,7 @@ skill; this skill only states what `node:test` itself supports.
 - Parent skill: [`SK-BE-001` backend-architecture](../backend-architecture/SKILL.md)
   — owns generic layering/middleware/DI/error-handling/shutdown and the
   Node-vs-Go-vs-Python runtime-selection framework.
-- Related (forthcoming, not yet authored): `SK-TECH-express`,
-  `SK-TECH-fastify` — framework-level specifics that run on this runtime.
+- Related: [`SK-TECH-express`](../express/SKILL.md),
+  [`SK-TECH-fastify`](../fastify/SKILL.md) — framework-level specifics that
+  run on this runtime.
 - Full source list: see `skill.yaml.source_references`.

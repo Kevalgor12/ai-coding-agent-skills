@@ -20,9 +20,9 @@ specifics. This skill specializes [data-modeling](../data-modeling/SKILL.md)
 (SK-DATA-001) with MongoDB's concrete API and does not repeat its generic
 store-shape/entity-relationship method. It does not cover ODM/driver usage
 mechanics ([orm-integration](../orm-integration/SKILL.md), SK-TECH-mongoose)
-or full-text/vector search integration depth (SK-DATA-005
-search-integration, not yet authored in this library — referenced here as a
-forward-reference only).
+or full-text/vector search integration depth
+([search-integration](../search-integration/SKILL.md), SK-DATA-005 —
+referenced, not restated, here).
 
 ## When to use / When not to use
 

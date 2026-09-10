@@ -250,7 +250,7 @@ where a public client is involved instead [Source:
 https://swagger.io/docs/open-source-tools/swagger-ui/usage/oauth2/].
 
 Cross-cutting threat modeling and secret-handling practice are owned by
-[security-engineering](../../core/taxonomy/skill-catalog.md); this section
+[security-engineering](../security-engineering/SKILL.md); this section
 covers only OpenAPI/Swagger-specific exposures. (The REST-vs-GraphQL
 security-scheme comparison is owned by [api-design](../api-design/SKILL.md)
 — not restated here.)
@@ -279,7 +279,7 @@ https://learn.openapis.org/introduction.html]. Wiring the OAD into CI to
 verify that implementation code matches the spec — and vice versa — is a
 named best practice [Source: https://learn.openapis.org/best-practices.html].
 Deep test-strategy method beyond these two spec-driven practices is owned by
-[testing-strategy](../../core/taxonomy/skill-catalog.md).
+[testing-strategy](../testing-strategy/SKILL.md).
 
 ## Failure handling
 
