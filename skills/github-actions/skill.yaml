@@ -1,0 +1,193 @@
+id: SK-TECH-github-actions
+slug: github-actions
+name: GitHub Actions
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-INFRA-002]
+
+purpose: >-
+  Apply GitHub Actions correctly and version-appropriately — workflow YAML
+  mechanics, reusable-workflow composition, artifact storage, self-hosted
+  runner risk, cache-poisoning boundaries, and the set-output/save-state
+  security fix — as the concrete implementation of ci-cd-pipeline's generic
+  method.
+scope: >-
+  GitHub-Actions-specific implementation depth: workflow/job/step YAML
+  structure, reusable workflows and composite actions, `actions/cache` and
+  `actions/upload-artifact`/`download-artifact` usage, self-hosted-runner
+  operational risk, cache-poisoning restrictions on low-trust triggers, and
+  the `set-output`/`save-state` deprecation. Does not repeat the generic
+  pipeline-design method, OIDC/token/caching *principles*, or matrix-strategy
+  concepts already owned by the parent (ci-cd-pipeline) — only adds
+  platform-specific mechanics and content the parent does not cover.
+expertise: CI/CD engineer specializing in GitHub Actions.
+description: >-
+  GitHub-Actions-specific workflow YAML syntax, reusable workflows,
+  actions/cache and artifact-storage mechanics, self-hosted-runner risk,
+  cache-poisoning on pull_request_target, and the set-output/save-state
+  security fix. Use when the CI platform is (or is being set up as) GitHub
+  Actions. Not for platform-agnostic pipeline design (use ci-cd-pipeline) or
+  other CI platforms, which have no researched grounding in this library.
+
+activation_conditions:
+  - A `.github/workflows/*.yml` or `.yaml` file exists or is being authored
+  - The task names GitHub Actions, a workflow file, a GitHub Actions action, or a self-hosted runner
+  - Configuring `GITHUB_TOKEN` permissions, `actions/cache`, `actions/*-artifact`, or GitHub OIDC-to-cloud federation
+non_activation_conditions:
+  - Platform-agnostic pipeline design with no CI platform chosen yet (route to ci-cd-pipeline)
+  - A different CI platform (Jenkins, CircleCI, GitLab CI) — not researched or grounded in this library
+  - Git hooks running locally rather than on a GitHub-hosted/self-hosted runner (route to husky)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The GitHub Actions task (author/change a workflow, harden a security posture, diagnose a failing run, speed up a pipeline).
+    required: true
+  - name: existing-workflows
+    description: Existing `.github/workflows/*.yml` files, if this is not greenfield.
+    required: false
+required_context:
+  - Whether the target platform is confirmed to be GitHub Actions (vs. platform-agnostic design, which belongs to the parent)
+optional_context:
+  - The deploy target's cloud provider, if OIDC federation is in scope
+  - Whether any self-hosted runners are in use, and whether the repo is public
+
+outputs:
+  - name: workflow-yaml
+    kind: edit
+    description: Workflow, reusable-workflow, or composite-action YAML under `.github/workflows/` or `action.yml`.
+  - name: analysis
+    kind: analysis
+    description: Findings on runner choice, cache/artifact configuration, or a security-hardening gap, with rationale.
+
+depends_on_skills: []
+related_skills: [SK-TECH-husky]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+# Tier A: authoring workflow YAML is advisory/file-only. This library's
+# capability map found no ecosystem that drives GitHub Actions natively —
+# actual workflow execution is external, same posture as the parent skill.
+
+grounding: official-docs
+source_references:
+  - url: https://docs.github.com/en/actions/get-started/understand-github-actions
+    title: GitHub Actions — Understand GitHub Actions (core concepts)
+    via: research/technologies/github-actions.md
+    retrieved: "2026-09-10"
+  - url: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+    title: GitHub Actions — Workflow syntax reference
+    via: research/technologies/github-actions.md
+    retrieved: "2026-09-10"
+  - url: https://docs.github.com/en/actions/sharing-automations/reusing-workflows
+    title: GitHub Actions — Reusing workflows
+    via: research/technologies/github-actions.md
+    retrieved: "2026-09-10"
+  - url: https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions
+    title: GitHub Actions — Metadata syntax for custom actions
+    via: research/technologies/github-actions.md
+    retrieved: "2026-09-10"
+  - url: https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows
+    title: GitHub Actions — Caching dependencies to speed up workflows
+    via: research/technologies/github-actions.md
+    retrieved: "2026-09-10"
+  - url: https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions
+    title: GitHub Actions — Security hardening for GitHub Actions
+    via: research/technologies/github-actions.md
+    retrieved: "2026-09-10"
+  - url: https://docs.github.com/en/actions/security-for-github-actions/security-hardening-your-deployments/about-security-hardening-with-openid-connect
+    title: GitHub Actions — About security hardening with OpenID Connect
+    via: research/technologies/github-actions.md
+    retrieved: "2026-09-10"
+  - url: https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners
+    title: GitHub Actions — About self-hosted runners
+    via: research/technologies/github-actions.md
+    retrieved: "2026-09-10"
+  - url: https://docs.github.com/en/actions/using-github-hosted-runners/using-larger-runners/about-larger-runners
+    title: GitHub Actions — About larger runners
+    via: research/technologies/github-actions.md
+    retrieved: "2026-09-10"
+  - url: https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
+    title: "GitHub Changelog — Deprecating save-state and set-output commands"
+    via: research/technologies/github-actions.md
+    retrieved: "2026-09-10"
+  - url: https://github.blog/changelog/2024-04-16-deprecation-notice-v3-of-the-artifact-actions/
+    title: "GitHub Changelog — Deprecation notice: v3 of the artifact actions"
+    via: research/technologies/github-actions.md
+    retrieved: "2026-09-10"
+  - url: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+    title: "GitHub Changelog — Deprecation of Node 20 on GitHub Actions runners"
+    via: research/technologies/github-actions.md
+    retrieved: "2026-09-10"
+  - url: https://docs.github.com/en/actions/concepts/overview/usage-limits-billing-and-administration
+    title: GitHub Actions — Usage limits, billing, and administration
+    via: research/technologies/github-actions.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/actions/download-artifact
+    title: "GitHub — actions/download-artifact (repo, GHES v4+ support note)"
+    via: research/technologies/github-actions.md
+    retrieved: "2026-09-10"
+
+covered_versions: >-
+  GitHub Actions the product is a continuously-deployed SaaS with no discrete
+  release version [Source: docs.github.com/en/actions]; version-sensitive
+  facts attach to sub-components instead: actions/upload-artifact and
+  actions/download-artifact >=4 (v3 blocked on GitHub.com as of 2025-01-30;
+  v4 unsupported on GHES, so GHES stays on v3); JavaScript action runtime
+  node20 (being removed from GitHub-hosted runners 2026-09-16) or node24
+  (forced default from 2026-06-02); self-hosted runner agent >=2.329.0
+  (older versions lost config.sh access starting 2026-03-16). Honestly thin
+  beyond these dated boundaries — the research found no single numbered
+  "GitHub Actions version" to pin against.
+version_sensitive_claims:
+  - claim: "actions/upload-artifact and actions/download-artifact v3 are blocked on GitHub.com; v4 is required, uses a new content-addressable storage backend (~10x faster downloads), and is not supported on GHES."
+    applies_to: "v3 blocked from 2025-01-30; v4 required on GitHub.com since; GHES remains on v3 until GHES support ships"
+    source_ref: research/technologies/github-actions.md (Breaking changes / Migration sections)
+  - claim: "::set-output:: and ::save-state:: workflow commands are deprecated in favor of $GITHUB_OUTPUT/$GITHUB_STATE environment files, for a log-injection security reason; old commands still run with a deprecation warning as of the last confirmed check."
+    applies_to: "deprecation announced 2022-10-11; hard-removal date not re-confirmed as of this research's 2026-09-10 pass"
+    source_ref: research/technologies/github-actions.md (Anti-patterns / Security / Breaking changes sections)
+  - claim: "JavaScript actions on node20 are being force-migrated to node24; node20 is scheduled for complete removal from GitHub-hosted runners."
+    applies_to: "node24 forced default from 2026-06-02; node20 removal scheduled 2026-09-16 (imminent as of this research)"
+    source_ref: research/technologies/github-actions.md (Breaking changes section)
+  - claim: "Self-hosted runners below v2.329.0 cannot run ./config.sh."
+    applies_to: "enforced starting 2026-03-16, brownout period 2026-02-23 to 2026-03-16"
+    source_ref: research/technologies/github-actions.md (Version information / Breaking changes sections)
+last_verified: "2026-09-10"
+reverify_triggers:
+  - The set-output/save-state commands' hard-removal date is confirmed or announced
+  - GitHub Enterprise Server ships download-artifact@v4+ support (changing the GHES v3-pinning guidance)
+  - The Node 20 removal deadline (2026-09-16) passes and its actual enforcement outcome is confirmed
+  - A new artifact-action major version ships
+  - Self-hosted runner minimum-version enforcement is extended or re-targeted again
+
+owned_knowledge:
+  - GitHub Actions workflow/job/step YAML structure and reusable-workflow composition
+  - actions/upload-artifact and download-artifact v3-to-v4 storage-backend change
+  - Self-hosted-runner operational security risk
+  - Cache-poisoning restriction on pull_request_target
+  - The set-output/save-state log-injection deprecation
+decision_framework_present: true
+
+failure_handling:
+  - If it's unclear whether the platform is GitHub Actions vs. undecided, ask or route to the parent (ci-cd-pipeline) rather than assuming.
+  - If shell/execution isn't available, produce workflow YAML advisory-only and state that the workflow was not run (same Tier-A posture as the parent).
+  - If a version-sensitive fact (e.g. the set-output hard-removal date) can't be confirmed against current docs, say "verify against current docs" rather than assert a resolved date.
+escalation:
+  - A proposal to use self-hosted runners on a public repository is flagged and requires explicit confirmation, given the documented "almost never" guidance.
+  - Granting cache write access or checking out PR head code under pull_request_target is flagged as a security-sensitive change requiring confirmation.
+verification:
+  - Any `uses:` reference to a third-party action is pinned to a full-length commit SHA, not a mutable tag or branch.
+  - No step uses `::set-output::`/`::save-state::`; outputs/state go through `$GITHUB_OUTPUT`/`$GITHUB_STATE`.
+  - "`pull_request_target`-triggered workflows do not both use privileged secrets and check out/execute PR head code, and do not have cache write access."
+  - Every version-specific claim in the output is tagged with the date/range it holds for.
+evaluation_criteria:
+  - For a seeded workflow-authoring task, produces syntactically correct YAML using the documented top-level/job/step keys, with GITHUB_TOKEN permissions scoped and third-party actions SHA-pinned.
+  - For a seeded "speed up this pipeline" task, proposes actions/cache and/or larger runners with the real 7-day/10GB/LRU limits stated, not assumed unlimited.
+  - For a seeded security-review task, flags any pull_request_target + PR-checkout combination and any remaining ::set-output::/::save-state:: usage.
+  - Does not restate the parent's generic OIDC/token/matrix/caching principles verbatim (QR-2) — only adds GitHub-Actions-specific mechanics.
+
+adapter_hints: {}

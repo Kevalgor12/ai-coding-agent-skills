@@ -1,0 +1,91 @@
+id: SK-CONV-001
+slug: git-conventions
+name: Git conventions
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 2
+domain: CONV
+
+purpose: >-
+  Produce professional, convention-compliant Git branch names and commit
+  messages — conforming to an existing repository convention when one
+  exists, and applying a sane professional default when none does.
+scope: >-
+  The text and structure of branch names and commit messages only. Not
+  branching strategy, rebasing, merge mechanics, or PR mechanics
+  (git-workflow). Mandated first-class skill per this library's taxonomy
+  ruling — every code-producing skill in this library composes with it
+  rather than inventing its own commit/branch text conventions.
+expertise: Senior engineer with strong version-control hygiene habits.
+description: >-
+  Produce professional Git branch names and commit messages. Detects an
+  existing repository convention first (git log, commitlint config,
+  CONTRIBUTING/CLAUDE.md guidance, existing branch-name patterns) and
+  conforms to it; applies a sane default prefix set only when no
+  convention is detected. Use whenever a commit or branch is about to be
+  created. Never fabricates a ticket ID, scope, or attribution the repo
+  doesn't already use.
+
+activation_conditions:
+  - A commit is about to be created
+  - A branch is about to be created
+  - The user asks for a commit message or branch name suggestion
+non_activation_conditions:
+  - No version control is present in the workspace
+  - The user explicitly dictates an exact message/branch text (use theirs verbatim, don't rewrite it)
+  - The concern is pushing, merging, rebasing, or PR mechanics rather than commit/branch text (route to git-workflow)
+activation_mode: auto
+
+inputs:
+  - name: staged-or-described-change
+    description: The change being committed, or its description if not yet staged.
+    required: true
+  - name: repo-history-and-config
+    description: Recent git log, any commitlint/.commitlintrc/Conventional-Commits config, CONTRIBUTING/CLAUDE.md guidance, and existing branch-name patterns.
+    required: true
+outputs:
+  - name: branch-name
+    kind: analysis
+    description: A proposed branch name, or the actual branch when the host permits and the user authorized it.
+  - name: commit-message
+    kind: analysis
+    description: A proposed commit message, or the actual commit when the host permits and the user authorized it.
+
+depends_on_skills: []
+related_skills: [SK-CONV-008]
+conflicts_with: []
+
+required_capabilities: [file-read, shell]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: research/technologies/github.md
+    title: "GitHub Research — GitHub Flow's isolated-commit convention and PR-based workflow"
+    via: research/technologies/github.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Convention-detection method (log/commitlint/CONTRIBUTING inspection before applying any default)
+  - Default professional branch-name/commit-message prefix set and structure
+decision_framework_present: true
+
+failure_handling:
+  - If a detected convention and a stated user instruction conflict, the explicit user instruction wins for that one message/branch — but the detected convention still applies to anything the user didn't explicitly dictate.
+  - If no convention is detectable and the change type is ambiguous, ask which of the default prefixes fits rather than guessing.
+verification:
+  - A detected repository convention (Conventional Commits config, a distinct existing style, or CONTRIBUTING/CLAUDE.md guidance) is conformed to, never overridden by this skill's own default.
+  - No fabricated ticket reference, scope, or attribution/signature line the repo doesn't already use.
+  - Commit subjects are concise and imperative; a body is added only when it carries real context, never decoratively.
+escalation:
+  - A force-push, history rewrite, or any destructive git operation is out of this skill's scope entirely (route to git-workflow, which itself guards such operations behind confirmation).
+evaluation_criteria:
+  - "Repo with Conventional Commits config: output conforms to that config, not this skill's own default prefix set."
+  - "Repo with a different existing style (e.g. Jira-key prefixes, sentence-case subjects): output matches the observed style."
+  - "Repo with no detectable convention: uses the default prefix set (feat/fix/chore/docs/test/refactor/perf/ci/build/release/hotfix/bugfix/feature), correct prefix for the change type, one-line subject unless a body is genuinely warranted."
+  - "Rejects/repairs a non-professional message (vague \"update stuff\", wrong prefix, decorative noise, spurious signature) when reviewing one."
+  - Never fabricates a ticket reference or attribution not already in use in the repo's history.
+
+adapter_hints: {}

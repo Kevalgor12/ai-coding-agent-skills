@@ -65,6 +65,11 @@ not generated speculatively or in bulk.
 | [containerization](containerization/) | `SK-INFRA-001` | Infrastructure (generic) | authored, not yet validated/evaluated |
 | [deployment-release](deployment-release/) | `SK-INFRA-003` | Infrastructure (generic) | authored, not yet validated/evaluated |
 | [docker](docker/) | `SK-TECH-docker` | Infrastructure (technology) | authored, not yet validated/evaluated |
+| [git-conventions](git-conventions/) | `SK-CONV-001` | Conventions (generic, mandated first-class) | authored, not yet validated/evaluated |
+| [git-workflow](git-workflow/) | `SK-CONV-008` | Conventions (generic) | authored, not yet validated/evaluated |
+| [ci-cd-pipeline](ci-cd-pipeline/) | `SK-INFRA-002` | Infrastructure (generic) | authored, not yet validated/evaluated |
+| [github-actions](github-actions/) | `SK-TECH-github-actions` | Infrastructure (technology) | authored, not yet validated/evaluated |
+| [husky](husky/) | `SK-TECH-husky` | Infrastructure (technology) | authored, not yet validated/evaluated |
 
 Per the [specification's conformance lifecycle](../core/skill-specification/specification.md#5-conformance--lifecycle),
 a skill needs a passing mechanical validator, an `evaluations/` test, and an
