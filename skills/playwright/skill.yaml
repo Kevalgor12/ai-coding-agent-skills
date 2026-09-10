@@ -1,0 +1,203 @@
+id: SK-TECH-playwright
+slug: playwright
+name: Playwright
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-QA-001, SK-FE-004]
+
+purpose: >-
+  Apply Playwright correctly and version-appropriately for browser-based
+  end-to-end testing, server-only API testing, visual regression, and
+  component testing, including its Docker deployment and security posture.
+scope: >-
+  Playwright-specific implementation depth: @playwright/test's fixture-based
+  composition, APIRequestContext for server-only API testing, visual
+  regression via pixelmatch, the stable component-testing model, Docker
+  deployment, and security (storageState credential handling, sandbox
+  posture). Test-layer selection method belongs to testing-strategy
+  (SK-QA-001); role-based-locator accessibility framing and MCP
+  accessibility-tree integration belong to web-accessibility (SK-FE-004) —
+  neither is repeated here.
+expertise: Test automation engineer specializing in Playwright.
+description: >-
+  Playwright implementation: @playwright/test fixture-based composition,
+  APIRequestContext for server-only API testing, visual regression via
+  pixelmatch, the stable component-testing model, and Docker deployment
+  security (storageState leaks, root-vs-sandboxed posture). Use when the
+  stack uses Playwright or the task needs E2E/browser/visual/component/API
+  test implementation or Playwright Docker/CI setup. Not for test-layer
+  selection (testing-strategy) or role-locator a11y framing.
+
+activation_conditions:
+  - A playwright.config.ts/.js or an @playwright/test dependency is present
+  - The task needs E2E, browser, visual-regression, component, or server-only API testing implementation
+  - Playwright Docker deployment or CI pipeline setup is being configured
+  - Playwright MCP integration for agent-driven browser automation is in scope
+non_activation_conditions:
+  - Deciding which test layer to use at all, tech-neutral (route to testing-strategy, SK-QA-001)
+  - Role-based-locator accessibility guidance or MCP accessibility-tree framing as an a11y signal (route to web-accessibility, SK-FE-004)
+  - The stack uses a different E2E tool with no Playwright involvement (Cypress/WebdriverIO/Selenium named directly, not as a Playwright-backed runner)
+  - No browser-automation capability or MCP browser server is available and the task requires an actual run rather than advisory test authoring (see failure_handling)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Playwright task (writing/fixing E2E tests, API tests, component tests, visual regression, or Docker/CI setup).
+    required: true
+  - name: existing-playwright-config
+    description: Existing playwright.config.ts and test files, if any.
+    required: false
+required_context:
+  - The Playwright major/minor version in use (from package.json/lockfile) — needed for version-correct guidance within the >=1.60 <=1.63 range this skill covers.
+optional_context:
+  - Whether the suite/automation touches untrusted content (changes the Docker security posture recommendation).
+  - Whether a browser-automation capability or an MCP browser server is available in the current agent environment.
+
+outputs:
+  - name: test-code
+    kind: edit
+    description: Playwright test files (E2E, API-only, component, or visual-regression) using fixtures and web-first assertions.
+  - name: config-or-docker
+    kind: edit
+    description: playwright.config.ts changes or Docker deployment configuration (image tag, hardening flags).
+  - name: analysis
+    kind: analysis
+    description: Recommendations (e.g. API-testing vs. full browser automation, Docker security posture, component vs. E2E) with version-tagged rationale.
+
+depends_on_skills: []
+related_skills: [SK-TECH-jest-vitest]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell, browser]
+execution_tier: C
+capability_fallbacks:
+  browser: >-
+    If a direct browser-automation primitive isn't available in the current
+    agent environment, fall back to Playwright-via-MCP (accessibility-tree-
+    based browser control, e.g. on Claude Code) for driving the browser. If
+    neither a direct browser capability nor an MCP browser server is
+    available, degrade to advisory-only test authoring — write/review
+    Playwright test code and config without executing it, and state that
+    explicitly rather than claiming a run occurred.
+
+grounding: official-docs
+source_references:
+  - url: https://playwright.dev/docs/intro
+    title: "Playwright — Getting Started (core concepts, @playwright/test package)"
+    via: research/technologies/playwright.md
+    retrieved: "2026-09-10"
+  - url: https://playwright.dev/docs/test-fixtures
+    title: "Playwright — Fixtures (test-scoped/worker-scoped/auto fixtures, test.extend())"
+    via: research/technologies/playwright.md
+    retrieved: "2026-09-10"
+  - url: https://playwright.dev/docs/api-testing
+    title: "Playwright — API Testing (APIRequestContext, request fixture)"
+    via: research/technologies/playwright.md
+    retrieved: "2026-09-10"
+  - url: https://playwright.dev/docs/test-snapshots
+    title: "Playwright — Visual Comparisons (toHaveScreenshot, pixelmatch, maxDiffPixels)"
+    via: research/technologies/playwright.md
+    retrieved: "2026-09-10"
+  - url: https://playwright.dev/docs/test-components
+    title: "Playwright — Component Testing (stable fixtures.mount() model, React/Vue)"
+    via: research/technologies/playwright.md
+    retrieved: "2026-09-10"
+  - url: https://playwright.dev/docs/auth
+    title: "Playwright — Authentication (storageState persistence and risk)"
+    via: research/technologies/playwright.md
+    retrieved: "2026-09-10"
+  - url: https://playwright.dev/docs/docker
+    title: "Playwright — Docker (image tags, Alpine unsupported, sandbox/seccomp hardening)"
+    via: research/technologies/playwright.md
+    retrieved: "2026-09-10"
+  - url: https://playwright.dev/mcp/introduction
+    title: "Playwright MCP — Introduction (browser_run_code_unsafe tool)"
+    via: research/technologies/playwright.md
+    retrieved: "2026-09-10"
+  - url: https://playwright.dev/docs/release-notes
+    title: "Playwright — Release Notes (v1.60/v1.62/v1.63 breaking changes)"
+    via: research/technologies/playwright.md
+    retrieved: "2026-09-10"
+  - url: https://playwright.dev/docs/ci
+    title: "Playwright — Continuous Integration (workers, sharding, no binary caching)"
+    via: research/technologies/playwright.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  playwright: ">=1.60 <=1.63"
+version_sensitive_claims:
+  - claim: >-
+      Alpine Linux is unsupported as a Docker base image for Playwright due
+      to musl libc incompatibility with the bundled browser builds.
+    applies_to: ">=1.60 <=1.63 (architectural constraint, not tied to a specific minor within this range)"
+    source_ref: research/technologies/playwright.md §10, §14 (via research/knowledge-maps/version-matrix.md)
+  - claim: >-
+      Docker image tags must be pinned to the exact Playwright version (e.g.
+      v1.63.0-noble) so bundled browser binaries match the automation code's
+      Playwright version; a mismatch is a real, common source of flaky/broken CI.
+    applies_to: ">=1.60 <=1.63"
+    source_ref: research/technologies/playwright.md §10, §17 (via research/knowledge-maps/version-matrix.md)
+  - claim: >-
+      v1.60 removed several long-deprecated APIs: Locator.ariaRef(), the
+      handle option on exposeBinding(), the logger option on connect()/
+      connectOverCDP(), and context.videoPath()/legacy video-size options.
+    applies_to: ">=1.60"
+    source_ref: research/technologies/playwright.md §13 (via research/knowledge-maps/version-matrix.md)
+  - claim: >-
+      v1.62 introduced the stable component-testing model (stories/galleries
+      + fixtures.mount()); v1.63 deprecated the experimental
+      @playwright/experimental-ct-react[-17]/-vue packages in its favor.
+    applies_to: ">=1.62 <=1.63"
+    source_ref: research/technologies/playwright.md §13 (via research/knowledge-maps/version-matrix.md)
+  - claim: v1.63 dropped Ubuntu 20.04 support; v1.62 announced Debian 11 end-of-support.
+    applies_to: ">=1.62 <=1.63"
+    source_ref: research/technologies/playwright.md §13 (via research/knowledge-maps/version-matrix.md)
+  - claim: >-
+      macOS 13 WebKit support was deprecated and route.continue() lost the
+      ability to override the Cookie header. Unresolved: the exact version
+      tag is believed to be v1.52 per the source research's summarized
+      fetch, but is explicitly unconfirmed — do not state it as settled.
+    applies_to: "Unresolved — believed v1.52, not confirmed against the dated release-notes entry"
+    source_ref: research/technologies/playwright.md §13
+last_verified: "2026-09-10"
+reverify_triggers:
+  - A new Playwright minor release beyond v1.63 (check for new breaking API removals, OS-support drops, or component-testing model changes)
+  - Confirmation or correction of the exact version tag for the macOS 13 WebKit / Cookie-header change, currently unconfirmed
+  - Any change to Playwright MCP's documented security guidance beyond the browser_run_code_unsafe tool-naming signal
+
+owned_knowledge:
+  - Playwright fixture-based test composition (test-scoped/worker-scoped/auto fixtures, test.extend())
+  - APIRequestContext server-only API testing
+  - Playwright visual-regression mechanics (pixelmatch diffing, maxDiffPixels tolerance)
+  - Playwright component-testing model (stories/galleries, fixtures.mount())
+  - Playwright Docker deployment and security posture (non-root+seccomp vs. root, storageState credential risk, Alpine incompatibility, image-tag/version pinning)
+decision_framework_present: true
+
+failure_handling:
+  - If no browser-automation capability and no MCP browser server is available, degrade to advisory-only: write/review Playwright test code and config without executing it, and state that explicitly rather than claiming a run occurred.
+  - If the Playwright version in use can't be determined, ask for it or state the version range (>=1.60 <=1.63) this guidance assumes; never assume "latest" silently.
+  - If a request needs test-layer-selection method or role-locator a11y framing, defer to testing-strategy/web-accessibility rather than restating their content.
+escalation:
+  - Running Chromium as root against untrusted content (scraping/crawling arbitrary sites) disables the OS-level sandbox; flag this to the user and recommend the documented non-root-user + seccomp-profile hardening before proceeding.
+  - A storageState file (e.g. under playwright/.auth) found staged for commit is flagged before proceeding — it can carry live, impersonation-capable session credentials.
+verification:
+  - Tests use web-first, auto-retrying assertions (e.g. expect(locator).toBeVisible()), not manually re-checked isVisible() booleans.
+  - Auth/state isolation matches the storageState-reuse or per-worker-account pattern where the suite mutates server-side state.
+  - Any Docker deployment pins the image tag to the exact Playwright version installed in the project.
+  - Every version-tagged claim in the output carries its applicable range.
+evaluation_criteria:
+  - For a seeded task needing only server-side verification, proposes APIRequestContext instead of defaulting to full browser automation.
+  - For a seeded Docker deployment task involving untrusted content, proposes non-root + seccomp hardening rather than defaulting to root.
+  - Does not recommend committing a storageState file to version control.
+  - Does not restate testing-strategy's layer-selection method or web-accessibility's role-locator/MCP-accessibility-tree content (QR-2).
+  - Flags the macOS-WebKit-version claim as unconfirmed rather than stating it as settled fact.
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]
+    mcp_fallback: "playwright-mcp (@playwright/mcp) when direct browser execution is unavailable"
+  vscode:
+    argument_hint: "<task, e.g. 'add an E2E test for checkout' or 'harden the Docker image'>"

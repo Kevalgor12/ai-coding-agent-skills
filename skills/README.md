@@ -70,6 +70,9 @@ not generated speculatively or in bulk.
 | [ci-cd-pipeline](ci-cd-pipeline/) | `SK-INFRA-002` | Infrastructure (generic) | authored, not yet validated/evaluated |
 | [github-actions](github-actions/) | `SK-TECH-github-actions` | Infrastructure (technology) | authored, not yet validated/evaluated |
 | [husky](husky/) | `SK-TECH-husky` | Infrastructure (technology) | authored, not yet validated/evaluated |
+| [testing-strategy](testing-strategy/) | `SK-QA-001` | QA (generic) | authored, not yet validated/evaluated |
+| [jest-vitest](jest-vitest/) | `SK-TECH-jest-vitest` | QA (technology) | authored, not yet validated/evaluated |
+| [playwright](playwright/) | `SK-TECH-playwright` | QA (technology) | authored, not yet validated/evaluated |
 
 Per the [specification's conformance lifecycle](../core/skill-specification/specification.md#5-conformance--lifecycle),
 a skill needs a passing mechanical validator, an `evaluations/` test, and an

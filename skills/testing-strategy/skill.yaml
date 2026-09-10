@@ -1,0 +1,90 @@
+id: SK-QA-001
+slug: testing-strategy
+name: Testing strategy
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: QA
+
+purpose: >-
+  Decide what to test at which layer (unit/integration/e2e/component/
+  visual/contract/load) and structure a test suite accordingly —
+  independent of which test runner or framework is used. Covers test-data/
+  fixture design and isolation as part of that structure, not as a
+  separate concern.
+scope: >-
+  Test strategy and structure, tech-neutral. Tool specifics (Jest/Vitest
+  for unit/component/snapshot; Playwright for E2E/browser/visual/API
+  testing) come from the paired technology skills. Manual QA process,
+  test-case management, and formal QA-team workflow are out of scope —
+  this library's research covers automated-testing methodology across 44
+  technologies, not manual-testing process, which has no independent
+  grounding here.
+expertise: Senior/principal engineer with test-architecture experience.
+description: >-
+  Decide what to test at which layer (unit/integration/e2e/component/
+  visual/contract/load), design test data and fixture isolation, and
+  structure a suite accordingly. Use when writing tests, deciding test
+  strategy, or a change needs coverage. Tool specifics come from
+  jest-vitest/playwright. Not for manual QA process or test-case
+  management, which this library hasn't researched.
+
+activation_conditions:
+  - Writing tests for a change or feature
+  - Deciding test strategy or structure for a project
+  - A change needs coverage and the right layer isn't yet decided
+  - An existing test suite's layer distribution, isolation, or fixture design needs review
+non_activation_conditions:
+  - Explicitly throwaway code the user has said doesn't need tests
+  - Manual QA process or test-case-management workflow (not researched in this library)
+activation_mode: auto
+
+inputs:
+  - name: code-or-feature-under-test
+    description: The code/feature needing test coverage.
+    required: true
+  - name: risk-profile
+    description: What's actually risky about this change (data integrity, user-facing behavior, integration boundary).
+    required: false
+outputs:
+  - name: test-plan
+    kind: analysis
+    description: Which layer(s) to test at, and why, for the given risk profile.
+  - name: tests
+    kind: edit
+    description: The actual tests, structured for isolation and determinism.
+
+depends_on_skills: []
+related_skills: [SK-CONV-004, SK-CONV-007, SK-QA-003, SK-TECH-jest-vitest, SK-TECH-playwright]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: mixed
+source_references:
+  - url: research/knowledge-maps/testing-knowledge-map.md
+    title: "Testing Knowledge Map — full layer-by-layer breakdown (unit/integration/e2e/component/visual/load/contract) across 44 technologies, plus Notable Gaps section"
+    via: research/knowledge-maps/testing-knowledge-map.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Test-layer selection method (matching risk to the right layer, not defaulting to one layer for everything)
+  - Test-data/fixture isolation and determinism design
+decision_framework_present: true
+
+failure_handling:
+  - If the risk profile of a change isn't clear, ask what's actually at risk rather than defaulting to a blanket layer choice.
+  - If the target technology has no documented first-party testing methodology (a real, common finding in this library's research — PostgreSQL, MySQL, Redis, TypeORM, Express, TypeScript, and others all lack one), state that gap explicitly and recommend ecosystem tooling rather than inventing an official-sounding methodology.
+verification:
+  - The chosen test layer(s) match the actual risk, not a reflexive default (no e2e-for-everything, no unit-testing-a-getter).
+  - Tests are isolated and deterministic — no shared mutable state between tests, no reliance on execution order, no flaky timing dependencies.
+  - Test data/fixtures are set up and torn down explicitly, not left to leak between runs.
+evaluation_criteria:
+  - For a seeded feature, assigns the right test layer to each risk (no e2e-for-everything, no unit-testing-a-getter) and produces deterministic tests.
+  - Correctly states when the underlying technology has no first-party testing methodology documented, rather than fabricating one.
+  - Does not answer a manual-QA-process or test-case-management request as if it were within this skill's grounded scope.
+
+adapter_hints: {}

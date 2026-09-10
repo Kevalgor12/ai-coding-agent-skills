@@ -1,0 +1,267 @@
+id: SK-TECH-jest-vitest
+slug: jest-vitest
+name: Jest & Vitest
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-QA-001]   # testing-strategy
+
+purpose: >-
+  Apply Jest and/or Vitest correctly and version-appropriately for
+  unit/component/snapshot testing in JavaScript/TypeScript projects — mocking,
+  fake timers, snapshots, coverage, and the choice between the two runners.
+scope: >-
+  Jest- and Vitest-specific API, configuration, CLI, and version behavior.
+  Merged into one skill because they are a choose-one decision with a
+  near-identical API surface (Vitest is explicitly designed as a
+  Jest-compatible drop-in), not two unrelated tools. Specializes
+  testing-strategy (generic layer selection, fixture isolation, the
+  snapshot-testing tension — not repeated here). Not test-layer strategy
+  itself (testing-strategy) or browser/E2E automation (playwright).
+expertise: JavaScript/TypeScript test engineer who has run both runners in production CI.
+description: >-
+  Jest- and Vitest-specific mocking/spying, snapshot testing, fake timers,
+  coverage providers, and the Jest-vs-Vitest choice, including version-gated
+  breaking changes (Jest v27/v30, Vitest v3.2/v5.0). Use when the stack uses
+  Jest or Vitest, or the task is choosing between them. Not for test-layer
+  strategy (testing-strategy) or browser/E2E automation (playwright).
+
+activation_conditions:
+  - The `jest` or `vitest` npm package is a dependency, or config files (`jest.config.*`, `"jest"` in package.json, `vitest.config.*`) are present
+  - Code imports Jest globals/`@jest/globals` or the Vitest `vi`/`vitest` APIs
+  - The task names Jest or Vitest, or asks to choose between them for a project
+non_activation_conditions:
+  - The task is deciding which test layer(s) to write at all, independent of tool (route to testing-strategy)
+  - The task is browser/E2E/visual automation via Playwright with no Jest/Vitest unit layer in question (route to playwright)
+  - The project uses Mocha/AVA/node:test/pytest with no Jest/Vitest involvement
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Jest/Vitest-mediated task (writing/mocking tests, snapshot config, fake timers, coverage setup, migrating between the two, or choosing one).
+    required: true
+  - name: runner-and-version
+    description: Which runner is (or would be) used and its pinned version/range — needed for version-correct guidance (Jest v27/v30 defaults, Vitest v3.2/v5.0 behavior).
+    required: false
+required_context:
+  - Confirmation of which runner is in use, or that the task is the Jest-vs-Vitest choice itself
+optional_context:
+  - The framework/ORM already in the stack (Vue/Angular/Nuxt/Next.js/Mongoose/Prisma) — several have documented, framework-specific runner guidance that should inform the choice.
+
+outputs:
+  - name: test-code
+    kind: edit
+    description: Jest/Vitest test files, mocks, fixtures, or config changes.
+  - name: runner-choice
+    kind: analysis
+    description: A Jest-vs-Vitest recommendation grounded in the stack's own official guidance, with rationale and the version it applies to.
+  - name: migration-notes
+    kind: analysis
+    description: Concrete API/config diffs when moving a suite between Jest and Vitest.
+
+depends_on_skills: []
+# depends_on_skills is reserved for hard composition (invoking another skill
+# as a blocking sub-step of this skill's own execution). The relationship to
+# testing-strategy is specialization, already captured by `parents` above --
+# duplicating it here would be redundant and would assert a stronger
+# (blocking-invocation) claim than specialization actually is. Per spec
+# §2.5, left empty.
+related_skills: [SK-TECH-playwright]
+conflicts_with: []
+# Jest and Vitest are merged into this one skill precisely because they are a
+# choose-one decision with a near-identical API surface, not two conflicting
+# tools -- so conflicts_with stays empty rather than listing either against
+# the other.
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: https://jestjs.io/docs/getting-started
+    title: Jest — Getting Started
+    via: research/technologies/jest.md
+    retrieved: "2026-09-10"
+  - url: https://jestjs.io/docs/mock-functions
+    title: Jest — Mock Functions
+    via: research/technologies/jest.md
+    retrieved: "2026-09-10"
+  - url: https://jestjs.io/docs/snapshot-testing
+    title: Jest — Snapshot Testing
+    via: research/technologies/jest.md
+    retrieved: "2026-09-10"
+  - url: https://jestjs.io/docs/timer-mocks
+    title: Jest — Timer Mocks
+    via: research/technologies/jest.md
+    retrieved: "2026-09-10"
+  - url: https://jestjs.io/docs/configuration
+    title: Jest — Configuration
+    via: research/technologies/jest.md
+    retrieved: "2026-09-10"
+  - url: https://jestjs.io/docs/cli
+    title: Jest — CLI
+    via: research/technologies/jest.md
+    retrieved: "2026-09-10"
+  - url: https://jestjs.io/docs/code-transformation
+    title: Jest — Code Transformation
+    via: research/technologies/jest.md
+    retrieved: "2026-09-10"
+  - url: https://jestjs.io/docs/ecmascript-modules
+    title: Jest — ECMAScript Modules
+    via: research/technologies/jest.md
+    retrieved: "2026-09-10"
+  - url: https://jestjs.io/docs/upgrading-to-jest30
+    title: Jest — Upgrading to Jest 30
+    via: research/technologies/jest.md
+    retrieved: "2026-09-10"
+  - url: https://jestjs.io/blog/2025/06/04/jest-30
+    title: "Jest 30: faster, leaner, better"
+    via: research/technologies/jest.md
+    retrieved: "2026-09-10"
+  - url: https://jestjs.io/blog/2021/05/25/jest-27
+    title: "Jest 27: New Defaults for Jest"
+    via: research/technologies/jest.md
+    retrieved: "2026-09-10"
+  - url: https://registry.npmjs.org/jest
+    title: "jest — npm registry metadata (version, engines)"
+    via: research/technologies/jest.md
+    retrieved: "2026-09-10"
+  - url: https://vitest.dev/guide/
+    title: Vitest — Why Vitest / Guide
+    via: research/technologies/vitest.md
+    retrieved: "2026-09-10"
+  - url: https://vitest.dev/guide/features.html
+    title: Vitest — Features
+    via: research/technologies/vitest.md
+    retrieved: "2026-09-10"
+  - url: https://vitest.dev/guide/mocking.html
+    title: Vitest — Mocking
+    via: research/technologies/vitest.md
+    retrieved: "2026-09-10"
+  - url: https://vitest.dev/guide/coverage.html
+    title: Vitest — Coverage
+    via: research/technologies/vitest.md
+    retrieved: "2026-09-10"
+  - url: https://vitest.dev/guide/browser/
+    title: Vitest — Browser Mode
+    via: research/technologies/vitest.md
+    retrieved: "2026-09-10"
+  - url: https://vitest.dev/guide/in-source.html
+    title: Vitest — In-Source Testing
+    via: research/technologies/vitest.md
+    retrieved: "2026-09-10"
+  - url: https://vitest.dev/guide/migration.html
+    title: Vitest — Migration Guide (v4 to v5)
+    via: research/technologies/vitest.md
+    retrieved: "2026-09-10"
+  - url: https://vitest.dev/guide/migration/jest.html
+    title: Vitest — Migrating from Jest
+    via: research/technologies/vitest.md
+    retrieved: "2026-09-10"
+  - url: https://vitest.dev/guide/workspace.html
+    title: Vitest — Workspace / Projects
+    via: research/technologies/vitest.md
+    retrieved: "2026-09-10"
+  - url: https://vitest.dev/blog/vitest-5.html
+    title: "Vitest 5.0 release announcement"
+    via: research/technologies/vitest.md
+    retrieved: "2026-09-10"
+  - url: https://vitest.dev/releases.html
+    title: Vitest — Releases and support policy
+    via: research/technologies/vitest.md
+    retrieved: "2026-09-10"
+  - url: https://vitest.dev/config/api.html
+    title: Vitest — API server configuration
+    via: research/technologies/vitest.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  jest: ">=27 <=30.5"
+  vitest: ">=3.2 <=5.0"
+version_sensitive_claims:
+  - claim: >-
+      Default test runner became jest-circus (previously jest-jasmine2);
+      testEnvironment default changed jsdom -> node; fake timers default
+      changed legacy -> modern.
+    applies_to: "jest >=27"
+    source_ref: research/technologies/jest.md §2/§4/§13 (jestjs.io/blog/2021/05/25/jest-27)
+  - claim: >-
+      Dropped Node.js 14, 16, 19, 21 (engines now
+      ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0); minimum TypeScript raised
+      to 5.4; jest-environment-jsdom upgraded jsdom 21 -> 26 (spec-compliance
+      changes, e.g. window.location mocking behavior); --testPathPattern
+      renamed --testPathPatterns (now multi-pattern); removed deprecated
+      expect matcher aliases (toBeCalled, toBeCalledWith, etc.) present
+      through v29; glob dependency bumped to v10 with stricter
+      brace-expansion/extglob handling that can change testMatch/
+      moduleNameMapper matching behavior.
+    applies_to: "jest v30 (30.0.0-30.5.1)"
+    source_ref: research/technologies/jest.md §12/§13 (jestjs.io/blog/2025/06/04/jest-30, registry.npmjs.org/jest); research/knowledge-maps/version-matrix.md
+  - claim: >-
+      ESM automocking and __mocks__-directory mocks only apply starting at
+      Node v24.9+; native ESM support overall remains experimental, gated
+      behind Node's --experimental-vm-modules flag.
+    applies_to: "jest ecmascript-modules support, current through v30"
+    source_ref: research/technologies/jest.md §14 (jestjs.io/docs/ecmascript-modules)
+  - claim: >-
+      Vitest 5.0 requires Vite >=6.4.0 and Node.js >=22.12.0; older versions
+      are "unsupported and may cause unexpected errors."
+    applies_to: "vitest 5.0"
+    source_ref: research/technologies/vitest.md §1/§11 (vitest.dev/guide/, vitest.dev/guide/migration.html); research/knowledge-maps/version-matrix.md
+  - claim: >-
+      Security patches are backported only to the current stable minor
+      (vitest@5.0) and the immediately preceding minor (vitest@4.1); older
+      versions receive no further security fixes.
+    applies_to: "vitest 4.1 and 5.0 only, as of the 5.0 release"
+    source_ref: research/technologies/vitest.md §7/§12 (vitest.dev/releases.html)
+  - claim: >-
+      V8 coverage-provider report accuracy is "as good as with Istanbul"
+      specifically since v3.2.0 — a version-sensitive parity claim, not
+      necessarily true of earlier V8-provider versions.
+    applies_to: "vitest >=3.2.0"
+    source_ref: research/technologies/vitest.md §8 (vitest.dev/guide/coverage.html); research/knowledge-maps/version-matrix.md
+  - claim: The `workspace` config key was deprecated in favor of `projects` (functionally equivalent).
+    applies_to: "vitest >=3.2"
+    source_ref: research/technologies/vitest.md §11/§13 (vitest.dev/guide/workspace.html)
+  - claim: "New APIs: `vi.when()` for conditional mocking with deep-equality/asymmetric-matcher argument matching, and `toHaveBeenExhausted()` to verify all registered vi.when() behaviors were consumed."
+    applies_to: "vitest 5.0"
+    source_ref: research/technologies/vitest.md §3 (vitest.dev/blog/vitest-5.html)
+  - claim: Fake timers also mock the Temporal API, via @sinonjs/fake-timers v15.4.
+    applies_to: "vitest 5.0"
+    source_ref: research/technologies/vitest.md §11 (vitest.dev/guide/migration.html)
+  - claim: >-
+      Browser Mode requires ES modules, dynamic imports, and BroadcastChannel
+      support; minimum browsers Chrome >=87, Firefox >=79, Safari >=15.4,
+      Edge >=88.
+    applies_to: "vitest browser mode, current through v5.0"
+    source_ref: research/technologies/vitest.md §14 (vitest.dev/guide/browser/)
+last_verified: "2026-09-10"
+reverify_triggers:
+  - A new Jest major release past v30
+  - A new Vitest major release past v5.0, or a v5.x/v6.x security-backport-window change
+  - A change to Node's --experimental-vm-modules ESM gating in Jest, or to Node's own ESM stability
+  - A change to which framework docs (Next.js, Vue, Angular, Nuxt, Mongoose, Prisma) recommend which runner
+
+owned_knowledge:
+  - Jest/Vitest mocking, spying, and snapshot-testing API mechanics
+  - Jest v27/v30 and Vitest v3.2/v5.0 version-gated breaking changes
+  - The Jest-vs-Vitest decision framework grounded in framework-specific official guidance
+decision_framework_present: true
+
+failure_handling:
+  - If neither the runner nor its version is known, ask, or state the covered_versions range the guidance assumes — Jest's v27/v30 defaults and Vitest's v3.2/v5.0 behavior differ materially enough to make "current" guidance wrong for an older pin.
+  - If the task is choosing a runner and the framework already in the stack has documented official guidance (Mongoose, Prisma, Vue, Angular, Nuxt, Next.js), surface that guidance rather than defaulting to a personal preference.
+  - If shell is unavailable, degrade to advisory test/config output and say the suite was not actually run.
+verification:
+  - Any Jest/Vitest API, config key, or CLI flag stated is one that actually appears in a cited source, not inferred from the other tool's equivalent.
+  - Any version-specific claim is tagged with the Jest or Vitest range it holds for.
+  - Snapshot assertions are paired with deterministic setup (mocked clocks/IDs or property matchers) rather than asserting on non-deterministic output.
+evaluation_criteria:
+  - For a seeded project with a framework that has documented runner guidance (e.g. Mongoose, Prisma, Vue), recommends the runner consistent with that framework's own official docs, not a blanket default.
+  - Given a Jest v29-era suite being evaluated against v30, correctly flags at least the Node/TypeScript floor change, the removed matcher aliases, and the glob-matching behavior change as relevant risks.
+  - Given a Vitest config predating v5.0, correctly flags the clearMocks-default change and the vi.mock()/vi.hoisted() module-scope-only restriction as relevant migration risks.
+  - Does not restate testing-strategy's general layer-selection, fixture-isolation, or snapshot-tension content — only adds Jest/Vitest implementation depth.
+
+adapter_hints: {}
