@@ -1,0 +1,101 @@
+id: SK-AI-007
+slug: llm-evaluation
+name: LLM Evaluation
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: AI
+
+purpose: >-
+  Build evaluation harnesses for LLM-powered features and detect/mitigate
+  hallucination — independent of which model provider or eval platform is
+  used.
+scope: >-
+  LLM-specific evaluation (success-criteria design, grading-method
+  selection, golden datasets, eval-before-ship discipline) and
+  hallucination mitigation (grounding requirements, claim verification).
+  Distinct from testing-strategy (SK-QA-001): LLM output is graded, not
+  merely asserted true/false, so this skill owns grading-method selection
+  and hallucination-specific verification; ties back to SK-QA-001 for
+  surrounding test-suite discipline (fixtures, CI gating). Not general
+  (non-LLM-output) test authoring.
+expertise: Senior/principal engineer with LLM-evaluation and eval-harness design experience.
+description: >-
+  Build eval harnesses for LLM features and mitigate hallucination: design
+  specific, measurable, achievable success criteria; pick a grading method
+  matched to the task (exact-match, semantic-similarity/ROUGE, or
+  LLM-as-judge with a different grader model). Maintain golden test cases;
+  gate ship-readiness on eval regressions. Use when building/reviewing an
+  LLM feature needing quality verification, or investigating suspected
+  hallucination. Not general test authoring — route to testing-strategy.
+
+activation_conditions:
+  - Building or reviewing an LLM feature that needs quality verification before shipping
+  - A feature is exhibiting suspected hallucination
+  - Changing a prompt or model and needing a regression gate before shipping
+non_activation_conditions:
+  - General (non-LLM-output) test authoring — route to testing-strategy (SK-QA-001)
+  - The output being tested is deterministic/non-generative code with no grading judgment required
+activation_mode: auto
+
+inputs:
+  - name: llm-feature
+    description: The LLM feature and its stated behavioral requirements.
+    required: true
+  - name: suspected-failure-mode
+    description: Suspected hallucination or quality-regression symptom, if already observed.
+    required: false
+outputs:
+  - name: eval-harness-design
+    kind: analysis
+    description: Success criteria, grading method, and golden test cases matched to the task type.
+  - name: hallucination-mitigation-checks
+    kind: analysis
+    description: Grounding requirements and claim-verification checks for outputs before an agent acts on them.
+
+depends_on_skills: []
+related_skills: [SK-AI-001, SK-QA-001]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: research/technologies/anthropic-claude-api.md
+    title: "Anthropic Claude API Research — Section 9 Testing: success-criteria design (specific/measurable/achievable/relevant), eval-dimension categories, four grading methods, different-model-grades-than-generates best practice"
+    via: research/technologies/anthropic-claude-api.md
+    retrieved: "2026-09-10"
+  - url: research/technologies/openai-api.md
+    title: "OpenAI API Research — Section 9 Testing: Evals API three-step workflow (documented pattern, platform itself deprecating), prompt-change test-before-ship discipline"
+    via: research/technologies/openai-api.md
+    retrieved: "2026-09-10"
+  - url: research/technologies/owasp-llm-top10.md
+    title: "OWASP LLM Top 10 (2026) Research — LLM07:2026 Misinformation: grounding-in-authoritative-sources mitigation, claim-verification workflows, documented hallucination scenario categories"
+    via: research/technologies/owasp-llm-top10.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Success-criteria design method for LLM output (specific/measurable/achievable/relevant)
+  - Grading-method selection (exact-match/cosine-similarity/ROUGE-L/LLM-as-judge) matched to task type
+  - Hallucination-mitigation and claim-verification checks for LLM/agentic output
+decision_framework_present: true
+
+failure_handling:
+  - If the feature's behavioral requirements aren't stated, ask what "correct" output looks like before proposing success criteria rather than inventing them.
+  - If asked to build the eval on OpenAI's Evals platform specifically, flag that it is being deprecated (read-only Oct 31 2026, shutdown Nov 30 2026) and frame guidance as the documented pattern (describe the task, run test inputs, analyze/iterate), implementation-tool-agnostic, rather than recommending `v1/evals` for new work.
+  - If the request is actually general (non-LLM-output) test authoring, route to testing-strategy (SK-QA-001) rather than answering as if it were LLM-specific grading.
+verification:
+  - Success criteria are specific, measurable, achievable, and relevant to the feature's actual stakes — not a vague "good performance" bar.
+  - The chosen grading method matches the task type (exact-match for categorical, cosine-similarity/ROUGE-L for semantic, LLM-as-judge for subjective) and, when LLM-as-judge is used, the grading model differs from the generating model.
+  - Hallucination-mitigation checks require outputs to be grounded in authoritative/current sources and verify claims/tool-call arguments before an agent acts on them, rather than trusting fluent but unverified output.
+escalation:
+  - A request for general (non-LLM-output) test-suite/CI discipline exceeds this skill's scope — defer to testing-strategy (SK-QA-001).
+evaluation_criteria:
+  - Given an LLM feature, produces success criteria and a grading method matched to the task type, per the decision framework.
+  - Hallucination-mitigation checks require grounding rather than trusting fluent-but-unverified output.
+  - Correctly declines a general (non-LLM-output) test-authoring request as outside this skill's scope, routing to testing-strategy.
+
+adapter_hints: {}

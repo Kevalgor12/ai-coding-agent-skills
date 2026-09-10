@@ -1,0 +1,100 @@
+id: SK-AI-005
+slug: rag-engineering
+name: RAG Engineering
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: AI
+
+purpose: >-
+  Design retrieval-augmented generation — grounding LLM output in retrieved
+  content via embeddings and vector/semantic search — independent of which
+  embedding model, vector store, or search engine is eventually used.
+scope: >-
+  The RAG pattern (retrieval → context injection → generation) and the
+  embedding layer feeding it (model/dimensionality choice, chunking
+  strategy). Not the vector/semantic search infrastructure itself — engine
+  selection, indexing/mapping, and relevance tuning are owned by the
+  already-authored search-integration (SK-DATA-005), which already scopes
+  "vector/semantic search." This skill owns the RAG pattern and two risks
+  the OWASP LLM Top 10 research documents directly against retrieval and
+  embedding stores: retrieval-authorization ordering (LLM09, LLM02) and
+  embedding-store sensitivity (LLM09).
+expertise: Senior/principal engineer with LLM-application and retrieval-systems experience.
+description: >-
+  Design retrieval-augmented generation: the retrieve-then-generate
+  pipeline, chunking/embedding strategy, and context injection for
+  grounding LLM output in a retrievable corpus. Enforces authorization
+  inside the retrieval query (not post-filtering) and treats embedding
+  stores/backups as source-document-sensitive. Use when a feature needs
+  LLM output grounded in a specific document/data corpus. Not for the
+  vector/semantic search infrastructure itself — route to
+  search-integration (SK-DATA-005).
+
+activation_conditions:
+  - A feature needs LLM output grounded in a specific document/data corpus rather than the model's own knowledge
+  - Designing or reviewing a retrieve-then-generate pipeline's chunking, embedding, or context-injection strategy
+  - Reviewing whether a retrieval layer authorizes access correctly or treats its embedding store with appropriate sensitivity
+non_activation_conditions:
+  - No retrieval corpus is involved — the LLM answers from its own knowledge or from context already supplied in the request
+  - The request is about the vector/semantic search infrastructure itself (engine selection, indexing, relevance tuning) — route to SK-DATA-005 (search-integration)
+activation_mode: auto
+
+inputs:
+  - name: retrievable-corpus
+    description: The document/data corpus the LLM output must be grounded in.
+    required: true
+  - name: existing-retrieval-layer
+    description: An existing vector store/search layer's design, if this is not greenfield.
+    required: false
+outputs:
+  - name: rag-pipeline-design
+    kind: analysis
+    description: Retrieval, chunking/embedding choice, and context-injection design for the retrieve-then-generate pipeline.
+  - name: authorization-sensitivity-notes
+    kind: analysis
+    description: Authorization-at-query-time and embedding-store-sensitivity notes for the retrieval layer.
+
+depends_on_skills: []
+related_skills: [SK-AI-001, SK-DATA-005, SK-AI-002, SK-AI-008]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: research/technologies/owasp-llm-top10.md
+    title: "OWASP GenAI LLM Top 10 (2026) Research — LLM09 Vector and Embedding Weaknesses, LLM02 Sensitive Information Disclosure, Section 8 Recommended Patterns"
+    via: research/technologies/owasp-llm-top10.md
+    retrieved: "2026-09-10"
+  - url: research/technologies/openai-api.md
+    title: "OpenAI API Research — File Search tool and vector stores (hosted RAG retrieval), RAG prompting guidance"
+    via: research/technologies/openai-api.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - The RAG pattern (retrieval → context injection → generation) and chunking/embedding-strategy choice
+  - Retrieval-authorization-ordering discipline (authorize inside the query, not post-filter)
+  - Embedding-store/backup sensitivity classification (source-document-equivalent, not lower-sensitivity)
+decision_framework_present: true
+
+failure_handling:
+  - If the retrievable corpus isn't identified, ask rather than designing a generic pipeline.
+  - If the request is actually about the vector/semantic search infrastructure itself (engine choice, indexing, relevance tuning), state that this is SK-DATA-005's scope rather than answering as if it were RAG-pipeline design.
+  - If an existing retrieval layer filters authorization after retrieval rather than inside the query, flag it as a documented cross-tenant-leakage risk rather than treating it as a stylistic choice.
+verification:
+  - The retrieval design enforces document/chunk-level authorization inside the index query, not as a post-retrieval filter.
+  - Embedding stores, exports, and backups are classified and handled as source-document-sensitive, not as a lower-sensitivity derived artifact.
+  - Context injection follows SK-AI-002's placement guidance (retrieved content placed appropriately in the context window) rather than appended arbitrarily.
+  - The chunking/embedding strategy is stated explicitly (chunk size/overlap, embedding model/dimensionality) rather than left implicit.
+escalation:
+  - A retrieval layer found to filter authorization post-search (rather than inside the query) is escalated as a security finding coordinated with SK-AI-008, not silently redesigned without flagging the risk.
+evaluation_criteria:
+  - On a fixture RAG task, designs authorization-at-query-time (not post-filter) retrieval and treats embedding backups as sensitive.
+  - Correctly delegates pure search-infrastructure concerns (engine selection, indexing, relevance tuning) to SK-DATA-005 rather than answering them directly.
+  - States a concrete chunking/embedding strategy and a context-injection placement, not generic RAG advice.
+
+adapter_hints: {}

@@ -1,6 +1,6 @@
 # Source Registry
 
-This file registers every official documentation source consulted while researching the 49 technologies in this Skill Library project. It exists so anyone auditing or extending a technology's research doc can see exactly which primary sources were used, without re-opening every individual `research/technologies/<slug>.md` file. Sources are grouped by technology in the order they were cited during research; the final section aggregates all distinct source domains across the whole project, ranked by how many technologies cite them.
+This file registers every official documentation source consulted while researching the 52 technologies in this Skill Library project. It exists so anyone auditing or extending a technology's research doc can see exactly which primary sources were used, without re-opening every individual `research/technologies/<slug>.md` file. Sources are grouped by technology in the order they were cited during research; the final section aggregates all distinct source domains across the whole project, ranked by how many technologies cite them.
 
 ## Angular
 
@@ -40,6 +40,36 @@ This file registers every official documentation source consulted while research
 - https://angular.dev/ai/agent-skills -- Official Angular Agent Skills for AI coding agents: angular-developer and angular-new-app skills
 - https://raw.githubusercontent.com/angular/angular/main/CHANGELOG.md -- Canonical raw CHANGELOG.md with full Breaking Changes sections for v20.0.0, v21.0.0, v22.0.0
 - https://blog.angular.dev/announcing-angular-v22-c52bb83a4664 -- Official v22 announcement blog post: signal-first release framing, Signal Forms/Angular ARIA stabilization
+
+## Anthropic Claude API (Messages API)
+
+- https://platform.claude.com/docs/en/models/overview -- model lineup, comparison table, pricing summary, retirement commitments, Models API
+- https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview -- when/how to prompt engineer, entry point
+- https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices -- system prompts, XML tags, multishot, chain-of-thought, long-context prompting, agentic-system patterns, migration guidance
+- https://platform.claude.com/docs/en/build-with-claude/context-windows -- context window sizes, context rot, context awareness, thinking-and-context-window interaction, overflow behavior
+- https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview -- tool definitions, tool_choice, pricing, tool catalog
+- https://platform.claude.com/docs/en/agents-and-tools/tool-use/how-tool-use-works -- agentic loop mechanics, client vs server tool execution model
+- https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons -- full stop_reason table, pause_turn handling
+- https://platform.claude.com/docs/en/build-with-claude/prompt-caching -- cache breakpoints, TTL, pricing multipliers, minimum lengths
+- https://platform.claude.com/docs/en/build-with-claude/thinking -- adaptive vs extended thinking, display modes, preservation rules, interleaved thinking
+- https://platform.claude.com/docs/en/build-with-claude/effort -- effort levels, per-model defaults and guidance
+- https://platform.claude.com/docs/en/build-with-claude/structured-outputs -- output_config.format, strict tool use, JSON Schema support matrix
+- https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool -- computer use architecture, safety guidance, pricing
+- https://platform.claude.com/docs/en/api/rate-limits -- spend limits, RPM/ITPM/OTPM, cache-aware limiting, tiers, response headers
+- https://platform.claude.com/docs/en/api/errors -- HTTP error codes, error shape, request IDs, common validation errors
+- https://platform.claude.com/docs/en/build-with-claude/streaming -- SSE event sequence, delta types, error events
+- https://platform.claude.com/docs/en/api/versioning -- anthropic-version header contract and history
+- https://platform.claude.com/docs/en/build-with-claude/batch-processing -- Message Batches API mechanics, limits, pricing
+- https://platform.claude.com/docs/en/about-claude/model-deprecations -- deprecation policy, notice period, full lifecycle table, parameter deprecations
+- https://platform.claude.com/docs/en/manage-claude/authentication -- API keys, Workload Identity Federation, App Attest
+- https://platform.claude.com/docs/en/test-and-evaluate/develop-tests -- success criteria, eval design principles, grading methods
+- https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks -- jailbreak/prompt-injection threat model and mitigations
+- https://platform.claude.com/docs/en/cli-sdks-libraries/overview -- CLI, client SDKs, libraries/integrations, Agent SDK/Managed Agents disambiguation
+- https://code.claude.com/docs/en/agent-sdk/overview -- Claude Agent SDK architecture, capabilities, comparison table (separate host from platform.claude.com)
+- https://platform.claude.com/docs/en/managed-agents/overview -- Managed Agents architecture, core concepts, when to use, beta status, ZDR ineligibility
+- https://platform.claude.com/docs/en/about-claude/pricing -- full pricing structure, tool/feature-specific pricing, Managed Agents billing
+- https://platform.claude.com/docs/en/build-with-claude/vision -- image formats/limits, token cost, multi-image guidance, documented limitations
+- https://docs.claude.com/en/docs/test-and-evaluate/eval-tool -- used only to confirm the 302 redirect to platform.claude.com (host-migration verification)
 
 ## ClickHouse
 
@@ -801,6 +831,36 @@ This file registers every official documentation source consulted while research
 - https://github.com/nuxt/nuxt/releases -- Official GitHub releases page: current version numbers and release dates
 - https://nuxt.com/modules/security -- nuxt-security module listing page (used to confirm community, not core-team, maintainership)
 
+## OpenAI API
+
+- https://developers.openai.com/api/docs/guides/text -- Responses vs. Chat Completions, message roles, `instructions` parameter, prompt-object deprecation
+- https://developers.openai.com/api/docs/guides/prompt-engineering -- prompt structure framework, few-shot, model-specific guidance, agentic/coding-task practices, model pinning
+- https://developers.openai.com/api/docs/models -- current model lineup, context windows, pricing, knowledge cutoffs
+- https://developers.openai.com/api/docs/guides/function-calling -- tool definitions, tool_choice, parallel tool calls, strict mode, best practices
+- https://developers.openai.com/api/docs/guides/structured-outputs -- JSON Schema strict mode, relationship to function calling, refusals
+- https://developers.openai.com/api/docs/guides/reasoning -- reasoning models, reasoning.effort levels, when to use reasoning vs. standard models
+- https://developers.openai.com/api/docs/guides/prompt-caching -- cache mechanics, breakpoints, minimum tokens, TTL, cost model, monitoring
+- https://developers.openai.com/api/docs/guides/agents -- Agents SDK loop, handoffs, agents-as-tools, guardrails, approval flows, state-management strategies
+- https://developers.openai.com/api/docs/guides/tools -- built-in tools overview (web search, file search, tool search, function calling)
+- https://developers.openai.com/api/docs/guides/tools-code-interpreter -- Code Interpreter, container/sandbox model, file support
+- https://developers.openai.com/api/docs/guides/tools-file-search -- File Search tool, vector stores, customization options
+- https://developers.openai.com/api/docs/guides/tools-web-search -- Web Search tool modes, citations, domain filtering, limitations
+- https://developers.openai.com/api/docs/guides/evals -- Evals API workflow, grading, deprecation status
+- https://developers.openai.com/api/docs/guides/safety-best-practices -- prompt injection, moderation, human-in-the-loop, safety identifiers
+- https://developers.openai.com/api/docs/guides/moderation -- Moderation API, categories, cost, inline usage
+- https://developers.openai.com/api/docs/guides/rate-limits -- RPM/TPM/etc., usage tiers, 429 handling, traffic ramping
+- https://developers.openai.com/api/docs/guides/error-codes -- HTTP error codes, Python SDK exception types, retry guidance
+- https://developers.openai.com/api/docs/guides/streaming-responses -- SSE streaming, event types, tool-call streaming, moderation limitation
+- https://developers.openai.com/api/docs/libraries -- official SDKs by language, Agents SDK, Azure OpenAI compatibility
+- https://developers.openai.com/api/docs/guides/batch -- Batch API workflow, turnaround, discount, limits
+- https://developers.openai.com/api/docs/guides/images-vision -- image input methods, formats, detail levels, limitations
+- https://developers.openai.com/api/docs/deprecations -- deprecation policy, notice periods, terminology, recent deprecations list
+- https://developers.openai.com/api/docs/guides/migrate-to-responses -- Chat Completions → Responses migration guide, code differences, common errors, ZDR pattern
+- https://developers.openai.com/api/docs/guides/conversation-state -- previous_response_id, context window composition, truncation, compaction references
+- https://developers.openai.com/api/docs/pricing -- per-token pricing structure, cached input, Batch/Fast-mode/regional pricing modifiers
+- https://developers.openai.com/api/docs/changelog -- dated changelog entries (Assistants API shutdown, GA announcements, pricing changes)
+- https://developers.openai.com/api/reference/overview -- authentication (Bearer auth, API keys, org/project headers), base URL, request-ID headers
+
 ## OpenAPI
 
 - https://spec.openapis.org/oas/v3.2.0.html -- OpenAPI Specification v3.2.0 — current stable spec text
@@ -894,6 +954,37 @@ This file registers every official documentation source consulted while research
 - https://github.com/open-telemetry/opentelemetry-js/releases -- JS SDK release history
 - https://github.com/open-telemetry/opentelemetry-python/releases -- Python SDK release history
 - https://github.com/open-telemetry/opentelemetry-go/releases -- Go SDK release history
+
+## OWASP Top 10 for LLM Applications
+
+- https://genai.owasp.org/ -- GenAI Security Project mission and outputs index
+- https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/ -- 2026 edition resource page, publish date, download
+- https://genai.owasp.org/resource/owasp-top-10-for-llm-applications-2025/ -- 2025 edition resource page, project history, methodology
+- https://genai.owasp.org/2026/09/01/owasp-genai-security-project-unveils-2026-top-10-for-llm-applications-new-agent-control-standard-and-sponsors-as-community-tops-30000-members/ -- 2026 announcement: rank changes, ACS, community stats
+- https://genai.owasp.org/resource/owasp-genai-security-project-solutions-reference-guide-q2_q325/ -- Solutions Reference Guide description, publish date
+- https://genai.owasp.org/resource/agent-control-standard-acs/ -- Agent Control Standard description, publish date
+- https://genai.owasp.org/2025/01/22/announcing-the-owasp-gen-ai-red-teaming-guide/ -- Gen AI Red Teaming Guide announcement
+- https://github.com/OWASP/www-project-top-10-for-large-language-model-applications -- legacy-archive notice, pointer to canonical repo
+- https://github.com/GenAI-Security-Project/GenAI-LLM-Top10 -- canonical source repository structure, license
+- https://github.com/GenAI-Security-Project/GenAI-LLM-Top10/blob/main/OWASP%20Top%2010%20for%20LLM%20Applications%20Charter.md -- project charter: mission, governance, scope boundaries
+- https://api.github.com/repos/GenAI-Security-Project/GenAI-LLM-Top10/contents/2026/final -- 2026 file listing (confirms canonical 10-item order)
+- https://api.github.com/repos/GenAI-Security-Project/GenAI-LLM-Top10/contents/2025 -- 2025 file listing (confirms 2025 order)
+- https://raw.githubusercontent.com/GenAI-Security-Project/GenAI-LLM-Top10/main/2026/final/LLM00_Preface.md -- 2026 preface: methodology, Agentic Top 10 boundary
+- https://raw.githubusercontent.com/GenAI-Security-Project/GenAI-LLM-Top10/main/2026/final/LLM01_PromptInjection.md -- Prompt Injection (2026)
+- https://raw.githubusercontent.com/GenAI-Security-Project/GenAI-LLM-Top10/main/2026/final/LLM02_SensitiveInformationDisclosure.md -- Sensitive Information Disclosure (2026)
+- https://raw.githubusercontent.com/GenAI-Security-Project/GenAI-LLM-Top10/main/2026/final/LLM03_ExcessiveAgency.md -- Excessive Agency (2026)
+- https://raw.githubusercontent.com/GenAI-Security-Project/GenAI-LLM-Top10/main/2026/final/LLM04_SupplyChain.md -- Supply Chain (2026)
+- https://raw.githubusercontent.com/GenAI-Security-Project/GenAI-LLM-Top10/main/2026/final/LLM05_DataModelPoisoning.md -- Data and Model Poisoning (2026)
+- https://raw.githubusercontent.com/GenAI-Security-Project/GenAI-LLM-Top10/main/2026/final/LLM06_UnboundedConsumption.md -- Unbounded Consumption (2026)
+- https://raw.githubusercontent.com/GenAI-Security-Project/GenAI-LLM-Top10/main/2026/final/LLM07_Misinformation.md -- Misinformation (2026)
+- https://raw.githubusercontent.com/GenAI-Security-Project/GenAI-LLM-Top10/main/2026/final/LLM08_HiddenContextExposure.md -- Hidden Context Exposure (2026, renamed from System Prompt Leakage)
+- https://raw.githubusercontent.com/GenAI-Security-Project/GenAI-LLM-Top10/main/2026/final/LLM09_VectorAndEmbeddingWeaknesses.md -- Vector and Embedding Weaknesses (2026)
+- https://raw.githubusercontent.com/GenAI-Security-Project/GenAI-LLM-Top10/main/2026/final/LLM10_ImproperOutputHandling.md -- Improper Output Handling (2026)
+- https://raw.githubusercontent.com/GenAI-Security-Project/GenAI-LLM-Top10/main/2026/final/Appendix_A_Related_Framework_Mappings.md -- cross-walk to nine external frameworks
+- https://raw.githubusercontent.com/GenAI-Security-Project/GenAI-LLM-Top10/main/2026/final/Appendix_B_LLM_Application_Architecture_and_Threat_Modeling.md -- architecture/trust-boundary diagram (caption/alt-text only)
+- https://raw.githubusercontent.com/GenAI-Security-Project/GenAI-LLM-Top10/main/2026/final/LLMZZ_Appendix_AISVS_Mapping.md -- AISVS relationship and mapping
+- https://raw.githubusercontent.com/GenAI-Security-Project/GenAI-LLM-Top10/main/2026/final/references.md -- consolidated references, CWE/framework citations
+- https://raw.githubusercontent.com/GenAI-Security-Project/GenAI-LLM-Top10/main/2025/LLM00_Preface.md -- 2025 preface: history, methodology
 
 ## Playwright
 
@@ -1554,13 +1645,13 @@ Each domain below is counted once per technology that cites it (not once per URL
 
 | Domain | Technologies citing it |
 |---|---|
-| github.com | 29 |
-| raw.githubusercontent.com | 9 |
+| github.com | 30 |
+| raw.githubusercontent.com | 10 |
 | registry.npmjs.org | 9 |
 | developer.mozilla.org | 4 |
+| api.github.com | 3 |
 | firefox-source-docs.mozilla.org | 3 |
 | nodejs.org | 3 |
-| api.github.com | 2 |
 | developers.google.com | 2 |
 | docs.github.com | 2 |
 | github.blog | 2 |
@@ -1572,14 +1663,17 @@ Each domain below is counted once per technology that cites it (not once per URL
 | blog.typicode.com | 1 |
 | blogs.oracle.com | 1 |
 | clickhouse.com | 1 |
+| code.claude.com | 1 |
 | code.visualstudio.com | 1 |
 | dev.mysql.com | 1 |
 | devblogs.microsoft.com | 1 |
 | develop.sentry.dev | 1 |
 | developers.googleblog.com | 1 |
+| developers.openai.com | 1 |
 | devguide.python.org | 1 |
 | devtools.vite.dev | 1 |
 | devtools.vuejs.org | 1 |
+| docs.claude.com | 1 |
 | docs.docker.com | 1 |
 | docs.libuv.org | 1 |
 | docs.npmjs.com | 1 |
@@ -1590,6 +1684,7 @@ Each domain below is counted once per technology that cites it (not once per URL
 | en.wikipedia.org | 1 |
 | expressjs.com | 1 |
 | fastify.dev | 1 |
+| genai.owasp.org | 1 |
 | go.dev | 1 |
 | grafana.com | 1 |
 | graphql.org | 1 |
@@ -1607,6 +1702,7 @@ Each domain below is counted once per technology that cites it (not once per URL
 | peps.python.org | 1 |
 | pinia.vuejs.org | 1 |
 | pkg.go.dev | 1 |
+| platform.claude.com | 1 |
 | playwright.dev | 1 |
 | prometheus.io | 1 |
 | pypi.org | 1 |

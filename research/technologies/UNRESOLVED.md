@@ -1,6 +1,6 @@
 # Unresolved Items
 
-This file collects every unresolved question, ambiguity, or unverified claim flagged during research across the 49 technologies in this Skill Library project. These are gaps the researching agent explicitly declined to guess at -- conflicting official sources, pages that 404'd, facts sourced only from search summaries rather than direct fetches, or genuinely undocumented behavior. Treat these as known open questions to re-verify before relying on the adjacent claims in each technology's `research/technologies/<slug>.md` doc. Items are grouped by technology; technologies with no unresolved items are omitted.
+This file collects every unresolved question, ambiguity, or unverified claim flagged during research across the 52 technologies in this Skill Library project. These are gaps the researching agent explicitly declined to guess at -- conflicting official sources, pages that 404'd, facts sourced only from search summaries rather than direct fetches, or genuinely undocumented behavior. Treat these as known open questions to re-verify before relying on the adjacent claims in each technology's `research/technologies/<slug>.md` doc. Items are grouped by technology; technologies with no unresolved items are omitted.
 
 ## Angular
 
@@ -12,6 +12,15 @@ This file collects every unresolved question, ambiguity, or unverified claim fla
 - Router-specific testing guide content (guards/resolvers/navigation testing APIs) was not directly fetched, only noted as present in the router guide's navigation.
 - Exact version the CLI's build pipeline defaulted to Vite/esbuild (over legacy Webpack-based @angular-devkit/build-angular) was not pinned to a specific version boundary in official docs fetched.
 - Whether every 20.x/21.x/22.x minor release (not just the .0.0 majors) is free of breaking changes was not exhaustively verified against the full CHANGELOG.md, only assumed consistent with the documented semver policy.
+
+## Anthropic Claude API (Messages API)
+
+- Claude Console's dedicated interactive Evaluation tool: existence is well-attested via cross-links/site search, but two direct fetch attempts at its documented URL both returned the `develop-tests` page's content instead -- the feature-list claims (side-by-side comparison, 5-point grading, CSV import, `{{variable}}` templating) come from a WebSearch summary only and are flagged at reduced confidence.
+- The Token Counting API's (`POST /v1/messages/count_tokens`) own dedicated reference page was not independently fetched, despite being referenced from multiple other pages as the recommended pre-flight context-limit check.
+- The full `mcp_servers`/`mcp_toolset` parameter reference and the dedicated MCP connector page's exact parameter shapes were not independently fetched (existence and role confirmed from the tool-use overview and Managed Agents docs only).
+- Individual per-tool reference pages for web search, web fetch, code execution, advisor, and tool search were not each fetched in full (pricing/token-overhead numbers were captured, but not full request/response schemas).
+- The Agent SDK's `agent-loop`, `hooks`, `subagents`, `permissions`, and `sessions` sub-pages were not individually fetched -- the Agent SDK is a distinct product from the Messages API this doc otherwise covers, and was explicitly out of primary scope.
+- Amazon Bedrock and Google Cloud region-specific pricing and rate-limit specifics were not independently fetched -- Anthropic's own docs point off-site for those figures, and this research stayed within `platform.claude.com`.
 
 ## ClickHouse
 
@@ -220,6 +229,15 @@ This file collects every unresolved question, ambiguity, or unverified claim fla
 - No single consolidated 'Security' best-practices guide page (as opposed to advisory/patch-note blog posts) was located on nuxt.com/docs during this research pass -- it's possible one exists under a URL not surfaced by search/fetch in this session.
 - No official Nuxt docs page for migrating *from* a different framework (e.g., Next.js) to Nuxt was located -- only version-to-version (2->3, 3->4, 4->5-preview) upgrade guides exist in official docs as far as this research could confirm.
 
+## OpenAI API
+
+- Whether OpenAI exposes a header-based API-versioning mechanism (a claimed `openai-version` response header pinned to `2020-10-01`) alongside path-based `/v1/` versioning -- one fetched passage claimed this, but a follow-up search could not independently corroborate it against an official page, and no dedicated versioning-scheme guide page was located.
+- The full technical surface of the **Datasets** feature OpenAI is positioning as the Evals platform's replacement -- referenced by name in the Evals deprecation notice but no dedicated Datasets guide page was fetched.
+- A dedicated, first-party "authentication" guide page returned HTTP 404 at the URL pattern that worked reliably for every other guide fetched in this pass; authentication facts were instead sourced from the API reference overview page, so guide-level nuance beyond that page may be incompletely captured.
+- Full chunking-strategy mechanics for the File Search tool's vector stores were referenced ("see the retrieval guide for deeper technical detail") but not independently fetched.
+- Two fetched passages (one from the vision/images guide, one from the web-search tool guide) contained text referring to "Claude" rather than OpenAI's own models -- flagged by the original researching agent as fetch/summarization-tool artifacts and excluded from the doc rather than cited. A follow-up spot-fetch of the web-search guide page during this research pass's own verification step found no such text, consistent with the artifact explanation, but the vision/images guide page was not independently re-checked.
+- The complete list of JSON Schema features unsupported by Structured Outputs' strict mode was referenced by the docs ("some features are unavailable ... for performance or technical reasons") but the specific supported-schemas subpage enumerating them was not independently fetched.
+
 ## OpenAPI
 
 - Exact CHANGELOG.md contents for 3.1.1 and 3.0.4 patch releases — GitHub blob and raw.githubusercontent.com URLs both returned 404 during this session, so their 'editorial only' characterization rests on the upgrade guides' summary framing, not a direct changelog read.
@@ -243,6 +261,16 @@ This file collects every unresolved question, ambiguity, or unverified claim fla
 - Numeric SDK-instrumentation performance overhead (e.g. added per-request latency) from `/docs/collector/benchmarks/` — page exists in the docs but was not fetched in this pass.
 - **Grafana- and Sentry-specific technical integration detail** — `opentelemetry.io`'s own vendor/ecosystem page confirms both are OTLP-compatible backends but does not itself document the integration mechanics; that material lives on each vendor's own documentation site, outside OpenTelemetry's own docs. This is why the Grafana and Sentry research docs, not this one, carry the integration-mechanics detail.
 - A consolidated, cross-repository OpenTelemetry governance page (CNCF Governance Committee, Technical Committee, per-language SIGs) was not found; only the multi-repo *structure* was confirmed via `github.com/open-telemetry` directly, not the formal governance/decision-making process.
+
+## OWASP Top 10 for LLM Applications
+
+- No fetched OWASP page states an explicit "extends / replaces / orthogonal" relationship to the **traditional web-application** OWASP Top 10 by name (only to the sibling Agentic Top 10 and to AISVS) -- the closest located statement is the charter's scoping language that "general application security issues" are out of scope, plus LLM10's reuse of "parameterized database queries" as a direct point of technical continuity.
+- The 2025-to-2026 rank-change table is derived by this research pass comparing two independently-sourced order lists, not quoted from a single official changelog page -- only 3 of the 10 moves (Excessive Agency, Hidden Context Exposure's rename, Improper Output Handling) are independently confirmed in prose by the official September 2026 announcement post.
+- The original 2023 v1.0/v1.1 PDF content could not be retrieved (both historical `owasp.org` PDF URLs return HTTP 404); the 2023 list's exact original ten entries are not independently confirmed against an official source and were deliberately omitted from the sourced version-history material.
+- The Gen AI Red Teaming Guide's full internal structure (a four-category testing breakdown circulating in third-party commentary) could not be confirmed via a directly quotable OWASP-authored sentence -- only its scope description and publish date are directly sourced.
+- The Threat Defense COMPASS 1.0 resource was identified only via a search-result title/snippet, not independently fetched and quoted from its own `genai.owasp.org` page.
+- `genai.owasp.org/faq/` and the plain `owasp.org/www-project-top-10-for-large-language-model-applications` URL both returned HTTP 404, suggesting some of the project's older top-level OWASP.org page structure has been retired -- consistent with, but not itself confirming, a complete migration to `genai.owasp.org`.
+- Appendix B's architecture/trust-boundary diagram content could not be extracted as prose -- it is an embedded image, and only its caption and alt text were retrievable.
 
 ## Playwright
 

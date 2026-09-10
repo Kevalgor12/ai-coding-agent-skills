@@ -1,0 +1,100 @@
+id: SK-AI-003
+slug: structured-output-tool-calling
+name: Structured Output & Tool Calling
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: AI
+
+purpose: >-
+  Get reliable, schema-conformant structured output and tool/function calls
+  from an LLM — provider-neutral, covering tool-schema design, forcing
+  semantics, and the tool-call round trip.
+scope: >-
+  Structured output and tool/function calling, treated as one skill because
+  both researched vendors implement them via the same underlying enforcement
+  mechanism: Anthropic's strict tool use and output_config.format share a
+  "constrained decoding" mechanism, and OpenAI documents that strict-mode
+  function tools "use Structured Outputs internally," so the two features
+  "share one underlying enforcement engine" rather than being unrelated.
+  Covers tool-schema design, forcing semantics, parallel tool calls, the
+  tool-call round trip, and each platform's documented JSON Schema support
+  ceiling. Not the multi-step orchestration loop around tool calls
+  (agent-architecture) and not prompt/context design for what surrounds a
+  tool definition (prompt-context-engineering).
+expertise: LLM application engineer designing tool/function integrations and schema-constrained API responses.
+description: >-
+  Design tool/function schemas and JSON-schema-constrained structured output
+  so LLM responses and tool calls are schema-conformant — choose forcing
+  semantics (auto/required/forced/none), respect each provider's JSON
+  Schema support ceiling, and keep tool counts near the ~20 soft ceiling
+  with dynamic loading for larger sets. Use when a feature needs
+  schema-conformant output or the LLM to call external tools. Not the
+  orchestration loop around tool calls (routes to agent-architecture).
+
+activation_conditions:
+  - A feature needs schema-conformant/structured output from an LLM
+  - A feature needs the LLM to call external tools/functions
+  - Designing or reviewing a tool/function schema, forcing semantics, or the tool-call round trip
+non_activation_conditions:
+  - The output is unconstrained free text with no schema or tool involved
+  - The request is about the multi-step orchestration loop around tool calls rather than a single call's schema/round trip (route to agent-architecture)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The task requiring structured/schema-conformant output or external tool/function invocation.
+    required: true
+  - name: target-provider
+    description: The target model/provider, needed to apply the correct JSON Schema support ceiling and tool_choice vocabulary.
+    required: false
+outputs:
+  - name: schema-design
+    kind: analysis
+    description: Tool/function schema(s) and/or JSON-schema-constrained output design, matched to the task and the target provider's documented JSON Schema ceiling.
+  - name: round-trip-implementation
+    kind: edit
+    description: Tool-call round trip (tool_use/tool_result or function_call/function_call_output) and forcing-semantics configuration applied to the codebase.
+
+depends_on_skills: []
+related_skills: [SK-AI-001, SK-AI-002, SK-AI-004]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: research/technologies/anthropic-claude-api.md
+    title: "Anthropic Claude API Research — tool definitions, tool_choice, strict tool use, structured outputs, JSON Schema ceiling, client-tool agentic loop"
+    via: research/technologies/anthropic-claude-api.md
+    retrieved: "2026-09-10"
+  - url: research/technologies/openai-api.md
+    title: "OpenAI API Research — function/tool definitions, tool_choice, parallel tool calls, Structured Outputs, tool-count and tool-search guidance"
+    via: research/technologies/openai-api.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Tool/function schema design method (clear names, descriptions, parameter docs) shared across providers
+  - Forcing-semantics selection (auto / any-or-required / forced-specific / none / allowed-tools, parallel-call control) matched to task need
+  - Cross-provider JSON Schema support ceiling for constrained tool input and structured output
+  - Tool-count discipline (~20-tool soft ceiling) and dynamic/tool-search loading for larger tool ecosystems
+decision_framework_present: true
+
+failure_handling:
+  - If the target provider/model isn't stated, ask rather than silently assume a JSON Schema ceiling or tool_choice vocabulary that may not apply.
+  - If the request is actually about the multi-step orchestration loop around tool calls rather than a single call's schema/round trip, say so and route to agent-architecture (SK-AI-004) rather than answering as if it were in scope.
+verification:
+  - The proposed/implemented schema does not rely on a JSON Schema feature outside the target provider's documented support ceiling (e.g. no recursive schemas, no numeric/string-length constraints, no external $ref where unsupported, additionalProperties set as required).
+  - Forcing semantics (tool_choice value, parallel-call setting) match the task's actual need rather than defaulting to forcing every call.
+  - The turn's tool count stays near the ~20 soft ceiling documented by both platforms; larger tool ecosystems use dynamic/tool-search loading instead of one static list.
+escalation:
+  - A request that is really about the agent orchestration loop around tool calls (not a single call's schema/round trip) is routed to agent-architecture (SK-AI-004) rather than answered here.
+evaluation_criteria:
+  - On a fixture task, produces schema-conformant output or a correct tool-call round trip within the target provider's documented JSON Schema ceiling.
+  - Does not over-provision unnecessary tools into a single turn.
+  - Chooses forcing semantics appropriate to the task rather than defaulting to forcing every call.
+
+adapter_hints: {}

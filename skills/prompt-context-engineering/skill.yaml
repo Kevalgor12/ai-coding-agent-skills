@@ -1,0 +1,103 @@
+id: SK-AI-002
+slug: prompt-context-engineering
+name: Prompt & Context Engineering
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: AI
+
+purpose: >-
+  Design system prompts, message structure, and context-window composition
+  so LLM behavior is reliable — independent of which model provider is
+  targeted.
+scope: >-
+  Prompt architecture (system prompts, structural delimiters, few-shot
+  examples, role framing) and context engineering (context-window
+  composition/ordering, long-context placement, budget/rot management,
+  cache-friendly structuring). Grounded in Anthropic's and OpenAI's own
+  prompting guidance, which converge on largely the same structural
+  recommendations despite differing vendor terminology. Not the output's
+  shape (structured output/tool-calling schemas — structured-output-tool-calling)
+  or the multi-step orchestration loop around tool calls (agent-architecture).
+expertise: LLM application engineer specializing in prompt design and context-window management.
+description: >-
+  Design system prompts (role, instructions, examples, context ordering)
+  and context-window composition (long-context placement, budget/rot
+  management, cache-friendly prefix structuring) for reliable LLM behavior,
+  grounded in Anthropic's and OpenAI's own prompting guidance. Use when
+  designing or debugging a prompt, or when a long-running conversation
+  needs context-budget/caching design. Not for the output's shape
+  (structured output/tool calling — route to structured-output-tool-calling).
+
+activation_conditions:
+  - Designing or debugging a prompt
+  - Output quality depends on prompt or context structure
+  - A long-running conversation needs context-budget or compaction design
+  - Choosing what to place first/last in a long-context prompt
+  - Structuring a cache-friendly prompt prefix for a provider that supports prompt caching
+non_activation_conditions:
+  - The request is about the output's shape (structured output schemas, tool/function-calling definitions) rather than its content/quality — route to structured-output-tool-calling
+  - The request is about the multi-step orchestration loop around tool calls rather than a single prompt's structure — route to agent-architecture
+  - No LLM call is involved
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The feature/task the prompt needs to accomplish.
+    required: true
+  - name: target-model
+    description: The target model(s)/provider(s), since caching mechanics and some structural conventions are provider-specific.
+    required: false
+  - name: existing-prompt
+    description: Any existing prompt or context-assembly logic being debugged or improved.
+    required: false
+outputs:
+  - name: prompt-design
+    kind: analysis
+    description: A system prompt and message-structure design (role, instructions, examples, context ordering).
+  - name: context-management-approach
+    kind: analysis
+    description: A context-window composition/budget plan, including cache-friendly prefix structuring where the target provider supports prompt caching.
+
+depends_on_skills: []
+related_skills: [SK-AI-001, SK-AI-003, SK-AI-005]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: research/technologies/anthropic-claude-api.md
+    title: "Anthropic Claude API Research — prompting best practices, long-context placement, context rot, prompt-caching mechanics"
+    via: research/technologies/anthropic-claude-api.md
+    retrieved: "2026-09-10"
+  - url: research/technologies/openai-api.md
+    title: "OpenAI API Research — Identity/Instructions/Examples/Context prompt structure, reasoning-model prompting, prompt-caching mechanics"
+    via: research/technologies/openai-api.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Prompt-structure method (role/instructions/examples/context ordering) reconciling Anthropic's and OpenAI's documented frameworks
+  - Long-context placement rule (longform data before the query, not after)
+  - Context-budget/rot management and cache-friendly prefix structuring
+decision_framework_present: true
+
+failure_handling:
+  - If the target model/provider isn't stated, ask before committing to provider-specific caching mechanics or terminology; give provider-neutral structural guidance in the meantime.
+  - If the request is actually about output shape (structured output/tool-calling schemas), state that and redirect to structured-output-tool-calling rather than answering as if it were prompt/context design.
+verification:
+  - The proposed prompt follows a documented structure (role/instructions, examples, context) with long-context content placed before the query, not after.
+  - The context-management plan is proportionate to the task's actual context-window needs, not reflexively maximal (context rot is treated as a real cost, not ignored).
+  - No deprecated or documented anti-pattern constructs are used (assistant-message prefill, over-aggressive imperative tool-triggering language, unbounded free-text injection into a system prompt).
+escalation:
+  - A request that is actually about structured-output/tool-calling schema design is redirected to structured-output-tool-calling rather than answered here.
+  - A request about the orchestration loop around multiple tool calls is redirected to agent-architecture rather than answered here.
+evaluation_criteria:
+  - On a fixture prompt-quality task, produces a prompt following documented structural best practices (role, instructions, examples, context ordering).
+  - Produces a context-budget/caching plan proportionate to the task's context-window needs, placing long-context content before the query.
+  - Correctly declines/redirects a request that is really about output-shape or tool-calling-loop concerns rather than prompt/context design.
+
+adapter_hints: {}

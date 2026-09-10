@@ -149,7 +149,7 @@ faked — consistent with the project's "mark unresolved, don't guess" rule.
 |---|---|---|
 | **Observability** (logging/metrics/tracing/APM) | **Resolved 2026-09-10.** A dedicated research pass on OpenTelemetry, Prometheus, Grafana, and Sentry closed the original near-zero-grounding gap (`research/technologies/opentelemetry.md`, `prometheus.md`, `grafana.md`, `sentry.md`). | `SK-QA-004` authored, specialized by `SK-TECH-opentelemetry|prometheus|grafana|sentry`. |
 | **Reliability / resilience patterns** (retries, circuit breakers, timeouts, bulkheads, graceful degradation) | Genuinely distinct from observability — no resilience-pattern library/framework (Polly/resilience4j/opossum-equivalent) has been researched. Surfaced as its own gap during the observability research pass rather than being folded in. | No skill yet; **add a dedicated research pass** if application-level resilience-pattern guidance is in scope, separate from the now-resolved observability pass. |
-| **AI/LLM engineering** | Brief lists it; none of the 44 researched technologies covers LLM app-building. | Skill `SK-AI-001` proposed but flagged; needs research (the session's `claude-api` reference is a start, not library research). |
+| **AI/LLM engineering** | **Resolved 2026-09-10.** A dedicated research pass on the Anthropic Claude API, the OpenAI API, and the OWASP Top 10 for LLM Applications closed the original near-zero-grounding gap (`research/technologies/anthropic-claude-api.md`, `openai-api.md`, `owasp-llm-top10.md`). The single thin `SK-AI-001` placeholder was decomposed, as a principal-architect taxonomy pass, into 8 skills against the master plan's 14 named candidates — merging tightly-coupled pairs (prompt+context, structured-output+tool-calling, RAG+embeddings, evaluation+hallucination-mitigation) and declining to add a 9th "AI Observability" skill (folded into the root skill) or a new "Vector Search" skill (already covered by `SK-DATA-005`). | `SK-AI-001` (root) through `SK-AI-008` authored — see skill-catalog.md's AI/LLM section. |
 | **Async messaging / queues** (Kafka, RabbitMQ, SQS) | Concept map flagged: no broker beyond Redis pub/sub researched. | No skill yet; **add a research pass** if the library should cover event-driven/queue architectures. |
 | **Authentication/authorization (unified)** | Concept map flagged auth as fragmented across JWT/OAuth2/MFA/session/RBAC with no unifying skill. | **Created** `SK-BE-005` to unify it — grounded in the fragments the research does have, but would benefit from dedicated auth research. |
 | **Infrastructure-as-code beyond containers** (Terraform, Kubernetes) | K8s appears only as an integration *target* in the research, never researched itself. | No skill; **add research** if IaC/orchestration is in scope. |
@@ -161,7 +161,7 @@ faked — consistent with the project's "mark unresolved, don't guess" rule.
 ### Generic skills (technology-neutral)
 All of Layers 0–3: `SK-ORCH-001..003`, `SK-DISC-001..004`, `SK-CONV-001..008`,
 `SK-FE-001..005`, `SK-BE-001..005`, `SK-DATA-001..006`, `SK-INFRA-001..003`,
-`SK-QA-001..004`, `SK-GROW-001..002`, `SK-AI-001`. These hold version-stable
+`SK-QA-001..004`, `SK-GROW-001..002`, `SK-AI-001..008`. These hold version-stable
 engineering *method* and are the most portable across agents.
 
 ### Technology-specific skills

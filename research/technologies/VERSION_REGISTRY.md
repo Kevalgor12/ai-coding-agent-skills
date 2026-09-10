@@ -1,6 +1,6 @@
 # Version Registry
 
-This file registers every version-sensitive fact captured while researching the 49 technologies in this Skill Library project -- specific release numbers, dates, deprecations, breaking-change milestones, and support-window boundaries that a skill or agent should be aware of before treating guidance as current. Facts are grouped by technology in the order captured during research.
+This file registers every version-sensitive fact captured while researching the 52 technologies in this Skill Library project -- specific release numbers, dates, deprecations, breaking-change milestones, and support-window boundaries that a skill or agent should be aware of before treating guidance as current. Facts are grouped by technology in the order captured during research.
 
 ## Angular
 
@@ -10,6 +10,16 @@ This file registers every version-sensitive fact captured while researching the 
 - v19 -- Standalone became the default for the `standalone` component option (previously defaulted to false pre-19.0.0)
 - v18 (referenced, not independently deep-verified) -- Event Replay for hydration became available, per a WebFetch summary of the hydration guide
 - pre-v22 (all majors) -- 6-month major release cycle with 1-3 minors per major and an 18-24 month-ish support window; v22 changed cadence to ~12-month majors with 4-6 minors and a formal 24-month (12 Active + 12 LTS) support window
+
+## Anthropic Claude API (Messages API)
+
+- Current model lineup (four active tiers): Claude Fable 5.1 (`claude-fable-5-1`), Claude Opus 5 (`claude-opus-5`), Claude Sonnet 5 (`claude-sonnet-5`), Claude Haiku 4.5 (`claude-haiku-4-5-20251001`) -- docs default recommendation is Opus 5 for most workloads, Fable 5.1 for demanding reasoning/long-horizon agentic work. Legacy-but-available: Fable 5, Opus 4.8/4.7/4.6/4.5, Sonnet 4.6/4.5.
+- `anthropic-version` header contract: `2023-06-01` is current (incremental streaming deltas, named SSE events, removed `data: [DONE]` sentinel and legacy `exception`/`truncated` values); `2023-01-01` was the initial release. Previous versions are deprecated and may be unavailable for new users.
+- Model-ID versioning changed at the 4.6 generation: from Claude 4.6 onward, dateless model-ID strings (e.g. `claude-opus-5`) are themselves pinned snapshots, not aliases over a hidden dated ID (pre-4.6 models use the alias-over-dated-ID pattern).
+- Retirement commitments (Anthropic-operated platforms; Bedrock/Google Cloud set their own): Fable 5.1 not sooner than 2027-09-01; Opus 5 not sooner than 2027-07-24; Sonnet 5 not sooner than 2027-06-30; Opus 4.8 not sooner than 2027-05-28; Opus 4.7 not sooner than 2027-04-16; Sonnet 4.6 not sooner than 2027-02-17; Opus 4.6 not sooner than 2027-02-05; Haiku 4.5 not sooner than 2026-10-15.
+- Sonnet 5's $2/$10-per-MTok launch pricing was introductory through August 31, 2026 but was made permanent -- a previously-announced increase to $3/$15 was retracted rather than taking effect.
+- Tokenizer change at Claude 4.7+: ~30% more tokens for the same text versus the pre-4.7 tokenizer -- a breaking change for any hardcoded token-budget math, not a request-shape error.
+- Breaking changes on current models: assistant-message prefill removed (Claude 4.6+); manual/extended thinking (`thinking.type.enabled`) removed on Claude 4.7+ (400 error; use `adaptive` + `output_config.effort`); sampling parameters (`temperature`/`top_p`/`top_k`) rejected as non-default on Opus 4.7+; thinking cannot be disabled at all on Fable 5.1/Mythos 5.1/Fable 5/Mythos 5/Mythos Preview.
 
 ## ClickHouse
 
@@ -252,6 +262,18 @@ This file registers every version-sensitive fact captured while researching the 
 - Node.js 22.x+ -- Minimum Node version for current stable Nuxt 4.x line; Node 22.19+ specifically required post-jiti-removal in the 3→4 upgrade
 - 5.x ~Q4 2026 (forward-looking, unreleased) -- Planned next major, includes Nitro v3; not yet stable at research time so breaking-changes list is preview-only
 
+## OpenAI API
+
+- Documentation host migration: `platform.openai.com/docs/*` 301-redirects to `developers.openai.com/api/docs/*` (confirmed via direct fetch); the API reference itself lives under `developers.openai.com/api/reference/`.
+- Current flagship model lineup, per the models page at research time: `gpt-6-astra` ("GPT-6 Astra," 1.05M-token context, 128K max output, $10/$50 per MTok, knowledge cutoff April 30, 2026) and the GPT-5.6 family -- `gpt-5.6-sol` ($4/$20/MTok), `gpt-5.6-terra` ($2/$12/MTok), `gpt-5.6-luna` ($0.20/$1.20/MTok) -- all sharing a 1.05M-token context window and February 16, 2026 knowledge cutoff.
+- **Assistants API retired August 26, 2026**, migration target is the Responses API plus the Conversations API for persistent state -- fully superseded, not merely deprecated toward an unspecified successor.
+- **Evals platform being deprecated**: read-only by October 31, 2026, full shutdown November 30, 2026; documented replacement is an unreleased "Datasets" feature. Agent Builder shuts down the same date (November 30, 2026).
+- Model-snapshot deprecations with concrete dates: GPT-5/o3 snapshots (`gpt-5-2025-08-07`, `o3-2025-04-16`) deprecated June 11, 2026, retiring December 11, 2026 (successor `gpt-5.6-sol`); legacy GPT models (`gpt-3.5-turbo`, `gpt-4`, `gpt-4-turbo`, older o1/o3 variants) deprecated April 22, 2026, retiring October 23, 2026; legacy transcription models deprecated August 26, 2026, retiring February 26, 2027; legacy audio/realtime model families deprecated July 20, 2026, retiring January 20, 2027.
+- Deprecation-notice policy is tiered: generally-available models get at least 6 months' notice; specialized variants (chat/Codex/deep-research) get at least 3 months; `preview`-named models may get as little as 2 weeks.
+- **Strict-mode default flip**: Responses API attempts strict schema mode by default; Chat Completions defaults to non-strict -- a request that succeeded pre-migration with slightly malformed tool arguments can start failing purely from this default change.
+- Pricing/naming changes outside the deprecation cadence: July 30, 2026 update cut GPT-5.6 Luna cost 80% and Terra cost 20%, and renamed "Priority processing" to "Fast mode."
+- Prompt objects (`v1/prompts`) being wound down: de-emphasized beginning June 3, 2026, scheduled shutdown November 30, 2026 -- documented replacement is storing prompts in application source control.
+
 ## OpenAPI
 
 - 3.2.0 -- Current stable, published 2025-09-19. Non-breaking upgrade from 3.1.x per official guide. Adds structured/nested tags, query HTTP method, additionalOperations, streaming media types (SSE/JSONL/json-seq/multipart), OAuth2 Device Flow, oauth2MetadataUrl, $self field, discriminator defaultMapping.
@@ -277,6 +299,14 @@ This file registers every version-sensitive fact captured while researching the 
 - OpenTelemetry JS SDK v2.0.0 -- Minimum Node.js raised to `^18.19.0 || >=20.6.0` (drops 14/16/early 18-20); minimum TypeScript raised to 5.0.4; `parentSpanId` replaced by `parentSpanContext`; `instrumentationLibrary` renamed `instrumentationScope`; `Resource` class made private in favor of factory functions.
 - OpenCensus repository archival (2023-07-31) -- Hard breaking change for any project still directly depending on OpenCensus client libraries; the documented OpenCensus bridge is the only forward-compatible migration path.
 - Approximate current releases (exact dates unconfirmed, re-verify before relying on them) -- Collector core/contrib ~v1.66.0/v0.160.0; JS SDK ~v2.11.0; Python ~v1.44.0/v0.65b0; Go ~v1.46.0 stable with v1.47.0-rc.1 (Logs API/SDK) in testing.
+
+## OWASP Top 10 for LLM Applications
+
+- **Current edition is the OWASP GenAI LLM Top 10 2026 (v1.0), published August 2026**, superseding the OWASP Top 10 for LLM Applications 2025 (v2.0, published November 17, 2024), which itself superseded the original 2023 v1.0/v1.1 list. Any skill built from this research should be re-checked when a 2027 edition ships.
+- 8 of the 10 risk entries changed rank or name between the 2025 and 2026 editions; only Prompt Injection (1st) and Sensitive Information Disclosure (2nd) held their exact position. Largest moves: **Excessive Agency jumped from 6th (2025) to 3rd (2026)**; **Improper Output Handling dropped from 5th (2025) to 10th (2026)**.
+- **"System Prompt Leakage" (LLM07:2025) was renamed and rescoped to "Hidden Context Exposure" (LLM08:2026)** -- broadened from just the system prompt to any hidden, non-user-facing context (RAG-injected policy, tool schemas) reaching the model, with regulated-data leakage and agentic amplification concerns explicitly carved back out to LLM02/LLM03.
+- 2026 methodology change: the list now blends incident-data validation (7,714 real incidents reviewed, 6,639 classifiable) with community/practitioner judgment, weighted 25% data / 75% judgment -- a deliberate, documented choice to keep incident data advisory rather than authoritative.
+- Original 2023 v1.0/v1.1 PDF URLs (`owasp.org/www-project-top-10-for-large-language-model-applications/assets/PDF/...`) return HTTP 404 at research time; canonical hosting has moved to `genai.owasp.org` and the `GenAI-Security-Project/GenAI-LLM-Top10` GitHub repository (the original `OWASP/` org repository is now a legacy archive pointer only).
 
 ## Playwright
 

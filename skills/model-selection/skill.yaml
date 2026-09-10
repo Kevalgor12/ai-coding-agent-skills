@@ -1,0 +1,103 @@
+id: SK-AI-006
+slug: model-selection
+name: Model Selection
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: AI
+
+purpose: >-
+  Choose the right LLM provider and model tier for a task's actual
+  capability, cost, and latency requirements, using vendor-neutral
+  trade-off reasoning instead of defaulting to the most capable or most
+  expensive option.
+scope: >-
+  Model/provider/tier selection as a vendor-neutral decision framework,
+  explicitly grounded in more than one vendor's own documented guidance
+  rather than a single-vendor recommendation. Not prompt/context design
+  (SK-AI-002), not tool-schema or agent-loop design (SK-AI-003/SK-AI-004),
+  not eval-harness design (SK-AI-007) — this skill decides which model
+  answers a call; those skills decide how the call is shaped and verified.
+  Current model names/prices cited from this skill's grounding research
+  are illustrative worked examples of the method, not the skill's actual
+  deliverable, and will go stale — re-verify against current vendor docs
+  before quoting a specific price or tier name.
+expertise: Engineer choosing LLM infrastructure cost/capability/latency trade-offs for a production feature.
+description: >-
+  Choose the right LLM provider and model tier for a task's capability,
+  cost, and latency needs — a vendor-neutral decision method, not a fixed
+  recommendation, using Anthropic's and OpenAI's own tiering guidance as
+  worked examples that go stale. Weighs capability vs. cost vs. latency vs.
+  context-window against actual requirements; accounts for snapshot pinning
+  and deprecation-notice practices. Use when choosing a model/provider/tier,
+  or auditing whether a current model is oversized for its task.
+
+activation_conditions:
+  - Choosing which model/provider/tier a feature should call
+  - Evaluating whether a currently-used model is appropriately sized (over- or under-powered) for its task
+  - Reviewing a production LLM integration's model choice before ship
+non_activation_conditions:
+  - The model is already fixed by an external constraint with no real choice to make (e.g. a mandated single-vendor contract)
+  - The request is about prompt/context design, tool-schema/agent-loop design, or eval-harness design rather than which model/tier to call
+activation_mode: auto
+
+inputs:
+  - name: task-requirements
+    description: The task's capability need, cost/latency budget, and context-window need.
+    required: true
+  - name: candidate-providers-models
+    description: The providers/models under consideration, if already constrained (e.g. by an existing vendor contract).
+    required: false
+outputs:
+  - name: model-selection
+    kind: analysis
+    description: The chosen model/provider/tier for the task.
+  - name: selection-rationale
+    kind: analysis
+    description: >-
+      The explicit capability/cost/latency/context-window trade-off behind
+      the choice, including a production snapshot-pinning/deprecation-
+      monitoring plan where relevant.
+
+depends_on_skills: []
+related_skills: [SK-AI-001, SK-AI-007]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: official-docs
+source_references:
+  - url: research/technologies/anthropic-claude-api.md
+    title: "Anthropic Claude API Research — model lineup/tiering, comparative latency, pricing, effort parameter, snapshot pinning, deprecation/retirement dates"
+    via: research/technologies/anthropic-claude-api.md
+    retrieved: "2026-09-10"
+  - url: research/technologies/openai-api.md
+    title: "OpenAI API Research — model lineup/tiering, reasoning.effort parameter, pricing, snapshot pinning, tiered deprecation-notice policy"
+    via: research/technologies/openai-api.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - The capability-vs-cost-vs-latency-vs-context-window selection method itself, not any specific model name — current tiers are worked examples only and will go stale
+  - Reading a vendor's own "start with the default tier, escalate for harder cases" guidance as a reusable pattern rather than a one-time product endorsement
+  - Production model-snapshot pinning and deprecation-notice-monitoring discipline as it bears on model choice
+decision_framework_present: true
+
+failure_handling:
+  - If the task's cost/latency budget or capability need isn't stated, ask rather than defaulting reflexively to the most capable/expensive tier.
+  - If the model is genuinely fixed by an external constraint, say so and skip the selection exercise rather than manufacturing a choice.
+verification:
+  - The stated selection is proportionate to the task's stated capability requirement — not the most capable/expensive tier by default when a cheaper tier would meet the bar.
+  - The rationale explicitly names the capability/cost/latency/context-window trade-off made, not just the chosen model.
+  - Any current model name/price cited is flagged as a worked example to re-verify against current vendor docs, not asserted as durably current.
+  - For a production selection, a snapshot-pinning and deprecation-notice-monitoring plan is stated.
+escalation:
+  - If a task's real requirement is too ambiguous to justify one tier over another, escalate to the requester for a concrete capability/cost/latency bar rather than guessing.
+evaluation_criteria:
+  - Given a task's stated capability/cost/latency requirements, selects a tier proportionate to the requirement and states the trade-off explicitly rather than defaulting silently.
+  - Correctly declines to answer with a hardcoded model recommendation treated as evergreen truth — flags current lineup facts as worked examples subject to re-verification.
+  - Given a production selection, states a snapshot-pinning/deprecation-monitoring plan appropriate to the target vendor's documented notice-period practice.
+
+adapter_hints: {}

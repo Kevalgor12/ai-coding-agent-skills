@@ -64,7 +64,7 @@ outputs:
     description: Index/analyzer/mapping design, relevance-tuning approach, and the strategy for keeping the index in sync with the source of truth.
 
 depends_on_skills: []
-related_skills: [SK-DATA-001, SK-TECH-postgresql, SK-TECH-redis, SK-AI-001]
+related_skills: [SK-DATA-001, SK-TECH-postgresql, SK-TECH-redis, SK-AI-001, SK-AI-005]
 conflicts_with: []
 
 required_capabilities: [file-read, file-write, shell]

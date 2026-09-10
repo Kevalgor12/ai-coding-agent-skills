@@ -644,18 +644,127 @@ Execution tier (A/B/C) is per [README.md](README.md#vendor-neutrality-model-how-
 
 ## AI / LLM
 
-### SK-AI-001 · llm-application-engineering  *(research-gap — see analysis)*
-- **Purpose:** Build LLM-powered features — prompt design, tool/function calling, RAG, evaluation, model selection.
-- **Scope:** LLM application engineering. **Flagged:** none of the 44 researched technologies covers this; grounding must come from a new research pass (the session's `claude-api` reference is a starting point, not library research).
-- **Responsibilities:** Prompt/context design; tool/function-calling patterns; RAG (ties to `SK-DATA-005` vector search); output validation; eval harness for LLM features; model/provider selection.
+*Resolved 2026-09-10.* Originally one thin, research-gap-flagged placeholder
+(`SK-AI-001`). A dedicated research pass (Anthropic Claude API, OpenAI API,
+OWASP Top 10 for LLM Applications 2026) and a principal-architect taxonomy
+pass decomposed it into 8 skills against the master plan's 14 named
+candidates — merging tightly-coupled pairs (prompt+context,
+structured-output+tool-calling, RAG+embeddings, evaluation+hallucination-mitigation),
+declining a 9th "AI Observability" skill (folded into the root skill as a
+lightweight extension of `SK-QA-004`), and declining a new "Vector Search"
+skill (already covered by `SK-DATA-005`). See
+[taxonomy-analysis.md](taxonomy-analysis.md#missing-capabilities).
+
+### SK-AI-001 · llm-application-engineering
+- **Purpose:** Decide the architecture of an LLM-powered feature — which AI/LLM disciplines apply and how they compose — and own lightweight LLM-specific observability.
+- **Scope:** The AI/LLM domain's root skill. Composes `SK-AI-002`–`SK-AI-008` selectively rather than reimplementing them; no dominant single LLM-provider technology to specialize into (model selection, `SK-AI-006`, is itself the vendor-neutral decision layer, grounded in both Anthropic's and OpenAI's documented guidance). Also owns LLM-call observability (prompt/completion logging, token/cost tracking, per-call latency) as a lightweight extension of the already-authored `SK-QA-004`, not as a separate skill — research found no LLM-specific observability concern deep enough to warrant one.
+- **Responsibilities:** Decide which of `SK-AI-002`–`SK-AI-008` a feature needs and sequence them; own the LLM-call observability plan (structured request/response logging with secret/PII scrubbing, token/cost tracking, latency); flag over-engineering (e.g. reaching for agent-architecture or RAG when a single structured-output call suffices).
 - **Inputs:** LLM feature requirement.
-- **Outputs:** LLM feature design/implementation + eval plan.
-- **Activation conditions:** Building a feature that calls an LLM.
-- **Non-activation conditions:** No LLM in the feature.
-- **Dependencies:** Related `SK-DATA-005` (vector/RAG); **needs new research**.
+- **Outputs:** LLM feature architecture (applicable sub-disciplines + composition) + LLM-call observability plan.
+- **Activation conditions:** Starting a new LLM-powered feature; deciding its overall shape before implementation.
+- **Non-activation conditions:** No LLM in the feature; the request is already scoped to one specific sub-discipline (route directly to `SK-AI-002`–`SK-AI-008`).
+- **Dependencies:** Related `SK-AI-002`–`SK-AI-008` (composes selectively, not unconditionally); related `SK-QA-004` (general observability, specialized here).
 - **Conflicts:** None.
-- **Related:** `SK-QA-001` (LLM evals), `SK-DATA-005`.
-- **Evaluation requirements:** (Partly deferred until research exists.) Provisionally: produces an LLM feature with validated/structured output and an eval harness rather than vibes-based acceptance.
+- **Related:** `SK-AI-002`–`SK-AI-008`, `SK-QA-004`.
+- **Evaluation requirements:** Given a feature requirement, correctly identifies which sub-disciplines apply and declines the ones that don't; LLM-call observability plan never logs unscrubbed secrets/PII in prompts or completions.
+- **Tier:** A/B.
+
+### SK-AI-002 · prompt-context-engineering
+- **Purpose:** Design system prompts, message structure, and context-window composition for reliable LLM behavior.
+- **Scope:** Prompt architecture (system prompts, structural delimiters, few-shot examples, role framing) and context engineering (context-window composition/ordering, long-context placement, budget/rot management, cache-friendly structuring). Grounded in Anthropic's and OpenAI's own prompting guidance, which converge on largely the same structural recommendations despite differing vendor terminology.
+- **Responsibilities:** Structure system prompts (role, instructions, examples, context ordering); place long-context content before the query, not after; manage context budget as a conversation grows; structure cache-friendly prefixes (stable content first) where the target provider supports prompt caching; avoid documented anti-patterns (over-aggressive imperative tool-triggering language, deprecated prefill-based patterns).
+- **Inputs:** Feature/task the prompt needs to accomplish; target model(s); any existing prompt.
+- **Outputs:** System prompt + message-structure design; context-management approach.
+- **Activation conditions:** Designing or debugging a prompt; output quality depends on prompt/context structure; long-running conversations need budget/compaction design.
+- **Non-activation conditions:** The request is about the output's *shape* (structured output/tool calling — route to `SK-AI-003`) rather than its content/quality.
+- **Dependencies:** Related `SK-AI-003` (structured output/tool calling), `SK-AI-005` (RAG's retrieved content is a context-engineering input), `SK-AI-001`.
+- **Conflicts:** None.
+- **Related:** `SK-AI-001`, `SK-AI-003`, `SK-AI-005`.
+- **Evaluation requirements:** On a fixture prompt-quality task, produces a prompt following documented structural best practices and a context-budget/caching plan proportionate to the task's context-window needs.
+- **Tier:** A/B.
+
+### SK-AI-003 · structured-output-tool-calling
+- **Purpose:** Get reliable, schema-conformant structured output and tool/function calls from an LLM.
+- **Scope:** Structured output and tool/function calling, treated as one skill because both researched vendors implement them via the same underlying enforcement mechanism (Anthropic's strict tool use/`output_config.format`; OpenAI's Structured Outputs and strict-mode function tools share "one underlying enforcement engine"). Covers tool-schema design, forcing semantics, parallel tool calls, the tool-call round trip, and each platform's documented JSON Schema support ceiling.
+- **Responsibilities:** Design tool/function schemas (clear names, descriptions, parameter docs); choose forcing semantics appropriate to the task; design the tool-call round trip; design JSON-schema-constrained output for non-tool structured responses; work within the target provider's JSON Schema support ceiling; keep the tool count small (~20 is the documented soft ceiling on both platforms) and use dynamic tool loading for larger tool ecosystems.
+- **Inputs:** Task requiring structured/schema-conformant output or external tool invocation; target model/provider.
+- **Outputs:** Tool/schema definitions + round-trip handling design.
+- **Activation conditions:** A feature needs schema-conformant output; a feature needs the LLM to call external tools/functions.
+- **Non-activation conditions:** The output is unconstrained free text; the request is about the multi-step orchestration loop around tool calls (route to `SK-AI-004`).
+- **Dependencies:** Related `SK-AI-004` (agent architecture builds on tool calling), `SK-AI-002` (context for tool definitions).
+- **Conflicts:** None.
+- **Related:** `SK-AI-001`, `SK-AI-002`, `SK-AI-004`.
+- **Evaluation requirements:** On a fixture task, produces schema-conformant output or a correct tool-call round trip within the target provider's documented JSON Schema ceiling; doesn't over-provision unnecessary tools into a single turn.
+- **Tier:** A/B.
+
+### SK-AI-004 · agent-architecture
+- **Purpose:** Architect multi-step, tool-using LLM agent loops — the orchestration layer above a single tool call.
+- **Scope:** Agent loop design (the while-loop-on-stop-reason pattern both researched vendors document), state-management strategy across turns, multi-agent patterns (handoffs, subagents) where supported, and hand-rolled-loop vs. managed-framework choice per each vendor's own documented criteria. Distinct from `SK-AI-003` (a single tool call's mechanics) and from excessive-agency risk management (owned by `SK-AI-008`).
+- **Responsibilities:** Design the agent's tool-execution loop and termination conditions; choose a state-management/conversation-persistence strategy; decide hand-rolled loop vs. managed framework per the task's control-vs-convenience trade-off; design multi-agent composition only where genuinely needed; bound agent autonomy (step/recursion/cost limits), coordinating with `SK-AI-008` on the security implications.
+- **Inputs:** Multi-step or tool-using task requiring an LLM agent; target platform.
+- **Outputs:** Agent loop/orchestration design + state-management strategy.
+- **Activation conditions:** A feature requires an LLM to autonomously sequence multiple tool calls or sub-tasks.
+- **Non-activation conditions:** A single tool call or single structured-output response suffices (route to `SK-AI-003`); the concern is really about bounding what the agent is authorized to do (route to `SK-AI-008`).
+- **Dependencies:** Related `SK-AI-003` (tool calling), `SK-AI-008` (excessive-agency/blast-radius limits).
+- **Conflicts:** None.
+- **Related:** `SK-AI-001`, `SK-AI-003`, `SK-AI-008`.
+- **Evaluation requirements:** On a fixture multi-step task, designs a bounded agent loop (explicit termination/step limits); correctly declines to add agent orchestration when a single call would do.
+- **Tier:** A/B.
+
+### SK-AI-005 · rag-engineering
+- **Purpose:** Design retrieval-augmented generation — grounding LLM output in retrieved content via embeddings and vector/semantic search.
+- **Scope:** The RAG pattern (retrieval → context injection → generation) and the embedding layer feeding it (model/dimensionality choice, chunking strategy). The vector/semantic *search infrastructure* itself is owned by the already-authored `SK-DATA-005` (search-integration), which already scopes "vector/semantic search"; this skill owns the RAG pattern and two risks the OWASP research documents directly (LLM09, LLM02): retrieval-authorization ordering and embedding-store sensitivity.
+- **Responsibilities:** Design the retrieve-then-generate pipeline; choose chunking/embedding strategy; design context injection (per `SK-AI-002`'s placement guidance); enforce authorization *inside* the retrieval query rather than filtering results after retrieval; treat embedding stores/backups as source-document-sensitive, not lower-sensitivity, per documented embedding-inversion risk.
+- **Inputs:** Task requiring grounding in a retrievable corpus.
+- **Outputs:** RAG pipeline design (retrieval, chunking/embedding choice, context injection) + authorization/sensitivity notes for the retrieval layer.
+- **Activation conditions:** A feature needs LLM output grounded in a specific document/data corpus rather than the model's own knowledge.
+- **Non-activation conditions:** No retrieval corpus involved; the request is about the search infrastructure itself (route to `SK-DATA-005`).
+- **Dependencies:** Related `SK-DATA-005` (vector/semantic search infrastructure), `SK-AI-002` (context injection), `SK-AI-008` (retrieval-authorization/embedding-sensitivity risk).
+- **Conflicts:** None.
+- **Related:** `SK-AI-001`, `SK-DATA-005`, `SK-AI-002`, `SK-AI-008`.
+- **Evaluation requirements:** On a fixture RAG task, designs authorization-at-query-time (not post-filter) retrieval and treats embedding backups as sensitive; correctly delegates pure search-infrastructure concerns to `SK-DATA-005`.
+- **Tier:** A/B.
+
+### SK-AI-006 · model-selection
+- **Purpose:** Choose the right LLM/provider/model tier for a task's capability, cost, and latency requirements.
+- **Scope:** Model/provider/tier selection as a vendor-neutral decision framework, explicitly grounded in more than one vendor's own documented guidance rather than a single-vendor recommendation — per the master plan's "do not assume one model/provider is always best."
+- **Responsibilities:** Weigh capability tier vs. cost vs. latency against the task's actual requirements (not reflexively defaulting to the most capable/expensive tier); apply each vendor's own "start with the default tier, escalate for harder cases" guidance as a pattern, not a specific product endorsement; account for context-window and per-request-cost differences across tiers; account for model-snapshot pinning and deprecation-notice practices when choosing a model for production use.
+- **Inputs:** Task requirements (capability need, cost/latency budget, context-window need); candidate providers/models.
+- **Outputs:** Model/provider/tier selection + rationale.
+- **Activation conditions:** Choosing which model/provider/tier a feature should call; evaluating whether a currently-used model is appropriately sized for its task.
+- **Non-activation conditions:** The model is already fixed by an external constraint with no real choice to make.
+- **Dependencies:** Related `SK-AI-001`.
+- **Conflicts:** None.
+- **Related:** `SK-AI-001`, `SK-AI-007`.
+- **Evaluation requirements:** Given a task's stated capability/cost/latency requirements, selects a tier proportionate to the requirement and states the trade-off explicitly rather than defaulting silently.
+- **Tier:** A.
+
+### SK-AI-007 · llm-evaluation
+- **Purpose:** Build evaluation harnesses for LLM-powered features and detect/mitigate hallucination.
+- **Scope:** LLM-specific evaluation (success-criteria design, grading-method selection, golden datasets, eval-before-ship discipline) and hallucination mitigation (grounding requirements, claim verification). Distinct from `SK-QA-001` (general testing-strategy): LLM output is *graded*, not merely asserted true/false, so this skill owns grading-method selection and hallucination-specific verification; ties back to `SK-QA-001` for surrounding test-suite discipline (fixtures, CI gating).
+- **Responsibilities:** Design measurable, specific, achievable success criteria; choose a grading method matched to the task (exact-match for categorical tasks, semantic-similarity/ROUGE for semantic tasks, LLM-as-judge for subjective ones — using a different model to grade than to generate); build/maintain a golden test-case set; design hallucination-mitigation checks (require grounding, verify claims before an agent acts on them); gate prompt/model changes behind eval regression checks before shipping.
+- **Inputs:** LLM feature and its stated behavioral requirements.
+- **Outputs:** Eval harness design (success criteria, grading method, test cases) + hallucination-mitigation checks.
+- **Activation conditions:** Building or reviewing an LLM feature that needs quality verification before shipping; a feature is exhibiting suspected hallucination.
+- **Non-activation conditions:** General (non-LLM-output) test authoring — route to `SK-QA-001`.
+- **Dependencies:** Related `SK-QA-001` (general testing-strategy/CI discipline).
+- **Conflicts:** None.
+- **Related:** `SK-AI-001`, `SK-QA-001`.
+- **Evaluation requirements:** Given an LLM feature, produces success criteria and a grading method matched to the task type; hallucination-mitigation checks require grounding rather than trusting fluent-but-unverified output.
+- **Tier:** A/B.
+
+### SK-AI-008 · ai-security
+- **Purpose:** Defend LLM-powered applications against threat classes specific to or meaningfully amplified by LLM use — prompt injection, excessive agency, sensitive-information disclosure via model/embedding channels, and LLM-specific supply-chain risk.
+- **Scope:** LLM-specific security, grounded directly in the OWASP GenAI LLM Top 10 (2026). Genuinely distinct from `SK-QA-002` (general security-engineering, which owns traditional AppSec). Prompt injection has no architectural equivalent to a parameterized-query code/data boundary, and the standard itself states "no reliable prevention mechanism exists today" — so this skill frames defense as *bounding blast radius* rather than promising prevention.
+- **Responsibilities:** Apply least-privilege architecture (credentials held in application code, not the model; deterministic policy re-validation at execution time); treat untrusted external content (web pages, tool results, RAG passages, emails) as belonging only in clearly-delineated, skepticism-flagged channels, never blended into system-level instructions; require human approval for high-impact/irreversible agent actions; validate/encode LLM output contextually before it reaches a downstream system, per the same parameterized-query discipline OWASP reasserts for LLM-generated queries; treat hidden context (system prompts, tool schemas) as discoverable by default; recommend adaptive (not merely static) red-teaming; flag LLM-specific supply-chain risk (model/adapter provenance, quantization-introduced behavior changes).
+- **Inputs:** LLM feature/system and its tool/data access surface.
+- **Outputs:** Threat assessment + mitigations mapped to the applicable OWASP LLM Top 10 categories.
+- **Activation conditions:** Reviewing or designing an LLM feature with tool access, untrusted-content ingestion, or user-facing exposure; a security review of an LLM-powered system.
+- **Non-activation conditions:** A traditional (non-LLM-specific) AppSec concern with no LLM-specific amplification — route to `SK-QA-002`.
+- **Dependencies:** Related `SK-QA-002` (general security-engineering), `SK-AI-004` (excessive-agency limits on agent design), `SK-AI-005` (retrieval-authorization/embedding-sensitivity risk).
+- **Conflicts:** None.
+- **Related:** `SK-AI-001`, `SK-QA-002`, `SK-AI-004`, `SK-AI-005`.
+- **Evaluation requirements:** On a fixture LLM feature with a seeded prompt-injection or excessive-agency vector, identifies the risk and proposes blast-radius-bounding mitigation rather than a false claim of complete prevention; correctly declines to answer a traditional non-LLM-specific AppSec question as if it were in scope.
 - **Tier:** A/B.
 
 ---

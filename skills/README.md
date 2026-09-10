@@ -92,6 +92,14 @@ not generated speculatively or in bulk.
 | [prometheus](prometheus/) | `SK-TECH-prometheus` | QA (technology) | authored, not yet validated/evaluated |
 | [grafana](grafana/) | `SK-TECH-grafana` | QA (technology) | authored, not yet validated/evaluated |
 | [sentry](sentry/) | `SK-TECH-sentry` | QA (technology) | authored, not yet validated/evaluated |
+| [llm-application-engineering](llm-application-engineering/) | `SK-AI-001` | AI/LLM (generic, root) | authored, not yet validated/evaluated — closes a research gap held from taxonomy design |
+| [prompt-context-engineering](prompt-context-engineering/) | `SK-AI-002` | AI/LLM (generic) | authored, not yet validated/evaluated |
+| [structured-output-tool-calling](structured-output-tool-calling/) | `SK-AI-003` | AI/LLM (generic) | authored, not yet validated/evaluated |
+| [agent-architecture](agent-architecture/) | `SK-AI-004` | AI/LLM (generic) | authored, not yet validated/evaluated |
+| [rag-engineering](rag-engineering/) | `SK-AI-005` | AI/LLM (generic) | authored, not yet validated/evaluated |
+| [model-selection](model-selection/) | `SK-AI-006` | AI/LLM (generic) | authored, not yet validated/evaluated |
+| [llm-evaluation](llm-evaluation/) | `SK-AI-007` | AI/LLM (generic) | authored, not yet validated/evaluated |
+| [ai-security](ai-security/) | `SK-AI-008` | AI/LLM (generic) | authored, not yet validated/evaluated |
 
 Per the [specification's conformance lifecycle](../core/skill-specification/specification.md#5-conformance--lifecycle),
 a skill needs a passing mechanical validator, an `evaluations/` test, and an

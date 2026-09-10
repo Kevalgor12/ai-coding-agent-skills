@@ -56,7 +56,7 @@ outputs:
     description: The actual tests, structured for isolation and determinism.
 
 depends_on_skills: []
-related_skills: [SK-CONV-004, SK-CONV-007, SK-QA-003, SK-TECH-jest-vitest, SK-TECH-playwright]
+related_skills: [SK-CONV-004, SK-CONV-007, SK-QA-003, SK-TECH-jest-vitest, SK-TECH-playwright, SK-AI-007]
 conflicts_with: []
 
 required_capabilities: [file-read, file-write, shell]

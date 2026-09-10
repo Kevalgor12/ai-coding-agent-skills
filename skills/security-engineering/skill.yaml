@@ -55,7 +55,7 @@ outputs:
     description: Concrete mitigations applied or proposed, matched to the identified risk.
 
 depends_on_skills: []
-related_skills: [SK-CONV-007, SK-BE-005, SK-QA-003]
+related_skills: [SK-CONV-007, SK-BE-005, SK-QA-003, SK-AI-008]
 conflicts_with: []
 
 required_capabilities: [file-read, file-write]
