@@ -1,0 +1,202 @@
+id: SK-TECH-docker
+slug: docker
+name: Docker
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-INFRA-001, SK-QA-002]   # containerization; security-engineering (not yet authored)
+
+purpose: >-
+  Apply Docker's concrete Engine/CLI/API/BuildKit/Compose mechanics
+  correctly and version-appropriately, on top of the engine-agnostic
+  image-authoring method the parent skill already supplies.
+scope: >-
+  Docker-specific implementation depth: Engine API versioning and the Go
+  SDK module migration, Build Checks' version gates, Compose V2's
+  build-field version gates, cgroup v1's deprecation timeline,
+  Enhanced Container Isolation's WSL2/kernel floor, and container-runtime
+  selection for isolation. Does not repeat the general image-authoring,
+  layer-caching, multi-stage-build, or root-daemon-security-model content
+  already owned by containerization (SK-INFRA-001); deep cross-cutting
+  threat modeling is owned by security-engineering (SK-QA-002, not yet
+  authored in this library).
+expertise: Docker/container-platform engineer.
+description: >-
+  Docker-specific Engine/CLI/BuildKit/Compose mechanics: Engine API version
+  floor, the Go SDK module migration, Build Checks' Buildx/syntax gates,
+  Compose V2 build-field gates (ssh, platforms), cgroup v1's deprecation
+  timeline, Enhanced Container Isolation's WSL2/kernel floor, and
+  isolation-runtime selection. Use for Docker Engine/API/Compose/Buildx
+  version-compatibility questions. Not general image authoring/layering or
+  the root-daemon security model, which containerization already covers.
+
+activation_conditions:
+  - The task involves Docker Engine API or Go SDK version compatibility (client vs. daemon API version, or migrating off the deprecated github.com/docker/docker module)
+  - The task involves Docker Build Checks (docker build --check) or its Buildx/Dockerfile-syntax minimum-version requirements
+  - The task involves whether a specific Compose V2 build field (cache_to, secrets, ssh, platforms, etc.) is available at the project's actual Compose version
+  - The task involves selecting or evaluating a container-isolation runtime (default runc vs. gVisor/Kata/Wasmtime via --runtime) for a stated threat model
+  - The task involves Enhanced Container Isolation, rootless-mode network-driver specifics, or cgroup v1-vs-v2 targeting for a Docker deployment
+non_activation_conditions:
+  - General Dockerfile/image authoring, layer-caching order, multi-stage structure, or non-root defaults with no Docker-Engine/API/Compose-version-specific question (route to containerization, SK-INFRA-001)
+  - The stack does not use Docker/Docker Engine at all
+  - Deep cross-cutting security threat modeling beyond Docker-specific mechanics (route to security-engineering, SK-QA-002, not yet authored)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Docker-specific task (API/SDK compatibility check, Build Checks/Compose version gate, isolation-runtime selection, cgroup/ECI targeting).
+    required: true
+  - name: environment-versions
+    description: Docker Engine version, Engine API version, Buildx/Dockerfile-syntax version, Compose version, and (if relevant) WSL/kernel version in use.
+    required: false
+required_context:
+  - The Docker Engine version (or Engine API version) in use — required for version-correct guidance given the independent API/Buildx/Compose/WSL2-kernel version gates.
+optional_context:
+  - Whether the target workload is untrusted (affects isolation-runtime choice).
+  - Whether multi-platform builds are self-hosted or a Docker Build Cloud subscription is available.
+
+outputs:
+  - name: version-compatibility-analysis
+    kind: analysis
+    description: Whether a given API client, Go SDK import, Build Checks setup, or Compose build field is actually compatible with the project's real Engine/Buildx/Compose/kernel versions.
+  - name: runtime-or-build-config
+    kind: edit
+    description: Compose/build configuration, Buildx invocation, or --runtime selection reflecting the correct version gate and the chosen isolation/build strategy.
+
+depends_on_skills: []
+# depends_on_skills is reserved for hard, blocking sub-step composition, not
+# specialization of a parent. The relationship to SK-INFRA-001 and SK-QA-002
+# is specialization/cross-cutting-reference, already fully captured by
+# `parents` (SK-INFRA-001, SK-QA-002) — duplicating them here would assert a
+# stronger claim (blocking invocation) than either relationship actually is.
+# This exact mistake recurred in an earlier batch of this project; left
+# empty deliberately per explicit instruction for this skill.
+related_skills: []
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+# Tier B: version-compatibility analysis and config authoring are advisory;
+# confirming the actual daemon/Buildx/Compose/kernel version, or running
+# docker/docker compose/buildx, needs shell.
+
+grounding: official-docs
+source_references:
+  - url: https://docs.docker.com/engine/api/
+    title: "Docker Engine API — API versioning"
+    via: research/technologies/docker.md
+    retrieved: "2026-09-10"
+  - url: https://docs.docker.com/engine/release-notes/29/
+    title: "Docker Engine 29 Release Notes"
+    via: research/technologies/docker.md
+    retrieved: "2026-09-10"
+  - url: https://docs.docker.com/reference/build-checks/
+    title: "Docker Build Checks reference"
+    via: research/technologies/docker.md
+    retrieved: "2026-09-10"
+  - url: https://www.docker.com/blog/new-docker-compose-v2-and-v1-deprecation/
+    title: "Docker Blog — New Docker Compose V2 and V1 Deprecation"
+    via: research/technologies/docker.md
+    retrieved: "2026-09-10"
+  - url: https://docs.docker.com/security/for-admins/hardened-desktop/enhanced-container-isolation/limitations/
+    title: "Enhanced Container Isolation — Limitations"
+    via: research/technologies/docker.md
+    retrieved: "2026-09-10"
+  - url: https://docs.docker.com/engine/daemon/alternative-runtimes/
+    title: "Docker Engine — Alternative container runtimes"
+    via: research/technologies/docker.md
+    retrieved: "2026-09-10"
+  - url: https://docs.docker.com/scout/
+    title: "Docker Scout"
+    via: research/technologies/docker.md
+    retrieved: "2026-09-10"
+  - url: https://docs.docker.com/build/building/multi-platform/
+    title: "Docker Build — Multi-platform builds"
+    via: research/technologies/docker.md
+    retrieved: "2026-09-10"
+  - url: https://docs.docker.com/engine/security/rootless/
+    title: "Docker Engine Security — Rootless mode"
+    via: research/technologies/docker.md
+    retrieved: "2026-09-10"
+  - url: https://docs.docker.com/testcontainers/
+    title: "Docker Docs — Testcontainers"
+    via: research/technologies/docker.md
+    retrieved: "2026-09-10"
+  - url: https://docs.docker.com/compose/
+    title: "Docker Compose overview"
+    via: research/technologies/docker.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/version-matrix.md
+    title: "Version Matrix — Docker row (Engine API, Go SDK, Build Checks, Compose V2 build-field gates, ECI, cgroup v1, rootless network driver)"
+    via: research/knowledge-maps/version-matrix.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/security-knowledge-map.md
+    title: "Security Knowledge Map — Docker Build Checks ARG/ENV rule, alternative-runtime containerd-shim integration, Docker Scout SBOM/recalibration"
+    via: research/knowledge-maps/security-knowledge-map.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/performance-knowledge-map.md
+    title: "Performance Knowledge Map — Docker Build Cloud as managed multi-platform-builder alternative"
+    via: research/knowledge-maps/performance-knowledge-map.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  docker: ">=25.0 (API v1.44 floor against Engine 29.0.0+); current stable Engine 29.8 (API v1.56)"
+version_sensitive_claims:
+  - claim: Docker Engine API minimum supported version is v1.44 as of Engine 29.0.0 (compatible with Engine 25.0+ clients); API versions before v1.40 are deprecated/unsupported against current Engine releases.
+    applies_to: ">=29.0.0 (daemon floor); client must be API >=v1.44, effectively Engine 25.0+"
+    source_ref: research/knowledge-maps/version-matrix.md (Docker row); docs.docker.com/engine/api/, docs.docker.com/engine/release-notes/29/
+  - claim: The github.com/docker/docker Go module is deprecated in favor of github.com/moby/moby/client and github.com/moby/moby/api — a breaking change for Go SDK consumers importing the old module path.
+    applies_to: ">=29.0.0"
+    source_ref: research/knowledge-maps/version-matrix.md (Docker row); docs.docker.com/engine/release-notes/29/
+  - claim: Docker Build Checks (docker build --check) requires Buildx >=0.15.0 and Dockerfile syntax >=1.8, gated independently of the Engine version.
+    applies_to: "Buildx >=0.15.0, Dockerfile syntax >=1.8"
+    source_ref: research/knowledge-maps/version-matrix.md (Docker row); docs.docker.com/reference/build-checks/
+  - claim: Compose V2 added cache_to/no-cache/pull/secrets/tags build fields not present in V1; ssh was added in V2.4.0+; platforms (multi-arch, requires a docker-container Buildx driver) was added in V2.11.0+.
+    applies_to: "Compose V2 generally; ssh requires >=V2.4.0; platforms requires >=V2.11.0"
+    source_ref: research/knowledge-maps/version-matrix.md (Docker row); docker.com/blog/new-docker-compose-v2-and-v1-deprecation
+  - claim: cgroup v1 support is deprecated as of Engine 29.0.0, with support continuing only until May 2029.
+    applies_to: "deprecated as of >=29.0.0; supported through May 2029"
+    source_ref: research/knowledge-maps/version-matrix.md (Docker row); docs.docker.com/engine/release-notes/29/
+  - claim: Enhanced Container Isolation on the WSL2 backend hard-requires WSL >=2.6 and Linux kernel >=6.3.0.
+    applies_to: "WSL >=2.6, kernel >=6.3.0"
+    source_ref: research/knowledge-maps/version-matrix.md (Docker row); docs.docker.com/security/for-admins/hardened-desktop/enhanced-container-isolation/limitations/
+  - claim: Rootless mode's default network driver changed to gvisor-tap-vsock as of Engine 29.5.0, alongside a private time namespace enabled by default for rootless containers.
+    applies_to: ">=29.5.0"
+    source_ref: research/knowledge-maps/version-matrix.md (Docker row); docs.docker.com/engine/release-notes/29/
+last_verified: "2026-09-10"
+reverify_triggers:
+  - A new Docker Engine major or minor release (re-check the API floor, Go SDK module path, and cgroup v1 support window)
+  - A new Buildx or Dockerfile-syntax release changing Build Checks' minimum-version gate
+  - A new Docker Compose release changing build-field availability
+  - Any change to Enhanced Container Isolation's WSL2/kernel version floor
+
+owned_knowledge:
+  - Docker Engine API versioning floor and Go SDK module-path migration
+  - Docker Build Checks' Buildx/Dockerfile-syntax version gates
+  - Compose V2 build-field version gates (ssh, platforms, and the rest)
+  - Enhanced Container Isolation's WSL2/kernel version floor
+decision_framework_present: true
+
+failure_handling:
+  - If the Docker Engine/API/Buildx/Compose (or WSL2/kernel) version cannot be determined, ask for it or state the version the guidance assumes before making a version-gated claim; never assume "latest" silently.
+  - If shell is unavailable/denied, degrade to advisory version-compatibility analysis (state the gate, don't run docker/docker compose/buildx) and say so.
+  - If a claim would depend on a consolidated cross-major Engine breaking-changes page that the underlying research did not find (only inline per-release notes were located), say "verify against the current Engine release notes" rather than assert by analogy to Engine 29.0.0's documented changes.
+verification:
+  - Any Engine API/client-version compatibility claim is checked against the actual daemon's reported API version, not assumed.
+  - Any recommended Compose build field (ssh, platforms, etc.) is checked against the project's actual Compose version and, for platforms, that a docker-container Buildx driver is configured.
+  - Any Go SDK code targets the current module path (moby/moby/client, moby/moby/api) when the project targets Engine >=29.0.0, not the deprecated docker/docker module.
+evaluation_criteria:
+  - For a seeded scenario with a stated Engine/API/Buildx/Compose version, correctly determines whether a specific claim (API client compatibility, Build Checks availability, a Compose build field, ECI eligibility) is actually supported.
+  - For a seeded Go-tooling task against Engine >=29.0.0, uses the current module path rather than the deprecated github.com/docker/docker.
+  - For a seeded untrusted-workload isolation decision, selects a defensible --runtime option (default runc vs. gVisor/Kata) based on the actual threat model, including the simplest "default runc is fine" branch when nothing justifies more.
+  - Does not restate general image-authoring/security/performance principles owned by containerization (QR-2).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]
+  cursor:
+    paths: ["**/Dockerfile*", "**/compose*.yaml", "**/compose*.yml", "**/docker-compose*.yml"]
+  vscode:
+    argument_hint: "<task, e.g. 'will this Compose platforms field work' or 'pick an isolation runtime for untrusted workloads'>"

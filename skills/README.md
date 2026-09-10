@@ -62,6 +62,9 @@ not generated speculatively or in bulk.
 | [webrtc](webrtc/) | `SK-TECH-webrtc` | Backend/Realtime (technology) | authored, not yet validated/evaluated |
 | [search-integration](search-integration/) | `SK-DATA-005` | Data (generic) | authored, not yet validated/evaluated |
 | [opensearch](opensearch/) | `SK-TECH-opensearch` | Data (technology) | authored, not yet validated/evaluated |
+| [containerization](containerization/) | `SK-INFRA-001` | Infrastructure (generic) | authored, not yet validated/evaluated |
+| [deployment-release](deployment-release/) | `SK-INFRA-003` | Infrastructure (generic) | authored, not yet validated/evaluated |
+| [docker](docker/) | `SK-TECH-docker` | Infrastructure (technology) | authored, not yet validated/evaluated |
 
 Per the [specification's conformance lifecycle](../core/skill-specification/specification.md#5-conformance--lifecycle),
 a skill needs a passing mechanical validator, an `evaluations/` test, and an
