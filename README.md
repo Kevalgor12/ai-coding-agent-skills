@@ -12,9 +12,19 @@ runtime, no service, and no UI. What ships is the content of this repository.
 
 ## Status
 
-Scaffold only. No skills have been written yet. The directory structure and
-initial files exist so that skill authoring can begin on a stable foundation,
-not the other way around.
+**v0.1.0 — initial release.** 88 skills authored, organized across 5 layers
+and 12 domains. All skills pass the mechanical validator
+([`scripts/validate_skills.py`](scripts/validate_skills.py) — VR-1 through
+VR-9). Six adapter targets are implemented and tested (36/36 compatibility
+combinations pass). The library has passed a final principal-engineer audit and
+a full regression suite (Step 35). See [`final/RELEASE.md`](final/RELEASE.md)
+for the complete release report.
+
+Individual skills carry status `authored, not yet validated/evaluated` because
+per-skill live-agent evaluation (the final promotion gate to `final/`) requires
+tooling not yet built. The skills are usable immediately through the adapter
+layer; the promotion gate is a quality ratchet for the `final/` directory,
+not a gate on consumption.
 
 ## Repository structure
 
@@ -63,21 +73,63 @@ current version is tracked in [`VERSION`](VERSION); changes are recorded in
 versioned relative to the library as a whole is not yet decided — see
 "Open architectural decisions" below.
 
+## How to consume this library
+
+### Pick your agent target
+
+Each supported agent has its own adapter in [`adapters/`](adapters/). The
+adapter handles skill discovery, loading, and format translation for that
+target. Start there:
+
+| Agent | Adapter |
+|---|---|
+| Claude Code | [`adapters/claude-code/`](adapters/claude-code/) |
+| Cursor | [`adapters/cursor/`](adapters/cursor/) |
+| GitHub Copilot / Codex | [`adapters/codex/`](adapters/codex/) |
+| Windsurf | [`adapters/windsurf/`](adapters/windsurf/) |
+| Antigravity | [`adapters/antigravity/`](adapters/antigravity/) |
+| MCP-based agents | [`adapters/mcp/`](adapters/mcp/) |
+
+### Understand the skill structure
+
+Every skill lives under [`skills/<slug>/`](skills/) and contains:
+
+- `skill.yaml` — machine-readable metadata (ID, activation conditions,
+  inputs/outputs, dependencies, capabilities, verification criteria)
+- `SKILL.md` — the human-readable method the agent should follow
+- `references/` — per-skill reference notes (version-sensitive details,
+  decision matrices) when present
+
+### Route skills correctly
+
+The orchestrator ([`core/orchestrator/`](core/orchestrator/)) and routing
+algorithm ([`core/routing-architecture/`](core/routing-architecture/)) define
+how an agent selects skills for a given task. Read
+[`core/orchestrator/lifecycle.md`](core/orchestrator/lifecycle.md) for the
+full decision flow, and
+[`core/routing-architecture/routing-algorithm.md`](core/routing-architecture/routing-algorithm.md)
+for the routing rules.
+
+### Browse the skill catalog
+
+[`core/taxonomy/skill-catalog.md`](core/taxonomy/skill-catalog.md) lists all
+88 skills organized by domain and layer.
+[`final/manifest.json`](final/manifest.json) is the machine-readable version
+for programmatic consumers.
+
 ## Contributing skills
 
-Not yet — the schema in `core/` needs to exist first. Skills are added
-deliberately and individually once that foundation is in place, not
-generated in bulk.
+Skills are added deliberately, following the schema in
+[`core/skill-specification/specification.md`](core/skill-specification/specification.md).
+Run [`scripts/validate_skills.py`](scripts/validate_skills.py) after authoring
+to confirm the skill passes VR-1 through VR-9 before opening a pull request.
 
-## Open architectural decisions
+## Versioning
 
-See the end of the initial-scaffold conversation/PR for the full list of
-decisions that should be reviewed before skill authoring begins (license
-choice, `skills/` vs `final/` promotion mechanism, per-skill versioning
-strategy, adapter granularity, and skill schema ownership).
+This project follows [Semantic Versioning](https://semver.org/). The current
+version is tracked in [`VERSION`](VERSION); changes are recorded in
+[`CHANGELOG.md`](CHANGELOG.md).
 
 ## License
 
-[MIT](LICENSE) — see the "Open architectural decisions" note above; this
-choice should be explicitly confirmed before the library is opened up to
-external contributors or consumers.
+[MIT](LICENSE)

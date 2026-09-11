@@ -1,0 +1,2006 @@
+{
+  "schema_version": "1.0",
+  "library_version": "0.1.0",
+  "generated": "2026-09-11",
+  "skill_count": 88,
+  "skills": [
+    {
+      "id": "SK-AI-004",
+      "slug": "agent-architecture",
+      "name": "Agent Architecture",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "AI",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-AI-001",
+        "SK-AI-003",
+        "SK-AI-008"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-AI-008",
+      "slug": "ai-security",
+      "name": "AI Security",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "AI",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-AI-001",
+        "SK-QA-002",
+        "SK-AI-004",
+        "SK-AI-005"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-angular",
+      "slug": "angular",
+      "name": "Angular",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-FE-001",
+        "SK-FE-005"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-typescript"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-BE-002",
+      "slug": "api-design",
+      "name": "API design",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "BE",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-BE-001",
+        "SK-BE-003",
+        "SK-TECH-openapi-swagger",
+        "SK-DATA-001",
+        "SK-CONV-006"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-BE-005",
+      "slug": "authentication-authorization",
+      "name": "Authentication & authorization",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "BE",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-BE-002",
+        "SK-BE-003",
+        "SK-QA-002",
+        "SK-DATA-003"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-BE-001",
+      "slug": "backend-architecture",
+      "name": "Backend architecture",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "BE",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-DISC-002",
+        "SK-BE-002",
+        "SK-BE-003",
+        "SK-DATA-001"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-DATA-004",
+      "slug": "caching-strategy",
+      "name": "Caching strategy",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "DATA",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-DATA-003",
+        "SK-QA-003",
+        "SK-TECH-redis"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-ORCH-002",
+      "slug": "capability-adapter",
+      "name": "Capability adapter",
+      "kind": "generic",
+      "layer": 0,
+      "domain": "ORCH",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-ORCH-001",
+        "SK-ORCH-003"
+      ],
+      "required_capabilities": [
+        "file-read"
+      ]
+    },
+    {
+      "id": "SK-INFRA-002",
+      "slug": "ci-cd-pipeline",
+      "name": "CI/CD pipeline",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "INFRA",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-QA-001",
+        "SK-INFRA-001",
+        "SK-CONV-008",
+        "SK-TECH-husky",
+        "SK-DISC-004"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-TECH-clickhouse",
+      "slug": "clickhouse",
+      "name": "ClickHouse",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-DATA-003"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-postgresql",
+        "SK-TECH-mysql",
+        "SK-DATA-001"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-CONV-002",
+      "slug": "code-commenting",
+      "name": "Code commenting",
+      "kind": "generic",
+      "layer": 2,
+      "domain": "CONV",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-CONV-003",
+        "SK-CONV-006",
+        "SK-CONV-007"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-CONV-003",
+      "slug": "code-quality",
+      "name": "Code quality",
+      "kind": "generic",
+      "layer": 2,
+      "domain": "CONV",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-CONV-002",
+        "SK-CONV-004",
+        "SK-CONV-007"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-CONV-007",
+      "slug": "code-review",
+      "name": "Code review",
+      "kind": "generic",
+      "layer": 2,
+      "domain": "CONV",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [
+        "SK-CONV-002",
+        "SK-CONV-003"
+      ],
+      "related_skills": [
+        "SK-CONV-001",
+        "SK-CONV-004",
+        "SK-CONV-005",
+        "SK-CONV-008",
+        "SK-QA-002",
+        "SK-QA-003"
+      ],
+      "required_capabilities": [
+        "file-read"
+      ]
+    },
+    {
+      "id": "SK-INFRA-001",
+      "slug": "containerization",
+      "name": "Containerization",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "INFRA",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-INFRA-002",
+        "SK-QA-002",
+        "SK-TECH-postgresql",
+        "SK-TECH-mongodb",
+        "SK-TECH-redis"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-DATA-006",
+      "slug": "data-migration",
+      "name": "Data migration",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "DATA",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-DATA-001",
+        "SK-DATA-002"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-DATA-001",
+      "slug": "data-modeling",
+      "name": "Data modeling",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "DATA",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-DISC-002",
+        "SK-DATA-002",
+        "SK-DATA-006"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-DATA-003",
+      "slug": "database-operations",
+      "name": "Database operations",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "DATA",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-DATA-001",
+        "SK-DATA-004",
+        "SK-QA-003",
+        "SK-TECH-postgresql",
+        "SK-TECH-mysql",
+        "SK-TECH-mongodb",
+        "SK-TECH-clickhouse"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-INFRA-003",
+      "slug": "deployment-release",
+      "name": "Deployment & release",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "INFRA",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-INFRA-001",
+        "SK-INFRA-002",
+        "SK-CONV-001",
+        "SK-CONV-005",
+        "SK-QA-004"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-TECH-docker",
+      "slug": "docker",
+      "name": "Docker",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-INFRA-001",
+        "SK-QA-002"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-drizzle",
+      "slug": "drizzle",
+      "name": "Drizzle ORM",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-DATA-002",
+        "SK-DATA-006"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-postgresql",
+        "SK-TECH-mysql"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-express",
+      "slug": "express",
+      "name": "Express",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-BE-001",
+        "SK-BE-002"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-nodejs"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-fastify",
+      "slug": "fastify",
+      "name": "Fastify",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-BE-001",
+        "SK-BE-002"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-nodejs"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-FE-001",
+      "slug": "frontend-architecture",
+      "name": "Frontend architecture",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "FE",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-DISC-002",
+        "SK-FE-004",
+        "SK-TECH-typescript"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-CONV-001",
+      "slug": "git-conventions",
+      "name": "Git conventions",
+      "kind": "generic",
+      "layer": 2,
+      "domain": "CONV",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-CONV-008"
+      ],
+      "required_capabilities": [
+        "file-read"
+      ]
+    },
+    {
+      "id": "SK-CONV-008",
+      "slug": "git-workflow",
+      "name": "Git workflow",
+      "kind": "generic",
+      "layer": 2,
+      "domain": "CONV",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [
+        "SK-CONV-001"
+      ],
+      "related_skills": [
+        "SK-INFRA-002",
+        "SK-DISC-004"
+      ],
+      "required_capabilities": [
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-github-actions",
+      "slug": "github-actions",
+      "name": "GitHub Actions",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-INFRA-002"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-husky"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-TECH-go",
+      "slug": "go",
+      "name": "Go",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-BE-001"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-grafana",
+      "slug": "grafana",
+      "name": "Grafana",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-QA-004"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-prometheus",
+        "SK-TECH-opentelemetry"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-graphql",
+      "slug": "graphql",
+      "name": "GraphQL",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-BE-003"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-BE-003",
+        "SK-BE-004"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-BE-003",
+      "slug": "graphql-api-design",
+      "name": "GraphQL API design",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "BE",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-BE-002",
+        "SK-BE-001",
+        "SK-DATA-002",
+        "SK-TECH-graphql"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-TECH-husky",
+      "slug": "husky",
+      "name": "Husky",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-INFRA-002",
+        "SK-CONV-001"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-github-actions"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-jest-vitest",
+      "slug": "jest-vitest",
+      "name": "Jest & Vitest",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-QA-001"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-playwright"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-CONV-005",
+      "slug": "legacy-modernization",
+      "name": "Legacy modernization",
+      "kind": "generic",
+      "layer": 2,
+      "domain": "CONV",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [
+        "SK-CONV-004"
+      ],
+      "related_skills": [
+        "SK-DISC-002",
+        "SK-DATA-006",
+        "SK-QA-001"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-AI-001",
+      "slug": "llm-application-engineering",
+      "name": "LLM Application Engineering",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "AI",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-AI-002",
+        "SK-AI-003",
+        "SK-AI-004",
+        "SK-AI-005",
+        "SK-AI-006",
+        "SK-AI-007",
+        "SK-AI-008",
+        "SK-QA-004"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-AI-007",
+      "slug": "llm-evaluation",
+      "name": "LLM Evaluation",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "AI",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-AI-001",
+        "SK-QA-001"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-AI-006",
+      "slug": "model-selection",
+      "name": "Model Selection",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "AI",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-AI-001",
+        "SK-AI-007"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-TECH-mongodb",
+      "slug": "mongodb",
+      "name": "MongoDB",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-DATA-001",
+        "SK-DATA-005"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-mongoose",
+        "SK-TECH-postgresql",
+        "SK-TECH-mysql",
+        "SK-DATA-002",
+        "SK-DATA-006"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-mongoose",
+      "slug": "mongoose",
+      "name": "Mongoose",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-DATA-002",
+        "SK-DATA-006"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-mongodb",
+        "SK-DATA-001"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-mui",
+      "slug": "mui",
+      "name": "MUI (Material UI)",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-FE-003",
+        "SK-FE-002"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-TECH-mysql",
+      "slug": "mysql",
+      "name": "MySQL",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-DATA-001",
+        "SK-DATA-003"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-drizzle",
+        "SK-TECH-prisma",
+        "SK-TECH-typeorm",
+        "SK-DATA-002",
+        "SK-DATA-006"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-nextjs",
+      "slug": "nextjs",
+      "name": "Next.js",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-FE-001",
+        "SK-FE-005",
+        "SK-GROW-001"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-react"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-nodejs",
+      "slug": "nodejs",
+      "name": "Node.js",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-BE-001"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-express",
+        "SK-TECH-fastify"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-nuxt",
+      "slug": "nuxt",
+      "name": "Nuxt",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-FE-001",
+        "SK-FE-005",
+        "SK-GROW-001"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-vue"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-QA-004",
+      "slug": "observability",
+      "name": "Observability",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "QA",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-QA-003",
+        "SK-INFRA-003",
+        "SK-TECH-opentelemetry",
+        "SK-TECH-prometheus",
+        "SK-TECH-grafana",
+        "SK-TECH-sentry"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-openapi-swagger",
+      "slug": "openapi-swagger",
+      "name": "OpenAPI & Swagger",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-BE-002",
+        "SK-CONV-006"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-BE-003",
+        "SK-TECH-express",
+        "SK-TECH-fastify"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-TECH-opensearch",
+      "slug": "opensearch",
+      "name": "OpenSearch",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-DATA-005",
+        "SK-QA-004"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-postgresql",
+        "SK-TECH-redis"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-opentelemetry",
+      "slug": "opentelemetry",
+      "name": "OpenTelemetry",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-QA-004"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-prometheus",
+        "SK-TECH-grafana",
+        "SK-TECH-sentry"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-DATA-002",
+      "slug": "orm-integration",
+      "name": "ORM integration",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "DATA",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-DATA-001",
+        "SK-DATA-006"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-QA-003",
+      "slug": "performance-engineering",
+      "name": "Performance engineering",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "QA",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-QA-001",
+        "SK-CONV-004",
+        "SK-DATA-003",
+        "SK-DATA-004",
+        "SK-FE-005"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-playwright",
+      "slug": "playwright",
+      "name": "Playwright",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "C",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-QA-001",
+        "SK-FE-004"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-jest-vitest"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell",
+        "browser"
+      ]
+    },
+    {
+      "id": "SK-TECH-postgresql",
+      "slug": "postgresql",
+      "name": "PostgreSQL",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-DATA-001",
+        "SK-DATA-003",
+        "SK-DATA-005"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-drizzle",
+        "SK-TECH-prisma",
+        "SK-TECH-typeorm",
+        "SK-DATA-002",
+        "SK-DATA-006"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-prisma",
+      "slug": "prisma",
+      "name": "Prisma",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-DATA-002",
+        "SK-DATA-006"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-postgresql",
+        "SK-TECH-mysql",
+        "SK-TECH-mongodb"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-DISC-004",
+      "slug": "project-management",
+      "name": "Project management",
+      "kind": "generic",
+      "layer": 1,
+      "domain": "DISC",
+      "execution_tier": "C",
+      "activation_mode": "manual",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-CONV-001",
+        "SK-CONV-008",
+        "SK-INFRA-002",
+        "SK-DISC-003"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "git"
+      ]
+    },
+    {
+      "id": "SK-TECH-prometheus",
+      "slug": "prometheus",
+      "name": "Prometheus",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-QA-004"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-opentelemetry",
+        "SK-TECH-grafana",
+        "SK-QA-003"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-AI-002",
+      "slug": "prompt-context-engineering",
+      "name": "Prompt & Context Engineering",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "AI",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-AI-001",
+        "SK-AI-003",
+        "SK-AI-005"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-python",
+      "slug": "python",
+      "name": "Python",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-BE-001",
+        "SK-AI-001"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-AI-005",
+      "slug": "rag-engineering",
+      "name": "RAG Engineering",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "AI",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-AI-001",
+        "SK-DATA-005",
+        "SK-AI-002",
+        "SK-AI-008"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-react",
+      "slug": "react",
+      "name": "React",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-FE-001",
+        "SK-FE-005"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-nextjs",
+        "SK-TECH-typescript"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-BE-004",
+      "slug": "realtime-communication",
+      "name": "Realtime communication",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "BE",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-BE-001",
+        "SK-BE-002",
+        "SK-TECH-redis"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-TECH-redis",
+      "slug": "redis",
+      "name": "Redis",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-DATA-004",
+        "SK-BE-004",
+        "SK-DATA-005"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-DATA-001"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-CONV-004",
+      "slug": "refactoring",
+      "name": "Refactoring",
+      "kind": "generic",
+      "layer": 2,
+      "domain": "CONV",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-CONV-003",
+        "SK-CONV-005",
+        "SK-QA-001"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-FE-005",
+      "slug": "rendering-strategy",
+      "name": "Rendering strategy",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "FE",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-FE-001",
+        "SK-GROW-001",
+        "SK-QA-003"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-DISC-001",
+      "slug": "requirements-engineering",
+      "name": "Requirements engineering",
+      "kind": "generic",
+      "layer": 1,
+      "domain": "DISC",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-DISC-002",
+        "SK-DISC-003",
+        "SK-DISC-004"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-TECH-sass",
+      "slug": "sass",
+      "name": "Sass",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-FE-003"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-web-standards"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-DATA-005",
+      "slug": "search-integration",
+      "name": "Search integration",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "DATA",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-DATA-001",
+        "SK-TECH-postgresql",
+        "SK-TECH-redis",
+        "SK-AI-001",
+        "SK-AI-005"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-QA-002",
+      "slug": "security-engineering",
+      "name": "Security engineering",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "QA",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-CONV-007",
+        "SK-BE-005",
+        "SK-QA-003",
+        "SK-AI-008"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-TECH-sentry",
+      "slug": "sentry",
+      "name": "Sentry",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-QA-004"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-opentelemetry"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-GROW-001",
+      "slug": "seo-optimization",
+      "name": "SEO optimization",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "GROW",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-FE-005",
+        "SK-QA-003",
+        "SK-TECH-nextjs",
+        "SK-GROW-002"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-TECH-shadcn-ui",
+      "slug": "shadcn-ui",
+      "name": "shadcn/ui",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-FE-003",
+        "SK-FE-002"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-tailwindcss"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-ORCH-001",
+      "slug": "skill-router",
+      "name": "Skill router",
+      "kind": "generic",
+      "layer": 0,
+      "domain": "ORCH",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-ORCH-002",
+        "SK-ORCH-003",
+        "SK-DISC-001",
+        "SK-DISC-002",
+        "SK-DISC-003"
+      ],
+      "required_capabilities": [
+        "file-read"
+      ]
+    },
+    {
+      "id": "SK-TECH-socketio",
+      "slug": "socketio",
+      "name": "Socket.IO",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-BE-004"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-websocket-api",
+        "SK-TECH-redis"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-DISC-002",
+      "slug": "solution-architecture",
+      "name": "Solution architecture",
+      "kind": "generic",
+      "layer": 1,
+      "domain": "DISC",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-DISC-001",
+        "SK-DISC-003",
+        "SK-CONV-005"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-AI-003",
+      "slug": "structured-output-tool-calling",
+      "name": "Structured Output & Tool Calling",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "AI",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-AI-001",
+        "SK-AI-002",
+        "SK-AI-004"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-FE-003",
+      "slug": "styling-systems",
+      "name": "Styling systems",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "FE",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-FE-002",
+        "SK-FE-004",
+        "SK-TECH-tailwindcss",
+        "SK-TECH-sass",
+        "SK-TECH-web-standards",
+        "SK-TECH-shadcn-ui",
+        "SK-TECH-mui"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-TECH-tailwindcss",
+      "slug": "tailwindcss",
+      "name": "Tailwind CSS",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-FE-003"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-shadcn-ui",
+        "SK-TECH-web-standards"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-CONV-006",
+      "slug": "technical-documentation",
+      "name": "Technical documentation",
+      "kind": "generic",
+      "layer": 2,
+      "domain": "CONV",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-CONV-002",
+        "SK-BE-002",
+        "SK-TECH-openapi-swagger",
+        "SK-DISC-004"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-DISC-003",
+      "slug": "technical-planning",
+      "name": "Technical planning",
+      "kind": "generic",
+      "layer": 1,
+      "domain": "DISC",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-DISC-002",
+        "SK-ORCH-003"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-QA-001",
+      "slug": "testing-strategy",
+      "name": "Testing strategy",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "QA",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-CONV-004",
+        "SK-CONV-007",
+        "SK-QA-003",
+        "SK-TECH-jest-vitest",
+        "SK-TECH-playwright",
+        "SK-AI-007"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-threejs",
+      "slug": "threejs",
+      "name": "Three.js",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-FE-001"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-TECH-typeorm",
+      "slug": "typeorm",
+      "name": "TypeORM",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-DATA-002",
+        "SK-DATA-006"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-postgresql",
+        "SK-TECH-mysql"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-typescript",
+      "slug": "typescript",
+      "name": "TypeScript",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-CONV-003"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-react",
+        "SK-TECH-vue",
+        "SK-TECH-angular",
+        "SK-TECH-nodejs"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-FE-002",
+      "slug": "ui-ux-design",
+      "name": "UI/UX design",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "FE",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-FE-003",
+        "SK-FE-004",
+        "SK-TECH-mui",
+        "SK-TECH-shadcn-ui"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-TECH-vue",
+      "slug": "vue",
+      "name": "Vue",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-FE-001",
+        "SK-FE-005"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-nuxt",
+        "SK-TECH-typescript"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-FE-004",
+      "slug": "web-accessibility",
+      "name": "Web accessibility",
+      "kind": "generic",
+      "layer": 3,
+      "domain": "FE",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-FE-001",
+        "SK-TECH-web-standards",
+        "SK-TECH-mui",
+        "SK-TECH-shadcn-ui",
+        "SK-TECH-playwright"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-TECH-web-standards",
+      "slug": "web-standards",
+      "name": "Web Standards (HTML & CSS)",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-FE-003",
+        "SK-FE-004"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-sass",
+        "SK-TECH-tailwindcss",
+        "SK-FE-004"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write"
+      ]
+    },
+    {
+      "id": "SK-TECH-webrtc",
+      "slug": "webrtc",
+      "name": "WebRTC",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-BE-004"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-TECH-websocket-api",
+      "slug": "websocket-api",
+      "name": "WebSocket API",
+      "kind": "technology",
+      "layer": 4,
+      "domain": "TECH",
+      "execution_tier": "B",
+      "activation_mode": "auto",
+      "parents": [
+        "SK-BE-004"
+      ],
+      "depends_on_skills": [],
+      "related_skills": [
+        "SK-TECH-socketio"
+      ],
+      "required_capabilities": [
+        "file-read",
+        "file-write",
+        "shell"
+      ]
+    },
+    {
+      "id": "SK-ORCH-003",
+      "slug": "workflow-composer",
+      "name": "Workflow composer",
+      "kind": "generic",
+      "layer": 0,
+      "domain": "ORCH",
+      "execution_tier": "A",
+      "activation_mode": "auto",
+      "parents": [],
+      "depends_on_skills": [
+        "SK-ORCH-001"
+      ],
+      "related_skills": [
+        "SK-ORCH-002",
+        "SK-DISC-003",
+        "SK-CONV-007",
+        "SK-QA-001"
+      ],
+      "required_capabilities": [
+        "file-read"
+      ]
+    }
+  ]
+}
