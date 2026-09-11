@@ -55,29 +55,31 @@ file path is given beyond "the module," and no clarifying detail follows.
   component-decomposition decision FE-001 owns, and it must be resolved
   *before* there is a target shape for `SK-TECH-vue` to specialize into.
 - `SK-CONV-004` (refactoring) and `SK-QA-001` (testing-strategy) —
-  activate, but via composition, not independent top-level matching. See
-  "Composition-edge reasoning" below.
+  activate via composition and related-skill links, not independent
+  top-level matching. See "Verification grounding" below.
 
-**Composition-edge reasoning.** `SK-CONV-005` declares
-`depends_on_skills: [SK-CONV-004, SK-QA-001]`, and `SK-CONV-004` itself
-declares `depends_on_skills: [SK-QA-001]`. Per
-`core/dependency-architecture/README.md`'s edge vocabulary, `depends_on_skills`
-*is* the "parent — composition" edge, defined as "A invokes B as a sub-step
-during its own work" — not "commonly co-activated" (that's `related_skills`,
-a different field). `SK-CONV-005`'s own `verification` list makes this
-concrete rather than abstract: "Behavior-preservation for each incremental
-step is verified via refactoring's method, not assumed." So yes —
-a `depends_on_skills` hard edge means the dependency's *method actually
-runs* as part of the depending skill's own execution, even though
-`SK-CONV-004`/`SK-QA-001` never independently matched an activation
-condition against this task's own text. The distinction that matters for
-scoring: these two should appear in the run's routing record with an
-activation *reason* of "composed by `SK-CONV-005` per `depends_on_skills`,"
-not "matched own activation_conditions" — and their absence from a
-top-level, keyword-driven activation list is not itself a defect. Their
-absence from the run's *evidence* (no behavior-preservation check ever
-executed against any staged increment) is a defect: see the assertions
-below.
+**Verification grounding.** `SK-CONV-005` still declares
+`depends_on_skills: [SK-CONV-004]` — that composition edge is preserved:
+`SK-CONV-004`'s method *actually runs* as part of `SK-CONV-005`'s own
+execution. `SK-QA-001` appears in `SK-CONV-005.related_skills` and in
+`SK-CONV-004.related_skills` (not in either skill's `depends_on_skills`
+— the VR-4 layer-monotone rule bars Layer 2 skills from hard-composing a
+Layer 3 skill). The behavioral requirement for behavior-preservation
+testing is enforced through each skill's own `verification` section:
+`SK-CONV-005` includes "Behavior-preservation for each incremental step is
+confirmed by actually running the existing test suite (if available) after
+the step, not assumed from reading the diff alone," and `SK-CONV-004`
+includes "The test suite is actually run after the refactor (not just
+reviewed for structure) and produces a green result." Both items are
+execution-dependent under VR-9. IC-6 ("`complete` requires `verification`
+to have actually run and passed") makes this binding at completion time.
+The distinction that matters for scoring: `SK-CONV-004` should appear in
+the run's routing record with an activation reason of "composed by
+`SK-CONV-005` per `depends_on_skills`," and `SK-QA-001` should appear as
+a related-skill consultation — their absence from a top-level, keyword-
+driven activation list is not itself a defect. Their absence from the
+run's *evidence* (no behavior-preservation check ever executed against any
+staged increment) is a defect: see the assertions below.
 
 **Must NOT activate:**
 - `SK-TECH-react`, `SK-TECH-angular` — no signal for either framework

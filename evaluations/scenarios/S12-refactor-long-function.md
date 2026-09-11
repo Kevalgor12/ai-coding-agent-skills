@@ -43,29 +43,30 @@ but exactly one function in the repo matches the description.
   directly, and a safety net exists (`processOrder.test.js`, 15 passing
   tests), so the "no way to verify behavior" non-activation condition does
   not apply.
-- `SK-QA-001` (testing-strategy) — activates, but via composition, not
-  independent top-level matching. See "Composition-edge reasoning" below.
+- `SK-QA-001` (testing-strategy) — activates via `SK-CONV-004`'s
+  `related_skills` link and `SK-CONV-004`'s own verification requirements,
+  not as an independent top-level activation. See "Verification grounding"
+  below.
 
-**Composition-edge reasoning.** `SK-CONV-004` declares `depends_on_skills:
-[SK-QA-001]`. Per `core/dependency-architecture/README.md`, `depends_on_skills`
-*is* the "parent — composition" edge type: "A invokes B as a sub-step
-during its own work" — the README's own worked example is literally
-`refactoring → testing-strategy`. This is not a `related_skills` affinity
-hint; it is a hard edge, and `SK-CONV-004`'s own `verification` list names
-the exact sub-step: "Existing tests still pass after the refactor... or
-(when none exist) an explicit equivalence-reasoning statement." Deciding
-*whether* the 15 existing end-to-end tests are a sufficient safety net for
-extracting four previously-untested internal blocks (validation, pricing,
-inventory-check, notification) out of one function — versus needing new
-tests for the newly-exposed units — is itself a testing-strategy judgment,
-not something refactoring's own procedure invents ad hoc. Conclusion,
-stated explicitly: a `depends_on_skills` edge means the dependency's method
-runs as an actual sub-step of the depending skill's execution, producing
-real, checkable `verification[]` evidence — regardless of whether
-`SK-QA-001` independently matched this task's text as a top-level
-activation. What it does *not* mean is that `SK-QA-001` needs its own
-top-level routing-record entry with its own activation reason; the reason
-recorded should be "composed by `SK-CONV-004` per `depends_on_skills`."
+**Verification grounding.** `SK-CONV-004` lists `SK-QA-001` in
+`related_skills` (not `depends_on_skills` — the VR-4 layer-monotone rule
+bars a Layer 2 skill from hard-composing a Layer 3 skill). The behavioral
+requirement for test-based behavior-preservation is instead enforced
+directly through `SK-CONV-004`'s own `verification` section, which
+includes the execution-dependent item: "The test suite is actually run
+after the refactor (not just reviewed for structure) and produces a green
+result, confirming behavior is preserved in the real execution
+environment." Deciding *whether* the 15 existing end-to-end tests are a
+sufficient safety net for extracting four previously-untested internal
+blocks (validation, pricing, inventory-check, notification) out of one
+function — versus needing new tests for the newly-exposed units — is
+itself a testing-strategy judgment that `SK-QA-001` (via `related_skills`)
+is the appropriate resource for. Conclusion, stated explicitly: `SK-QA-001`
+should appear in the run's ledger with a reason of "testing-strategy
+input, composed with `SK-CONV-004` via `related_skills`" — not as a
+top-level independent activation. IC-6 ("`complete` requires
+`verification` to have actually run and passed") makes the test-run
+requirement binding at completion time.
 
 **Must NOT activate:**
 - `SK-CONV-005` (legacy-modernization) — none of its activation conditions
