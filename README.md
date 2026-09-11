@@ -90,6 +90,38 @@ target. Start there:
 | Antigravity | [`adapters/antigravity/`](adapters/antigravity/) |
 | MCP-based agents | [`adapters/mcp/`](adapters/mcp/) |
 
+### Deploy skills into a new project
+
+[`scripts/deploy.py`](scripts/deploy.py) projects the whole library (or a
+chosen subset) into any project directory, in the file format your agent
+auto-discovers:
+
+```bash
+# Claude Code — writes .claude/skills/<slug>/SKILL.md
+python3 scripts/deploy.py --target claude-code --dest ~/projects/my-app
+
+# Antigravity — writes .agents/skills/<slug>/SKILL.md
+python3 scripts/deploy.py --target antigravity --dest ~/projects/my-app
+
+# Cursor / Codex / Windsurf work the same way (--target cursor|codex|windsurf)
+
+# Only deploy the skills you need for this project
+python3 scripts/deploy.py --target claude-code --dest . --skills react,postgresql,testing-strategy
+
+# Preview without touching disk
+python3 scripts/deploy.py --target claude-code --dest . --dry-run
+```
+
+Re-run the same command whenever the library updates to pick up new/changed
+skills — it's a straight overwrite of the projected files, not a merge.
+**Avoid `--target all` into one destination**: Cursor, Codex, and Windsurf all
+target the same `.agents/skills/` path by design (the shared "common
+denominator" location), so deploying every target into a single project
+directory has them overwrite each other; the script warns to stderr if any
+two targets would write different content to the same path. Deploy each
+target you actually use into that project separately, or use distinct
+`--dest` directories.
+
 ### Understand the skill structure
 
 Every skill lives under [`skills/<slug>/`](skills/) and contains:
