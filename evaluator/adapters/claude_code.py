@@ -5,11 +5,28 @@ parses the structured run record emitted by the agent.
 Agent-specific execution is isolated here so the evaluator core (checker, scorer,
 reporter) stays vendor-neutral.
 
+Authentication
+--------------
+This adapter requires the `claude` CLI to be authenticated.  Two modes work:
+
+  1. API-key mode (recommended for CI / subprocess use):
+       export ANTHROPIC_API_KEY=sk-ant-...
+     The adapter automatically adds `--bare` to skip interactive auth when this
+     variable is set.
+
+  2. Interactive session mode:
+       Run `claude /login` in a terminal first; OAuth tokens are stored in
+       ~/.config/Claude/.  This DOES NOT carry into subprocesses on most systems
+       (keychain is unavailable outside the GUI session).
+
+When neither mode is active the adapter raises `ClaudeAuthError` immediately
+rather than silently producing empty results.
+
 Run record protocol
 -------------------
 The adapter invokes Claude Code with:
 
-  claude --print -- "<task>"
+  claude [--bare] --print --dangerously-skip-permissions -- "<task>"
 
 and captures stdout.  The agent is expected to emit a structured JSON block
 delimited by markers:
@@ -18,14 +35,13 @@ delimited by markers:
   { ... JSON matching RunRecord schema ... }
   <<<END_EVAL_RUN_RECORD>>>
 
-If that block is absent the adapter falls back to heuristic parsing (grepping
-stdout for keywords), marks parse_errors, and returns a best-effort RunRecord.
+If that block is absent the adapter falls back to heuristic parsing, marks
+parse_errors, and returns a best-effort RunRecord.
 
 Fixture setup
 -------------
-The adapter copies (or symlinks) the fixture skeleton for the scenario into a
-fresh temp directory inside the provided fixture_dir, ensuring each run gets an
-isolated, reproducible starting state.
+The adapter copies the fixture skeleton for the scenario into a fresh temp
+directory, ensuring each run gets an isolated, reproducible starting state.
 
 Timeout
 -------
@@ -35,6 +51,7 @@ The default is 300 s.  Increase for multi-skill scenarios.
 from __future__ import annotations
 
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -51,6 +68,11 @@ from ..models import (
 from .base import AgentAdapter
 
 
+class ClaudeAuthError(RuntimeError):
+    """Raised when the claude CLI is not authenticated and cannot run headlessly."""
+
+
+_NOT_LOGGED_IN = "Not logged in"
 _RECORD_START = "<<<EVAL_RUN_RECORD>>>"
 _RECORD_END   = "<<<END_EVAL_RUN_RECORD>>>"
 _RECORD_RE    = re.compile(
@@ -190,6 +212,14 @@ class ClaudeCodeAdapter(AgentAdapter):
             f"{_RECORD_END}"
         )
 
+    def _build_cmd(self) -> list[str]:
+        """Build the base command list, adding --bare when ANTHROPIC_API_KEY is set."""
+        cmd = [self._claude_bin]
+        if os.environ.get("ANTHROPIC_API_KEY"):
+            cmd.append("--bare")
+        cmd += ["--print", "--dangerously-skip-permissions"]
+        return cmd
+
     def run(
         self,
         scenario: Scenario,
@@ -201,16 +231,23 @@ class ClaudeCodeAdapter(AgentAdapter):
         workspace = self._prepare_workspace(scenario, fixture_dir)
         try:
             prompt = self._build_prompt(scenario, skill_ids)
+            cmd = self._build_cmd() + ["--", prompt]
             result = subprocess.run(
-                [self._claude_bin, "--print", "--", prompt],
+                cmd,
                 capture_output=True,
                 text=True,
                 timeout=timeout,
                 cwd=str(workspace),
             )
-            raw = result.stdout
-            if result.returncode != 0:
-                raw += f"\n[stderr]: {result.stderr}"
+            raw = (result.stdout or "").strip()
+            if _NOT_LOGGED_IN in raw or _NOT_LOGGED_IN in (result.stderr or ""):
+                raise ClaudeAuthError(
+                    "claude CLI is not authenticated. "
+                    "Set ANTHROPIC_API_KEY to enable headless (--bare) mode, "
+                    "or run `claude /login` in an interactive terminal first."
+                )
+            if result.returncode != 0 and not raw:
+                raw = f"[exit {result.returncode}] {result.stderr}"
 
             record = _parse_run_record(scenario.scenario_id, scenario.task, raw, workspace)
 
