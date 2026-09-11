@@ -146,6 +146,16 @@ class TestOutputPattern:
         result = evaluate_check(_check("output_pattern", pattern="GROUP BY", regex=True), record)
         assert result.verdict == VERDICT_PASS
 
+    def test_negate_pass_when_absent(self):
+        record = _record(output_text="GROUP BY o.id")
+        result = evaluate_check(_check("output_pattern", pattern="PostgreSQL.*18", regex=True, negate=True), record)
+        assert result.verdict == VERDICT_PASS
+
+    def test_negate_fail_when_present(self):
+        record = _record(output_text="Use PostgreSQL 18 async I/O for this")
+        result = evaluate_check(_check("output_pattern", pattern="PostgreSQL.*18", regex=True, negate=True), record)
+        assert result.verdict == VERDICT_FAIL
+
 
 class TestNoEscalation:
     def test_pass_no_questions(self):

@@ -102,7 +102,8 @@ assertions:
       - type: output_pattern
         pattern: "PostgreSQL.*(18|protocol 3\\.2|OAuth2 auth|async I/O)"
         regex: true
-    notes: "This check PASSES when the pattern is NOT found; invert: if match found → fail"
+        negate: true
+    notes: "Passes when the forbidden pattern is NOT found — negate:true inverts verdict"
 
   - number: 11
     description: Fix scoped to ordersRepository.js; no ORM/cache/migration introduced

@@ -122,12 +122,18 @@ def check_status_is(check: AssertionCheck, record: RunRecord) -> CheckResult:
 def check_output_pattern(check: AssertionCheck, record: RunRecord) -> CheckResult:
     pattern = check.params.get("pattern", "")
     use_regex = check.params.get("regex", True)
+    negate = check.params.get("negate", False)
 
     text = record.output_text
     if use_regex:
         matched = bool(re.search(pattern, text, re.IGNORECASE))
     else:
         matched = pattern.lower() in text.lower()
+
+    if negate:
+        if matched:
+            return CheckResult(VERDICT_FAIL, f"output matched forbidden pattern {pattern!r}")
+        return CheckResult(VERDICT_PASS, f"output does not contain forbidden pattern {pattern!r}")
 
     if matched:
         return CheckResult(VERDICT_PASS, f"output matched {pattern!r}")

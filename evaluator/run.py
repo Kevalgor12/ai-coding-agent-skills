@@ -62,11 +62,11 @@ from evaluator.scorer import score_scenario
 # Adapter factory
 # ---------------------------------------------------------------------------
 
-def _make_adapter(name: str, *, keep: bool = False):
+def _make_adapter(name: str, *, keep: bool = False, claude_bin: str = "claude"):
     if name == ADAPTER_MOCK:
         return MockAdapter()
     if name == ADAPTER_CLAUDE_CODE:
-        return ClaudeCodeAdapter(keep_fixtures=keep)
+        return ClaudeCodeAdapter(claude_bin=claude_bin, keep_fixtures=keep)
     print(f"ERROR: unknown adapter {name!r} — choose 'mock' or 'claude-code'", file=sys.stderr)
     sys.exit(1)
 
@@ -142,6 +142,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Skill Library evaluation runner")
     parser.add_argument("--scenario", metavar="SNN", help="Run only this scenario ID")
     parser.add_argument("--adapter", default="mock", choices=["mock", "claude-code"])
+    parser.add_argument("--claude-bin", default="claude", metavar="PATH",
+                        help="Path to claude CLI binary (default: 'claude' on PATH)")
     parser.add_argument("--coverage", action="store_true", help="Print coverage report and exit")
     parser.add_argument("--promote", metavar="SKILL_ID", help="Check promotion gate for a skill")
     parser.add_argument("--timeout", type=int, default=300, metavar="SECS")
@@ -166,10 +168,11 @@ def main() -> None:
                 print(f"  {s.skill_id}  {s.skill_slug}  L{s.layer}")
         return
 
-    adapter = _make_adapter(args.adapter, keep=args.keep)
+    adapter = _make_adapter(args.adapter, keep=args.keep, claude_bin=args.claude_bin)
 
     # --- Promotion gate for one skill ---
     if args.promote:
+        adapter = _make_adapter(args.adapter, keep=args.keep, claude_bin=args.claude_bin)
         skill_id = args.promote
         # Load all scenarios that must-activate this skill
         all_scenarios = load_all_scenarios()
