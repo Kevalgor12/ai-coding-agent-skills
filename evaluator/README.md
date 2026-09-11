@@ -33,14 +33,11 @@ Skill → Evaluation Scenario → Expected Behaviors → Agent Adapter
 ## How to Run
 
 ```bash
-# Run one scenario with mock adapter (no live agent needed)
+# Run one scenario with mock adapter (no live agent needed — recommended for CI)
 python3 evaluator/run.py --scenario S01 --adapter mock
 
 # Run all 16 scenarios with mock adapter
 python3 evaluator/run.py --adapter mock
-
-# Run with Claude Code (requires claude CLI in PATH)
-python3 evaluator/run.py --scenario S12 --adapter claude-code
 
 # Coverage report only
 python3 evaluator/run.py --coverage
@@ -50,9 +47,28 @@ python3 evaluator/run.py --promote SK-DB-001 --adapter mock
 
 # Machine-readable JSON output
 python3 evaluator/run.py --adapter mock --json
+
+# Run with Claude Code (requires ANTHROPIC_API_KEY — see adapter note below)
+export ANTHROPIC_API_KEY=sk-ant-...
+python3 evaluator/run.py --scenario S01 --adapter claude-code \
+  --claude-bin /path/to/claude --timeout 300
 ```
 
 Results are written to `evaluations/results/`.
+
+### Claude Code adapter auth requirement
+
+The `claude-code` adapter runs the `claude` CLI as a subprocess using `--bare
+--print` mode, which requires `ANTHROPIC_API_KEY` to be set. The adapter
+automatically adds `--bare` when the variable is present.
+
+OAuth / interactive login (`claude /login`) does **not** carry into subprocess
+invocations — the keychain is unavailable outside the GUI session. If neither
+auth method is available, the adapter raises `ClaudeAuthError` immediately rather
+than silently producing empty results.
+
+The **mock adapter** is the recommended path for automated and CI evaluation. It
+tests the full scoring, assertion, and promotion gate logic without any API cost.
 
 ## How to Add a New Evaluation Scenario
 
@@ -77,8 +93,8 @@ Results are written to `evaluations/results/`.
            skill_id: SK-EXAMPLE-001
    ```
 
-4. Optionally add a fixture skeleton under `evaluator/fixtures/SNN/`
-   (files the isolated workspace should start with).
+4. Optionally add a fixture skeleton under `evaluations/fixtures/SNN/`
+   (files the isolated workspace should start with for claude-code adapter runs).
 
 ## How Expected Behaviors Are Defined
 
@@ -133,14 +149,10 @@ A skill is eligible for promotion when ALL of these gates pass:
 | `command_run` | `pattern` in `commands_run` (optional: `regex: true`) |
 | `file_changed` | `path` substring in `files_changed` (optional: `regex: true`) |
 | `status_is` | `run_record.status == value` |
-| `output_pattern` | regex/substring in `output_text` |
+| `output_pattern` | regex/substring in `output_text`; add `negate: true` to pass when pattern is absent |
 | `no_escalation` | `open_questions` is empty |
 | `test_passed` | `VerificationEntry` matching `item` has `status=pass` |
 | `human_review` | Always `not-evaluated` — requires a human reviewer |
-
-**Inverted checks** (where finding the pattern means failure) must be handled in
-the scenario's assertion notes and interpreted by the human reviewer.
-Future work: add a `negate: true` field to `AssertionCheck`.
 
 ## Current Skill Coverage
 
@@ -185,27 +197,25 @@ New Evaluation Scenario" above).
 
 ## Known Limitations
 
-1. **Inverted checks** — assertions like "this pattern must NOT appear in output"
-   cannot be expressed as a machine-checkable `fail` condition with the current
-   check types. They are marked `human_review` in the YAML `notes` field.
-   Planned fix: add `negate: true` to `AssertionCheck`.
+1. **Claude Code adapter requires ANTHROPIC_API_KEY** — the `claude` CLI's OAuth
+   session does not carry into subprocess invocations. The `claude-code` adapter
+   is blocked without an API key. Use the mock adapter for automated evaluation;
+   the `claude-code` adapter is an opt-in path for manual API-key-gated runs.
 
-2. **Human review required** — 30–40% of assertions require a human reviewer.
-   Scenarios cannot achieve an automated `complete` verdict without a human
-   sign-off pass. This is by design (the library's own evaluation-spec says
-   behavioral correctness cannot be fully automated).
+2. **Structured run record not emitted by default** — the `claude-code` adapter
+   prompts Claude to emit a `<<<EVAL_RUN_RECORD>>>` JSON block; the fixture
+   `CLAUDE.md` reinforces this. Without the block the adapter falls back to
+   heuristic parsing (output_text matching only), so routing and ledger assertions
+   return `not-evaluated`.
 
-3. **Claude Code adapter structured output** — the adapter currently relies on
-   a `<<<EVAL_RUN_RECORD>>>` JSON block in `claude --print` output. Claude Code
-   does not natively emit this block; the adapter falls back to heuristic parsing
-   when the block is absent, resulting in most assertions returning `not-evaluated`.
-   A future pass will instrument the skill invocation with an explicit output
-   schema instruction.
+3. **Human review required** — 30–40% of assertions require a human reviewer.
+   Scenarios cannot reach an automated `complete` verdict without a human sign-off
+   pass. This is by design (the evaluation-spec requires behavioral correctness to
+   be human-verified for ambiguous cases).
 
-4. **Fixture skeletons not yet authored** — the `evaluator/fixtures/` directory
-   exists but is empty. The Claude Code adapter runs in the skill directory
-   as a fallback. Per-scenario repository skeletons (the minimal repo state
-   each scenario's task assumes) should be authored to make runs reproducible.
+4. **Fixture coverage** — only S01 has a fixture skeleton (`evaluations/fixtures/S01/`).
+   Other scenarios run the claude-code adapter in an empty workspace. Author
+   additional fixtures as scenarios are promoted to live-agent testing.
 
 5. **No parallel scenario execution** — the CLI runs scenarios sequentially.
    A `--parallel` flag and async adapter interface are future work.
@@ -216,4 +226,4 @@ New Evaluation Scenario" above).
 python3 -m pytest evaluator/tests/ -v
 ```
 
-Expected: 59 tests, all passing.
+Expected: 61 tests, all passing.
