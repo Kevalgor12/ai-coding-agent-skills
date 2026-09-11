@@ -20,7 +20,7 @@ scope: >-
   reactivity, the v2-EOL/v3 split, and the pre-stable Vapor Mode (3.6 line).
   Does not repeat the React-vs-Vue-vs-Angular framework-selection comparison
   (owned by frontend-architecture) or the SSR/SSG rendering-mode decision
-  (owned by rendering-strategy, not yet authored). Not Nuxt-specific
+  (owned by rendering-strategy). Not Nuxt-specific
   meta-framework concerns (owned by the Nuxt technology skill).
 expertise: Vue engineer maintaining a Vue 3 codebase, aware of the Vue 2 EOL boundary and the pre-stable Vapor Mode line.
 description: >-
@@ -40,7 +40,7 @@ activation_conditions:
 non_activation_conditions:
   - The codebase uses React or Angular instead (route to that technology skill)
   - A framework choice is still open with no framework chosen yet (route to frontend-architecture, SK-FE-001)
-  - The question is the SSR/SSG rendering-mode decision itself, independent of Vue specifics (route to rendering-strategy, SK-FE-005, not yet authored)
+  - The question is the SSR/SSG rendering-mode decision itself, independent of Vue specifics (route to rendering-strategy, SK-FE-005)
   - The task is Nuxt-specific meta-framework concern (Nitro, routeRules, universal rendering config) with no Vue-core question (route to SK-TECH-nuxt)
 activation_mode: auto
 
@@ -218,6 +218,7 @@ verification:
   - Any Vapor Mode usage is flagged as pre-stable (3.6 RC) and not recommended for production without explicit user acceptance of that risk.
   - Any reactivity claim correctly attributes Proxy (v3) vs. Object.defineProperty (v2) to the right major version.
   - v-html usage is checked against the "never on user-provided content" rule before being proposed.
+  - The Vue project's dev build is actually run (npm run dev or vite build) and confirmed to compile without errors, not just the component structure reviewed for correctness.
 evaluation_criteria:
   - Given a seeded package.json pinning vue to a 3.5.x version, proposes Composition API code using only compiler macros valid at that minor (no 3.6-only or Vapor-only constructs).
   - Given a seeded Vue 2 codebase, states the EOL status explicitly and does not silently apply Vue-3-only reactivity/API assumptions.

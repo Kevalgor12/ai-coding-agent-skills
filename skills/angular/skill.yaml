@@ -7,9 +7,7 @@ kind: technology
 layer: 4
 domain: TECH
 parents: [SK-FE-001, SK-FE-005]
-# SK-FE-001 (frontend-architecture) is authored. SK-FE-005 (rendering-strategy)
-# is not yet authored as of this skill's creation; forward-referenced per the
-# taxonomy catalog (core/taxonomy/skill-catalog.md row SK-TECH-angular).
+# SK-FE-001 (frontend-architecture) and SK-FE-005 (rendering-strategy) are authored.
 
 purpose: >-
   Apply Angular correctly and version-appropriately — dependency injection,
@@ -24,7 +22,7 @@ scope: >-
   generic frontend-structure method and the React-vs-Vue-vs-Angular
   framework-selection decision belong to the parent, frontend-architecture
   (SK-FE-001) — not repeated here. The SSR/SSG rendering-mode decision
-  belongs to rendering-strategy (SK-FE-005, not yet authored).
+  belongs to rendering-strategy (SK-FE-005).
 expertise: Senior Angular engineer navigating the v20-v22 signal-first transition.
 description: >-
   Angular-specific implementation: dependency injection (inject(),
@@ -230,6 +228,7 @@ verification:
   - Any TypeScript/Node.js/RxJS version claim matches the confirmed Angular major's floor (see version_sensitive_claims).
   - Zoneless-vs-Zone.js guidance matches the codebase's actual provider configuration (provideZonelessChangeDetection vs provideZoneChangeDetection), not assumed.
   - Standalone-vs-NgModule guidance matches the codebase's actual structure, not assumed to be standalone-by-default for a pre-v19 codebase.
+  - The zoneless/Zone.js provider change is confirmed by actually running the project's build (`ng build`) or test suite against the configured providers, not inferred from reading the provider registration alone.
 evaluation_criteria:
   - For a seeded package.json pinning a specific Angular major (20, 21, or 22), states the correct TypeScript/Node.js/RxJS floor for that major without guessing.
   - Given a v20-era codebase using provideExperimentalZonelessChangeDetection, correctly identifies the v20 rename to provideZonelessChangeDetection and the v21+ default-on-change.

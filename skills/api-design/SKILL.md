@@ -128,8 +128,7 @@ REST/OpenAPI has a formal, five-type security-scheme model
 (`apiKey`/`http`/`mutualTLS`/`oauth2`/`openIdConnect`) declarable per-operation
 [Source: technology-decision-matrix.md §7] — use it to make auth requirements
 introspectable by tooling, not just documented in prose. Deep auth mechanics
-are owned by authentication-authorization (not yet authored in this
-library); deep threat modeling is owned by
+are owned by authentication-authorization; deep threat modeling is owned by
 [security-engineering](../../core/taxonomy/skill-catalog.md).
 
 ## Performance

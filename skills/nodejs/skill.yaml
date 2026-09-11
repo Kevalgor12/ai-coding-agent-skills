@@ -218,6 +218,7 @@ verification:
   - Any Node.js version claim is tagged with the release line/range it applies to.
   - Permission Model guidance repeats its official "does not provide security against malicious code" caveat rather than presenting it as a sandbox against adversarial dependencies.
   - CPU-bound work is not routed to worker_threads/child_process/cluster when the actual bottleneck is I/O-bound, and vice versa.
+  - The CPU-bound-vs-I/O-bound diagnosis is backed by an actual profile or load test run against the workload (e.g. `node --prof`, a benchmark run), not inferred from reading the code path alone.
 evaluation_criteria:
   - For a seeded module-system decision, chooses CommonJS or ESM based on the project's actual constraints (interop needs, existing "type" field, dependency ecosystem) rather than defaulting to one.
   - For a seeded event-loop-blocking symptom, correctly diagnoses it as blocking (not a memory leak or GC pause) and proposes partitioning/offload per official guidance.

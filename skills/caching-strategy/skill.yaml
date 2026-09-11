@@ -17,7 +17,7 @@ scope: >-
   Nuxt rendering-layer caching, and Docker/CI build-layer caching. Related
   to SK-TECH-redis for Redis-specific implementation depth. Not database
   query optimization itself (database-operations) and not the rendering-
-  mode decision (rendering-strategy, not yet authored).
+  mode decision (rendering-strategy).
 expertise: Senior/principal engineer with caching-architecture experience.
 description: >-
   Design caching — choose the layer(s) (client/CDN/app/ORM/database),

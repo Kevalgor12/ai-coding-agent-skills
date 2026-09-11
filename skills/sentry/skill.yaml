@@ -233,6 +233,7 @@ verification:
   - Any beforeSend/beforeSendTransaction PII-scrubbing hook is present before enabling sendDefaultPii or attaching user/request context.
   - Release/source-map steps produce Debug IDs and run before the corresponding deploy, not after.
   - Every version-specific claim made is tagged with the SDK major-version range it applies to.
+  - A test error or event is triggered in the instrumented app and its arrival is confirmed in the Sentry project dashboard, not just the SDK initialization code reviewed for correctness.
 evaluation_criteria:
   - For a seeded Node.js/Express or Fastify service, produces an instrument.js-first Sentry.init() with correct ordering and the documented framework error-handler wiring (setupExpressErrorHandler/setupFastifyErrorHandler).
   - Correctly distinguishes when Sentry's own tracing is sufficient vs. when broader OpenTelemetry instrumentation is the right call, per the decision framework.

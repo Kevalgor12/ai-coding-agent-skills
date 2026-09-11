@@ -15,7 +15,7 @@ purpose: >-
 scope: >-
   Schema/data-model design across relational and document stores, and the
   shape-of-store decision. Not query tuning, indexing, or replication once a
-  schema exists (database-operations, not yet authored); not ORM-specific
+  schema exists (database-operations); not ORM-specific
   mapping mechanics (orm-integration); not evolving an existing populated
   schema (data-migration).
 expertise: Senior engineer acting as a data modeler / database architect.
@@ -31,7 +31,7 @@ activation_conditions:
   - An existing schema needs a structural change (new entity, changed relationship)
   - A store-shape decision is open (relational vs. document vs. columnar/OLAP vs. key-value)
 non_activation_conditions:
-  - The schema is fixed and the task is query/index tuning against it (route to database-operations, not yet authored)
+  - The schema is fixed and the task is query/index tuning against it (route to database-operations)
   - The task is ORM-specific mapping mechanics with the schema already decided (route to orm-integration)
   - The task is migrating an already-populated database to a new shape (route to data-migration)
 activation_mode: auto

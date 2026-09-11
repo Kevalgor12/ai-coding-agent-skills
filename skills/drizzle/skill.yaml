@@ -198,6 +198,7 @@ verification:
   - Every version-sensitive API used (defineRelations vs. relations(), withRLS() vs. enableRLS(), getColumns() vs. getTableColumns()) matches the confirmed installed line.
   - Any migration output assumes the folder format (pre-v1 journal.json vs. v1 per-migration folders) matching the installed drizzle-kit version.
   - Any sql.raw() usage is confirmed to carry only trusted, non-user-controlled input, never interpolated user data.
+  - A generated migration was actually run (`drizzle-kit migrate`/`push`) against a real or test database and the resulting schema inspected, not just reasoned about from the generated SQL.
 evaluation_criteria:
   - Given a seeded package.json pinning drizzle-orm to a 0.x version, produces schema/query code using v0.x-correct APIs (relations(), enableRLS(), getTableColumns()), not v1 APIs.
   - Given a seeded package.json pinning drizzle-orm to 1.0.0-rc.x, produces code using v1 APIs (defineRelations(), withRLS(), getColumns()).

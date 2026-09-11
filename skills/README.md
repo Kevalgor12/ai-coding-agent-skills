@@ -37,12 +37,14 @@ not generated speculatively or in bulk.
 | [api-design](api-design/) | `SK-BE-002` | Backend (generic) | authored, not yet validated/evaluated |
 | [graphql-api-design](graphql-api-design/) | `SK-BE-003` | Backend (generic) | authored, not yet validated/evaluated |
 | [nodejs](nodejs/) | `SK-TECH-nodejs` | Backend (technology) | authored, not yet validated/evaluated — added to the taxonomy post-hoc (2026-09-10) |
+| [graphql](graphql/) | `SK-TECH-graphql` | Backend (technology) | authored, not yet validated/evaluated |
 | [express](express/) | `SK-TECH-express` | Backend (technology) | authored, not yet validated/evaluated |
 | [fastify](fastify/) | `SK-TECH-fastify` | Backend (technology) | authored, not yet validated/evaluated |
 | [go](go/) | `SK-TECH-go` | Backend (technology) | authored, not yet validated/evaluated |
 | [python](python/) | `SK-TECH-python` | Backend (technology) | authored, not yet validated/evaluated |
 | [openapi-swagger](openapi-swagger/) | `SK-TECH-openapi-swagger` | Backend (technology) | authored, not yet validated/evaluated |
 | [frontend-architecture](frontend-architecture/) | `SK-FE-001` | Frontend (generic) | authored, not yet validated/evaluated |
+| [rendering-strategy](rendering-strategy/) | `SK-FE-005` | Frontend (generic) | authored, not yet validated/evaluated |
 | [web-accessibility](web-accessibility/) | `SK-FE-004` | Frontend (generic) | authored, not yet validated/evaluated |
 | [react](react/) | `SK-TECH-react` | Frontend (technology) | authored, not yet validated/evaluated |
 | [nextjs](nextjs/) | `SK-TECH-nextjs` | Frontend (technology) | authored, not yet validated/evaluated |

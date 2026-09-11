@@ -93,6 +93,7 @@ verification:
   - The designed loop has an explicit, stated termination condition (a stop-reason/output check, an iteration/step cap, or both) — never an open-ended loop.
   - Autonomy is bounded (step/recursion/cost limits) and coordinated with ai-security (SK-AI-008) wherever the loop grants tools real-world effects.
   - Multi-agent composition (subagents/handoffs/agents-as-tools) is justified by genuine task decomposition into specialist roles, not added reflexively to a task a single agent could complete.
+  - The termination condition is exercised by an actual trial run (a real invocation or an existing eval trace) and observed to stop as designed, not confirmed by reading the control-flow code alone.
 escalation:
   - A request that is really about restricting what tools/actions the agent may take (authorization, blast radius, excessive agency) is escalated to ai-security (SK-AI-008) rather than answered as loop design.
 evaluation_criteria:

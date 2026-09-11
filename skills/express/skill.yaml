@@ -215,6 +215,7 @@ verification:
   - Route-path syntax used (wildcards, optional segments, alternatives) matches the project's actual Express major version.
   - Error-handling middleware (4-arg signature) is registered last, after all other app.use()/route registrations.
   - Any security-hardening recommendation cites a specific documented CVE/fixed-version rather than a vague "update your dependencies."
+  - The error-handling middleware ordering and route-path matching are confirmed by actually sending a request (via a test client or curl) and observing the response, not inferred by reading the registration order alone.
 evaluation_criteria:
   - For a seeded Express 4.x app, does not introduce 5.x-only route syntax (named wildcards, brace optional segments) or 5.x-only defaults (urlencoded extended:false) that would break on 4.x.
   - For a seeded Express 5.x migration task, correctly identifies the route-syntax, req.body/req.query, and urlencoded-default changes.

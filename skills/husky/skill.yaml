@@ -137,7 +137,7 @@ failure_handling:
   - If the package manager can't be determined, ask rather than guessing prepare-vs-postinstall wiring, since Yarn's wiring is genuinely different.
 verification:
   - The `.husky/<hook-name>` file uses the exact Git hook name (no `precommit`/`pre-commit.sh`-style typos).
-  - "`git config core.hooksPath` resolves to the Husky-managed directory after install."
+  - "`git config core.hooksPath` is actually run after install and its output confirmed to point to the Husky-managed directory — not assumed from reading `.husky/` or `package.json` alone."
   - "`package.json`'s `prepare` script (or Yarn's `postinstall`) actually invokes `husky`."
   - Any CI workflow that shouldn't install hooks sets `HUSKY=0`.
 evaluation_criteria:

@@ -143,12 +143,29 @@ object**: classes, lifecycle, and invariants.
 
 | Class | Trigger | Examples |
 |---|---|---|
-| **G-DESTRUCTIVE** | Irreversible data or history loss | destructive migration, `DROP`/`TRUNCATE`, force-push, history rewrite, `reset --hard` |
-| **G-OUTWARD** | Something leaves the repository | posting to a PR or tracker, sending a message, publishing, security disclosure |
-| **G-PRODUCTION** | Production is affected | deploy, release cut, secret rotation, feature-flag flip in prod |
+| **G-DESTRUCTIVE** | Irreversible data or history loss, **performed now or pre-authorized for later** | destructive migration, `DROP`/`TRUNCATE`, force-push, history rewrite, `reset --hard`; *also* a branch-protection exemption or always-allow rule that lets a future force-push/history-rewrite skip this gate |
+| **G-OUTWARD** | Something leaves the repository, **now or by standing rule** | posting to a PR or tracker, sending a message, publishing, security disclosure; *also* a webhook/integration or auto-publish rule that lets future output leave the repo ungated |
+| **G-PRODUCTION** | Production is affected, **now or by standing rule** | deploy, release cut, secret rotation, feature-flag flip in prod; *also* a CI/CD setting that lets a future deploy or flag flip skip this gate |
 | **G-COMMITMENT** | An expensive-to-reverse decision is locked in | major stack/architecture commitment, schema shape, public API contract |
-| **G-COST** | Real cost or data exposure per invocation | live external LLM/API calls with cost or data implications |
+| **G-COST** | Real cost or data exposure per invocation, **now or by standing rule** | live external LLM/API calls with cost or data implications; *also* a config change that raises a rate/cost ceiling for future calls |
 | **P-PROHIBITED** | **Not a gate.** The agent does not do these at all | entering credentials, accepting terms, granting OAuth, executing financial transfers |
+
+**GA-0.1 · Authoring a bypass is gated at the class it bypasses.** The
+"performed now or pre-authorized for later" qualifier above is not
+decorative: a request that establishes a policy, config, or exception
+letting a *future* action skip one of these gates is itself gated at that
+class, at the point the policy is authored — not deferred to whenever the
+bypass is first exercised. This closes a documented failure mode where a
+self-contradictory request ("strict branch protection" + "force-push
+exemption for hotfixes") was classified as an ordinary config edit
+(`reversible-write`), never reached D13 admission or FV-9, and shipped as a
+working ruleset with a bypass actor — every check passed because every
+check was keyed to the wrong risk value at intake (D3;
+[routing-algorithm.md](../routing-architecture/routing-algorithm.md#phase-1--classify-intent-task-type-complexity-risk)).
+GA-1 (one approval, one action) still applies once this gate is correctly
+requested: approving the policy does not retroactively approve every future
+action it authorizes — each of those, when it occurs, is a separate,
+individually-gated action of its own class.
 
 - **GA-0 · Approval cannot convert P into G.** A prohibited action stays
   prohibited when the user asks for it, supplies the details, or grants

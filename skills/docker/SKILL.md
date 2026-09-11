@@ -23,8 +23,7 @@ implementation depth on top of it: Engine API versioning, the Go SDK
 migration, Build Checks' version gates, Compose V2's build-field version
 gates, cgroup v1's deprecation timeline, and Enhanced Container Isolation's
 platform floor. Deep cross-cutting security threat modeling is owned by
-security-engineering (`SK-QA-002`, not yet authored in this library) —
-forward-referenced here, not restated.
+security-engineering (`SK-QA-002`) — not restated here.
 
 ## When to use / When not to use
 
@@ -206,7 +205,7 @@ update as new advisories are published, without re-running the scan itself
 `docker scout` CLI subcommands (e.g. `docker scout cves`).
 
 Deep threat modeling beyond these Docker-specific mechanics is owned by
-security-engineering (`SK-QA-002`, not yet authored in this library) — not
+security-engineering (`SK-QA-002`) — not
 restated here.
 
 ## Performance
@@ -274,6 +273,5 @@ testing-strategy skill, not restated here.
 - Parent skill: [containerization](../containerization/SKILL.md) — general
   image-authoring, layering, multi-stage builds, and the root-daemon
   security model.
-- Cross-cutting reference: security-engineering (`SK-QA-002`, not yet
-  authored in this library) — deep threat modeling beyond Docker-specific
-  mechanics.
+- Cross-cutting reference: security-engineering (`SK-QA-002`) — deep threat
+  modeling beyond Docker-specific mechanics.

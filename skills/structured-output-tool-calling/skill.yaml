@@ -90,6 +90,7 @@ verification:
   - The proposed/implemented schema does not rely on a JSON Schema feature outside the target provider's documented support ceiling (e.g. no recursive schemas, no numeric/string-length constraints, no external $ref where unsupported, additionalProperties set as required).
   - Forcing semantics (tool_choice value, parallel-call setting) match the task's actual need rather than defaulting to forcing every call.
   - The turn's tool count stays near the ~20 soft ceiling documented by both platforms; larger tool ecosystems use dynamic/tool-search loading instead of one static list.
+  - A test API call is actually made with the schema and the model's response is observed to be a well-formed JSON object matching the schema, not just the schema definition reviewed for structural correctness.
 escalation:
   - A request that is really about the agent orchestration loop around tool calls (not a single call's schema/round trip) is routed to agent-architecture (SK-AI-004) rather than answered here.
 evaluation_criteria:

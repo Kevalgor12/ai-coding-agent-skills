@@ -17,8 +17,8 @@ Apply MUI (Material UI) correctly for the version actually installed —
 Emotion-based CSS-in-JS theming, the `sx` prop, `styled()`, CSS-variables
 theming, and RSC/App Router integration. The general styling-system method
 (design tokens, theming architecture, dark-mode strategy as a discipline)
-belongs to `styling-systems` (`SK-FE-003`, not yet authored); general UI/UX
-design judgment belongs to `ui-ux-design` (`SK-FE-002`, not yet authored).
+belongs to `styling-systems` (`SK-FE-003`); general UI/UX
+design judgment belongs to `ui-ux-design` (`SK-FE-002`).
 This skill supplies what's MUI-specific: the `sx` prop and `styled()` API,
 `createTheme()`/`ThemeProvider`, the Emotion styling engine and its CSP
 requirements, and the security-patch-line policy that makes "which major

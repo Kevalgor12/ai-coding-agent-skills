@@ -20,8 +20,7 @@ version-critical May 2026 security advisories. The framework-selection
 decision and the Next.js-vs-Nuxt comparison belong to
 [frontend-architecture](../frontend-architecture/SKILL.md) (`SK-FE-001`) and
 are not repeated here; the rendering-mode decision method belongs to
-`SK-FE-005` (not yet authored) and SEO mechanics to `SK-GROW-001` (not yet
-authored).
+`SK-FE-005` and SEO mechanics to `SK-GROW-001`.
 
 ## When to use / When not to use
 
@@ -147,7 +146,7 @@ removed — use ESLint/Biome directly).
    Actions are independently reachable via direct POST [Source:
    https://nextjs.org/docs/app/guides/data-security].
 7. Verify (below) before declaring done; hand off deep rendering-mode
-   trade-offs to `SK-FE-005` and SEO mechanics to `SK-GROW-001` once authored.
+   trade-offs to `SK-FE-005`, and SEO mechanics to `SK-GROW-001`.
 
 ## Engineering rules
 

@@ -6,7 +6,7 @@ skill_version: "0.1.0"
 kind: technology
 layer: 4
 domain: TECH
-parents: [SK-FE-001, SK-FE-005, SK-GROW-001]   # frontend-architecture, rendering-strategy (not yet authored), seo-optimization (not yet authored)
+parents: [SK-FE-001, SK-FE-005, SK-GROW-001]   # frontend-architecture, rendering-strategy, seo-optimization
 
 purpose: >-
   Apply Nuxt correctly and version-appropriately — the Nitro server engine,
@@ -180,6 +180,7 @@ verification:
   - Any cache/swr/isr route rule proposed for a route touches only non-authenticated data, or the GHSA-wm8w-6qjm-cv43 exposure and its purge-the-cache remediation step were explicitly addressed.
   - Auto-import/file-based-routing conventions (app/pages/, server/api, server/routes) are used instead of a hand-rolled router or duplicate backend framework.
   - Every version-specific claim in the output is tagged with the range it holds for.
+  - The cache/swr/isr route-rule behavior is confirmed by actually building and requesting the route (`nuxi build`/`nuxi preview`) and observing whether cached content leaks across users, not assumed from reading `nuxt.config` alone.
 evaluation_criteria:
   - For a seeded route serving authenticated/per-user data, refuses or flags a cache/swr/isr route rule unless the GHSA-wm8w-6qjm-cv43 patch level and cache-purge step are confirmed.
   - For a seeded Nuxt 3.x repo, states the 3.x EOL date and does not silently treat 3.x as an actively maintained option.

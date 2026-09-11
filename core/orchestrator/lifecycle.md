@@ -86,7 +86,11 @@ change exits after P2 with one skill and no plan.
 - **D2 · Is intent genuinely ambiguous on a non-trivial task?** If yes, escalate
   before selecting build skills (ER-4). Do not route on a guess.
 - **D3 · What is the highest-risk action this task implies?** This single value
-  drives gating (ER-2), admission (D13), and the discovery depth (SR-8).
+  drives gating (ER-2), admission (D13), and the discovery depth (SR-8). A
+  request to author a policy/config/exception that lets a *future* action
+  bypass a gate classifies at the risk level of the gate class it would
+  bypass, not at the mechanical action of writing the policy — see
+  [routing-algorithm.md, Phase 1](../routing-architecture/routing-algorithm.md#phase-1--classify-intent-task-type-complexity-risk).
 
 ---
 

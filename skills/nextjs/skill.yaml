@@ -16,8 +16,8 @@ purpose: >-
 scope: >-
   Next.js-specific implementation depth. The generic frontend-structure
   method comes from SK-FE-001; the rendering-mode decision method comes from
-  SK-FE-005 (not yet authored); SEO mechanics come from SK-GROW-001 (not yet
-  authored). The Next.js-vs-Nuxt meta-framework comparison is already owned
+  SK-FE-005; SEO mechanics come from SK-GROW-001. The
+  Next.js-vs-Nuxt meta-framework comparison is already owned
   by SK-FE-001 and is not repeated here.
 expertise: Next.js/full-stack React framework engineer.
 description: >-
@@ -36,9 +36,9 @@ activation_conditions:
   - A Next.js version upgrade, security-patch check, or major-version migration is requested
 non_activation_conditions:
   - The stack uses a different meta-framework (Nuxt, Remix, SvelteKit, Astro) — route to that skill
-  - The framework/meta-framework choice is still open (route to SK-FE-001, or SK-FE-005 once authored)
+  - The framework/meta-framework choice is still open (route to SK-FE-001, or SK-FE-005)
   - Generic React component/hook/state work with no Next.js-specific mechanism involved (route to SK-TECH-react)
-  - Pure SEO/content strategy with no rendering-mechanism question (route to SK-GROW-001 once authored)
+  - Pure SEO/content strategy with no rendering-mechanism question (route to SK-GROW-001)
 activation_mode: auto
 
 inputs:
@@ -218,6 +218,7 @@ verification:
   - App Router and Pages Router conventions are not mixed in ways the docs warn against; the correct React-version source (canary vs package.json) is used for the router in play.
   - Any version-gated API/config/CLI claim made matches the project's actual Next.js version, not an assumed "latest."
   - A proposed static export (output:'export') does not rely on a feature the docs list as unsupported in that mode.
+  - The chosen router/version-gated API combination is confirmed by actually running the project's build (`next build`) against the real package.json-resolved Next.js version, not assumed from reading the config alone.
 evaluation_criteria:
   - For a seeded project on Next.js 13 or 14, identifies that no direct patch exists and recommends the correct upgrade target (>=15.5.18 or >=16.2.6).
   - For a seeded App Router task, correctly distinguishes canary-React behavior from Pages Router's package.json-declared React version.

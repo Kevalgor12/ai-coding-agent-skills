@@ -1,0 +1,132 @@
+id: SK-FE-005
+slug: rendering-strategy
+name: Rendering strategy
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: FE
+parents: []   # Layer-3 generic — specializes nothing; specialized BY react/nextjs/vue/nuxt/angular
+
+purpose: >-
+  Choose the rendering mode for a page or app — CSR, SSR, SSG, ISR, or
+  streaming SSR with partial/selective hydration — weighing SEO need,
+  time-to-interactive, personalization, and infrastructure complexity,
+  independent of which framework ends up implementing the choice.
+scope: >-
+  Tech-neutral rendering-mode selection and its trade-offs. Specialized by
+  the React/Next.js/Vue/Nuxt/Angular technology skills, which own each
+  framework's concrete mechanics for implementing the chosen mode (RSC
+  Server/Client Component boundaries, Next.js's Cache Components/ISR APIs,
+  Nuxt's routeRules, Angular's Server/Client/Prerender route config). Not
+  component/state architecture itself (frontend-architecture owns that) and
+  not SEO implementation depth beyond the rendering-mode/indexability tie
+  (seo-optimization owns structured data, canonicalization, sitemaps, and
+  Core Web Vitals implementation depth).
+expertise: Senior/principal frontend engineer specializing in rendering architecture.
+description: >-
+  Choose how a page or app renders — CSR, SSR, SSG, ISR, or streaming SSR
+  with partial/selective hydration — weighing SEO need, time-to-interactive,
+  personalization, and infrastructure complexity. Use when deciding or
+  reviewing how a page/app should render in a framework capable of more than
+  one mode, or when a rendering choice has SEO/TTI consequences. Not for
+  component/state architecture (frontend-architecture) or a specific
+  framework's rendering-mode API/config mechanics once the mode is already
+  decided (its own technology skill).
+
+activation_conditions:
+  - Deciding how a page or app should render (CSR/SSR/SSG/ISR/streaming) in a framework capable of more than one mode
+  - A rendering-mode choice has SEO, time-to-interactive, or personalization consequences that need weighing
+  - Reviewing an existing app's rendering mode for a mismatch against its actual content-volatility/interactivity/SEO needs
+non_activation_conditions:
+  - A pure client-only SPA with no SEO/SSR concern and no rendering-mode choice actually open (nothing to decide)
+  - The framework/meta-framework itself hasn't been chosen yet (route to frontend-architecture)
+  - A specific framework's rendering-mode API/config mechanics with the mode already decided (route to that framework's technology skill: react, nextjs, vue, nuxt, or angular)
+  - Backend-only work with no rendered page involved
+activation_mode: auto
+
+inputs:
+  - name: page-requirements
+    description: Per-page/app requirements — SEO need, content volatility, personalization level, interactivity, target infrastructure.
+    required: true
+  - name: framework-context
+    description: The chosen framework/meta-framework, if any, and which rendering modes it actually supports.
+    required: false
+required_context:
+  - Whether the page/app needs to be indexed by search engines
+  - How often the content changes (static, periodically revalidated, per-request dynamic, per-user personalized)
+optional_context:
+  - The chosen framework/meta-framework and its supported rendering modes
+  - Target deployment infrastructure (CDN/static host vs. a server runtime)
+
+outputs:
+  - name: rendering-mode-decision
+    kind: analysis
+    description: The recommended rendering mode (or a per-route mix) with rationale and the SEO/TTI/infrastructure trade-offs, handed off to the relevant framework technology skill for implementation.
+
+depends_on_skills: []
+related_skills: [SK-FE-001, SK-GROW-001, SK-QA-003]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: research/knowledge-maps/concept-knowledge-map.md
+    title: "Concept Knowledge Map — §C Rendering, Frontend Architecture & State (SSR/SSG/Hydration/ISR/Streaming/CSR cross-framework concept entries)"
+    via: research/knowledge-maps/concept-knowledge-map.md
+    retrieved: "2026-09-10"
+  - url: https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics
+    title: "Google Search Central — JavaScript SEO basics (crawl/render/index pipeline, rendering as a distinct queued step)"
+    via: research/technologies/google-seo.md
+    retrieved: "2026-09-10"
+  - url: https://nuxt.com/docs/4.x/guide/concepts/rendering
+    title: "Nuxt Docs — Rendering Modes (Universal/Client-Side/Hybrid Rendering, routeRules swr/isr/prerender)"
+    via: research/technologies/nuxt.md
+    retrieved: "2026-09-09"
+  - url: https://nuxt.com/docs/4.x/getting-started/introduction
+    title: "Nuxt Docs — Introduction (documented SSR-by-default benefits)"
+    via: research/technologies/nuxt.md
+    retrieved: "2026-09-09"
+  - url: https://nextjs.org/docs/app/getting-started/caching
+    title: "Next.js Docs — Caching (Cache Components / Partial Prerendering: static shell + Suspense-streamed content)"
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+  - url: https://vuejs.org/guide/scaling-up/ssr.html
+    title: "Vue Docs — Server-Side Rendering Guide (SSR constraints, SSG contrast, Nuxt/VitePress as recommended meta-frameworks)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-09"
+  - url: https://angular.dev/guide/hydration
+    title: "Angular Docs — Hydration (definition, Event Replay)"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-09"
+  - url: https://angular.dev/guide/ssr
+    title: "Angular Docs — SSR (Server/Client/Prerender per-route RenderMode)"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-09"
+  - url: https://react.dev/reference/rsc/server-components
+    title: "React Docs — Server Components (streaming, RSC payload)"
+    via: research/technologies/react.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Rendering-mode (CSR/SSR/SSG/ISR/streaming) selection decision framework
+  - Cross-framework rendering-mode vocabulary and the SEO/TTI/infrastructure trade-offs between modes
+decision_framework_present: true
+
+failure_handling:
+  - If per-page requirements (SEO need, content volatility, interactivity) aren't stated, ask rather than assuming a mode.
+  - If the framework/meta-framework choice is still open, hand off to frontend-architecture first — a rendering mode can't be chosen independent of what the target framework actually supports.
+  - If the target framework's exact rendering-mode API isn't known, state the recommended mode and rationale, and hand off the implementation specifics to that framework's technology skill rather than guessing its API.
+verification:
+  - The recommended mode is justified against the page's actual SEO/content-volatility/interactivity needs, not chosen by default or by framework-marketing preference.
+  - A CSR-only recommendation for a page with a real SEO requirement explicitly flags the indexability consequence.
+  - The simplest-sufficient mode is recommended before reaching for ISR/streaming machinery a page doesn't need.
+evaluation_criteria:
+  - For seeded page types (marketing page, dashboard, blog/content page), recommends a defensible rendering mode and correctly flags the SEO consequence of a CSR-only choice.
+  - Does not recommend SSR/ISR/streaming infrastructure for a page with no SEO, TTI, or personalization need that would justify it (QR-4 anti-overengineering).
+  - Does not restate a specific framework's rendering-mode implementation mechanics already owned by that framework's technology skill (QR-2).
+
+adapter_hints: {}

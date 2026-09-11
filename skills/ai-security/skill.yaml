@@ -95,6 +95,7 @@ verification:
   - No mitigation is presented as complete prevention where the source material documents it as partial or bypassable (especially prompt injection).
   - Untrusted external content is never recommended for placement in system-level instructions; it is confined to clearly-delineated, skepticism-flagged channels.
   - High-impact or irreversible agent actions are gated on human approval or deterministic policy re-validation, not on the model's own stated intent.
+  - A claimed mitigation (an input filter, an output guardrail, a permission check) is actually exercised with a crafted adversarial payload and the observed behavior recorded, not marked effective from reading the mitigation code alone.
 escalation:
   - A finding involving an LLM agent with simultaneous access to untrusted input, sensitive data, and state-changing capability (the "Rule of Two" coincidence) is escalated for per-action approval design, not treated as a routine finding.
   - A request to certify prompt-injection defenses as complete is escalated back to the requester with the standard's own documented adaptive-testing gap, not silently accepted.

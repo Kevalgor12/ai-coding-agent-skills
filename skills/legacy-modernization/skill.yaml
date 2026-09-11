@@ -55,8 +55,12 @@ outputs:
     kind: edit
     description: Incremental modernization changes applied, when execution is authorized.
 
-depends_on_skills: [SK-CONV-004, SK-QA-001]
-related_skills: [SK-DISC-002, SK-DATA-006]
+depends_on_skills: [SK-CONV-004]
+# SK-QA-001 (testing-strategy, layer 3) moved to related_skills: it is an input
+# to verification steps, not an unconditional hard blocking sub-step of this
+# skill's execution. VR-4 requires depends_on_skills to be same-or-lower layer;
+# SK-QA-001 is layer 3 while this skill is layer 2.
+related_skills: [SK-DISC-002, SK-DATA-006, SK-QA-001]
 conflicts_with: []
 
 required_capabilities: [file-read, file-write, shell]
@@ -82,7 +86,7 @@ failure_handling:
 verification:
   - Every documented breaking change between current and target state is addressed in the plan, not silently skipped.
   - Each staged step has a rollback point.
-  - Behavior-preservation for each incremental step is verified via refactoring's method, not assumed.
+  - Behavior-preservation for each incremental step is confirmed by actually running the existing test suite (or refactoring's equivalence-reasoning method when none exists) after the step, not assumed from reading the diff alone.
 escalation:
   - A major-version upgrade or migration with production impact is presented with the staged plan and rollback points for explicit confirmation before execution begins.
   - A proposed big-bang rewrite (versus incremental/strangler migration) requires explicit justification and confirmation, since it's a significant, harder-to-reverse choice than staged migration.

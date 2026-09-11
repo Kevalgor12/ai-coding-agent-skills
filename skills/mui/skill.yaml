@@ -7,9 +7,8 @@ kind: technology
 layer: 4
 domain: TECH
 parents: [SK-FE-003, SK-FE-002]
-# SK-FE-003 (styling-systems) and SK-FE-002 (ui-ux-design) are not yet
-# authored anywhere in this library as of this skill's creation — forward
-# reference only, no content from either is assumed or fabricated here.
+# SK-FE-003 (styling-systems) and SK-FE-002 (ui-ux-design) — no content
+# from either is assumed or fabricated here.
 
 purpose: >-
   Apply MUI (Material UI) correctly and version-appropriately — Emotion-based
@@ -19,9 +18,9 @@ purpose: >-
 scope: >-
   MUI-specific API, theming, styling-engine, CSP, and integration detail. The
   general styling-system method (design tokens, theming architecture,
-  dark-mode strategy) belongs to styling-systems (SK-FE-003, not yet
-  authored); general UI/UX design judgment (information architecture, visual
-  design) belongs to ui-ux-design (SK-FE-002, not yet authored). This skill
+  dark-mode strategy) belongs to styling-systems (SK-FE-003);
+  general UI/UX design judgment (information architecture, visual
+  design) belongs to ui-ux-design (SK-FE-002). This skill
   supplies what's MUI-specific: the sx prop, createTheme()/ThemeProvider, the
   Emotion styling engine and its CSP requirements, the v7/v9 breaking-change
   surface, and the security-patch-line policy.
@@ -41,8 +40,8 @@ activation_conditions:
   - The task names MUI, Material UI, or a Material-Design component library specifically
 non_activation_conditions:
   - The project uses shadcn/ui, Chakra UI, Ant Design, or another component library instead (route to that skill)
-  - The question is a generic styling-system or design-token choice with no component library chosen yet (route to styling-systems, not yet authored)
-  - The question is UI/UX design judgment (information architecture, visual design, usability) independent of a specific component library (route to ui-ux-design, not yet authored)
+  - The question is a generic styling-system or design-token choice with no component library chosen yet (route to styling-systems)
+  - The question is UI/UX design judgment (information architecture, visual design, usability) independent of a specific component library (route to ui-ux-design)
 activation_mode: auto
 
 inputs:
@@ -77,8 +76,7 @@ depends_on_skills: []
 related_skills: []
 conflicts_with: [SK-TECH-shadcn-ui]
 # SK-TECH-shadcn-ui is an alternative component library for the same UI
-# layer, authored by a sibling agent in this same batch — forward reference
-# only; no content of that skill is assumed here beyond the structural
+# layer; no content of that skill is assumed here beyond the structural
 # comparison already recorded in technology-decision-matrix.md §8.
 
 required_capabilities: [file-read, file-write]

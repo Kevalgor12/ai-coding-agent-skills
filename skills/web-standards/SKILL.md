@@ -24,8 +24,7 @@ specific** guidance (semantic-HTML-for-a11y, alt text, heading hierarchy,
 table markup) is owned by `web-accessibility` (`SK-FE-004`) and only
 referenced here, not repeated; **styling-architecture** decisions (design
 tokens, utility-first vs. component CSS, CSS-in-JS) belong to
-`styling-systems` (`SK-FE-003`), which is not yet authored in this library
-— forward-referenced, not fabricated.
+`styling-systems` (`SK-FE-003`) and only referenced here, not fabricated.
 
 ## When to use / When not to use
 
@@ -320,8 +319,7 @@ out of scope for this skill's official-sources grounding.
 - If the task is actually an accessibility concern, defer to
   `web-accessibility` (`SK-FE-004`) rather than restating its content.
 - If the task is a styling-architecture decision beyond raw CSS mechanics,
-  state that `styling-systems` (`SK-FE-003`) — not yet authored in this
-  library — owns that decision.
+  state that `styling-systems` (`SK-FE-003`) owns that decision.
 
 ## Escalation
 

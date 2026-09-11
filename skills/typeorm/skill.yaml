@@ -199,6 +199,7 @@ verification:
   - Any Repository/QueryBuilder API named (e.g. `findOneBy` vs. `findOneById`) matches the version line actually in use.
   - "The relation-loading strategy avoids N+1 without setting `eager: true` on both sides of the same relation."
   - "A DataSource config never leaves `synchronize: true` or `dropSchema: true` enabled for a production target."
+  - A migration is actually run against the target database (npm run migration:run or equivalent) and the resulting schema change is observed, or at minimum the TypeScript compilation against the entity files completes without errors.
 evaluation_criteria:
   - Given a codebase pinned to 0.3.x, does not apply v1.0-only API/driver requirements (or the reverse) without flagging the mismatch.
   - Correctly follows the existing codebase's Active Record or Data Mapper convention, or gives a reasoned recommendation when greenfield.

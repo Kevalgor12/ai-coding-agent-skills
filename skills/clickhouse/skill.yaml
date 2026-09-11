@@ -251,6 +251,7 @@ verification:
   - Insert strategy (batch size or async_insert config) follows the documented sizing guidance rather than many small, frequent inserts.
   - Every version-specific claim is tagged with the ClickHouse range it holds for.
   - Nullable(T) usage is justified by a genuine need to distinguish "empty" from "absent," not used reflexively.
+  - The chosen table engine and insert strategy are validated against an actual query run (`EXPLAIN`, or `system.query_log`/`system.parts`) on the target table, not reasoned about from the schema alone.
 evaluation_criteria:
   - For a seeded scenario where analytical queries are demonstrably degrading an OLTP primary, recommends adding ClickHouse as a second, complementary store — not a replacement for the OLTP primary.
   - For a seeded scenario where the analytical need is only hypothetical ("might need it later"), does not recommend adopting ClickHouse (anti-overengineering, QR-4).

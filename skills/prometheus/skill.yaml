@@ -196,6 +196,7 @@ verification:
   - Every version-specific claim states the range it applies to, especially the TSDB v2.55 boundary and the v2->v3 regex/lookback semantic changes.
   - A proposed Alertmanager HA configuration lists every instance directly in Prometheus's alerting.alertmanagers block, never behind a load balancer.
   - A scrape config with realistic cardinality risk sets sample_limit/label_limit/label_value_length_limit/target_limit rather than relying on convention alone.
+  - A cardinality-risk claim is confirmed by actually querying `prometheus_tsdb_head_series` (or an equivalent live metric) against a running instance, not estimated from the scrape config alone.
 evaluation_criteria:
   - For a seeded metric-instrumentation task, chooses Counter vs. Gauge correctly per the value's semantics (monotonic-only vs. can-decrease) and recommends native histograms over classic histograms when the client library supports them.
   - For a seeded HA/scale question, correctly states that local storage is not clustered/replicated and recommends federation or remote-write to a long-term-storage backend rather than implying Prometheus alone scales horizontally.

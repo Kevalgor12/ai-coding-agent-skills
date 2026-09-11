@@ -86,6 +86,7 @@ verification:
   - The chosen test layer(s) match the actual risk, not a reflexive default (no e2e-for-everything, no unit-testing-a-getter).
   - Tests are isolated and deterministic — no shared mutable state between tests, no reliance on execution order, no flaky timing dependencies.
   - Test data/fixtures are set up and torn down explicitly, not left to leak between runs.
+  - The authored tests are actually run (not just reviewed for structure) and produce a green suite, confirming they pass and are deterministic across at least two consecutive executions.
 evaluation_criteria:
   - For a seeded feature, assigns the right test layer to each risk (no e2e-for-everything, no unit-testing-a-getter) and produces deterministic tests.
   - Correctly states when the underlying technology has no first-party testing methodology documented, rather than fabricating one.

@@ -49,8 +49,12 @@ outputs:
     kind: analysis
     description: How behavior-preservation was verified (tests passing, or explicit equivalence reasoning with the risk stated).
 
-depends_on_skills: [SK-QA-001]
-related_skills: [SK-CONV-003, SK-CONV-005]
+depends_on_skills: []
+# SK-QA-001 (testing-strategy, layer 3) moved to related_skills: it is a
+# related skill for verification discipline, not an unconditional hard blocking
+# sub-step of every refactor. VR-4 requires depends_on_skills to be same-or-lower
+# layer; SK-QA-001 is layer 3 while this skill is layer 2.
+related_skills: [SK-CONV-003, SK-CONV-005, SK-QA-001]
 conflicts_with: []
 
 required_capabilities: [file-read, file-write, shell]
@@ -77,6 +81,7 @@ verification:
   - Existing tests still pass after the refactor, or (when none exist) an explicit equivalence-reasoning statement is provided with the risk stated.
   - No behavior change is bundled into the refactor — a found bug is reported and handed off, never silently fixed inline.
   - Changes are applied in small, independently-verifiable steps rather than one large rewrite.
+  - The test suite is actually run after the refactor (not just reviewed for structure) and produces a green result, confirming behavior is preserved in the real execution environment.
 escalation:
   - If a bug is discovered during refactoring, it's reported and handed off rather than silently fixed — fixing it would bundle a behavior change into what should be a behavior-preserving change.
   - A refactor with no available safety net proceeds only after the user explicitly accepts that risk.

@@ -21,7 +21,7 @@ React-vs-Vue-vs-Angular framework-selection decision belong to the parent,
 [frontend-architecture](../frontend-architecture/SKILL.md) (`SK-FE-001`) —
 this skill does not repeat that comparison, only adds Angular-specific
 implementation depth. The SSR/SSG rendering-mode decision belongs to
-rendering-strategy (`SK-FE-005`, not yet authored).
+rendering-strategy (`SK-FE-005`).
 
 ## When to use / When not to use
 
@@ -396,11 +396,10 @@ Angular specifics is owned by `SK-QA-001`.
   — owns the generic frontend-structure method and the
   React-vs-Vue-vs-Angular comparison
   ([references/framework-comparison.md](../frontend-architecture/references/framework-comparison.md));
-  `SK-FE-005` rendering-strategy (not yet authored) — will own the SSR/SSG
-  rendering-mode decision.
-- Related (forthcoming, being authored alongside this skill): `SK-TECH-typescript`
-  — Angular is TypeScript-first; the version-floor table above is the
-  concrete coupling point between the two skills.
+  `SK-FE-005` rendering-strategy — will own the SSR/SSG rendering-mode decision.
+- Related: `SK-TECH-typescript` — Angular is TypeScript-first; the
+  version-floor table above is the concrete coupling point between the two
+  skills.
 - Angular itself publishes official "Agent Skills" for AI coding agents
   (`angular-developer`, `angular-new-app`) as of v22
   [Source: https://angular.dev/ai/agent-skills] — worth being aware of as a

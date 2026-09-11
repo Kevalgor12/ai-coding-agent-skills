@@ -25,8 +25,7 @@ scope: >-
   heading hierarchy, table markup) is owned by SK-FE-004 and only
   referenced here, not repeated. Styling-architecture decisions (design
   tokens, utility-first vs. component CSS, CSS-in-JS) are owned by
-  SK-FE-003, which is not yet authored in this library — forward-referenced,
-  not fabricated.
+  SK-FE-003 and only referenced here, not fabricated.
 expertise: Web platform engineer (HTML/CSS specialist).
 description: >-
   HTML document structure, the DOM data model, and Custom Elements/DOM
@@ -200,7 +199,7 @@ decision_framework_present: true
 failure_handling:
   - If a feature's current Baseline/browser-support status cannot be confirmed as current, state "verify against current Baseline/MDN compat tables" rather than asserting support (SG-3) — this applies especially to @property and native CSS Nesting, both flagged as recent.
   - If the task is actually an accessibility concern (alt text, ARIA, heading semantics), do not duplicate SK-FE-004's content — cite it and defer.
-  - If the task is a styling-architecture decision (design tokens, utility-first vs. component CSS, preprocessor/framework choice) beyond raw CSS mechanics, state that SK-FE-003 (not yet authored in this library) owns that decision and this skill supplies only the underlying CSS mechanics.
+  - If the task is a styling-architecture decision (design tokens, utility-first vs. component CSS, preprocessor/framework choice) beyond raw CSS mechanics, state that SK-FE-003 owns that decision and this skill supplies only the underlying CSS mechanics.
 verification:
   - Any Baseline-availability claim is tagged with the date/range it holds for, not stated as a bare fact.
   - HTML output uses a correct DOCTYPE/charset/Content-Type and avoids obsolete non-conforming elements/attributes.
@@ -210,6 +209,6 @@ evaluation_criteria:
   - Given a seeded document-structure task, produces correct DOM-aware HTML (no obsolete elements, correct DOCTYPE/charset) without restating SK-FE-004's accessibility content verbatim.
   - Given a seeded cascade/specificity conflict, correctly explains and resolves it per the documented cascade order (relevance → origin/importance → specificity → scoping proximity → source order).
   - Given a request to use @property or native CSS Nesting, correctly flags the Baseline-recency caveat and recommends a fallback/compat check rather than asserting unconditional safety.
-  - Does not fabricate SK-FE-003 or Sass/Tailwind content when those topics come up — forward-references them instead (QR-1).
+  - Does not fabricate SK-FE-003 or Sass/Tailwind content when those topics come up — references them instead (QR-1).
 
 adapter_hints: {}

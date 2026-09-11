@@ -92,6 +92,7 @@ verification:
   - The proposed prompt follows a documented structure (role/instructions, examples, context) with long-context content placed before the query, not after.
   - The context-management plan is proportionate to the task's actual context-window needs, not reflexively maximal (context rot is treated as a real cost, not ignored).
   - No deprecated or documented anti-pattern constructs are used (assistant-message prefill, over-aggressive imperative tool-triggering language, unbounded free-text injection into a system prompt).
+  - The proposed prompt structure is confirmed by actually running it against the target model and inspecting the completion, not assumed effective from the template alone.
 escalation:
   - A request that is actually about structured-output/tool-calling schema design is redirected to structured-output-tool-calling rather than answered here.
   - A request about the orchestration loop around multiple tool calls is redirected to agent-architecture rather than answered here.

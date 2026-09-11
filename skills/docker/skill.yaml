@@ -6,7 +6,7 @@ skill_version: "0.1.0"
 kind: technology
 layer: 4
 domain: TECH
-parents: [SK-INFRA-001, SK-QA-002]   # containerization; security-engineering (not yet authored)
+parents: [SK-INFRA-001, SK-QA-002]   # containerization; security-engineering
 
 purpose: >-
   Apply Docker's concrete Engine/CLI/API/BuildKit/Compose mechanics
@@ -20,8 +20,7 @@ scope: >-
   selection for isolation. Does not repeat the general image-authoring,
   layer-caching, multi-stage-build, or root-daemon-security-model content
   already owned by containerization (SK-INFRA-001); deep cross-cutting
-  threat modeling is owned by security-engineering (SK-QA-002, not yet
-  authored in this library).
+  threat modeling is owned by security-engineering (SK-QA-002).
 expertise: Docker/container-platform engineer.
 description: >-
   Docker-specific Engine/CLI/BuildKit/Compose mechanics: Engine API version
@@ -41,7 +40,7 @@ activation_conditions:
 non_activation_conditions:
   - General Dockerfile/image authoring, layer-caching order, multi-stage structure, or non-root defaults with no Docker-Engine/API/Compose-version-specific question (route to containerization, SK-INFRA-001)
   - The stack does not use Docker/Docker Engine at all
-  - Deep cross-cutting security threat modeling beyond Docker-specific mechanics (route to security-engineering, SK-QA-002, not yet authored)
+  - Deep cross-cutting security threat modeling beyond Docker-specific mechanics (route to security-engineering, SK-QA-002)
 activation_mode: auto
 
 inputs:
@@ -187,6 +186,7 @@ verification:
   - Any Engine API/client-version compatibility claim is checked against the actual daemon's reported API version, not assumed.
   - Any recommended Compose build field (ssh, platforms, etc.) is checked against the project's actual Compose version and, for platforms, that a docker-container Buildx driver is configured.
   - Any Go SDK code targets the current module path (moby/moby/client, moby/moby/api) when the project targets Engine >=29.0.0, not the deprecated docker/docker module.
+  - The image is actually built (`docker build`) and, where applicable, run, not just reviewed as a Dockerfile.
 evaluation_criteria:
   - For a seeded scenario with a stated Engine/API/Buildx/Compose version, correctly determines whether a specific claim (API client compatibility, Build Checks availability, a Compose build field, ECI eligibility) is actually supported.
   - For a seeded Go-tooling task against Engine >=29.0.0, uses the current module path rather than the deprecated github.com/docker/docker.

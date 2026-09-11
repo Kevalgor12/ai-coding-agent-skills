@@ -28,6 +28,22 @@ follow-along. All selection uses **Tier-0 metadata only** (no skill bodies).
   number of domains touched.
 - **Risk** ∈ {read-only, reversible-write, destructive, outward-facing,
   production} from the most dangerous action the task implies.
+- **Policy-authorizing requests classify at the class they would bypass, not at
+  the mechanical action of writing the policy.** A request to establish a
+  standing rule, config, or exception that lets a *future* action skip a gate
+  (a branch-protection exemption enabling force-push, an always-allow list for
+  a destructive command, a CI setting that lets a merge bypass a check) is
+  classified at the risk level of the gate class it authorizes bypassing —
+  `destructive`/`outward-facing`/`production` as appropriate — not at
+  `reversible-write`, which is what editing a config file would be on its own.
+  This is the fix for a documented failure mode: a request combining two
+  individually-reasonable instructions ("strict branch protection" +
+  "force-push exemption for hotfixes") previously classified as an ordinary
+  `reversible-write` config change, so it never reached D13 admission, gate
+  declaration, or FV-9 — the contradiction shipped as a working ruleset with a
+  bypass actor, having passed every check because every check was keyed to the
+  wrong risk value. Fixing the input classification here is sufficient; D13,
+  gate declaration, and FV-9 all key off this value and need no separate patch.
 
 **Early exits:**
 - `question` (pure explanation, no change) → activate only the relevant

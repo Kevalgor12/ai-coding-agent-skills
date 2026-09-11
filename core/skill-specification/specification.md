@@ -177,6 +177,18 @@ with nothing to say MUST be omitted, not filled with filler (context-efficiency)
 - **VR-6** `activation_conditions` and `non_activation_conditions` are non-empty and disjoint (no signal appears in both).
 - **VR-7** No two skills share an identical activation trigger (uniqueness across the library).
 - **VR-8** Body section order and required-section presence match §3.2 for the skill's `kind`.
+- **VR-9** Every Tier B or Tier C skill (`execution_tier` ≠ `A`, i.e. it requires
+  `shell` or a subagent capability) declares at least one `verification` list
+  item whose truth cannot be established by reading the produced artifact
+  alone — it requires actually running something (a test suite, a linter, a
+  build, a query, a browser check) and observing the result. An item phrased
+  as a static code property ("uses async/await correctly," "follows the
+  existing pattern") does not satisfy this rule, even if true, because it can
+  be honestly marked `pass` without the capability the skill declared ever
+  being exercised. This is the enabling condition for IC-6
+  ([state-and-contract.md](../orchestrator/state-and-contract.md)): without at
+  least one execution-dependent item, IC-6's `verification: not-run →
+  status: partial` downgrade has nothing to catch on.
 
 ### 4.3 Source-grounding rules (anti-hallucination)
 

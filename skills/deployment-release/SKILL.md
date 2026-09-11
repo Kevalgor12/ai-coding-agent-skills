@@ -15,7 +15,7 @@ spec_version: "1.0"
 
 Plan deployment strategy, per-environment configuration, rollback, and
 release-tagging coordination — beyond both the CI/CD pipeline definition
-itself (ci-cd-pipeline, not yet authored in this library) and image
+itself (ci-cd-pipeline) and image
 authoring ([containerization](../containerization/SKILL.md)). **This
 skill is explicit about a real boundary**: this library's research does
 not contain a dedicated, vendor-neutral rolling/blue-green/canary
@@ -77,7 +77,7 @@ transport comparison does.
 
 **Release-tagging/versioning coordination** is a workflow-discipline
 concern that overlaps with this library's Git-conventions skill
-(`SK-CONV-001`, not yet authored) — this skill owns the *deployment*
+(`SK-CONV-001`) — this skill owns the *deployment*
 sequencing (when a tagged release actually rolls out), while the
 conventions skill owns the *tagging/commit* discipline itself.
 
@@ -166,8 +166,8 @@ Secrets/credentials used during deployment (registry auth, cloud
 provider credentials) should never be embedded in the artifact or committed
 to config; OIDC-based credential-free deployment (where the target platform
 supports it) is preferable to long-lived static keys — this overlaps with
-[ci-cd-pipeline](../../core/taxonomy/skill-catalog.md)'s own scope (not yet
-authored) more than it's a deployment-release-specific concern. Deep threat
+[ci-cd-pipeline](../../core/taxonomy/skill-catalog.md)'s own scope
+more than it's a deployment-release-specific concern. Deep threat
 modeling is owned by
 [security-engineering](../../core/taxonomy/skill-catalog.md).
 

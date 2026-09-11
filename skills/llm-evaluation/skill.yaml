@@ -91,6 +91,7 @@ verification:
   - Success criteria are specific, measurable, achievable, and relevant to the feature's actual stakes — not a vague "good performance" bar.
   - The chosen grading method matches the task type (exact-match for categorical, cosine-similarity/ROUGE-L for semantic, LLM-as-judge for subjective) and, when LLM-as-judge is used, the grading model differs from the generating model.
   - Hallucination-mitigation checks require outputs to be grounded in authoritative/current sources and verify claims/tool-call arguments before an agent acts on them, rather than trusting fluent but unverified output.
+  - The chosen grading method is actually run against a seeded example set and its scored output inspected, including confirming at invocation time (not just in the design) that an LLM-as-judge model differs from the generating model.
 escalation:
   - A request for general (non-LLM-output) test-suite/CI discipline exceeds this skill's scope — defer to testing-strategy (SK-QA-001).
 evaluation_criteria:

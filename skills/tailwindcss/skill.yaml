@@ -6,7 +6,7 @@ skill_version: "0.1.0"
 kind: technology
 layer: 4
 domain: TECH
-parents: [SK-FE-003]   # styling-systems (not yet authored in this library)
+parents: [SK-FE-003]   # styling-systems
 
 purpose: >-
   Apply Tailwind CSS correctly and version-appropriately — the utility-first
@@ -20,7 +20,7 @@ scope: >-
   and the concurrently-live v3.4/v4.x version lines. The generic method for
   choosing/architecting a project's styling system (tokens, theming
   architecture, when to reach for a framework at all) comes from the parent
-  Layer-3 skill (styling-systems, not yet authored in this library).
+  Layer-3 skill (styling-systems).
 expertise: Frontend engineer specializing in utility-first CSS with Tailwind CSS.
 description: >-
   Tailwind CSS utility-first styling: v4's CSS-first @theme config, Oxide

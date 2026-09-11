@@ -17,9 +17,8 @@ scope: >-
   OpenSearch-specific implementation depth beyond the generic search-engine
   selection method (SK-DATA-005, already covers DB-native-FTS-vs-dedicated-
   engine-vs-vector decision and the Elasticsearch-research-gap caveat — not
-  repeated here) and beyond general observability instrumentation (SK-QA-004,
-  a documented research gap in this library — forward-referenced only for
-  OpenSearch's own log-analytics use case, not fabricated). Covers cluster
+  repeated here) and beyond general observability instrumentation (SK-QA-004).
+  Covers cluster
   topology, indices/mappings/analyzers, the security plugin, shard-sizing/
   JVM/thread-pool/circuit-breaker tuning, testing, and deployment.
 expertise: OpenSearch search/cluster engineer.
@@ -227,6 +226,7 @@ verification:
   - Every version-specific claim is tagged with the OpenSearch range it holds for.
   - A production-bound security config does not leave demo TLS certificates or `plugins.security.disabled: true` in place.
   - A mapping/query change proposed for production is checked against a benchmark or explicit rationale for skipping one.
+  - When a benchmark is the chosen path, the query is actually run against the current mapping/index and its timing/relevance measured, not estimated from the mapping diff alone.
 evaluation_criteria:
   - For a seeded workload description (search-latency-sensitive vs. write-heavy), proposes a shard-sizing strategy in the documented 10-30GB / 30-50GB ranges with rationale, not a default.
   - For a seeded identity-infrastructure scenario (existing LDAP/AD vs. SAML/OIDC IdP vs. none), recommends a defensible authentication method from the security plugin's documented backends.

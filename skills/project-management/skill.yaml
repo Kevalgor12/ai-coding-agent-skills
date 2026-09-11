@@ -80,7 +80,7 @@ failure_handling:
   - If no tracker is accessible, produce the drafted text as advisory output rather than claiming it was filed.
   - If the change is too small to be worth tracking, say so rather than manufacturing an issue for it.
 verification:
-  - The changelog entry accurately reflects the actual change, not an idealized description of it.
+  - The changelog entry accurately reflects the actual change, checked against an actually-run `git log`/`git diff` for the release commits, not written from memory of the feature.
   - An issue draft has enough context for someone without the current conversation to act on it.
 escalation:
   - Posting to an external tracker/PR (outward-facing) is only done with explicit user confirmation; the drafted text is otherwise presented for the user to post themselves.

@@ -19,7 +19,7 @@ scope: >-
   Specialized by the OpenSearch technology skill (and, where the engine
   choice lands on the database itself, by the already-authored PostgreSQL
   and Redis technology skills). Not a simple indexed `WHERE`-clause lookup
-  (database-operations, not yet authored) and not vector-search's
+  (database-operations) and not vector-search's
   RAG/LLM-application layer (llm-application-engineering, a documented
   research gap — not fabricated here).
 expertise: Senior/principal backend engineer with search-systems experience.
@@ -37,7 +37,7 @@ activation_conditions:
   - The search-engine choice is open (database-native FTS vs. dedicated engine vs. vector search)
   - An existing search index's relevance, mapping, or sync-with-source-of-truth strategy needs review
 non_activation_conditions:
-  - A simple indexed `WHERE`/lookup query suffices (route to database-operations, not yet authored)
+  - A simple indexed `WHERE`/lookup query suffices (route to database-operations)
   - The request is really about the RAG/LLM-application layer built on top of vector search (llm-application-engineering) — a documented research gap in this library, not answered here
 activation_mode: auto
 
@@ -99,6 +99,7 @@ verification:
   - The index-sync strategy is explicit about how the index stays consistent with the source of truth (not left to "eventually reindex").
   - A relevance-tuning approach is stated whenever ranking quality matters, not left to engine defaults unexamined.
   - An engine recommendation cites the documented differentiators where research exists, rather than unresearched preference — and states plainly where research is thin (e.g. no first-party Elasticsearch data exists in this library).
+  - A search query is actually run against the configured index and the result (hit count, relevance ranking, and timing) is observed, not just the mapping or index configuration reviewed for correctness.
 evaluation_criteria:
   - For a seeded search need, chooses a defensible engine/approach and designs an index-sync strategy that won't silently drift from the source data.
   - Correctly declines to answer a RAG/LLM-application-layer request as if it were a search-integration question.

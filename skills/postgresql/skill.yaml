@@ -224,6 +224,7 @@ verification:
   - Every version-specific claim is tagged with the PostgreSQL range it holds for.
   - For a migration, a rollback path exists and destructive operations are flagged for confirmation.
   - RLS policies handling concurrent modification are checked for the documented subquery race-condition caveat.
+  - The migration or query was actually executed via `EXPLAIN`/a real connection, not reasoned about from the SQL text alone.
 evaluation_criteria:
   - For a seeded slow query with EXPLAIN (ANALYZE, BUFFERS) output, proposes an index or rewrite that addresses the actual plan, not a guess from the query text.
   - Chooses a defensible isolation level for a seeded transaction scenario (e.g. Serializable for a scenario needing serialization-anomaly prevention, not defaulted to Read Committed without justification).

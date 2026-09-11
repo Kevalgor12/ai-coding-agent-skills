@@ -79,7 +79,7 @@ failure_handling:
   - If the repo's branching model isn't clear from history/config, ask rather than impose one.
   - If PR automation/host capability isn't available in the current environment, degrade to advisory guidance (the operation described, not performed) rather than silently failing.
 verification:
-  - Before any git status check, before any command that could discard uncommitted work.
+  - A `git status` is actually run and its output inspected immediately before any command that could discard uncommitted work, not skipped based on an assumed clean state.
   - No destructive operation (force-push, reset --hard, history rewrite) is executed without explicit confirmation for that specific action.
   - A opened/updated PR is well-formed (clear title/description, correct base branch) when the host permits.
 escalation:

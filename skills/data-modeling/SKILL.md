@@ -164,7 +164,7 @@ design time — a mismatched shape (e.g. deep joins on a document store, or
 point-queries at scale on ClickHouse, which the research notes is
 inefficient by design [Source: technology-decision-matrix.md §2]) cannot be
 fully fixed by indexing later. Query/index tuning depth is owned by
-database-operations (not yet authored in this library).
+database-operations.
 
 ## Testing
 

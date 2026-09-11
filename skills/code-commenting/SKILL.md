@@ -19,7 +19,7 @@ introduces. This is a mandated, first-class skill in this library
 alongside [git-conventions](../git-conventions/SKILL.md): every code-
 producing skill composes with it rather than inventing its own commenting
 convention. Prose documentation (READMEs, API docs, ADRs) belongs to
-technical-documentation (not yet authored).
+technical-documentation.
 
 ## When to use / When not to use
 

@@ -33,7 +33,7 @@ own TypeScript integration mechanics when the type system itself isn't in
 question (route to that framework's skill — `SK-TECH-react`, `SK-TECH-vue`,
 `SK-TECH-nodejs`, etc.).
 
-## Knowledge (essential)
+## Knowledge
 
 **Type system fundamentals.** TypeScript is a static type-checker built as a
 superset of JavaScript, adding compile-time-only type annotations; types are

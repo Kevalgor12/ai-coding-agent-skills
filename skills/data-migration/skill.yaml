@@ -14,7 +14,7 @@ purpose: >-
 scope: >-
   Migration mechanics and safety on data that already exists. Not schema
   design itself (data-modeling) and not whole-codebase/technology
-  modernization (legacy-modernization, not yet authored). Specialized by
+  modernization (legacy-modernization). Specialized by
   the ORM technology skills for their concrete migration-tool syntax.
 expertise: Senior engineer who has run schema migrations against live production data.
 description: >-
@@ -30,7 +30,7 @@ activation_conditions:
   - A version upgrade of the database/ORM carries a breaking schema-relevant change
 non_activation_conditions:
   - The schema is greenfield with no existing data to preserve (route to data-modeling directly)
-  - The change is a broad technology/pattern modernization beyond a single migration (route to legacy-modernization, not yet authored)
+  - The change is a broad technology/pattern modernization beyond a single migration (route to legacy-modernization)
 activation_mode: auto
 
 inputs:
@@ -81,6 +81,7 @@ verification:
   - The migration has a working down/rollback path, or an explicit stated reason one isn't possible.
   - No step drops or overwrites data without being flagged and confirmed.
   - Large backfills are batched, not run as a single blocking operation on a populated table.
+  - The migration was actually run against a staging/representative dataset (or the tool's dry-run mode) and its outcome observed, not just reasoned about from the migration script.
 escalation:
   - Any migration step that can lose data (a DROP, a destructive ALTER, an irreversible transform) requires explicit user confirmation before it runs — never executed automatically.
 evaluation_criteria:

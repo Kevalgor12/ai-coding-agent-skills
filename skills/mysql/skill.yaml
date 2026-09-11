@@ -36,7 +36,7 @@ activation_conditions:
   - A MySQL version upgrade is being planned (e.g. 8.0 → 8.4, 8.4 → 9.7, or onto a 26.x calendar-versioned Innovation release)
 non_activation_conditions:
   - The stack uses PostgreSQL, MongoDB, or another engine (route to that engine's skill)
-  - Purely generic schema design with no engine chosen yet (route to SK-DATA-001 data-modeling)
+  - Purely generic relational schema design with no relational engine chosen yet (route to SK-DATA-001 data-modeling)
   - ORM usage mechanics independent of the underlying engine (route to SK-DATA-002 orm-integration)
   - The task is safely evolving an already-populated schema's data, not MySQL-specific facts (route to SK-DATA-006 data-migration)
 activation_mode: auto
@@ -199,7 +199,7 @@ failure_handling:
 escalation:
   - A destructive migration (DROP/ALTER that loses data), a storage-engine change on a populated table, or an in-place major-version upgrade requires explicit user confirmation before execution (defer to SK-DATA-006 rollout discipline).
 verification:
-  - Any proposed index matches the query's actual access pattern as shown by EXPLAIN, not a guess.
+  - Any proposed index is checked against an EXPLAIN actually run against the target table, not a guess or a plan reasoned about from the query text alone.
   - Any storage-engine choice is justified against the table's actual workload (transactional vs. read-only/temp/archival), not left at the InnoDB default by inertia or changed from it without cause.
   - Any version-specific claim is tagged with the range it holds for, and the target MySQL version is confirmed before recommending a version-gated feature.
   - For an upgrade, the path respects the documented no-skip-a-series restriction and the AUTO_INCREMENT FLOAT/DOUBLE pre-upgrade check when crossing into 8.4+.

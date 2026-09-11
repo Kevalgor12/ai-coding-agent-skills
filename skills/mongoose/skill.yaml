@@ -204,6 +204,7 @@ verification:
   - Schema methods/statics/virtuals/middleware/plugins are registered before mongoose.model() compilation, never after [Source: https://mongoosejs.com/docs/models.html].
   - Any query filter built from user input either whitelists fields explicitly or relies on a patched (sanitizeFilter-enabled, post-CVE-2026-42334) Mongoose version — never an unpatched version assumed safe by the flag alone.
   - Any version-specific claim made is tagged with the Mongoose range it holds for.
+  - Schema registration order is confirmed by actually running the application (or a smoke script) that compiles the model and checks the plugin/method is present on an instance, not inferred from reading the file order alone.
 evaluation_criteria:
   - Given a seeded schema/model task, produces methods/statics/middleware as non-arrow functions registered pre-compilation, per the documented `this`-binding and pre-compilation-only registration rules.
   - Given a query-filter task built from user input, either flags sanitizeFilter's off-by-default status plus CVE-2026-42334's version range, or recommends field whitelisting instead of asserting the flag alone is sufficient.

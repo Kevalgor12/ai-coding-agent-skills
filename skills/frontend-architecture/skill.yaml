@@ -14,9 +14,9 @@ purpose: >-
 scope: >-
   Tech-neutral frontend structure and the framework-selection decision.
   Specialized by the React/Vue/Angular/Next.js/Nuxt technology skills. Not
-  styling itself (styling-systems, not yet authored), not accessibility
+  styling itself (styling-systems), not accessibility
   depth (web-accessibility), and not the rendering-mode decision
-  (rendering-strategy, not yet authored).
+  (rendering-strategy).
 expertise: Senior/principal frontend engineer.
 description: >-
   Structure a frontend application — components, state management, data
@@ -30,7 +30,7 @@ activation_conditions:
   - A framework/meta-framework choice is open
   - An existing frontend's component/state structure needs review or rework
 non_activation_conditions:
-  - Pure styling work with structure already settled (route to styling-systems, not yet authored)
+  - Pure styling work with structure already settled (route to styling-systems)
   - Backend-only work
   - A framework choice already fixed, with a purely technology-specific question (route to the matching technology skill)
 activation_mode: auto

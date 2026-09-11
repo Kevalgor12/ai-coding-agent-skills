@@ -221,6 +221,7 @@ verification:
   - A recommended multi-node adapter's documented limitations (Redis: no persistence, no connectionStateRecovery support, silently degrades broadcasts to local-only if Redis is unavailable) are stated alongside the recommendation, not omitted.
   - Any version-gated API/option used in generated code is tagged with the version it was added in and checked against the stated covered_versions.
   - If Admin UI instrumentation is added, production auth (not disabled auth) is configured.
+  - A test client is actually connected to the running server and bidirectional message exchange is confirmed (not just the event handler registration code reviewed), with the connection observed to close cleanly.
 evaluation_criteria:
   - For a seeded auth requirement, proposes an io.use() middleware that validates socket.handshake.auth on connect and reconnect, rejecting via next(new Error(...)), rather than only checking at the initial handshake.
   - For a seeded multi-instance scaling requirement that also needs connection-state recovery, selects MongoDB or Redis Streams (not the plain Redis Pub/Sub adapter) and states why, citing the documented adapter-support differences.

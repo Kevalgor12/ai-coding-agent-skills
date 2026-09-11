@@ -240,6 +240,7 @@ verification:
   - Any version-gated claim is tagged with the range it holds for.
   - For a schema-validation change, a staged rollout path exists (warn before error) rather than a hard cutover on a populated collection.
   - A proposed transaction is justified against MongoDB's own guidance to prefer denormalized/embedded design over multi-document transactions where feasible.
+  - A compound index's actual effectiveness is confirmed via `explain()` run against a representative query, not assumed from the ESR ordering alone.
 
 evaluation_criteria:
   - For a seeded access pattern, proposes embed vs. reference per MongoDB's own documented design patterns (Computed, Bucket/Group, Polymorphic, Schema Versioning, Archive, Single Collection), not a guess.

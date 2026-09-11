@@ -218,6 +218,7 @@ verification:
   - ICE-restart handling exists for `iceConnectionState === "failed"`.
   - When a data channel is used, message sizing and `bufferedamountlow` monitoring are addressed.
   - Every version-specific claim (Plan-B/Unified-Plan timeline, codec-by-browser-version) is tagged with the range it holds for.
+  - A test connection is actually established between two peers (or using a WebRTC emulator with fake media/data) and ICE negotiation is observed to complete, with data or media confirmed to flow between the peers.
 evaluation_criteria:
   - For a seeded peer-to-peer feature request, produces a working perfect-negotiation implementation (not ad hoc caller/callee logic) with ICE-restart handling.
   - Configures `iceServers` with both STUN and TURN, and makes an explicit `iceTransportPolicy` recommendation given the stated IP-privacy/latency requirement.

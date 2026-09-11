@@ -19,8 +19,8 @@ migrating off the deprecated `@import` syntax and the end-of-life
 LibSass/Node Sass/Ruby Sass implementations onto Dart Sass. The generic
 styling-architecture method (design tokens, scoping strategy, whether to use
 a preprocessor at all) comes from the parent skill `SK-FE-003`
-(styling-systems — not yet authored in this library; forward reference).
-This skill supplies the Sass-language and Dart-Sass-specific detail.
+(styling-systems). This skill supplies the Sass-language and
+Dart-Sass-specific detail.
 
 ## When to use / When not to use
 

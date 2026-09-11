@@ -203,6 +203,7 @@ verification:
   - Any TypeScript-version-specific claim is tagged with the version range it holds for.
   - "`tsc --noEmit` (or the project's equivalent type-check command) is proposed or run to confirm a change actually type-checks, not just visually plausible."
   - A recommendation to upgrade to TypeScript 7.0 explicitly checks whether the project depends on the programmatic Compiler API.
+  - tsc --noEmit (or the project's type-check command) is actually executed and exits with zero errors, confirming the changes compile in the real project environment rather than only appearing visually correct.
 evaluation_criteria:
   - For a seeded project on TypeScript <6.0, produces a migration plan that sequences the 6.0 default changes before any 7.0 upgrade, per the documented adoption path.
   - For a seeded question about upgrading to TypeScript 7.0, correctly flags the missing Compiler API as a blocker when the project embeds the compiler programmatically.

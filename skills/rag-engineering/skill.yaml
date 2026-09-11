@@ -90,6 +90,7 @@ verification:
   - Embedding stores, exports, and backups are classified and handled as source-document-sensitive, not as a lower-sensitivity derived artifact.
   - Context injection follows SK-AI-002's placement guidance (retrieved content placed appropriately in the context window) rather than appended arbitrarily.
   - The chunking/embedding strategy is stated explicitly (chunk size/overlap, embedding model/dimensionality) rather than left implicit.
+  - The document/chunk-level authorization is confirmed by actually issuing a retrieval query as a restricted-access user and observing that unauthorized chunks are excluded, not assumed from the query-construction code alone.
 escalation:
   - A retrieval layer found to filter authorization post-search (rather than inside the query) is escalated as a security finding coordinated with SK-AI-008, not silently redesigned without flagging the risk.
 evaluation_criteria:

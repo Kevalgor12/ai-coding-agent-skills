@@ -226,6 +226,7 @@ verification:
   - A MongoDB-backed project's guidance targets v6, never v7.
   - Raw-SQL escape hatches (`$queryRaw`/`$executeRaw`) are parameterized/tagged-template; `$queryRawUnsafe`/`$executeRawUnsafe` never receive unsanitized input.
   - Production migration guidance uses only `prisma migrate deploy`, never `migrate dev`/`db push`.
+  - A generated migration is actually run (`prisma migrate dev` locally or `migrate deploy` against staging) and its result inspected, not just generated and reviewed as SQL.
 
 evaluation_criteria:
   - For a seeded MongoDB-backed project, correctly recommends staying on Prisma v6 rather than v7, citing the documented support gap.

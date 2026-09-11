@@ -25,9 +25,7 @@ Cluster/Sentinel for scaling and HA. The *method* for deciding whether
 caching, a pub/sub transport, or a search architecture is the right answer at
 all belongs to the parent Layer-3 skills — `SK-DATA-004` (caching-strategy),
 `SK-BE-004` (realtime-communication), and `SK-DATA-005` (search-integration).
-All three are **forward references, not yet authored anywhere in this
-library**, so this skill stays self-contained and comprehensive on Redis's
-own facts rather than assuming depth it can't yet borrow from them.
+This skill stays self-contained and comprehensive on Redis's own facts.
 [data-modeling](../data-modeling/SKILL.md) (`SK-DATA-001`) is related only
 for basic key-design framing, not a formal parent.
 
@@ -40,11 +38,11 @@ task names Redis or a Redis-specific feature (`MULTI`/`EXEC`/`WATCH`,
 pub/sub, Redis Cluster, Sentinel, RDB/AOF, `ACL SETUSER`, `FT.SEARCH`, vector
 sets). **Do not use** when no Redis dependency exists and the question is
 still an open store-shape/cache-layer choice (route to `SK-DATA-001`, or
-`SK-DATA-004` once authored), when the question is realtime-transport
+`SK-DATA-004`), when the question is realtime-transport
 selection independent of Redis (WebSocket vs. WebRTC vs. SSE — route to
-`SK-BE-004` once authored), or when the question is search-engine selection
+`SK-BE-004`), or when the question is search-engine selection
 independent of Redis (Redis vs. OpenSearch vs. Postgres FTS — route to
-`SK-DATA-005` once authored).
+`SK-DATA-005`).
 
 ## Knowledge
 
@@ -204,7 +202,7 @@ self-contained online backup workflow
 3. **In-Redis search/vector vs. a dedicated engine:** bundled RediSearch/JSON
    (**8.0+**) or preview vector sets (**8.0.0+**) can suffice for moderate
    full-text/vector needs without operating a second system. Escalate to a
-   dedicated search engine (`SK-DATA-005`, forward reference) only once
+   dedicated search engine (`SK-DATA-005`) only once
    relevance-tuning, scale, or vector-sets' preview-status risk exceeds what
    Redis's own search features support — don't add a second engine "in
    case."

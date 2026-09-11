@@ -204,6 +204,7 @@ verification:
   - Every returned error from a called function is checked (or explicitly, deliberately discarded with a stated reason), not silently dropped.
   - Every spawned goroutine has a clear termination path (channel close, context cancellation, or WaitGroup) — none started with no way for it to end.
   - Any version-specific claim is tagged with the range it holds for, and the target Go version is confirmed before recommending a version-gated feature.
+  - Goroutine termination and error handling are confirmed by actually running the code (`go build`, `go vet`, or `go test -race`) and observing the result, not inferred by reading the control flow alone.
 evaluation_criteria:
   - For a seeded concurrency requirement, chooses between raw goroutines+channels and a bounded worker-pool pattern based on the actual concurrency need (unbounded fan-out risk vs. controlled parallelism/backpressure), not by default.
   - For a seeded function with fallible calls, produces idiomatic (value, error) handling with early return, not ignored errors or panic-for-control-flow.

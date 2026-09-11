@@ -48,8 +48,13 @@ outputs:
     kind: analysis
     description: Actionable, severity-ranked findings, distinguishing confirmed from speculative, optionally posted as PR comments where the host allows.
 
-depends_on_skills: [SK-QA-002, SK-QA-003, SK-CONV-002, SK-CONV-003]
-related_skills: [SK-CONV-001, SK-CONV-004, SK-CONV-005, SK-CONV-008]
+depends_on_skills: [SK-CONV-002, SK-CONV-003]
+# SK-QA-002 (security-engineering, layer 3) and SK-QA-003 (performance-engineering,
+# layer 3) moved to related_skills: they are conditional, domain-specific facets
+# invoked when a security/perf concern is present, not unconditional hard blocking
+# sub-steps of every review. VR-4 requires depends_on_skills to be same-or-lower
+# layer; SK-QA-002/003 are layer 3 while this skill is layer 2.
+related_skills: [SK-CONV-001, SK-CONV-004, SK-CONV-005, SK-CONV-008, SK-QA-002, SK-QA-003]
 conflicts_with: []
 
 required_capabilities: [file-read]

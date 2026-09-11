@@ -86,6 +86,7 @@ verification:
   - No N+1 query pattern is introduced by the relation-loading strategy chosen.
   - A multi-step write that must be atomic is wrapped in the ORM's transaction mechanism, not left as separate calls.
   - Any raw-SQL escape hatch used is parameterized, never string-concatenated.
+  - The relation-loading strategy is confirmed by actually running the query against a seeded dataset and counting the executed statements (a query log or APM trace), not inferred from reading the ORM call alone.
 escalation:
   - Recommending a switch away from the codebase's existing ORM is a significant, hard-to-reverse decision — surfaced with trade-offs for explicit confirmation, not applied unilaterally.
 evaluation_criteria:

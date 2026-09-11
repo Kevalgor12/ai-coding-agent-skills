@@ -15,8 +15,7 @@ scope: >-
   REST/HTTP API contract design, including the REST-vs-GraphQL paradigm
   decision. GraphQL schema design itself is graphql-api-design. Spec/tooling
   mechanics (OpenAPI/Swagger) are openapi-swagger. Not the service's internal
-  structure (backend-architecture) or auth mechanics (authentication-authorization,
-  not yet authored).
+  structure (backend-architecture) or auth mechanics (authentication-authorization).
 expertise: Senior/principal API engineer.
 description: >-
   Design REST/HTTP API contracts — resources, versioning, pagination, status/
@@ -31,7 +30,7 @@ activation_conditions:
   - Reviewing an existing REST API's resource/versioning/pagination/error design
 non_activation_conditions:
   - GraphQL schema/resolver design once REST vs. GraphQL is already decided against REST (route to graphql-api-design)
-  - Realtime/bidirectional transport design (route to realtime-communication, not yet authored)
+  - Realtime/bidirectional transport design (route to realtime-communication)
   - Pure spec-tooling mechanics (generating docs/SDKs from an existing OpenAPI document) with no contract-design question (route to openapi-swagger)
 activation_mode: auto
 

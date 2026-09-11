@@ -19,7 +19,7 @@ React version actually in use. The generic component/state-management
 [frontend-architecture](../frontend-architecture/SKILL.md) (`SK-FE-001`,
 already authored) — this skill supplies React's concrete API and behavior.
 The broader SSR/SSG/CSR rendering-mode decision is owned by `SK-FE-005`
-(rendering-strategy, a forward reference — not yet authored in this library);
+(rendering-strategy);
 this skill covers the RSC Server/Client Component split once RSC is already
 in scope, not the general rendering-mode choice. The React-vs-Vue-vs-Angular
 framework comparison itself is owned by `SK-FE-001` and is not repeated here.
@@ -424,10 +424,8 @@ test-strategy method beyond React's own gap here is owned by
 - [frontend-architecture](../frontend-architecture/SKILL.md) (`SK-FE-001`) —
   parent skill; owns the React-vs-Vue-vs-Angular comparison and the generic
   component/state-management method.
-- `SK-FE-005` (rendering-strategy) — forward reference, not yet authored;
-  owns the general SSR/SSG/CSR rendering-mode decision.
-- `SK-TECH-nextjs`, `SK-TECH-typescript` — related skills, forward
-  references, authored by sibling agents in this batch.
+- `SK-FE-005` (rendering-strategy) — owns the general SSR/SSG/CSR rendering-mode decision.
+- `SK-TECH-nextjs`, `SK-TECH-typescript` — related skills.
 - Source list: see `skill.yaml.source_references` (react.dev official docs
   and blog, plus `research/knowledge-maps/version-matrix.md`; retrieved
   2026-09-10, via `research/technologies/react.md`).

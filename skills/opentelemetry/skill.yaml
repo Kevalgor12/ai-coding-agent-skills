@@ -265,6 +265,7 @@ verification:
   - Any semantic convention used that is still Experimental-status is flagged as carrying standing breaking-change risk, even on a Stable SDK.
   - Collector receiver endpoints are bound to localhost or a specific interface, not `0.0.0.0`, unless explicitly justified.
   - Any signal-stability claim (e.g. "logs are stable in X") is checked against the per-language matrix for the actual language in use, not assumed.
+  - The collector receiver binding and emitted resource attributes are confirmed by actually running the instrumented service and inspecting exported telemetry (a real trace/metric/log observed at the backend), not inferred by reading the SDK configuration alone.
 evaluation_criteria:
   - For a seeded Node.js or Python instrumentation task, correctly flags logs as non-Stable (Development) while treating traces/metrics as Stable, and states this as an actionable caveat.
   - For a seeded Collector config task, does not bind a receiver to `0.0.0.0` without explicit justification.

@@ -188,6 +188,7 @@ verification:
   - Auth/state isolation matches the storageState-reuse or per-worker-account pattern where the suite mutates server-side state.
   - Any Docker deployment pins the image tag to the exact Playwright version installed in the project.
   - Every version-tagged claim in the output carries its applicable range.
+  - The written test suite is actually run (`npx playwright test`) against the target app and its pass/fail report observed, not just reviewed as source.
 evaluation_criteria:
   - For a seeded task needing only server-side verification, proposes APIRequestContext instead of defaulting to full browser automation.
   - For a seeded Docker deployment task involving untrusted content, proposes non-root + seccomp hardening rather than defaulting to root.

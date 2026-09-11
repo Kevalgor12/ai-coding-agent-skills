@@ -19,7 +19,7 @@ generic framework-selection method and the React/Vue/Angular comparison
 (reactivity model, XSS auto-escaping, compiler story, test runner) belong to
 [frontend-architecture](../frontend-architecture/SKILL.md) (`SK-FE-001`) and
 are not repeated here. The SSR/SSG rendering-mode decision belongs to
-rendering-strategy (`SK-FE-005`, not yet authored). Nuxt-specific
+rendering-strategy (`SK-FE-005`). Nuxt-specific
 meta-framework concerns belong to the Nuxt technology skill (`SK-TECH-nuxt`).
 
 ## When to use / When not to use

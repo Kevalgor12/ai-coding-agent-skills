@@ -229,7 +229,7 @@ escalation:
   - Upgrading across the legacy-alerting boundary (any version <11.0.0 to >=11.0.0) requires explicit user confirmation and a completed Upgrade with Preview / Simple Upgrade migration before the upgrade proceeds — legacy alerts can become inaccessible or lost otherwise.
   - Upgrading from a v12.x instance with Git Sync enabled to v13.0.0 requires flagging the documented dashboard/folder-loss migration bug and confirming a backup/rollback path before proceeding.
 verification:
-  - A provisioned dashboard's source-of-truth JSON file matches what's live in Grafana (no undetected UI-edit drift that a provisioning reconciliation would silently overwrite).
+  - A provisioned dashboard's source-of-truth JSON file is actually diffed against what's live in Grafana (via the HTTP API or a UI export), not assumed to match from the file alone — undetected UI-edit drift would otherwise be silently overwritten by provisioning reconciliation.
   - Proposed dashboards use template variables instead of copy-pasted near-duplicates.
   - Any alerting-routing recommendation correctly distinguishes rule evaluation (always in Grafana) from notification routing (built-in Grafana Alertmanager or external Alertmanager).
   - Any version-specific claim (breaking change, migration risk, deprecation) is tagged with the range it holds for and matches the target Grafana version.

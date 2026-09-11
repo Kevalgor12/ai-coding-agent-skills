@@ -17,7 +17,7 @@ container engine is used, though in this library's research Docker is the
 only profiled implementation, so the paired
 [docker](../docker/SKILL.md) technology skill adds implementation depth
 rather than covering a meaningfully different engine. CI/CD pipeline design
-is a separate concern (ci-cd-pipeline, not yet authored in this library);
+is a separate concern (ci-cd-pipeline);
 deployment/release strategy once an image exists belongs to
 [deployment-release](../deployment-release/SKILL.md).
 
@@ -116,7 +116,7 @@ filesystem change notifications do not work under emulation
 6. If image scanning is available, run it and address findings before
    treating the image as production-ready.
 7. Hand off to deployment-release for how the resulting image actually
-   gets deployed, and to ci-cd-pipeline (not yet authored) for how it gets
+   gets deployed, and to ci-cd-pipeline for how it gets
    built/tested/pushed automatically.
 
 ## Engineering rules

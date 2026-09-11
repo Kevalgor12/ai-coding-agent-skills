@@ -93,6 +93,7 @@ verification:
   - No secrets or PII are logged or attached as span/metric attributes without explicit scrubbing.
   - High-cardinality values (raw user IDs, full URLs with query strings, unbounded label sets) are not attached as metric labels/attributes without a stated reason.
   - Every alert has a clear owner and a stated action it triggers — no ownerless or non-actionable alerts.
+  - A configured alert is confirmed by actually firing it against a real or synthetic breach of its threshold and observing that the stated action triggers, not assumed from reading the alert rule alone.
 escalation:
   - A request for resilience/fault-tolerance-pattern guidance (retries, circuit breakers, timeouts) is escalated as a research gap requiring a dedicated pass, not answered from general knowledge.
 evaluation_criteria:

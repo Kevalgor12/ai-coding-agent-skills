@@ -258,6 +258,7 @@ verification:
   - Any Jest/Vitest API, config key, or CLI flag stated is one that actually appears in a cited source, not inferred from the other tool's equivalent.
   - Any version-specific claim is tagged with the Jest or Vitest range it holds for.
   - Snapshot assertions are paired with deterministic setup (mocked clocks/IDs or property matchers) rather than asserting on non-deterministic output.
+  - The test suite was actually run and its pass/fail output observed, not inferred from the code.
 evaluation_criteria:
   - For a seeded project with a framework that has documented runner guidance (e.g. Mongoose, Prisma, Vue), recommends the runner consistent with that framework's own official docs, not a blanket default.
   - Given a Jest v29-era suite being evaluated against v30, correctly flags at least the Node/TypeScript floor change, the removed matcher aliases, and the glob-matching behavior change as relevant risks.

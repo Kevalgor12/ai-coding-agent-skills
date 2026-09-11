@@ -56,7 +56,15 @@ outputs:
     description: Concrete fixes — structured data, canonical tags, sitemap/robots config, hreflang annotations.
 
 depends_on_skills: []
-related_skills: [SK-GROW-002, SK-FE-005, SK-QA-003, SK-TECH-nextjs]
+related_skills:
+  - SK-FE-005
+  - SK-QA-003
+  - SK-TECH-nextjs
+  # -----------------------------------------------------------------------
+  # -----------------------------------------------------------------------
+  # SK-GROW-002 (web-monetization) is in the taxonomy but has not yet been
+  # authored in this library — forward reference.
+  - SK-GROW-002
 conflicts_with: []
 
 required_capabilities: [file-read, file-write]

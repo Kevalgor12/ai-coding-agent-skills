@@ -13,7 +13,7 @@ purpose: >-
   and release tagging/versioning coordination.
 scope: >-
   Deployment/release mechanics beyond the CI/CD pipeline definition itself
-  (ci-cd-pipeline, not yet authored) and beyond image authoring
+  (ci-cd-pipeline) and beyond image authoring
   (containerization). **Deliberately honest about a real research gap**:
   this library's research is thin on deployment-strategy grounding beyond
   scattered framework/edge-deployment notes (e.g. Next.js/Vercel, Vue SSR,
@@ -38,7 +38,7 @@ activation_conditions:
 non_activation_conditions:
   - Local development only, with no deployment involved
   - Image authoring itself with deployment strategy already settled (route to containerization)
-  - CI/CD pipeline definition itself, distinct from the deployment/release strategy running inside it (route to ci-cd-pipeline, not yet authored)
+  - CI/CD pipeline definition itself, distinct from the deployment/release strategy running inside it (route to ci-cd-pipeline)
 activation_mode: auto
 
 inputs:

@@ -78,7 +78,7 @@ failure_handling:
   - If a request is really about database-specific or caching-specific performance, route to database-operations/caching-strategy for depth.
   - If this library's research is silent on a specific vendor/product (e.g. a named CDN vendor, a message queue), state that gap rather than inventing guidance.
 verification:
-  - The identified dominant cost is backed by evidence (a profile, a benchmark, a measured symptom), not a guess.
+  - The identified dominant cost is backed by evidence from a profile or benchmark actually run for this diagnosis (not a historical report or intuition) — the profiler/benchmark was executed, not just cited.
   - No micro-optimization is proposed for a component that isn't the measured bottleneck.
   - A proposed fix is checked against known cross-stack patterns (e.g. a dev-mode default left on) before assuming a deeper architectural cause.
 evaluation_criteria:

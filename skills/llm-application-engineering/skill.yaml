@@ -99,6 +99,7 @@ verification:
   - Every sub-discipline named in the architecture output maps to a concrete signal in the feature requirement, not reflexive inclusion of all eight.
   - The output explicitly states which sub-disciplines were declined and why, not only which were included.
   - The LLM-call observability plan never logs unscrubbed secrets/PII in prompts, completions, or tool arguments.
+  - For a composed architecture, at least one seeded feature requirement is actually traced end-to-end through the chosen sub-disciplines (a dry run or an eval-harness invocation), not just asserted route-by-route from the requirement text.
 escalation:
   - A request already fully scoped to one SK-AI-002–SK-AI-008 sub-discipline is routed there directly rather than re-decided at the root.
   - A request that is really a general (non-LLM-call) observability need is routed to SK-QA-004 directly rather than answered here.

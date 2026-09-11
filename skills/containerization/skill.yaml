@@ -17,7 +17,7 @@ scope: >-
   this generic skill and the Docker technology skill are closely paired
   (specializing/adding implementation depth) rather than covering
   meaningfully different engines. Not CI/CD pipeline design
-  (ci-cd-pipeline, not yet authored) and not deployment/release mechanics
+  (ci-cd-pipeline) and not deployment/release mechanics
   (deployment-release).
 expertise: Senior/principal engineer with container/build-tooling experience.
 description: >-
@@ -34,7 +34,7 @@ activation_conditions:
   - An existing image's size, build-cache efficiency, or security posture needs review
 non_activation_conditions:
   - No containerization is involved
-  - CI/CD pipeline design itself, with containerization already settled (route to ci-cd-pipeline, not yet authored)
+  - CI/CD pipeline design itself, with containerization already settled (route to ci-cd-pipeline)
   - Deployment/release strategy once an image already exists (route to deployment-release)
 activation_mode: auto
 
@@ -90,6 +90,7 @@ verification:
   - The image runs as a non-root user unless there's a stated, justified reason not to.
   - Layer/instruction ordering puts rarely-changing steps (dependency install) before frequently-changing ones (source copy), so cache invalidation is minimized.
   - Multi-stage builds are used where a build toolchain would otherwise bloat the runtime image.
+  - The image is actually built and run via the project's container runtime, and its non-root user and layer/cache behavior confirmed with inspection commands (e.g. `docker history`, `id` inside the running container), not inferred by reading the Dockerfile/Containerfile alone.
 evaluation_criteria:
   - Produces a multi-stage, non-root image with sensible layer-caching order for a seeded app.
   - A compose file (when relevant) stands up the app plus at least one local dependency (e.g. a database) correctly.

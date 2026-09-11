@@ -13,10 +13,9 @@ spec_version: "1.0"
 
 Structure how a frontend application is put together — components, state
 management, data flow, routing — and choose a framework when that's still
-open. Styling specifics belong to styling-systems (not yet authored),
+open. Styling specifics belong to styling-systems,
 accessibility depth to [web-accessibility](../web-accessibility/SKILL.md),
-and the SSR/SSG rendering-mode decision to rendering-strategy (not yet
-authored).
+and the SSR/SSG rendering-mode decision to rendering-strategy.
 
 ## When to use / When not to use
 

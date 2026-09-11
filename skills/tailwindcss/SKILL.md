@@ -18,9 +18,8 @@ composition, v4's CSS-first `@theme` configuration and Oxide engine, content
 detection, and the v3→v4 migration/browser-floor decision. The *method* for
 architecting a project's broader styling system (design tokens, theming
 strategy, whether a utility framework is warranted at all) comes from the
-parent skill (`SK-FE-003` styling-systems, not yet authored in this
-library); this skill supplies Tailwind's concrete facts on top of that
-method.
+parent skill (`SK-FE-003` styling-systems); this skill supplies
+Tailwind's concrete facts on top of that method.
 
 ## When to use / When not to use
 

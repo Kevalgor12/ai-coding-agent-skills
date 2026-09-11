@@ -210,6 +210,7 @@ verification:
   - Any version-sensitive API used (loggerInstance vs. logger, useSemicolonDelimiter default, jsonShortHand absence) matches the confirmed installed major.
   - Response schemas are defined for routes handling sensitive fields, not left to serialize the full object.
   - A custom setErrorHandler is present (or its absence is explicitly flagged) before any route can leak >=500 error detail to clients.
+  - A custom setErrorHandler's behavior is confirmed by actually triggering an error in the running server and observing the client-facing response, not inferred by reading the handler registration alone.
 evaluation_criteria:
   - Given a seeded package.json pinning fastify to ^4, does not suggest loggerInstance, the v5 useSemicolonDelimiter default, or other v5-only APIs.
   - Given a seeded package.json pinning fastify to ^5, correctly flags that a custom logger instance must go through loggerInstance, not logger.

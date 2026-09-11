@@ -176,6 +176,7 @@ verification:
   - Server-side code enforces the client-must-mask / server-must-not-mask rule and disconnects clients sending unmasked frames.
   - Close-code handling distinguishes codes never actually sent on the wire (1005, 1006, 1015) from real remote-sent codes.
   - Every version-specific claim (Node client-only gap, http(s) normalization date, WebSocketStream status) is tagged with its applicable range.
+  - A WebSocket client is actually connected and frames are exchanged with the server, then a proper close with the expected close code is confirmed, not just the handshake and frame-handling code reviewed.
 evaluation_criteria:
   - For a seeded "implement a WebSocket client/server" task, produces handshake-correct code (proper headers, Sec-WebSocket-Accept, masking rule) grounded in RFC 6455.
   - Correctly states that Node.js has no built-in WebSocket server when the task involves a Node.js server.

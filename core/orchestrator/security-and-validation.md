@@ -122,7 +122,7 @@ waived and recorded*. Anything else ends the run as
 | **FV-6** | The testing gate is satisfied, or its limit is declared as a residual |
 | **FV-7** | The security gate is satisfied, or its residual is declared; no secret was introduced into the repository |
 | **FV-8** | The review loop closed, or its open findings are deferred with a named owning skill (never closed by re-scoping) |
-| **FV-9** | **No ungated destructive, outward-facing, or production action was performed.** Audited against the ledger: every gated action has a matching recorded user approval (GA-1) |
+| **FV-9** | **No ungated destructive, outward-facing, or production action was performed — and no policy, config, or exception was authored that lets a future action of one of these classes bypass its own gate.** Audited against the ledger: every gated action, and every gated bypass-authorization (GA-0.1), has a matching recorded user approval (GA-1) |
 | **FV-10** | Every capability degradation and every `unverified_claim` appears in the final report — no advisory output presented as executed (IC-3, SB-5) |
 | **FV-11** | Open questions and deferred findings are enumerated, not dropped |
 | **FV-12** | A residual-risk statement is present whenever any item above is waived or partial |

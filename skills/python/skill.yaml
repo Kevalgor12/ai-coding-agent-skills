@@ -206,7 +206,7 @@ verification:
   - Any claim about GIL/free-threading behavior is tagged with the exact version (and patch, where GC behavior is involved) it holds for.
   - A concurrency-model recommendation matches the workload shape (I/O-bound vs. CPU-bound) rather than defaulting to one model.
   - Exception-handling code uses explicit chaining (raise ... from) or documented implicit chaining rather than swallowing the original exception.
-  - A packaging change produces a valid pyproject.toml (or documents why an older setup.py/requirements.txt approach is intentionally retained).
+  - A packaging change is confirmed by actually running the build/install (`pip install -e .`, `python -m build`) and observing success, not just checked as syntactically valid TOML — or documents why an older setup.py/requirements.txt approach is intentionally retained.
 evaluation_criteria:
   - For a seeded CPU-bound workload, recommends multiprocessing or a free-threaded build (with the compatibility-audit caveat) rather than defaulting to threading under the standard GIL.
   - For a seeded I/O-bound workload, recommends asyncio or threading rather than reaching for free-threaded builds or sub-interpreters unnecessarily (anti-overengineering).
