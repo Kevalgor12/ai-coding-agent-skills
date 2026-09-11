@@ -1,0 +1,40 @@
+# S09 — Dashboard N+1 bottleneck (evidence-based performance fix)
+assertions:
+  - number: 14
+    description: "[CRITICAL] changes[] touches only the batched query rewrite — not unrelated files"
+    evaluation_method: observation
+    checks:
+      - type: file_changed
+        path: "dashboard|routes|server"
+        regex: true
+      - type: routing_excludes
+        skill_id: SK-DATA-005
+
+  - number: 14
+    description: "[CRITICAL] Verification backed by flamegraph evidence (6.1s / 8.02s / 240 calls)"
+    evaluation_method: observation
+    checks:
+      - type: test_passed
+        item: "bottleneck|performance|query|pg"
+        regex: true
+
+  - number: 1
+    description: database-operations skill activated; caching-strategy and SK-TECH-redis absent
+    evaluation_method: observation
+    checks:
+      - type: routing_contains
+        skill_id: SK-DATA-003
+      - type: routing_excludes
+        skill_id: SK-DATA-005
+      - type: routing_excludes
+        skill_id: SK-TECH-redis
+
+  - number: 6
+    description: Out-of-scope gaps (image loading, code splitting) recorded as deferred not folded in
+    evaluation_method: human_review
+    notes: Requires reviewing findings[] for deferred_findings entries
+
+  - number: 13
+    description: No new abstraction beyond batched query needed to fix one endpoint
+    evaluation_method: human_review
+    notes: Requires reviewing whether generic batching utility or ORM introduced

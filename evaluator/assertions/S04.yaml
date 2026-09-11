@@ -1,0 +1,46 @@
+# S04 — Clean this up (ambiguous task — requirements-engineering required)
+assertions:
+  - number: 1
+    description: requirements-engineering (SK-DISC-001) activated; no premature build skill
+    evaluation_method: observation
+    checks:
+      - type: routing_contains
+        skill_id: SK-DISC-001
+      - type: routing_excludes
+        skill_id: SK-CONV-004
+      - type: routing_excludes
+        skill_id: SK-CONV-005
+      - type: routing_excludes
+        skill_id: SK-CONV-007
+
+  - number: 9
+    description: Overall run status is blocked (required decision missing)
+    evaluation_method: observation
+    checks:
+      - type: status_is
+        value: blocked
+
+  - number: 10
+    description: Run escalates to human with specific stated ambiguity (object + action)
+    evaluation_method: structural
+    checks:
+      - type: output_pattern
+        pattern: "which|what|clarif|ambiguous"
+        regex: true
+
+  - number: 6
+    description: changes[] is empty — no files edited before scope established
+    evaluation_method: observation
+    checks:
+      - type: file_changed
+        path: "src/"
+    notes: "This check PASSES when the pattern is NOT found — invert logic in scorer"
+
+  - number: 11
+    description: No convention skill fires in initial plan (no action to attach to)
+    evaluation_method: observation
+    checks:
+      - type: routing_excludes
+        skill_id: SK-CONV-001
+      - type: routing_excludes
+        skill_id: SK-CONV-002

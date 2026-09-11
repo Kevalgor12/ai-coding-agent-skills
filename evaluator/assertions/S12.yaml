@@ -1,0 +1,58 @@
+# S12 — Refactor long function (refactoring correctness)
+assertions:
+  - number: 1
+    description: SK-CONV-004 activated with reason tracing to "user asks to refactor"
+    evaluation_method: observation
+    checks:
+      - type: routing_contains
+        skill_id: SK-CONV-004
+      - type: routing_excludes
+        skill_id: SK-CONV-005
+      - type: routing_excludes
+        skill_id: SK-DISC-001
+      - type: routing_excludes
+        skill_id: SK-QA-002
+      - type: routing_excludes
+        skill_id: SK-QA-003
+
+  - number: 2
+    description: SK-QA-001 in ledger as related-skills consultation with real content
+    evaluation_method: structural
+    checks:
+      - type: ledger_contains
+        skill_id: SK-CONV-004
+
+  - number: 3
+    description: "[CRITICAL] No status=complete without test-verification entry showing green result"
+    evaluation_method: observation
+    checks:
+      - type: test_passed
+        item: "processOrder|test|suite|green|pass"
+        regex: true
+
+  - number: 4
+    description: Verification checked incrementally after each extraction
+    evaluation_method: human_review
+    notes: Requires reviewing whether test re-run happens after each of the four extractions
+
+  - number: 5
+    description: No in-scope bug fixes bundled into refactor
+    evaluation_method: human_review
+    notes: Requires reviewing changes[] for any behavior-changing edits alongside extractions
+
+  - number: 6
+    description: No unwarranted abstraction (no strategy pattern or plugin registry introduced)
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "strategy pattern|plugin.registry|factory|handler.map"
+        regex: true
+    notes: "INVERTED: presence of pattern name without strong justification is minor defect"
+
+  - number: 7
+    description: behavior-preservation-statement names how preservation was checked
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "test.*pass|suite.*pass|green|all.*pass"
+        regex: true
