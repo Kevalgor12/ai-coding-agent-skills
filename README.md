@@ -114,13 +114,16 @@ python3 scripts/deploy.py --target claude-code --dest . --dry-run
 
 Re-run the same command whenever the library updates to pick up new/changed
 skills — it's a straight overwrite of the projected files, not a merge.
-**Avoid `--target all` into one destination**: Cursor, Codex, and Windsurf all
-target the same `.agents/skills/` path by design (the shared "common
-denominator" location), so deploying every target into a single project
-directory has them overwrite each other; the script warns to stderr if any
-two targets would write different content to the same path. Deploy each
-target you actually use into that project separately, or use distinct
-`--dest` directories.
+**Avoid `--target all` into one destination**: Cursor, Codex, Windsurf, and
+Antigravity all target the same `.agents/skills/` path by design (the shared
+"common denominator" location), so deploying every target into a single
+project directory has them overwrite each other — Antigravity's content
+differs from the other three on every skill (its third-person description
+rewrite), and Codex differs from Cursor/Windsurf on manual-invocation skills
+(it encodes that via a sidecar `agents/openai.yaml` instead of frontmatter).
+The script warns to stderr whenever two targets would write different
+content to the same path. Deploy each target you actually use into that
+project separately, or use distinct `--dest` directories.
 
 ### Understand the skill structure
 

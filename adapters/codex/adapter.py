@@ -43,6 +43,15 @@ def project(skill: Skill) -> tuple:
     frontmatter = f"---\nname: {name}\ndescription: {description}\n---\n"
 
     body = skill.body
+    if skill.activation_mode == "manual":
+        body += (
+            "\n\n## Activation note\n\n"
+            "This skill is manual-invocation-only in its canonical definition. "
+            "Codex enforces this via the sidecar `agents/openai.yaml` "
+            "(`allow_implicit_invocation: false`, emitted alongside this file), "
+            "not via SKILL.md frontmatter — if you are reading only this file, "
+            "the enforcement lives in that sidecar, not here.\n"
+        )
     body += activation_conditions_note(skill)
     record_activation_conditions(skill, manifest, "No glob/semantic-condition frontmatter field documented for Codex; kept in body.")
     body += capability_note(skill)
