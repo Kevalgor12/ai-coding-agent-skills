@@ -40,7 +40,7 @@ assertions:
         status: failed
 
   - number: 6
-    description: Failure ladder: R1 → R2 → R5 before R7/R8 if corrected attempt also fails
+    description: "Failure ladder: R1 → R2 → R5 before R7/R8 if corrected attempt also fails"
     evaluation_method: human_review
     notes: Requires reviewing whether escalation ladder is respected
 
