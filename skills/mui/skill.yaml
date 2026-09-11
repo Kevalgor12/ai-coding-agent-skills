@@ -1,0 +1,233 @@
+id: SK-TECH-mui
+slug: mui
+name: MUI (Material UI)
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-FE-003, SK-FE-002]
+# SK-FE-003 (styling-systems) and SK-FE-002 (ui-ux-design) — no content
+# from either is assumed or fabricated here.
+
+purpose: >-
+  Apply MUI (Material UI) correctly and version-appropriately — Emotion-based
+  CSS-in-JS theming, the sx prop, the styled() utility, CSS-variables theming,
+  and RSC/App Router integration — while tracking the patch-line and peer-
+  dependency gotchas that differ across its v7/v9 major lines.
+scope: >-
+  MUI-specific API, theming, styling-engine, CSP, and integration detail. The
+  general styling-system method (design tokens, theming architecture,
+  dark-mode strategy) belongs to styling-systems (SK-FE-003);
+  general UI/UX design judgment (information architecture, visual
+  design) belongs to ui-ux-design (SK-FE-002). This skill
+  supplies what's MUI-specific: the sx prop, createTheme()/ThemeProvider, the
+  Emotion styling engine and its CSP requirements, the v7/v9 breaking-change
+  surface, and the security-patch-line policy.
+expertise: Frontend engineer building or maintaining a Material-Design UI with MUI.
+description: >-
+  MUI (Material UI) component library — Emotion-based CSS-in-JS via the sx
+  prop, theming (createTheme()/ThemeProvider/CSS-variables mode), and RSC/App
+  Router integration (AppRouterCacheProvider). Use when @mui/material,
+  @mui/icons-material, or @emotion/react+styled appear, or the task names MUI
+  or Material UI. Not for shadcn/ui (route to that skill), generic
+  styling-system choice (styling-systems), or UI/UX design judgment
+  independent of a library (ui-ux-design).
+
+activation_conditions:
+  - "@mui/material, @mui/icons-material, @mui/material-nextjs, or @mui/system appear in package.json, a lockfile, or an import statement"
+  - "A createTheme()/ThemeProvider/sx-prop pattern recognizable as MUI is present in the codebase"
+  - The task names MUI, Material UI, or a Material-Design component library specifically
+non_activation_conditions:
+  - The project uses shadcn/ui, Chakra UI, Ant Design, or another component library instead (route to that skill)
+  - The question is a generic styling-system or design-token choice with no component library chosen yet (route to styling-systems)
+  - The question is UI/UX design judgment (information architecture, visual design, usability) independent of a specific component library (route to ui-ux-design)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The MUI-specific task (component usage, theming, sx-vs-styled() decision, CSP configuration, SSR/RSC integration, version migration).
+    required: true
+  - name: installed-version
+    description: The pinned @mui/material major version (from package.json/lockfile) — governs both API surface and security-patch posture.
+    required: false
+required_context:
+  - The installed @mui/material major version — v9 (current, patched), v7 (LTS, patched), or v6-and-earlier (unpatched) changes both the correct API surface and the security posture of the recommendation.
+optional_context:
+  - The host framework/rendering setup (Next.js App Router vs. Pages Router vs. Express vs. another SSR host) — changes which integration pattern (AppRouterCacheProvider vs. AppCacheProvider vs. createEmotionServer) applies.
+  - Whether a strict CSP is enforced in production — changes which CSP directives must be planned for.
+
+outputs:
+  - name: component-or-theme-code
+    kind: edit
+    description: MUI component usage, theme configuration (createTheme/ThemeProvider), sx-prop or styled() code, or CSS-variables theming setup correct for the installed version.
+  - name: integration-config
+    kind: edit
+    description: SSR/RSC integration (AppRouterCacheProvider/AppCacheProvider), CSP directive configuration, or import-path/ESLint config addressing dev-server import performance.
+  - name: analysis
+    kind: analysis
+    description: The determined version/patch-line and which version-sensitive caveats apply, or a MUI-vs-shadcn/ui / sx-vs-styled()-vs-CSS-variables decision with rationale.
+
+depends_on_skills: []
+# Per specification.md §2.5: parents (SK-FE-003, SK-FE-002) already captures
+# the specialization relationship. depends_on_skills is reserved for hard,
+# blocking sub-step composition, which does not apply here — deliberately
+# left empty, not populated with the parents.
+related_skills: []
+conflicts_with: [SK-TECH-shadcn-ui]
+# SK-TECH-shadcn-ui is an alternative component library for the same UI
+# layer; no content of that skill is assumed here beyond the structural
+# comparison already recorded in technology-decision-matrix.md §8.
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+# Tier A: MUI work is authoring/advising on component, theme, and config
+# code. No shell execution is required to produce correct MUI code; running a
+# dev server to observe an import-speed regression or a build to measure
+# bundle size is out of this skill's tier and is stated as such (see
+# failure_handling).
+
+grounding: official-docs
+source_references:
+  - url: https://mui.com/material-ui/
+    title: "Material UI — Overview and positioning"
+    via: research/technologies/mui.md
+    retrieved: "2026-09-10"
+  - url: https://mui.com/material-ui/customization/theming/
+    title: "Material UI — Theming (ThemeProvider, createTheme, CSS variables)"
+    via: research/technologies/mui.md
+    retrieved: "2026-09-10"
+  - url: https://mui.com/material-ui/customization/how-to-customize/
+    title: "Material UI — How to customize (sx / styled() / theme overrides / GlobalStyles)"
+    via: research/technologies/mui.md
+    retrieved: "2026-09-10"
+  - url: https://mui.com/material-ui/getting-started/installation/
+    title: "Material UI — Installation (peer deps, styling engines, react-is pin)"
+    via: research/technologies/mui.md
+    retrieved: "2026-09-10"
+  - url: https://mui.com/material-ui/guides/content-security-policy/
+    title: "Material UI — Content Security Policy guide"
+    via: research/technologies/mui.md
+    retrieved: "2026-09-10"
+  - url: https://mui.com/material-ui/guides/minimizing-bundle-size/
+    title: "Material UI — Minimizing bundle size (import patterns, dev-server perf)"
+    via: research/technologies/mui.md
+    retrieved: "2026-09-10"
+  - url: https://mui.com/material-ui/guides/testing/
+    title: "Material UI — Testing guide"
+    via: research/technologies/mui.md
+    retrieved: "2026-09-10"
+  - url: https://mui.com/material-ui/integrations/nextjs/
+    title: "Material UI — Next.js integration (App Router / Pages Router)"
+    via: research/technologies/mui.md
+    retrieved: "2026-09-10"
+  - url: https://mui.com/blog/mui-next-js-app-router/
+    title: "MUI blog — App Router support introduced in v5.14.0"
+    via: research/technologies/mui.md
+    retrieved: "2026-09-10"
+  - url: https://mui.com/material-ui/migration/upgrade-to-v7/
+    title: "Material UI — Migration: upgrade to v7"
+    via: research/technologies/mui.md
+    retrieved: "2026-09-10"
+  - url: https://mui.com/material-ui/migration/upgrade-to-v9/
+    title: "Material UI — Migration: upgrade to v9"
+    via: research/technologies/mui.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/mui/material-ui/blob/master/SECURITY.md
+    title: "material-ui — SECURITY.md (vulnerability reporting, patch/support policy)"
+    via: research/technologies/mui.md
+    retrieved: "2026-09-10"
+  - url: https://mui.com/material-ui/getting-started/versions/
+    title: "Material UI — Versions (history, semver cadence, support policy)"
+    via: research/technologies/mui.md
+    retrieved: "2026-09-10"
+  - url: https://mui.com/blog/introducing-material-ui-v9/
+    title: "MUI blog — Introducing Material UI v9"
+    via: research/technologies/mui.md
+    retrieved: "2026-09-10"
+  - url: https://mui.com/material-ui/getting-started/faq/
+    title: "Material UI — FAQ (anti-patterns, legacy SSR gotchas)"
+    via: research/technologies/mui.md
+    retrieved: "2026-09-10"
+  - url: https://mui.com/material-ui/migration/troubleshooting/
+    title: "Material UI — Troubleshooting (duplicate styling-engine instances, ThemeProvider errors)"
+    via: research/technologies/mui.md
+    retrieved: "2026-09-10"
+  - url: https://mui.com/material-ui/guides/content-security-policy/
+    title: "MUI vs. shadcn/ui — CSP requirement, structural comparison (Material UI side)"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/mui/material-ui/blob/master/SECURITY.md
+    title: "MUI vs. shadcn/ui — patch/support-policy, structural comparison (Material UI side)"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  "@mui/material": ">=7.0 <=9.0 (only 9.x current and 7.x LTS receive patches; 6.x and earlier unpatched)"
+  react: "17.0.0+, 18.0.0+, 19.0.0+ (React <=18 requires pinning react-is to the installed React major via package-manager overrides)"
+  typescript: ">=4.9 (raised from 4.7 by the v6->v7 migration)"
+version_sensitive_claims:
+  - claim: Only v9.x (current stable) and v7.x (designated long-term support) receive security patches; v6.x and earlier are not receiving security patches under this policy.
+    applies_to: "v9.x and v7.x are currently patched; v6.x and earlier are unpatched (state as of the v9 release cycle)"
+    source_ref: research/technologies/mui.md §7, §12; github.com/mui/material-ui SECURITY.md
+  - claim: React <=18 apps must pin react-is to their installed React major via package-manager overrides, because MUI's own code depends on react-is@19.
+    applies_to: "React 17.0.0+/18.0.0+ peer support, gotcha introduced/documented from the v7 migration onward"
+    source_ref: research/technologies/mui.md §11, §12
+  - claim: TypeScript minimum raised to 4.9 (from 4.7).
+    applies_to: "v7 and later"
+    source_ref: research/technologies/mui.md §11, §13
+  - claim: Next.js 13.5+ auto-applies optimizePackageImports for MUI, removing the need for manual path-import discipline.
+    applies_to: "Next.js >=13.5, any MUI version"
+    source_ref: research/technologies/mui.md §5
+  - claim: RSC/App Router support ("use client" on all components) shipped in Material UI v5.14.0.
+    applies_to: ">=5.14.0"
+    source_ref: research/technologies/mui.md §2, §16
+  - claim: Minimum supported browsers raised to Chrome 117+, Firefox 121+, Safari 17.0+.
+    applies_to: "v9 and later"
+    source_ref: research/technologies/mui.md §11, §13
+  - claim: Major version numbering jumped from v7 directly to v9 (skipping v8) specifically to align with MUI X, which as of v9 shares major-version numbers with Material UI.
+    applies_to: "v9 release onward"
+    source_ref: research/technologies/mui.md §11, §16
+  - claim: CSS-variables theming (cssVariables:true) was opt-in/experimental in v5, became more central/refined through v6-v9, and v9 adds color-mix()-based derived colors.
+    applies_to: "opt-in from v5; refined v6-v9"
+    source_ref: research/technologies/mui.md §1, §13
+last_verified: "2026-09-10"
+reverify_triggers:
+  - A new Material UI major release (changes covered_versions and the API surface)
+  - Any change to the SECURITY.md supported-version/patch-line policy
+  - The 9.0.0-beta.1 "next" dist-tag (or a subsequent v10 line) reaching stable
+  - MUI's stated migration of Material UI's internals onto Base UI reaching a documented, version-tagged milestone
+
+owned_knowledge:
+  - MUI's sx prop, styled() utility, and theme-overrides customization API
+  - MUI's Emotion-based CSS-in-JS styling engine and its CSP nonce requirements
+  - MUI's CSS-variables theming mode (cssVariables:true, colorSchemes)
+  - MUI's v7/v9 breaking-change surface, codemods, and security-patch-line policy
+  - MUI's RSC/App Router integration pattern (AppRouterCacheProvider)
+decision_framework_present: true
+
+failure_handling:
+  - If the installed @mui/material major version cannot be determined, ask for it or explicitly state the version the guidance assumes — never assume "v9/latest" silently, since v6-and-earlier is unpatched and the API surface differs materially across majors (VA-3).
+  - If shell is unavailable (this skill's tier is A), produce advisory component/theme/config code and state plainly that no dev-server/build was run to verify an import-performance or bundle-size claim.
+  - If the project pins @mui/material to v6.x or earlier, state explicitly that the line no longer receives security patches per MUI's SECURITY.md policy, rather than proceeding as if it were a routine version choice.
+escalation:
+  - Recommending or continuing development on an unpatched v6-or-earlier @mui/material line for a production app is a security-relevant decision requiring explicit user acknowledgment before proceeding.
+  - Accepting style-src-attr 'unsafe-inline' in a strict-CSP production deployment (required by some MUI components) should be surfaced to the user for explicit sign-off, not silently included in generated CSP config.
+verification:
+  - Every version-sensitive API used (Grid vs. GridLegacy, slots/slotProps vs. components/componentsProps, react-is pin) matches the confirmed installed major version.
+  - Any CSP configuration produced includes the style-src-elem nonce, and notes style-src-attr 'unsafe-inline' and the InitColorSchemeScript script-src nonce where applicable.
+  - Any claim about patch support, browser floor, or peer-dependency requirements is tagged with the version range it holds for.
+evaluation_criteria:
+  - Given a seeded package.json pinning @mui/material to v6.x or earlier, flags the unpatched-security-line risk rather than proceeding silently.
+  - Given a seeded React 18 project using @mui/material v7+, recommends pinning react-is via overrides rather than omitting the step.
+  - For a seeded strict-CSP Next.js App Router scenario, produces CSP directives covering the Emotion style-src-elem nonce, any needed style-src-attr allowance, and the InitColorSchemeScript script-src nonce.
+  - Chooses a defensible customization approach (sx vs. styled() vs. theme components key) for a seeded one-off-vs-reusable-vs-global styling scenario, matching MUI's documented scope guidance.
+  - Does not restate styling-systems' or ui-ux-design's general method, or shadcn/ui's internal API, verbatim (QR-2).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Read, Edit]
+  cursor:
+    paths: ["**/theme.ts", "**/theme.tsx", "**/*.tsx", "**/*.jsx"]
+  vscode:
+    argument_hint: "<task, e.g. 'add a dark-mode CSS-variables theme' or 'configure CSP for Emotion'>"

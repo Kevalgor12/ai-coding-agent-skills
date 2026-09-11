@@ -1,0 +1,100 @@
+id: SK-DATA-001
+slug: data-modeling
+name: Data modeling
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: DATA
+
+purpose: >-
+  Design data models — relational schemas and document schemas — that fit
+  the system's actual access patterns and integrity needs, and choose the
+  right data-store shape (relational, document, columnar/OLAP) for the
+  workload.
+scope: >-
+  Schema/data-model design across relational and document stores, and the
+  shape-of-store decision. Not query tuning, indexing, or replication once a
+  schema exists (database-operations); not ORM-specific
+  mapping mechanics (orm-integration); not evolving an existing populated
+  schema (data-migration).
+expertise: Senior engineer acting as a data modeler / database architect.
+description: >-
+  Design relational or document data models and choose the right store shape
+  (relational/document/columnar) for the access pattern. Use when a new data
+  model is being designed or an existing one is being changed. Not for query
+  optimization on an existing schema, ORM-specific mapping, or migrating a
+  populated database — those are separate skills.
+
+activation_conditions:
+  - A new data model or schema is being designed
+  - An existing schema needs a structural change (new entity, changed relationship)
+  - A store-shape decision is open (relational vs. document vs. columnar/OLAP vs. key-value)
+non_activation_conditions:
+  - The schema is fixed and the task is query/index tuning against it (route to database-operations)
+  - The task is ORM-specific mapping mechanics with the schema already decided (route to orm-integration)
+  - The task is migrating an already-populated database to a new shape (route to data-migration)
+activation_mode: auto
+
+inputs:
+  - name: requirements
+    description: The functional/non-functional requirements the data model must satisfy (ideally from requirements-engineering / solution-architecture).
+    required: true
+  - name: existing-schema
+    description: Any existing schema the new model must extend or coexist with.
+    required: false
+required_context:
+  - The entities involved and how they relate
+  - The dominant access patterns (what gets read/written together, how often, at what scale)
+optional_context:
+  - Consistency requirements (strict vs. eventual)
+  - Expected data volume and growth
+  - Team's existing datastore expertise
+
+outputs:
+  - name: schema-design
+    kind: analysis
+    description: Entity/relationship design with keys, constraints, and integrity rules.
+  - name: store-shape-recommendation
+    kind: analysis
+    description: The recommended data-store shape with trade-offs recorded.
+
+depends_on_skills: []
+related_skills: [SK-DISC-002, SK-DATA-002, SK-DATA-006]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: "Technology Decision Matrix — §2 Database model: PostgreSQL vs. MySQL vs. MongoDB vs. ClickHouse"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-09"
+  - url: research/knowledge-maps/concept-knowledge-map.md
+    title: "Concept Knowledge Map — Part A, Data Persistence & Databases"
+    via: research/knowledge-maps/concept-knowledge-map.md
+    retrieved: "2026-09-09"
+last_verified: "2026-09-09"
+
+owned_knowledge:
+  - Data-store shape selection (relational vs. document vs. columnar/OLAP vs. key-value)
+  - Schema/entity-relationship design method
+decision_framework_present: true
+
+failure_handling:
+  - If access patterns are unknown or unstated, ask for them rather than guessing a shape from the entities alone — the same data can justify different shapes depending on how it's read.
+  - If requirements are too thin to design against, request them or hand off to requirements-engineering rather than modeling against assumptions.
+escalation:
+  - A store-shape decision that's expensive to reverse (the primary datastore for a system already in production) is presented with trade-offs for explicit user confirmation before being treated as decided.
+verification:
+  - Every entity's keys and relationships are stated explicitly (no implied foreign key without a name).
+  - The chosen shape is justified against the actual access pattern, not chosen by default/familiarity.
+  - Constraints that protect real invariants (uniqueness, referential integrity, required fields) are specified, not left implicit.
+evaluation_criteria:
+  - For a seeded set of access patterns, proposes a schema whose normalization level and store shape fit those patterns, citing the decision-matrix comparison where relevant.
+  - Does not default to a familiar shape (e.g. always relational) without weighing the requirements against the recorded trade-offs.
+  - Flags at least one integrity risk (missing constraint, unbounded growth, race condition on a shared counter) when the design has one.
+
+adapter_hints: {}

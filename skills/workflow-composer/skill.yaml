@@ -1,0 +1,135 @@
+id: SK-ORCH-003
+slug: workflow-composer
+name: Workflow composer
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 0
+domain: ORCH
+
+purpose: >-
+  Sequence a multi-skill effort into an ordered, gated workflow, carry state
+  between stages, and refuse to mark the run complete while a required gate is
+  unrun.
+scope: >-
+  Cross-skill orchestration of a run: stage order, the handoff artifact each
+  stage passes on, parallelism where it is safe, loop budgets with declared exit
+  criteria, approval-gate placement and lifecycle, recovery-rung selection when a
+  stage does not succeed, and the final-validation checklist. Not the work of any
+  one stage. Not skill selection (skill-router, SK-ORCH-001) or host-capability
+  resolution (capability-adapter, SK-ORCH-002). Distinct from technical-planning
+  (SK-DISC-003), which decomposes the work itself into ordered tasks; this skill
+  stages the skills that will do it.
+expertise: >-
+  Principal engineer with multi-stage agent-workflow and release-gate discipline.
+description: >-
+  Stage a multi-skill effort into an ordered, gated workflow — sequence,
+  parallelize, loop with declared exit criteria, carry a named handoff artifact
+  between stages, and refuse to mark completion while a required gate is unrun.
+  Use when a task needs several skills across build and verify phases. Not for
+  single-stage tasks or pure Q&A, and not for decomposing the work itself into
+  tasks (technical-planning).
+
+activation_conditions:
+  - A task requires several skills across build and verify phases
+  - A run needs explicit stage ordering, gates, and handoff artifacts before execution begins
+  - A stage did not succeed and the run needs a recovery decision rather than an ad hoc retry
+  - A run is approaching completion and needs final validation against what was actually asked
+non_activation_conditions:
+  - A single-stage task, or pure question-and-answer with no change requested
+  - The request is which skills apply (route to skill-router) or whether the host can execute a step (route to capability-adapter)
+  - The request is to break agreed work into ordered implementation tasks (route to technical-planning)
+activation_mode: auto
+
+inputs:
+  - name: routing-plan
+    description: The selected skills and their reasons, from skill-router — the hard input this skill always consults before staging anything.
+    required: true
+  - name: task-goal
+    description: The objective and the verbatim task statement the finished run is validated against.
+    required: true
+  - name: capability-decisions
+    description: Per-step execute, fallback, advisory, or not-possible-here decisions, where a Tier B/C step is involved.
+    required: false
+  - name: repository-conventions
+    description: The detected conventions every stage's output is judged against.
+    required: false
+outputs:
+  - name: staged-workflow
+    kind: analysis
+    description: Ordered stages with their execution semantics, the handoff artifact each passes on, declared loop budgets and exit criteria, and every approval gate surfaced up front with its denied-branch.
+  - name: run-record
+    kind: analysis
+    description: The append-only record of stage outcomes, gate requests and responses, degradations, and recovery decisions — the evidence the final validation is checked against.
+  - name: completion-report
+    kind: analysis
+    description: The final validation result — complete, or incomplete with an explicit statement of residuals, degradations, deferred findings, and open questions.
+
+depends_on_skills: [SK-ORCH-001]
+related_skills: [SK-ORCH-002, SK-DISC-003, SK-CONV-007, SK-QA-001]
+conflicts_with: []
+
+required_capabilities: [file-read]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: core/dependency-architecture/workflows.md
+    title: "Workflow Patterns — the ten canonical staged compositions and their sequencing, iteration, review-loop, and approval semantics"
+    via: core/dependency-architecture/workflows.md
+    retrieved: "2026-09-10"
+  - url: core/dependency-architecture/matrices.md
+    title: "Matrices — the parallelization and escalation lookup tables that make ordering and gating decisions mechanical"
+    via: core/dependency-architecture/matrices.md
+    retrieved: "2026-09-10"
+  - url: core/orchestrator/lifecycle.md
+    title: "Run Lifecycle — phases P3-P7 and decision points D10-D19"
+    via: core/orchestrator/lifecycle.md
+    retrieved: "2026-09-10"
+  - url: core/orchestrator/failure-recovery-and-escalation.md
+    title: "Failure Recovery, Escalation & Approval Gates — failure classes F1-F9, recovery ladder R1-R8, loop budgets, and gate invariants GA-0..GA-8"
+    via: core/orchestrator/failure-recovery-and-escalation.md
+    retrieved: "2026-09-10"
+  - url: core/orchestrator/security-and-validation.md
+    title: "Security Boundaries, Gate Points & Final Validation — the security and testing gate points and the FV-1..FV-12 completion checklist"
+    via: core/orchestrator/security-and-validation.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/agent-capability-map.md
+    title: "Agent Capability Map — sub-agent history inheritance and nesting caps are unresolved cross-vendor forks, so staging must not assume delegation semantics"
+    via: research/knowledge-maps/agent-capability-map.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Stage composition — establishing stage order and the named handoff artifact each stage passes to the next
+  - Approval-gate placement and lifecycle (declared, armed, requested with a specific proposal, awaiting a real user response, recorded, consumed) including the denied-branch requirement
+  - Loop-budget discipline — no loop without a declared exit criterion, budgets declared before the loop starts, and non-convergence surfaced rather than silently continued or abandoned
+  - Recovery-rung selection — matching an agent-workflow failure class to the cheapest adequate response rather than retrying blindly or escalating reflexively
+  - The completion rule and final-validation checklist — a run is complete only on recorded evidence, and no required gate may be left unrun
+decision_framework_present: true
+
+failure_handling:
+  - If a stage returns anything other than success, select a recovery rung from the failure class rather than retrying identically or dropping the stage.
+  - If a loop's exit criterion cannot be stated in advance, do not start the loop — escalate for a criterion instead.
+  - If a loop exhausts its budget, escalate with what was tried and what was ruled out; never continue past the budget and never silently give up.
+  - If the host cannot deliver requested parallelism, run the stages sequentially — a workflow's correctness must never depend on parallelism.
+  - If a gate is denied, take the plan's declared denied-branch and record the denial; never re-request the same approval as if it had not been answered.
+verification:
+  - Every planned stage has a recorded terminal outcome — no stage is silently dropped so that completion can be claimed.
+  - Verification and convention stages are ordered after implementation, never skipped at the end.
+  - Every approval gate was surfaced before work started and, where triggered, was answered by an actual user response before the action ran.
+  - Every loop had a declared exit criterion and budget before it started.
+  - The completion report distinguishes complete from incomplete-with-residuals, and every degradation and deferred finding appears in it.
+escalation:
+  - A denied gate ends that branch; the run continues on its declared denied-branch or stops with a residual statement, never by proceeding anyway.
+  - A non-converging loop escalates to the user with the narrowest remaining hypothesis rather than consuming further budget.
+  - Evidence that invalidates the plan escalates as a replan through skill-router rather than being patched into the running stage order.
+  - A finding outside the running stage's scope is handed to its owning skill as a separate change, never fixed opportunistically inside the current stage.
+evaluation_criteria:
+  - For a seeded feature task, produces a stage order that places verification and conventions after implementation and never marks completion with an unrun required gate.
+  - Declares an exit criterion and a budget for every loop before the loop starts, and surfaces non-convergence rather than looping indefinitely.
+  - Selects a recovery rung matching the failure class, and never repeats an identical failed attempt without a stated correction.
+  - Produces a completion report that names every degradation, deferred finding, and open question rather than reporting unqualified success.
+  - Runs correctly when parallelism is unavailable, producing the same result sequentially.
+
+adapter_hints: {}

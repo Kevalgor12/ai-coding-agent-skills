@@ -1,0 +1,214 @@
+id: SK-TECH-web-standards
+slug: web-standards
+name: Web Standards (HTML & CSS)
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-FE-003, SK-FE-004]   # styling-systems, web-accessibility
+
+purpose: >-
+  Apply HTML document structure/DOM APIs and CSS cascade/layout/theming
+  mechanics correctly and version-appropriately — the foundational
+  web-platform primitives underneath any frontend framework, component
+  library, or styling system.
+scope: >-
+  HTML and CSS as web-platform technologies: document structure, the DOM
+  data model and Custom Elements/DOM APIs, HTML's own security surface
+  (XSS sinks, sandboxing), the CSS cascade/specificity/box model, modern
+  CSS layout and theming at-rules (@container, @property, @layer, native
+  nesting), and Baseline-based version awareness for both. Deliberately
+  merged (HTML+CSS): both are foundational, almost-always-co-present
+  web-platform primitives (see core/taxonomy/taxonomy-analysis.md).
+  Accessibility-specific guidance (semantic-HTML-for-a11y, alt text,
+  heading hierarchy, table markup) is owned by SK-FE-004 and only
+  referenced here, not repeated. Styling-architecture decisions (design
+  tokens, utility-first vs. component CSS, CSS-in-JS) are owned by
+  SK-FE-003 and only referenced here, not fabricated.
+expertise: Web platform engineer (HTML/CSS specialist).
+description: >-
+  HTML document structure, the DOM data model, and Custom Elements/DOM
+  APIs, plus CSS cascade, specificity, box model, layout, custom
+  properties, and modern at-rules (@container, @property, @layer, native
+  nesting) with Baseline-availability awareness. Use for raw HTML/CSS
+  platform mechanics. Not for accessibility semantics (use
+  web-accessibility), styling-architecture decisions like design tokens or
+  utility-first vs. component CSS (use styling-systems), or Sass/Tailwind
+  syntax (use those skills).
+
+activation_conditions:
+  - Authoring or reviewing raw HTML document structure/elements/attributes independent of a specific JS framework
+  - Authoring or reviewing CSS selectors, cascade, box model, layout, or custom properties independent of a specific CSS framework/preprocessor
+  - The task names an HTML/CSS platform primitive (DOM API, Custom Elements, box model, cascade/specificity, @container/@property/@layer/nesting)
+  - Deciding whether native CSS Nesting can replace a preprocessor, or whether a modern CSS feature's Baseline status is safe for production
+non_activation_conditions:
+  - The task is specifically accessibility semantics (alt text, ARIA, heading hierarchy for screen readers) — route to SK-FE-004 (web-accessibility)
+  - The task is a styling-architecture/design-system decision (tokens, utility-first vs. component CSS, choosing among Sass/Tailwind/CSS-in-JS) — route to SK-FE-003 (styling-systems)
+  - The task is Sass-specific (@use/@forward, mixins) or Tailwind-specific (utility classes, config) syntax — route to SK-TECH-sass / SK-TECH-tailwindcss
+  - Backend/non-UI work with no HTML/CSS surface
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The HTML/CSS task (document structure, a DOM API, a cascade/layout/theming decision, or evaluating a specific modern CSS feature).
+    required: true
+  - name: existing-markup-or-styles
+    description: Existing HTML/CSS in the codebase, if any, to stay consistent with.
+    required: false
+required_context:
+  - The markup or stylesheet (or the structural/styling problem) being worked on
+optional_context:
+  - Target browser support requirements (informs Baseline-status decisions)
+  - Whether the project already uses a CSS preprocessor (informs the native-nesting-vs-preprocessor decision)
+
+outputs:
+  - name: markup-or-stylesheet-edit
+    kind: edit
+    description: HTML structure or CSS rules reflecting correct document/DOM/cascade/layout usage and Baseline-aware feature choices.
+  - name: analysis
+    kind: analysis
+    description: Recommendations on document structure, DOM API usage, or CSS mechanics decisions (e.g. native nesting vs. preprocessor, @property production-readiness), with version/Baseline caveats stated.
+
+depends_on_skills: []
+related_skills: [SK-TECH-sass, SK-TECH-tailwindcss, SK-FE-004]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+# Tier A: authoring markup/stylesheets is advisory/file-only, not
+# fundamentally shell-execution-dependent (unlike running a service).
+
+grounding: official-docs
+source_references:
+  - url: https://html.spec.whatwg.org/multipage/introduction.html
+    title: "WHATWG HTML Living Standard — Introduction (semantic-level markup, extensibility, backwards compatibility)"
+    via: research/technologies/html.md
+    retrieved: "2026-09-10"
+  - url: https://html.spec.whatwg.org/multipage/dom.html
+    title: "WHATWG HTML Living Standard — The DOM (Document Object Model data model)"
+    via: research/technologies/html.md
+    retrieved: "2026-09-10"
+  - url: https://html.spec.whatwg.org/multipage/parsing.html
+    title: "WHATWG HTML Living Standard — Parsing (tokenization/tree construction, error-tolerant recovery)"
+    via: research/technologies/html.md
+    retrieved: "2026-09-10"
+  - url: https://html.spec.whatwg.org/multipage/custom-elements.html
+    title: "WHATWG HTML Living Standard — Custom Elements API"
+    via: research/technologies/html.md
+    retrieved: "2026-09-10"
+  - url: https://html.spec.whatwg.org/multipage/obsolete.html
+    title: "WHATWG HTML Living Standard — Obsolete features (non-conforming elements/attributes and replacements)"
+    via: research/technologies/html.md
+    retrieved: "2026-09-10"
+  - url: https://html.spec.whatwg.org/multipage/urls-and-fetching.html
+    title: "WHATWG HTML Living Standard — loading/fetchpriority/crossorigin/referrerpolicy attributes"
+    via: research/technologies/html.md
+    retrieved: "2026-09-10"
+  - url: https://whatwg.org/faq
+    title: "WHATWG FAQ — the HTML Living Standard versioning model (no version numbers, frozen dated snapshots)"
+    via: research/technologies/html.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/XSS
+    title: "MDN — Cross-Site Scripting (XSS): dangerous HTML sinks and layered defenses"
+    via: research/technologies/html.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Cascade/Cascade
+    title: "MDN — The cascade (relevance, origin/importance, specificity, scoping proximity, source order)"
+    via: research/technologies/css.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Cascade/Specificity
+    title: "MDN — Specificity (ID/CLASS/TYPE weighting, :where()/:is()/:not()/:has())"
+    via: research/technologies/css.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/box-sizing
+    title: "MDN — box-sizing (box model; content-box vs. border-box)"
+    via: research/technologies/css.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@container
+    title: "MDN — @container (container queries)"
+    via: research/technologies/css.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@property
+    title: "MDN — @property (typed custom properties, CSS Houdini)"
+    via: research/technologies/css.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/will-change
+    title: "MDN — will-change (rendering optimization hint, overuse warning)"
+    via: research/technologies/css.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_nesting
+    title: "MDN — CSS nesting (CSS Nesting Module Level 1, & selector, specificity interaction)"
+    via: research/technologies/css.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Cascading_variables/Using_custom_properties
+    title: "MDN — Using CSS custom properties (--name, var(), inheritance, cascade participation)"
+    via: research/technologies/css.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Selectors/Privacy_and_:visited
+    title: "MDN — Privacy and the :visited selector (history-sniffing mitigation)"
+    via: research/technologies/css.md
+    retrieved: "2026-09-10"
+  - url: https://web.dev/articles/content-visibility
+    title: "web.dev — content-visibility (up to 7x rendering-performance improvement on initial load)"
+    via: research/technologies/css.md
+    retrieved: "2026-09-10"
+  - url: https://web-platform-tests.org/test-suite-design.html
+    title: "web-platform-tests — CSS conformance test-suite design (browser conformance, not application testing)"
+    via: research/technologies/css.md
+    retrieved: "2026-09-10"
+  - url: https://www.w3.org/TR/css-2026/
+    title: "W3C CSS Snapshot 2026 — module-based CSS versioning, implementer-facing"
+    via: research/technologies/css.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Glossary/Baseline/Compatibility
+    title: "MDN — Baseline compatibility (widely/newly/limited available)"
+    via: research/technologies/css.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  html: "WHATWG Living Standard (continuously updated, no version number; last-updated snapshot observed 2026-09-07 per research/technologies/html.md)"
+  css: "Module-based, no single version; 2026 CSS Snapshot Group Note used as the reference point for current module status"
+version_sensitive_claims:
+  - claim: "box-sizing is Baseline widely available."
+    applies_to: "since July 2015"
+    source_ref: research/technologies/css.md
+  - claim: "@container (container queries) is Baseline widely available."
+    applies_to: "established February 2023"
+    source_ref: research/technologies/css.md
+  - claim: "@property is Baseline newly available — expect gaps on older browsers, not yet safe to rely on without a fallback for broad production use."
+    applies_to: "since July 2024"
+    source_ref: research/technologies/css.md
+  - claim: "will-change is Baseline widely available."
+    applies_to: "since January 2020"
+    source_ref: research/technologies/css.md
+  - claim: "CSS Nesting Module Level 1 is comparatively new; MDN's nesting page carries a 'last update November 2025' note. Check current browser-compat tables before production use."
+    applies_to: "as of the 2026-09-09/10 research pass — reverify against current MDN compat tables"
+    source_ref: research/technologies/css.md
+last_verified: "2026-09-10"
+reverify_triggers:
+  - A new annual CSS Snapshot Group Note publication (module status may have changed)
+  - "@property or CSS Nesting Module Level 1 crossing from 'newly available' to 'widely available' Baseline status (changes the production-safety recommendation)"
+  - A WHATWG HTML Living Standard change to sections cited here (the spec is continuously updated, unlike versioned technologies)
+
+owned_knowledge:
+  - HTML document structure and DOM data model (as distinct from accessibility semantics, owned by SK-FE-004)
+  - CSS cascade/specificity/box-model mechanics and Baseline-based version awareness
+decision_framework_present: true
+
+failure_handling:
+  - If a feature's current Baseline/browser-support status cannot be confirmed as current, state "verify against current Baseline/MDN compat tables" rather than asserting support (SG-3) — this applies especially to @property and native CSS Nesting, both flagged as recent.
+  - If the task is actually an accessibility concern (alt text, ARIA, heading semantics), do not duplicate SK-FE-004's content — cite it and defer.
+  - If the task is a styling-architecture decision (design tokens, utility-first vs. component CSS, preprocessor/framework choice) beyond raw CSS mechanics, state that SK-FE-003 owns that decision and this skill supplies only the underlying CSS mechanics.
+verification:
+  - Any Baseline-availability claim is tagged with the date/range it holds for, not stated as a bare fact.
+  - HTML output uses a correct DOCTYPE/charset/Content-Type and avoids obsolete non-conforming elements/attributes.
+  - CSS output's cascade/specificity reasoning is correct (no unexplained !important reach, no untagged use of a newly-available feature without a fallback).
+  - No accessibility-specific or styling-architecture content is restated rather than referenced (QR-2 no-duplication).
+evaluation_criteria:
+  - Given a seeded document-structure task, produces correct DOM-aware HTML (no obsolete elements, correct DOCTYPE/charset) without restating SK-FE-004's accessibility content verbatim.
+  - Given a seeded cascade/specificity conflict, correctly explains and resolves it per the documented cascade order (relevance → origin/importance → specificity → scoping proximity → source order).
+  - Given a request to use @property or native CSS Nesting, correctly flags the Baseline-recency caveat and recommends a fallback/compat check rather than asserting unconditional safety.
+  - Does not fabricate SK-FE-003 or Sass/Tailwind content when those topics come up — references them instead (QR-1).
+
+adapter_hints: {}

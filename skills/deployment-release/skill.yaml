@@ -1,0 +1,102 @@
+id: SK-INFRA-003
+slug: deployment-release
+name: Deployment & release
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: INFRA
+
+purpose: >-
+  Plan and execute deployments and releases — deployment strategy
+  (rolling/blue-green/canary), per-environment configuration, rollback,
+  and release tagging/versioning coordination.
+scope: >-
+  Deployment/release mechanics beyond the CI/CD pipeline definition itself
+  (ci-cd-pipeline) and beyond image authoring
+  (containerization). **Deliberately honest about a real research gap**:
+  this library's research is thin on deployment-strategy grounding beyond
+  scattered framework/edge-deployment notes (e.g. Next.js/Vercel, Vue SSR,
+  Angular's GitHub Pages CLI command) — it does not contain a dedicated,
+  vendor-neutral rolling/blue-green/canary methodology doc. This skill
+  states that boundary rather than inventing generic DevOps advice beyond
+  what's actually grounded.
+expertise: Senior/principal engineer with release-engineering experience.
+description: >-
+  Plan and execute deployments and releases — choose a deployment strategy
+  (rolling/blue-green/canary), manage per-environment configuration, ensure
+  a working rollback path, and coordinate release tagging/versioning. Use
+  when deploying or cutting a release. Not for local development, and
+  honest that this library's deployment-strategy research is thinner than
+  its other domains — grounded mainly in scattered framework-specific
+  deployment notes, not a dedicated methodology doc.
+
+activation_conditions:
+  - Deploying an application or service to an environment
+  - Cutting a release (tagging, versioning, coordinating a rollout)
+  - An existing deployment's rollback path or per-environment config separation needs review
+non_activation_conditions:
+  - Local development only, with no deployment involved
+  - Image authoring itself with deployment strategy already settled (route to containerization)
+  - CI/CD pipeline definition itself, distinct from the deployment/release strategy running inside it (route to ci-cd-pipeline)
+activation_mode: auto
+
+inputs:
+  - name: artifact
+    description: The build artifact/image being deployed.
+    required: true
+  - name: target-environments
+    description: The target environment(s) and their risk tolerance (e.g. staging vs. production).
+    required: true
+  - name: existing-deployment-setup
+    description: An existing deployment/release setup, if this is not greenfield.
+    required: false
+required_context:
+  - The target environment(s) and their risk tolerance
+  - Whether a CI/CD pipeline already exists to run the deployment, or this is being designed from scratch
+optional_context:
+  - Framework-specific deployment guidance already documented for the stack in use (e.g. Next.js/Vercel, Angular CLI's GitHub Pages deploy)
+  - Existing rollback tooling or lack thereof
+
+outputs:
+  - name: deployment-strategy
+    kind: analysis
+    description: The recommended deployment strategy (rolling/blue-green/canary) with trade-offs, when open.
+  - name: release-plan-or-config
+    kind: edit
+    description: Per-environment configuration separation, rollback path, and release tagging/versioning coordination.
+
+depends_on_skills: []
+related_skills: [SK-INFRA-001, SK-INFRA-002, SK-CONV-001, SK-CONV-005, SK-QA-004]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: research/knowledge-maps/integration-map.md
+    title: "Integration Map — framework-specific deployment paths (Next.js/Vercel/Docker, Vue SSR, Angular CLI GitHub Pages, Fastify serverless targets)"
+    via: research/knowledge-maps/integration-map.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Deployment-strategy selection framework (rolling/blue-green/canary trade-offs)
+  - Per-environment config separation and rollback-path design method
+decision_framework_present: true
+
+failure_handling:
+  - If the target environment(s) and risk tolerance are too thin to support a strategy decision, request them rather than assuming a default.
+  - If a deployment/release setup already exists, work within it unless the user explicitly asks to evaluate a change.
+  - If asked for deployment-methodology depth this library hasn't researched (e.g. a specific cloud provider's native deployment primitives), state that gap explicitly rather than fabricating vendor-specific guidance.
+verification:
+  - A rollback path is explicit and actually working, not assumed.
+  - Environment-specific configuration is separated (not hardcoded per-environment values baked into a shared artifact).
+  - Any production-affecting deployment action is presented for explicit confirmation before execution, never applied unilaterally.
+evaluation_criteria:
+  - For a seeded service, proposes a deployment strategy with a working rollback path and correct per-environment config separation.
+  - Correctly states when a request exceeds this skill's grounded scope (deployment-methodology depth beyond scattered framework notes) rather than fabricating generic DevOps advice.
+  - Never executes a production-affecting deployment action without explicit user confirmation.
+
+adapter_hints: {}

@@ -1,0 +1,94 @@
+id: SK-CONV-008
+slug: git-workflow
+name: Git workflow
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 2
+domain: CONV
+
+purpose: >-
+  Manage branching strategy, history hygiene, merges/rebases, worktrees,
+  and PR mechanics — the operations of version control, as distinct from
+  the text of commits/branches.
+scope: >-
+  Git operations and workflow, including GitHub-hosted PR/merge/ruleset
+  mechanics where the host is GitHub. Not commit/branch text (git-conventions).
+  This library's research covers GitHub's documented Flow/merge-methods/
+  ruleset mechanics; it does not contain a dedicated official "Git" (the
+  CLI tool) research document — pure git-plumbing mechanics not covered by
+  GitHub's own docs are grounded in this project's own established safety
+  discipline rather than a cited external source, and that boundary is
+  stated honestly rather than fabricated as researched fact.
+expertise: Senior engineer with strong version-control operational discipline.
+description: >-
+  Manage branching strategy, history hygiene, safe merges/rebases,
+  worktrees, and pull-request mechanics. Guards risky operations
+  (force-push, reset --hard, history rewrites) behind explicit
+  confirmation. Use for branch creation, merge/rebase, PR management, or
+  worktree isolation. Not for commit/branch text itself, which is
+  git-conventions' scope.
+
+activation_conditions:
+  - A branch is being created as part of a workflow decision (which model, from where)
+  - A merge or rebase is being performed
+  - A pull request is being opened, updated, or managed
+  - Worktree isolation is needed for parallel work
+non_activation_conditions:
+  - Composing commit/branch text only, with no operational decision involved (route to git-conventions)
+  - No version control system is present
+activation_mode: auto
+
+inputs:
+  - name: repo-state
+    description: Current branch, working-tree status, and remote-tracking state.
+    required: true
+  - name: task
+    description: What operation is needed (branch, merge, rebase, PR, worktree).
+    required: true
+  - name: branching-convention
+    description: The repository's existing branching model, if one is detectable.
+    required: false
+outputs:
+  - name: git-operation
+    kind: edit
+    description: The branch/merge/rebase/worktree/PR operation performed, or advisory guidance when execution isn't authorized or isn't possible.
+
+depends_on_skills: [SK-CONV-001]
+related_skills: [SK-INFRA-002, SK-DISC-004]
+conflicts_with: []
+
+required_capabilities: [shell]
+execution_tier: B
+
+grounding: mixed
+source_references:
+  - url: research/technologies/github.md
+    title: "GitHub Research — GitHub Flow, PR merge methods, rulesets/branch protection"
+    via: research/technologies/github.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Branching-model selection and application
+  - Safe merge/rebase/worktree operational discipline
+  - PR mechanics on a GitHub-hosted repository
+decision_framework_present: true
+
+failure_handling:
+  - If the repo's branching model isn't clear from history/config, ask rather than impose one.
+  - If PR automation/host capability isn't available in the current environment, degrade to advisory guidance (the operation described, not performed) rather than silently failing.
+verification:
+  - A `git status` is actually run and its output inspected immediately before any command that could discard uncommitted work, not skipped based on an assumed clean state.
+  - No destructive operation (force-push, reset --hard, history rewrite) is executed without explicit confirmation for that specific action.
+  - A opened/updated PR is well-formed (clear title/description, correct base branch) when the host permits.
+escalation:
+  - Force-push, reset --hard, and any other history-destroying operation require explicit per-action user confirmation — a prior approval does not generalize to a later instance.
+  - PR automation capability varies across agent hosts (this library's capability map found no uniform PR-automation primitive) — state the constraint rather than assuming it's available.
+evaluation_criteria:
+  - Applies the repository's own branching model correctly when one is detectable, rather than imposing a default unasked.
+  - Never performs a history-destroying operation (force-push, reset --hard, branch deletion with unmerged work) without explicit confirmation for that specific action.
+  - Opens a well-formed PR (clear title/description, correct base) when the host allows PR automation; degrades to advisory text when it doesn't.
+  - Uses git-conventions (SK-CONV-001) for the actual branch/commit text rather than inventing its own.
+
+adapter_hints: {}

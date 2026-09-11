@@ -1,0 +1,88 @@
+id: SK-CONV-006
+slug: technical-documentation
+name: Technical documentation
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 2
+domain: CONV
+
+purpose: >-
+  Produce and maintain accurate prose documentation — READMEs, API docs,
+  architecture decision records (ADRs), and inline module docs — that
+  matches current behavior and resists rot.
+scope: >-
+  Human-readable documentation artifacts. Not in-code comments
+  (code-commenting) and not changelog/release-notes drafting
+  (project-management, which already owns that responsibility). Specialized
+  by openapi-swagger for OpenAPI-spec-as-documentation authoring.
+expertise: Senior engineer with strong technical-writing discipline.
+description: >-
+  Produce and maintain accurate prose documentation — READMEs, API docs,
+  ADRs, inline module docs. Write docs matching current behavior, concise
+  and non-duplicative, recording architectural decisions with rationale
+  and alternatives, avoiding docs that will rot (prefer generating from
+  source where possible). Use when the user asks for docs, a public
+  interface changed, or a decision needs recording. Not for in-code
+  comments or changelog drafting.
+
+activation_conditions:
+  - The user asks for documentation
+  - A public interface changed and its documentation needs updating
+  - An architectural decision needs recording
+non_activation_conditions:
+  - In-code commenting (route to code-commenting)
+  - The user explicitly wants code only, no docs
+  - Changelog/release-notes drafting (already owned by project-management)
+activation_mode: auto
+
+inputs:
+  - name: code-or-architecture
+    description: The code/architecture/interface being documented.
+    required: true
+  - name: existing-docs
+    description: Existing documentation, if this is not greenfield.
+    required: false
+outputs:
+  - name: documentation
+    kind: edit
+    description: Documentation files/sections (README, API docs, ADRs, inline module docs) matching current behavior.
+
+depends_on_skills: []
+related_skills: [SK-CONV-002, SK-BE-002, SK-TECH-openapi-swagger, SK-DISC-004]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: research/technologies/github.md
+    title: "GitHub Research — recommended repository documentation practices (README/LICENSE/CITATION/SECURITY.md/contributing guidelines) and the documented anti-pattern of skipping documentation"
+    via: research/technologies/github.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Docs-match-current-behavior discipline (no drift)
+  - Generate-from-source-where-possible method to resist doc rot
+  - ADR structure (decision + rationale + alternatives)
+decision_framework_present: true
+
+failure_handling:
+  - If the user explicitly wants code only with no docs, don't impose documentation uninvited.
+  - If existing docs already cover the topic accurately, don't duplicate them — update in place instead.
+verification:
+  - Produced docs match the actual current interface/behavior, not a stale or aspirational description.
+  - Docs are concise and non-duplicative, not restating what's already documented elsewhere.
+  - ADRs capture the decision, its rationale, and the alternatives considered — not just the outcome.
+  - Where a doc could instead be generated from source (e.g. an OpenAPI spec), that path is preferred over hand-maintained prose that will drift.
+escalation:
+  - None — this skill has no escalation path of its own beyond the standard confirmation rules for any file the user hasn't explicitly asked to be changed.
+evaluation_criteria:
+  - Produced docs match the actual current interface (no drift) and do not merely restate code.
+  - ADRs capture decision + rationale + alternatives.
+  - Correctly routes in-code comments to code-commenting and changelog drafting to project-management rather than answering them itself.
+  - Prefers generating documentation from source (e.g. OpenAPI) over hand-maintained prose where that path exists.
+
+adapter_hints: {}

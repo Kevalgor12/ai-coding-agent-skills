@@ -1,0 +1,121 @@
+id: SK-ORCH-001
+slug: skill-router
+name: Skill router
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 0
+domain: ORCH
+
+purpose: >-
+  Read an incoming task and determine which skills apply, in what order —
+  activating the minimum correct set and recording, with reasons, everything
+  it excluded.
+scope: >-
+  Intent classification, stack detection from repository signals, and
+  default-deny skill selection with an explicit exclusion record. Produces a
+  routing plan; does none of the domain work itself. Does not choose a
+  technology (that is solution-architecture, SK-DISC-002) — it detects which
+  one is already in use. Does not decompose work into tasks (technical-planning,
+  SK-DISC-003) or stage a multi-skill workflow (workflow-composer, SK-ORCH-003),
+  and does not resolve host capabilities (capability-adapter, SK-ORCH-002).
+expertise: >-
+  Principal engineer with skill-library routing and context-budget discipline.
+description: >-
+  Select the minimum correct skill set for a task: parse intent, detect the
+  stack from repository signals, apply default-deny selection, and record every
+  exclusion with its reason. Use when a task spans more than one domain, or the
+  right skill set is non-obvious. Not for a task one skill clearly owns
+  (routing overhead is waste), and not for choosing a technology or planning
+  the work itself.
+
+activation_conditions:
+  - A task spans more than one domain
+  - The correct skill set for a task is non-obvious
+  - A stated task's intent, scope, or risk level needs classifying before work begins
+  - Evidence found mid-run suggests the active skill set is wrong or incomplete
+non_activation_conditions:
+  - A single, unambiguous skill clearly owns the task — let it trigger directly
+  - The request is to choose between technologies rather than detect which is in use (route to solution-architecture)
+  - The request is to break agreed work into ordered tasks (route to technical-planning) or to stage a multi-skill workflow (route to workflow-composer)
+activation_mode: auto
+
+inputs:
+  - name: task-statement
+    description: The user's request, verbatim.
+    required: true
+  - name: repository-signals
+    description: Dependency manifests, config files, driver imports, connection strings, and file types present — the bounded scan, not a full repository read.
+    required: false
+  - name: user-constraints
+    description: Constraints the user stated on how the work is done, which must survive routing unmodified.
+    required: false
+outputs:
+  - name: routing-plan
+    kind: analysis
+    description: The selected skills with the reason each was included, ordered by prerequisite, annotated where parallel-safe, with review facets and approval gates surfaced up front.
+  - name: exclusion-record
+    kind: analysis
+    description: The explicit complement — what was not activated and why, by skill or exclusion class — which is what makes the minimum-set claim auditable.
+
+depends_on_skills: []
+related_skills: [SK-ORCH-002, SK-ORCH-003, SK-DISC-001, SK-DISC-002, SK-DISC-003]
+conflicts_with: []
+
+required_capabilities: [file-read]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: core/routing-architecture/routing-algorithm.md
+    title: "Routing Algorithm & Activation Decision Tree — the ordered selection procedure and its early exits"
+    via: core/routing-architecture/routing-algorithm.md
+    retrieved: "2026-09-10"
+  - url: core/routing-architecture/rules.md
+    title: "Routing Rules — skill-selection (SR-1..SR-11), context-selection (CS-1..CS-8), parallelization (PR-1..PR-5), and escalation (ER-1..ER-6) rules"
+    via: core/routing-architecture/rules.md
+    retrieved: "2026-09-10"
+  - url: core/orchestrator/lifecycle.md
+    title: "Run Lifecycle — phases P0-P2 (intake, discovery, routing) and decision points D1-D9"
+    via: core/orchestrator/lifecycle.md
+    retrieved: "2026-09-10"
+  - url: core/dependency-architecture/matrices.md
+    title: "Matrices — the activation, conflict, parallelization, and escalation lookup tables"
+    via: core/dependency-architecture/matrices.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/agent-capability-map.md
+    title: "Agent Capability Map — no standing semantic index in roughly half the researched hosts, so detection must rest on deterministic signals rather than semantic search"
+    via: research/knowledge-maps/agent-capability-map.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Default-deny skill-selection method — a skill is excluded unless its activation matches and the task type needs it
+  - The exclusion-record discipline (the explicit complement, with a reason per exclusion class) that makes a minimum-set claim auditable
+  - Routing-time task classification — intent, task type, complexity, and risk class as the four values that drive selection, gating, and discovery depth
+  - Detection-gated technology activation and conflict-cluster resolution for the artifact under change
+decision_framework_present: true
+
+failure_handling:
+  - If intent is genuinely ambiguous on a non-trivial task, escalate to requirements-engineering or the user before selecting any build skill — never route on a guess.
+  - If a required conflict-cluster choice is undetectable from the repository, activate the generic Layer-3 skill and raise the choice as a decision rather than activating every sibling.
+  - If a candidate skill exists only as a taxonomy catalog entry and has not been authored, record the gap and route to the nearest authored skill — never plan an unauthored skill as if it existed.
+  - If the repository signal scan is unavailable, route on the request text alone and state that technology detection was not possible rather than assuming a stack.
+verification:
+  - Every excluded skill or exclusion class carries a stated reason — the complement is produced explicitly, never as a silent omission.
+  - No technology skill is activated for a technology absent from the repository and unnamed in the request.
+  - Every required stage of the chosen workflow pattern is staffed by some selected skill, and any completeness-backstop addition is recorded with the stage it staffed.
+  - No skill is selected whose non-activation conditions match the task's signals.
+  - Selection used name, description, and activation/non-activation metadata only — no skill body was loaded to decide whether to select it.
+escalation:
+  - Genuine intent ambiguity on a non-trivial or high-stakes task escalates to requirements-engineering or the user before any build skill is selected.
+  - A required technology choice that cannot be resolved by detection escalates to solution-architecture as an open decision.
+  - A dependency cycle or an upward layer edge discovered while ordering escalates as a library defect rather than being silently broken.
+evaluation_criteria:
+  - On seeded multi-domain tasks, selects the expected skill set with no missing essential skill and no more than a stated bound of spurious selections.
+  - Correctly detects the stack in play from dependency manifests, config files, and imports, and activates no technology skill for an undetected technology.
+  - Produces an exclusion record with a reason for every exclusion class, including the unrelated-domain skills a naive keyword match would have pulled in.
+  - On an ambiguous request, escalates for clarification instead of selecting a speculative skill set.
+  - On a trivial single-owner task, selects one skill and suppresses the rest of the orchestration layer.
+
+adapter_hints: {}

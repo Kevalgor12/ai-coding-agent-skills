@@ -1,0 +1,223 @@
+id: SK-TECH-python
+slug: python
+name: Python
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-BE-001, SK-AI-001]   # backend-architecture; llm-application-engineering
+
+purpose: >-
+  Apply Python correctly and version-appropriately: the GIL and its
+  free-threading evolution, sub-interpreters, concurrency-model selection,
+  virtual environments/packaging, and exception chaining.
+scope: >-
+  Python-language-and-runtime engineering detail — the generic backend
+  structure method comes from the parent skill (SK-BE-001); Python's role in
+  LLM/agent application engineering is owned by SK-AI-001
+  (llm-application-engineering) and is not repeated here.
+expertise: Python backend/platform engineer.
+description: >-
+  Python-specific engineering: the GIL and its free-threading evolution (PEP
+  703/779), sub-interpreters (PEP 684/734), concurrency-model choice
+  (asyncio/multiprocessing vs. free-threaded builds), venv/pyproject.toml
+  packaging, and exception chaining (raise...from). Use when the stack is
+  Python (pyproject.toml/requirements.txt/setup.py, a .py entrypoint, or the
+  task names Python). Not for the generic backend-structure decision
+  (backend-architecture) or LLM/agent-application-specific design.
+
+activation_conditions:
+  - A pyproject.toml, requirements.txt, setup.py/setup.cfg, or Pipfile is present
+  - A Python interpreter/venv is the runtime target (python3/python command, a .py entrypoint)
+  - The task names a Python-specific concern (GIL, free-threaded/no-GIL build, sub-interpreters, venv, pip, asyncio, multiprocessing, unittest, exception chaining)
+  - A Python version upgrade or version-gated behavior (e.g. 3.12/3.13/3.14 differences) is in question
+non_activation_conditions:
+  - The stack uses another language/runtime (Node.js, Go, etc.) with no Python component (route to that technology skill)
+  - The question is generic backend structure with no language chosen yet (route to SK-BE-001)
+  - The task is LLM/agent-application design itself (prompt engineering, RAG, agent orchestration) rather than Python-the-language mechanics (route to SK-AI-001, llm-application-engineering)
+  - Pure data-science/ML modeling questions with no language-mechanics component
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Python task (concurrency design, packaging, version upgrade, exception handling, performance profiling).
+    required: true
+  - name: python-version
+    description: The Python version/interpreter in use (python --version, pyproject.toml, container base image, or CI config).
+    required: false
+required_context:
+  - The Python major.minor (and, for GC-behavior claims, patch) version in use — most claims here are version-gated (rule VA-3).
+optional_context:
+  - Whether C-extension dependencies are in use (relevant to free-threaded-build adoption risk).
+  - The existing concurrency approach (asyncio/threading/multiprocessing) if a concurrency change is being considered.
+
+outputs:
+  - name: code-or-config-change
+    kind: edit
+    description: Version-correct Python code, packaging config (pyproject.toml), or interpreter/runtime flags.
+  - name: analysis
+    kind: analysis
+    description: Concurrency-model or version-upgrade recommendation with rationale and the exact version/patch range it applies to.
+  - name: commands-run
+    kind: command-run
+    description: python/pip/venv invocations executed to diagnose or verify, when shell is available.
+
+depends_on_skills: []
+# depends_on_skills is reserved for hard composition (invoking another skill
+# as a blocking sub-step of this skill's own execution). The relationship to
+# SK-BE-001 and SK-AI-001 above is specialization, already fully captured by
+# `parents` -- duplicating it into depends_on_skills would conflate the two
+# relationship types (spec §2.5; this exact mistake happened in a prior batch
+# of this project, see specification.md §2.5 note).
+related_skills: []
+conflicts_with: [SK-TECH-nodejs, SK-TECH-go]   # alternative backend runtimes/languages for the same service; do not co-activate for the same runtime decision
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+# Proposing code/config changes is advisory (file-only); running python/pip/
+# venv/profilers needs shell. No capability_fallbacks block required (Tier B,
+# not C) — degrades to advisory per failure_handling if shell is unavailable.
+
+grounding: official-docs
+source_references:
+  - url: https://docs.python.org/3/glossary.html#term-global-interpreter-lock
+    title: "Python Glossary — Global Interpreter Lock (GIL)"
+    via: research/technologies/python.md
+    retrieved: "2026-09-10"
+  - url: https://docs.python.org/3/howto/free-threading-python.html
+    title: "Python HOWTO — Free-Threaded CPython"
+    via: research/technologies/python.md
+    retrieved: "2026-09-10"
+  - url: https://peps.python.org/pep-0703/
+    title: "PEP 703 — Making the Global Interpreter Lock Optional in CPython"
+    via: research/technologies/python.md
+    retrieved: "2026-09-10"
+  - url: https://docs.python.org/3/whatsnew/3.12.html
+    title: "What's New in Python 3.12"
+    via: research/technologies/python.md
+    retrieved: "2026-09-10"
+  - url: https://docs.python.org/3/whatsnew/3.13.html
+    title: "What's New in Python 3.13"
+    via: research/technologies/python.md
+    retrieved: "2026-09-10"
+  - url: https://docs.python.org/3/whatsnew/3.14.html
+    title: "What's New in Python 3.14"
+    via: research/technologies/python.md
+    retrieved: "2026-09-10"
+  - url: https://docs.python.org/3/library/exceptions.html
+    title: "Python — Built-in Exceptions (chaining, __cause__/__context__)"
+    via: research/technologies/python.md
+    retrieved: "2026-09-10"
+  - url: https://docs.python.org/3/library/venv.html
+    title: "Python — venv: Creation of Virtual Environments"
+    via: research/technologies/python.md
+    retrieved: "2026-09-10"
+  - url: https://packaging.python.org/en/latest/tutorials/packaging-projects/
+    title: "PyPA — Packaging Python Projects (pyproject.toml)"
+    via: research/technologies/python.md
+    retrieved: "2026-09-10"
+  - url: https://docs.python.org/3/library/unittest.html
+    title: "Python — unittest: Unit Testing Framework"
+    via: research/technologies/python.md
+    retrieved: "2026-09-10"
+  - url: https://docs.python.org/3/library/security_warnings.html
+    title: "Python — Security Considerations"
+    via: research/technologies/python.md
+    retrieved: "2026-09-10"
+  - url: https://docs.python.org/3/library/profile.html
+    title: "Python — The Python Profilers (cProfile/profile)"
+    via: research/technologies/python.md
+    retrieved: "2026-09-10"
+  - url: https://docs.python.org/3/using/cmdline.html
+    title: "Python — Command Line and Environment"
+    via: research/technologies/python.md
+    retrieved: "2026-09-10"
+  - url: https://docs.python.org/3/library/2to3.html
+    title: "Python — 2to3: Automated Python 2 to 3 Code Translation"
+    via: research/technologies/python.md
+    retrieved: "2026-09-10"
+  - url: https://peps.python.org/pep-2026/
+    title: "PEP 2026 — Calendar versioning for Python"
+    via: research/technologies/python.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/version-matrix.md
+    title: "Version Matrix — Python row (GIL/free-threading, sub-interpreters, distutils/2to3 removal, ProcessPoolExecutor, GC revert, platform tiers, tail-call build, PEP 2026)"
+    via: research/knowledge-maps/version-matrix.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  python: ">=3.12 <=3.14"
+version_sensitive_claims:
+  - claim: "Free-threaded (no-GIL) builds are disable-at-build (--disable-gil) plus a runtime toggle (-X gil=0 / PYTHON_GIL=0), experimental, in 3.13 (PEP 703); \"officially supported\" as of 3.14 (PEP 779), with single-thread overhead narrowed to roughly 5-10%."
+    applies_to: "3.13 (experimental); >=3.14 (officially supported)"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/python.md §2, §8
+  - claim: "Python 3.14.0-3.14.4 shipped a new incremental GC, then reverted to 3.13's generational GC within the 3.14 bugfix series (3.14.5+) due to memory-pressure reports in production. \"Python 3.14\" alone is not a precise enough version tag for GC-behavior-sensitive claims — the patch version matters."
+    applies_to: "3.14.0-3.14.4 (incremental GC); >=3.14.5 (reverted to generational GC)"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/python.md §13
+  - claim: Sub-interpreters gained their own per-interpreter GIL at the C-API level (PEP 684); exposed at the standard-library level via concurrent.interpreters and concurrent.futures.InterpreterPoolExecutor (PEP 734).
+    applies_to: ">=3.12 (C-API); >=3.14 (stdlib)"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/python.md §2
+  - claim: PEP 695 compact generic syntax (class C[T], def f[T](...), the type statement) was added in 3.12; TypeIs was added in 3.13; the older TypeVar-object-based generic syntax remains supported.
+    applies_to: ">=3.12 (PEP 695 syntax); >=3.13 (TypeIs)"
+    source_ref: research/technologies/python.md §3
+  - claim: distutils was removed from the standard library (PEP 632); the documented migration target is setuptools.
+    applies_to: ">=3.12"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/python.md §6, §13
+  - claim: The 2to3 tool and lib2to3 module were removed entirely (deprecated since 3.11); the dedicated pyporting.html HOWTO was itself discontinued as of 3.11, with only an archived copy under the 3.10 docs branch.
+    applies_to: ">=3.13 (removal); >=3.11 (HOWTO discontinued)"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/python.md §11
+  - claim: ProcessPoolExecutor's default start method changes from fork to forkserver on non-macOS Unix — a behavior-affecting default for code relying on fork's implicit resource/global-state inheritance without pinning a start method explicitly.
+    applies_to: ">=3.14 (non-macOS Unix)"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/python.md §13, §17
+  - claim: iOS (Tier 3, PEP 730) and Android (Tier 3, PEP 738) support landed; official Android binary releases and Emscripten's re-elevation to Tier 3 (PEP 776) followed, after wasm32-emscripten had lost officially-supported status.
+    applies_to: ">=3.13 (iOS/Android Tier 3, Emscripten loses status); >=3.14 (Android binaries, Emscripten Tier 3 restored)"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/python.md §10
+  - claim: The opt-in tail-call interpreter build (--with-tail-call-interp) requires Clang 19+ on x86-64/AArch64.
+    applies_to: ">=3.14"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/python.md §2, §8
+  - claim: "PEP 2026 (\"Calendar versioning for Python\") was rejected by the Python Steering Council, reportedly partly over wheel-filename/version-parsing ecosystem compatibility concerns; sequential 3.15, 3.16, ... numbering continues."
+    applies_to: "n/a — rejected proposal, informational for any future-version assumption"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/python.md (header note, §12)
+last_verified: "2026-09-10"
+reverify_triggers:
+  - A new Python minor/major release reaches general availability (3.15 was in release-candidate stage at research time, GA expected ~October 2026)
+  - Any further GC-behavior change within the 3.14.x (or later) bugfix series
+  - Free-threaded builds becoming the default (non-opt-in) CPython build
+  - A documented shift in major C-extension free-threading compatibility (an incompatible extension silently re-enabling the GIL is currently the norm to check for)
+
+owned_knowledge:
+  - Python GIL mechanics and the free-threaded (PEP 703/779) build/runtime-toggle timeline
+  - Python sub-interpreter concurrency model (PEP 684/734)
+  - Python virtual-environment/packaging mechanics (venv, pyproject.toml)
+  - Python exception-chaining semantics (raise ... from, __cause__/__context__/__suppress_context__)
+  # Cross-cutting security/performance/testing depth is NOT owned here — referenced, not restated.
+
+decision_framework_present: true
+
+failure_handling:
+  - If the Python version (and, for GC-behavior questions, the patch version) cannot be determined, ask for it or explicitly state the version the guidance assumes — never assume "latest" silently (rule VA-3).
+  - If shell is unavailable or denied, degrade to advisory code/config output and state that python/pip/venv/profiler commands were not actually run.
+  - If it is unknown whether third-party C-extension dependencies are free-threading-compatible, do not recommend a free-threaded build without flagging that audit as a prerequisite.
+escalation:
+  - Adopting a free-threaded build in an existing production service is a significant, hard-to-reverse-cheaply decision (requires a C-extension compatibility audit) — presented with trade-offs for explicit confirmation, never applied unilaterally.
+  - Pinning PYTHONHASHSEED or disabling isolation flags (-I/-P/-E) in production removes a documented DoS/security mitigation — confirmed explicitly before recommending.
+verification:
+  - Any claim about GIL/free-threading behavior is tagged with the exact version (and patch, where GC behavior is involved) it holds for.
+  - A concurrency-model recommendation matches the workload shape (I/O-bound vs. CPU-bound) rather than defaulting to one model.
+  - Exception-handling code uses explicit chaining (raise ... from) or documented implicit chaining rather than swallowing the original exception.
+  - A packaging change is confirmed by actually running the build/install (`pip install -e .`, `python -m build`) and observing success, not just checked as syntactically valid TOML — or documents why an older setup.py/requirements.txt approach is intentionally retained.
+evaluation_criteria:
+  - For a seeded CPU-bound workload, recommends multiprocessing or a free-threaded build (with the compatibility-audit caveat) rather than defaulting to threading under the standard GIL.
+  - For a seeded I/O-bound workload, recommends asyncio or threading rather than reaching for free-threaded builds or sub-interpreters unnecessarily (anti-overengineering).
+  - Any claim about a version-gated 3.12/3.13/3.14 feature (free-threading support level, sub-interpreter stdlib exposure, GC behavior, ProcessPoolExecutor default) is correctly scoped to its version/patch range, not presented as universally true.
+  - Does not restate generic backend-structure guidance owned by SK-BE-001, or fabricate LLM/agent-application-specific content that belongs to SK-AI-001 (llm-application-engineering) (rule QR-2).
+  - Recommends venv + pyproject.toml for dependency isolation/packaging rather than a shared/system interpreter, unless the existing project already uses another documented approach.
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]   # for running python/pip/venv/profilers; abstract shell -> CC tools
+  cursor:
+    paths: ["**/*.py", "pyproject.toml", "requirements*.txt", "setup.py", "setup.cfg"]
+  vscode:
+    argument_hint: "<task, e.g. 'is free-threading worth adopting here' or 'set up packaging'>"

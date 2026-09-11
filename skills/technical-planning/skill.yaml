@@ -1,0 +1,91 @@
+id: SK-DISC-003
+slug: technical-planning
+name: Technical planning
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 1
+domain: DISC
+
+purpose: >-
+  Decompose an agreed architecture/approach into an ordered, dependency-aware
+  task plan with verification points and risk flags.
+scope: >-
+  Task breakdown, sequencing, effort/risk flagging, and attaching a
+  verification point to each build step. Not project/issue tracking (that's
+  project-management) and not the runtime sequencing of which library
+  SKILLS activate when (that's the orchestration layer's
+  workflow-composer) — this skill plans the engineering work itself.
+expertise: Senior engineer breaking down implementation work the way a tech lead would before a sprint.
+description: >-
+  Break an agreed approach into an ordered, dependency-aware task plan with a
+  verification point per step and risk flags on uncertain steps. Use for
+  multi-step implementation or when a plan is requested. Not for a
+  single-step change, not for issue/milestone tracking (project-management),
+  and not for sequencing which skills a coding agent activates (that's
+  runtime orchestration, not engineering planning).
+
+activation_conditions:
+  - The agreed approach requires multiple ordered steps to implement
+  - The user asks for a plan, a breakdown, or "how would you approach this"
+  - Several steps have real dependencies or uncertain/risky sub-steps worth flagging before starting
+non_activation_conditions:
+  - A single-step change with no real ordering decision to make
+  - The host agent's own native planning/plan-mode tool is already active for this task (defer to it rather than duplicating)
+  - The ask is to track work over time as issues/milestones (route to project-management)
+activation_mode: auto
+
+inputs:
+  - name: approach
+    description: The agreed architecture/approach (ideally from solution-architecture) or a clear enough request to plan directly.
+    required: true
+  - name: repository-state
+    description: Current repo state relevant to sequencing (what already exists, what's greenfield).
+    required: false
+required_context:
+  - The approach or task to be decomposed
+optional_context:
+  - Current repository state
+  - Team/agent capacity or parallelism constraints
+
+outputs:
+  - name: task-plan
+    kind: analysis
+    description: An ordered list of steps with dependencies made explicit.
+  - name: verification-points
+    kind: analysis
+    description: A verification check attached to each build step.
+  - name: risk-flags
+    kind: analysis
+    description: Steps flagged as uncertain, risky, or likely to need rework.
+
+depends_on_skills: []
+related_skills: [SK-DISC-002, SK-ORCH-003]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: engineering-convention
+last_verified: "2026-09-09"
+
+owned_knowledge:
+  - Engineering task decomposition and dependency-aware sequencing method
+decision_framework_present: true
+
+failure_handling:
+  - If the approach being planned is itself unclear or unagreed, hand off to solution-architecture rather than planning against an assumption.
+  - If a step's risk can't be resolved by more planning (only by doing it), say so and flag it as "resolve by spike" rather than over-planning around an unknown.
+escalation:
+  - A step whose risk is high enough that failure would be expensive (a schema change, a public interface) is flagged for explicit acknowledgment before work starts on it, not discovered mid-implementation.
+verification:
+  - No step's plan position depends on a step ordered after it.
+  - Every build step has an attached verification point.
+  - Steps carrying real uncertainty are explicitly flagged, not presented with false confidence.
+evaluation_criteria:
+  - Produces a plan whose step order respects real dependencies (no step depends on a later one).
+  - Attaches a verification point to every build step.
+  - Flags at least the steps a reviewer would independently consider risky/uncertain.
+  - Does not duplicate a host agent's already-active native planning, and does not attempt to sequence skill activations itself.
+
+adapter_hints: {}

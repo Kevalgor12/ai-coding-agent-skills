@@ -1,0 +1,235 @@
+id: SK-TECH-vue
+slug: vue
+name: Vue
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-FE-001, SK-FE-005]
+
+purpose: >-
+  Apply Vue correctly and version-appropriately — Composition API and SFC
+  mechanics, Proxy-based reactivity, Pinia/Vue Router integration, and the
+  Vue 2 (EOL) to Vue 3 split — specializing the frontend-architecture and
+  rendering-strategy parent skills with Vue-specific, cited, version-aware
+  detail.
+scope: >-
+  Vue-specific implementation detail: the Composition API, `<script setup>`
+  SFC compiler macros, Proxy-based (v3) vs. Object.defineProperty-based (v2)
+  reactivity, the v2-EOL/v3 split, and the pre-stable Vapor Mode (3.6 line).
+  Does not repeat the React-vs-Vue-vs-Angular framework-selection comparison
+  (owned by frontend-architecture) or the SSR/SSG rendering-mode decision
+  (owned by rendering-strategy). Not Nuxt-specific
+  meta-framework concerns (owned by the Nuxt technology skill).
+expertise: Vue engineer maintaining a Vue 3 codebase, aware of the Vue 2 EOL boundary and the pre-stable Vapor Mode line.
+description: >-
+  Vue-specific implementation: Composition API vs. Options API, SFC mechanics
+  (`<script setup>` compiler macros), Proxy-based reactivity (v3) vs.
+  Object.defineProperty (v2, EOL 2023-12-31), Pinia, Vue Router, and the
+  pre-stable Vapor Mode (3.6 line). Use when vue/@vue, a .vue SFC,
+  @vitejs/plugin-vue, Vue Router, or Pinia is present, or the task names Vue.
+  Not for React/Angular, generic framework selection, or the SSR/SSG
+  rendering-mode decision (frontend-architecture/rendering-strategy).
+
+activation_conditions:
+  - vue and/or @vue/* packages appear in package.json, a lockfile, or an import statement
+  - One or more .vue Single-File Component files are present in the repo
+  - vue-router, pinia, or @vitejs/plugin-vue is present, or a vite.config with the Vue plugin is present
+  - The task names Vue, the Composition API, Options API, SFCs, Pinia, Vue Router, or Vapor Mode specifically
+non_activation_conditions:
+  - The codebase uses React or Angular instead (route to that technology skill)
+  - A framework choice is still open with no framework chosen yet (route to frontend-architecture, SK-FE-001)
+  - The question is the SSR/SSG rendering-mode decision itself, independent of Vue specifics (route to rendering-strategy, SK-FE-005)
+  - The task is Nuxt-specific meta-framework concern (Nitro, routeRules, universal rendering config) with no Vue-core question (route to SK-TECH-nuxt)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Vue-specific task (component/composable design, reactivity, SFC authoring, state management, migration, Vapor Mode adoption question).
+    required: true
+  - name: installed-version-line
+    description: Which Vue line is pinned — 2.x (EOL), 3.x stable (up to 3.5), or 3.6 RC/Vapor Mode — from package.json/lockfile.
+    required: false
+required_context:
+  - Whether the codebase is Vue 2 or Vue 3 — the reactivity model, SFC compiler-macro surface, and most APIs differ enough between majors that guidance is wrong without this.
+optional_context:
+  - Whether Pinia or Vuex is already in use for state management.
+  - Whether the project targets SSR (via Nuxt) or is a pure SPA.
+  - Whether any 3.6/Vapor Mode pre-release is intentionally installed.
+
+outputs:
+  - name: component-or-composable-code
+    kind: edit
+    description: Vue SFC/component or composable code correct for the confirmed version line (Options or Composition API).
+  - name: state-or-router-config
+    kind: edit
+    description: Pinia store definition or Vue Router configuration.
+  - name: analysis
+    kind: analysis
+    description: The determined Vue version line and which v2-vs-v3 or Vapor Mode caveats apply to the task at hand.
+
+depends_on_skills: []
+related_skills: [SK-TECH-nuxt, SK-TECH-typescript]
+conflicts_with: [SK-TECH-react, SK-TECH-angular]
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: https://vuejs.org/guide/introduction.html
+    title: "Vue.js — Introduction (API styles, Vue 2 EOL statement)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://vuejs.org/guide/extras/composition-api-faq.html
+    title: "Vue.js — Composition API FAQ"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://vuejs.org/guide/reusability/composables.html
+    title: "Vue.js — Composables"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://vuejs.org/guide/scaling-up/tooling.html
+    title: "Vue.js — Tooling (SFCs, Vite, Vue CLI maintenance mode)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://vuejs.org/guide/extras/reactivity-in-depth.html
+    title: "Vue.js — Reactivity in Depth (Proxy vs. Object.defineProperty)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://vuejs.org/guide/extras/rendering-mechanism.html
+    title: "Vue.js — Rendering Mechanism (Compiler-Informed Virtual DOM)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://vuejs.org/api/sfc-script-setup.html
+    title: "Vue.js — <script setup> API (compiler macros, version gates)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://vuejs.org/api/application.html
+    title: "Vue.js — Application API (createApp, app.config)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://vuejs.org/guide/components/async.html
+    title: "Vue.js — Async Components (Lazy Hydration strategies, 3.5+)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://vuejs.org/guide/best-practices/security.html
+    title: "Vue.js — Security (v-html bypass warning, URL/style/JS injection)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://vuejs.org/guide/best-practices/performance.html
+    title: "Vue.js — Performance (computed() 3.4+ behavior, Lazy Hydration use, profiling)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://vuejs.org/guide/scaling-up/testing.html
+    title: "Vue.js — Testing (Vitest setup, testing tiers)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://vuejs.org/guide/scaling-up/state-management.html
+    title: "Vue.js — State Management (Pinia recommendation)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://vuejs.org/style-guide/rules-use-with-caution
+    title: "Vue.js — Style Guide, Priority D (use-with-caution anti-patterns)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://v3-migration.vuejs.org/
+    title: "Vue 3 Migration Guide — Overview (Vue 2 EOL framing, Migration Build)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://v3-migration.vuejs.org/breaking-changes/
+    title: "Vue 3 Migration Guide — Breaking Changes catalogue"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://vuejs.org/about/releases
+    title: "Vue.js — Releases (cadence, semver carve-outs incl. TypeScript)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://registry.npmjs.org/vue
+    title: "npm registry — vue package dist-tags (latest 3.5.42, rc 3.6.0-rc.7, legacy 2.7.16)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/vuejs/core/releases/tag/v3.6.0-rc.1
+    title: "GitHub — vuejs/core v3.6.0-rc.1 release notes (Vapor Mode)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://router.vuejs.org/introduction.html
+    title: "Vue Router — Introduction (v4.x/v3.x version split)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+  - url: https://pinia.vuejs.org/introduction.html
+    title: "Pinia — Introduction (Vue 2 support discontinued 2025)"
+    via: research/technologies/vue.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  vue: ">=3.3 <=3.5 (3.6/Vapor Mode still RC, not stable); Vue 2.x is EOL and out of scope except for migration/EOL guidance"
+version_sensitive_claims:
+  - claim: "Vue 2 reached end of support on 2023-12-31 and receives no new features, fixes, or security patches from the core team; 2.7.16 is the final published Vue 2 line version."
+    applies_to: "Vue 2.x (all)"
+    source_ref: "research/technologies/vue.md §12; research/knowledge-maps/version-matrix.md (Vue row)"
+  - claim: "Vue 2's reactivity used Object.defineProperty() getter/setters exclusively 'due to browser support limitations' on Proxy; Vue 3's reactive() uses native ES Proxy — a core architectural split between majors, not just an API rename."
+    applies_to: "Vue 2.x (defineProperty) vs. Vue 3.x (Proxy)"
+    source_ref: "research/technologies/vue.md §2; research/knowledge-maps/version-matrix.md (Vue row)"
+  - claim: "Reactive Props Destructure (destructuring defineProps()'s return value while retaining reactivity) is available."
+    applies_to: "Vue >=3.5"
+    source_ref: "research/technologies/vue.md §3, §13"
+  - claim: "defineOptions() and defineSlots() compiler macros are available."
+    applies_to: "Vue >=3.3"
+    source_ref: "research/technologies/vue.md §3, §13"
+  - claim: "defineModel() compiler macro is available."
+    applies_to: "Vue >=3.4"
+    source_ref: "research/technologies/vue.md §3, §13"
+  - claim: "Lazy Hydration strategies (hydrateOnIdle/hydrateOnVisible/hydrateOnMediaQuery/hydrateOnInteraction/custom HydrationStrategy) are available for defineAsyncComponent."
+    applies_to: "Vue >=3.5"
+    source_ref: "research/technologies/vue.md §3"
+  - claim: "computed() only re-triggers dependent effects when its return value actually changed, not on every re-evaluation — a within-major behavioral shift not cataloged on the formal breaking-changes page."
+    applies_to: "Vue >=3.4"
+    source_ref: "research/technologies/vue.md §5, §13"
+  - claim: "Vapor Mode is a feature-complete but pre-stable opt-in compilation mode bypassing the Virtual DOM; npm 'latest' still points at 3.5.42 while 3.6.0 sits at rc.7 as of the research date. Do not treat it as production-ready despite some secondary sources calling it 'confirmed stable.'"
+    applies_to: "Vue 3.6.0-rc line only, not yet GA"
+    source_ref: "research/technologies/vue.md §2, §12, §13"
+  - claim: "Pinia support for Vue 2 was discontinued in 2025; Pinia docs now focus on Vue 3 only."
+    applies_to: "Pinia, current version, Vue 2 unsupported"
+    source_ref: "research/technologies/vue.md §3; research/knowledge-maps/version-matrix.md (Vue row)"
+  - claim: "Vue Router v4.x targets Vue 3 and v3.x targets Vue 2; a v5.x is referenced on the intro page but its existence/status was not independently confirmed in the primary research pass."
+    applies_to: "Vue Router, current lines; v5.x status Unresolved"
+    source_ref: "research/technologies/vue.md §3, Unresolved note; research/knowledge-maps/version-matrix.md (Vue row)"
+last_verified: "2026-09-10"
+reverify_triggers:
+  - Vue 3.6.0 stable release
+  - Vue Router v5.x being officially confirmed or released
+  - Any change to the Vue 2 EOL/extended-support status (e.g. a third-party extended-support program becoming officially endorsed by vuejs.org)
+
+owned_knowledge:
+  - Vue Composition API mechanics (ref/reactive/computed/watch, composables, toValue())
+  - Vue SFC and <script setup> compiler-macro API and its version gates
+  - Vue 3's Proxy-based reactivity vs. Vue 2's Object.defineProperty-based reactivity
+  - Vapor Mode's opt-in scope and pre-stable status (3.6 line)
+decision_framework_present: true
+
+failure_handling:
+  - If the installed Vue major (2.x vs. 3.x) cannot be determined from package.json/lockfile, ask before applying any version-sensitive API — never assume Vue 3 or "latest" silently (VA-3).
+  - If a Vue 2 codebase is detected, state plainly that Vue 2 is EOL (no fixes/security patches from the core team) and default to recommending migration guidance over new Vue-2-specific feature work.
+  - If shell is unavailable, produce advisory component/composable/config code and state that it was not run, built, or type-checked.
+verification:
+  - Every version-gated compiler macro (defineOptions/defineSlots, defineModel, Reactive Props Destructure) matches the confirmed installed Vue 3 minor.
+  - Any Vapor Mode usage is flagged as pre-stable (3.6 RC) and not recommended for production without explicit user acceptance of that risk.
+  - Any reactivity claim correctly attributes Proxy (v3) vs. Object.defineProperty (v2) to the right major version.
+  - v-html usage is checked against the "never on user-provided content" rule before being proposed.
+  - The Vue project's dev build is actually run (npm run dev or vite build) and confirmed to compile without errors, not just the component structure reviewed for correctness.
+evaluation_criteria:
+  - Given a seeded package.json pinning vue to a 3.5.x version, proposes Composition API code using only compiler macros valid at that minor (no 3.6-only or Vapor-only constructs).
+  - Given a seeded Vue 2 codebase, states the EOL status explicitly and does not silently apply Vue-3-only reactivity/API assumptions.
+  - When asked whether to adopt Vapor Mode for a new project, does not recommend it as the default without flagging its RC status and scoped incompatibilities.
+  - Does not restate frontend-architecture's React-vs-Vue-vs-Angular comparison or its own reactivity-model/XSS-escaping/compiler/test-runner table verbatim (QR-2).
+  - For a Pinia vs. Vuex/other state-management question, recommends Pinia with the documented rationale (TS inference, Composition-API style, Devtools, SSR) unless the codebase already commits to Vuex.
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]
+  cursor:
+    paths: ["**/*.vue", "**/vite.config.*", "**/pinia/**"]
+  vscode:
+    argument_hint: "<task, e.g. 'convert this component to <script setup>' or 'add a Pinia store'>"

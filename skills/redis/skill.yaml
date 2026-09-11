@@ -1,0 +1,258 @@
+id: SK-TECH-redis
+slug: redis
+name: Redis
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-DATA-004, SK-BE-004, SK-DATA-005]   # caching-strategy, search-integration, realtime-communication
+
+purpose: >-
+  Apply Redis correctly and version-appropriately across its distinct roles —
+  in-memory cache, pub/sub messaging, full-text/vector search, and
+  general-purpose in-memory data structures — including eviction policy,
+  TTL/key-expiration, pipelining, transactions, Cluster/Sentinel topology,
+  and ACL/security configuration.
+scope: >-
+  Redis-specific engineering detail across all of its roles. The generic
+  caching-strategy method, realtime-transport selection, and search-engine
+  trade-off analysis belong to the parent Layer-3 skills (SK-DATA-004
+  caching-strategy, SK-BE-004 realtime-communication, SK-DATA-005
+  search-integration). Not generic
+  data modeling (SK-DATA-001, related only for basic key-design framing).
+expertise: Redis / in-memory data-layer engineer.
+description: >-
+  Redis-specific data structures, eviction policies, TTL/key expiration,
+  pipelining, transactions (MULTI/EXEC/WATCH), pub/sub, Cluster sharding,
+  Sentinel HA, ACLs, and the Redis 8.0 licensing/module-bundling change. Use
+  when the stack uses Redis (redis:// URL, a Redis client library, or the
+  task names caching/pub-sub/search/vector work backed by Redis). Not for
+  generic caching strategy, realtime-transport choice, or search-engine
+  choice made independent of Redis.
+
+activation_conditions:
+  - A redis:// / rediss:// connection string or a Redis client library (redis-py, ioredis, node-redis, Jedis, Lettuce, go-redis, StackExchange.Redis, hiredis, redis-rs, redis-rb) is present
+  - The task names Redis or a Redis-specific feature (MULTI/EXEC/WATCH, pub/sub, Redis Cluster, Sentinel, RDB/AOF, ACL SETUSER, FT.SEARCH/RediSearch, vector sets, HyperLogLog)
+  - A caching, pub/sub, or search/vector design question has already committed to Redis as the implementation
+non_activation_conditions:
+  - No Redis dependency exists and the question is an open store-shape or cache-layer choice (route to SK-DATA-001 data-modeling, or SK-DATA-004 caching-strategy)
+  - The question is realtime-transport selection independent of Redis, e.g. choosing WebSocket vs. WebRTC vs. SSE (route to SK-BE-004)
+  - The question is search-engine selection independent of Redis, e.g. Redis vs. OpenSearch vs. Postgres FTS (route to SK-DATA-005)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Redis task (cache design, pub/sub channel design, search/vector index, data-structure choice, Cluster/Sentinel topology, ACL/security config, version upgrade).
+    required: true
+  - name: workload-and-topology
+    description: Access pattern, data volume, current Redis version, and topology (standalone, Sentinel, Cluster).
+    required: false
+required_context:
+  - The Redis role actually needed (cache vs. pub/sub vs. search/vector vs. general data-structure store) — Redis's multi-role nature means guidance differs materially by role.
+  - The Redis major version in use — required for version-correct ACL/licensing/module guidance.
+optional_context:
+  - Current maxmemory-policy and hit/miss stats (INFO stats / INFO memory).
+  - Whether the deployment is standalone, Sentinel, or Cluster.
+  - Existing ACL rules, if any, before an 8.0 upgrade.
+
+outputs:
+  - name: data-structure-and-key-design
+    kind: analysis
+    description: Recommended Redis data type(s), key naming/TTL scheme, and eviction-policy choice for the workload.
+  - name: config-or-command-change
+    kind: edit
+    description: redis.conf directives, ACL rules, or command sequences (pipelining, MULTI/EXEC, Cluster bootstrap) implementing the design.
+  - name: analysis
+    kind: analysis
+    description: Role selection (cache/pub-sub/search/data-structure), topology recommendation (standalone/Sentinel/Cluster), and security posture, with rationale and version scope.
+  - name: commands-run
+    kind: command-run
+    description: redis-cli invocations executed to diagnose, configure, or verify, when shell is available.
+
+depends_on_skills: []
+related_skills: [SK-DATA-001]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+# Tier B: proposing config/ACL/key-design is advisory (file-only); running
+# redis-cli, CONFIG SET, or a Cluster bootstrap needs shell. No
+# capability_fallbacks block required (Tier B, not C) — degrades to advisory
+# per failure_handling below if shell is unavailable.
+
+grounding: official-docs
+source_references:
+  - url: https://redis.io/docs/latest/get-started/
+    title: "Redis — Get Started (core concepts, deployment paths overview)"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/develop/data-types/
+    title: "Redis — Data Types Overview"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/develop/reference/eviction/
+    title: "Redis — Using Redis as an LRU/LFU Cache (key eviction, maxmemory policies)"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/develop/using-commands/transactions/
+    title: "Redis — Transactions (MULTI/EXEC/DISCARD/WATCH)"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/develop/using-commands/pipelining/
+    title: "Redis — Pipelining"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/develop/programmability/
+    title: "Redis — Programmability (Lua scripting, Functions)"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/develop/reference/protocol-spec/
+    title: "Redis — RESP Protocol Specification"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/develop/clients/
+    title: "Redis — Client Libraries"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/operate/oss_and_stack/management/replication/
+    title: "Redis — Replication (leader-follower, PSYNC)"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/
+    title: "Redis — Scaling with Redis Cluster"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/
+    title: "Redis — High Availability with Sentinel"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/operate/oss_and_stack/management/security/
+    title: "Redis — Security"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/
+    title: "Redis — Access Control Lists (ACL)"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/
+    title: "Redis — Persistence (RDB/AOF)"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/benchmarks/
+    title: "Redis — Benchmarking Redis"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/latency-monitor/
+    title: "Redis — Latency Monitoring Framework"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/develop/tools/cli/
+    title: "Redis — redis-cli"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/operate/oss_and_stack/install/version-mgmt/
+    title: "Redis — Version Management / Release-Type and Support-Window Policy"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/operate/oss_and_stack/stack-with-enterprise/release-notes/redisce/redisos-8.0-release-notes/
+    title: "Redis Open Source 8.0 Release Notes (naming/licensing, module bundling, ACL breaking change)"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/tutorials/redis-anti-patterns-every-developer-should-avoid/
+    title: "Redis — Anti-Patterns Every Developer Should Avoid (official tutorial)"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/docker/
+    title: "Redis — Install with Docker"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: https://redis.io/docs/latest/operate/kubernetes/
+    title: "Redis — Kubernetes (Redis Enterprise operator)"
+    via: research/technologies/redis.md
+    retrieved: "2026-09-09"
+  - url: research/knowledge-maps/version-matrix.md
+    title: "Version Matrix — Redis row (RESP, ACLs, licensing/naming, Cluster topology, Kubernetes, ACL category widening)"
+    via: research/knowledge-maps/version-matrix.md
+    retrieved: "2026-09-09"
+  - url: research/knowledge-maps/concept-knowledge-map.md
+    title: "Concept Knowledge Map — Redis's multi-role entries (caching, ACID-lite transactions, replication, sharding, full-text/vector search, message queuing)"
+    via: research/knowledge-maps/concept-knowledge-map.md
+    retrieved: "2026-09-09"
+
+covered_versions:
+  redis: ">=6.0 <=8.x"
+version_sensitive_claims:
+  - claim: RESP2 has been standard since Redis 2.0; RESP3 has been opt-in since Redis 6.0 (via the HELLO handshake); from Redis 7 onward both RESP2 and RESP3 clients can invoke all core commands, though a command's reply may be typed differently by protocol version.
+    applies_to: ">=2.0 (RESP2 standard); >=6.0 (RESP3 opt-in); >=7.0 (both protocols invoke all core commands)"
+    source_ref: research/knowledge-maps/version-matrix.md (Redis row); research/technologies/redis.md §3
+  - claim: ACLs were introduced in Redis 6 (named users, fine-grained permissions, replacing single-password auth as the recommended method); subcommand-level allow/block syntax (+config|get) and key-pattern read/write scoping (%R~/%W~) arrived in 7.0; comment lines in external ACL files arrived in 8.8.
+    applies_to: ">=6.0 (ACLs exist); >=7.0 (subcommand + read/write key-pattern scoping); >=8.8 (comment lines)"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/redis.md §7
+  - claim: As of Redis 8.0 (May 2025), "Redis Community Edition" was renamed "Redis Open Source" and the license changed from the prior BSD-3-Clause/dual-license arrangement to a tri-license choice (RSALv2, SSPLv1, or AGPLv3). Versions 7.4 and 7.2 remain on RSALv2/SSPLv1 (no AGPL option); 7.2 and earlier were BSD-3-Clause. Standalone RediSearch/RedisJSON/RedisTimeSeries/RedisBloom modules were bundled into core Redis as of 8.0.
+    applies_to: ">=8.0 (naming, tri-license, module bundling); 7.2 and 7.4 (RSALv2/SSPLv1 dual-license only); <=7.2 (BSD-3-Clause)"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/redis.md (Naming/licensing note; §1; §13)
+  - claim: "Breaking change: as of Redis 8.0, the @read/@write/@dangerous/@admin/@slow/@fast ACL categories now include Redis Search, JSON, time-series, Bloom, Cuckoo, Top-K, count-min-sketch, and t-digest commands that they previously excluded — silently widening rules like +@read (now also grants FT.SEARCH) and narrowing rules like +@all -@write (now also excludes JSON.SET). Existing ACL rules require re-analysis before upgrading."
+    applies_to: ">=8.0"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/redis.md §7, §13
+  - claim: A minimal working Redis Cluster requires at least 3 master nodes; production deployments are recommended to use 6 nodes (3 masters + 3 replicas).
+    applies_to: "documented for current Redis Cluster; no version gate stated in the source research"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/redis.md §2
+  - claim: The officially documented Kubernetes path is the Redis Enterprise operator, which targets CNCF-conformant Kubernetes specifically; no official Redis Open Source (non-Enterprise) Kubernetes deployment path was found in the source research.
+    applies_to: "current, as of research date 2026-09-09"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/redis.md §10
+  - claim: The acl-pubsub-default setting defaulted to allchannels through Redis 6.0 (and for new users created under 6.2, for backward compatibility), then flipped to resetchannels starting in Redis 7.0 "to provide better security" — a security-hardening default change spanning three version boundaries that can silently change Pub/Sub access for newly created ACL users depending on upgrade path.
+    applies_to: "<=6.0 and 6.2-created users: allchannels; >=7.0: resetchannels"
+    source_ref: research/technologies/redis.md §13
+  - claim: Vector sets were introduced as a preview feature in Redis 8.0.0; the LRM (Least Recently Modified) eviction policy (allkeys-lrm) was introduced in Redis 8.6.
+    applies_to: ">=8.0 (vector sets, preview status); >=8.6 (allkeys-lrm)"
+    source_ref: research/technologies/redis.md §1, §5, summary table
+last_verified: "2026-09-09"
+reverify_triggers:
+  - A new Redis major version release beyond the 8.x line documented here
+  - Any change to the documented ACL category-to-command mapping (further widening/narrowing of @read/@write/@dangerous/@admin/@slow/@fast)
+  - Redis Open Source gaining an official (non-Enterprise) Kubernetes deployment path
+  - Vector sets graduating out of preview status
+  - A licensing change superseding the 8.0 tri-license (RSALv2/SSPLv1/AGPLv3)
+
+owned_knowledge:
+  - Redis in-memory data-type selection (strings/hashes/sets/sorted sets/streams/probabilistic types/vector sets) for a given access pattern
+  - Redis eviction-policy selection (maxmemory-policy) and TTL/key-expiration design
+  - Redis transaction (MULTI/EXEC/WATCH) and pipelining mechanics
+  - Redis Cluster sharding/hash-slot design and Sentinel HA topology
+  - Redis ACL rule syntax and the 8.0 ACL-category-widening upgrade hazard
+  # Cross-cutting caching-strategy method, realtime-transport selection, and
+  # search-architecture trade-offs are NOT owned here — they are deferred to
+  # the parent skills SK-DATA-004/SK-BE-004/SK-DATA-005.
+
+decision_framework_present: true
+
+failure_handling:
+  - If the Redis role needed (cache vs. pub/sub vs. search/vector vs. general data-structure store) is unclear, ask rather than assuming cache — Redis's multi-role nature means the wrong assumption produces materially wrong guidance.
+  - If the Redis major version cannot be determined, ask for it or explicitly state the version the guidance assumes — never assume "latest" silently (rule VA-3); flag the 8.0 licensing/ACL-widening boundary specifically since it changes both legal and security posture.
+  - If shell is unavailable or denied, degrade to advisory redis.conf/ACL/command output and state that nothing was actually run against a live instance.
+escalation:
+  - Adopting Redis Cluster (rather than a single instance, or single instance plus Sentinel) is confirmed with the user before being treated as decided — it is a materially more complex, harder-to-reverse operational commitment (see Anti-patterns).
+  - Upgrading a deployment across the Redis 8.0 boundary while custom ACL rules exist is flagged for explicit user re-analysis of those rules before the upgrade proceeds, per the documented breaking change.
+  - A licensing choice among RSALv2/SSPLv1/AGPLv3 (8.0+) that affects legal/compliance posture is presented with the trade-offs for user confirmation, not decided silently.
+verification:
+  - The recommended Redis role (cache/pub-sub/search/data-structure) matches the actual stated need, not defaulted to "cache" by habit.
+  - The chosen eviction policy and TTL scheme are justified against the workload's access pattern, not left at a config default without comment.
+  - Every version-specific claim (ACL widening, licensing, RESP, Cluster topology) is tagged with the range it holds for.
+  - If Redis Cluster is recommended, the workload actually needs more RAM/throughput than one instance can provide, and the minimum-3-master topology is stated.
+  - ACL rules for FLUSHALL/FLUSHDB/SWAPDB are explicitly addressed when a user is scoped to a key pattern (whole-keyspace commands are not covered by pattern scoping).
+  - The chosen eviction policy is confirmed by actually running `CONFIG GET maxmemory-policy` (or observing real eviction behavior under load) against the target instance, not assumed from the recommendation alone.
+evaluation_criteria:
+  - For a seeded workload, selects the correct Redis role(s) (cache vs. pub/sub vs. search/vector vs. plain data structure) and does not recommend Redis Cluster when a single instance (optionally with Sentinel) suffices.
+  - For a seeded cache scenario, chooses a defensible maxmemory-policy and TTL scheme with rationale tied to the access pattern.
+  - For a seeded pre-8.0-upgrade scenario with custom ACL rules, flags the @read/@write/etc. category-widening breaking change and requires re-analysis before upgrade.
+  - Any version-gated claim (ACL syntax, RESP, licensing, eviction policy) is correctly scoped to the range it applies to.
+  - Does not restate generic caching-strategy, realtime-transport, or search-architecture method that belongs to the parent skills (anticipates rule QR-2).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]   # for running redis-cli/CONFIG SET/Cluster bootstrap; abstract shell -> CC tools
+  cursor:
+    paths: ["**/*.conf", "**/redis/**", "**/*.lua"]
+  vscode:
+    argument_hint: "<task, e.g. 'design the cache key/TTL scheme' or 'plan the Redis 8.0 ACL upgrade'>"

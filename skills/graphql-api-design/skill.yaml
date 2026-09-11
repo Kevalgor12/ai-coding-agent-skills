@@ -1,0 +1,92 @@
+id: SK-BE-003
+slug: graphql-api-design
+name: GraphQL API design
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: BE
+
+purpose: >-
+  Design GraphQL schemas and resolvers — type modeling, N+1 avoidance,
+  pagination, field-level authorization, and schema evolution — once GraphQL
+  is the chosen paradigm.
+scope: >-
+  GraphQL-specific API design. Assumes the REST-vs-GraphQL decision is
+  already made (api-design owns that decision); this skill owns everything
+  once GraphQL is chosen. Not REST design and not the service's internal
+  structure (backend-architecture).
+expertise: Senior/principal API engineer specializing in GraphQL.
+description: >-
+  Design GraphQL schemas and resolvers — types, N+1-safe resolver structure,
+  cursor pagination, field-level authorization, schema evolution, and
+  production-readiness (introspection, query-cost limits). Use when building
+  or extending a GraphQL API. Not for REST design or the REST-vs-GraphQL
+  paradigm decision itself (api-design owns that).
+
+activation_conditions:
+  - Building or extending a GraphQL API
+  - A GraphQL schema/resolver has an N+1, pagination, or authorization design question
+  - Preparing a GraphQL API for production (introspection posture, query-cost limits)
+non_activation_conditions:
+  - The REST-vs-GraphQL paradigm choice is still open (route to api-design)
+  - REST/HTTP API design (route to api-design)
+  - The service's internal structure with no GraphQL-specific question (route to backend-architecture)
+activation_mode: auto
+
+inputs:
+  - name: domain-model
+    description: The domain model the API exposes (ideally from data-modeling).
+    required: true
+  - name: query-needs
+    description: The consumer query patterns the schema needs to support.
+    required: false
+required_context:
+  - The types/relationships the schema needs to expose
+optional_context:
+  - Expected query complexity/nesting depth from real consumers
+  - Whether the API will be public (affects introspection/cost-limiting posture)
+
+outputs:
+  - name: schema-design
+    kind: analysis
+    description: GraphQL type/schema design with pagination and authorization.
+  - name: resolver-design
+    kind: edit
+    description: Resolver structure that avoids N+1 via batching.
+
+depends_on_skills: []
+related_skills: [SK-BE-002, SK-BE-001, SK-DATA-002, SK-TECH-graphql]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: "Technology Decision Matrix — §7 API spec tooling: OpenAPI vs. GraphQL (plus Swagger)"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - GraphQL schema/resolver design method (N+1 avoidance, pagination, field auth, evolution)
+decision_framework_present: true
+
+failure_handling:
+  - If the REST-vs-GraphQL decision hasn't actually been made yet, hand off to api-design rather than assuming GraphQL is the right choice.
+  - If query-cost/introspection posture is unstated for a public API, ask rather than shipping with defaults that may be inappropriate for the exposure level.
+verification:
+  - Nested-relationship resolvers batch (DataLoader-style) rather than issuing one query per item.
+  - List fields use cursor-based pagination, not raw offset/limit, unless there's a stated reason otherwise.
+  - Field-level authorization is applied where a field exposes data not every caller should see.
+escalation:
+  - Disabling introspection or imposing query-cost limits on an already-public API is a consumer-facing breaking change — surfaced for explicit confirmation before applying.
+evaluation_criteria:
+  - Produces a schema whose resolvers batch to avoid N+1 on a seeded nested query.
+  - Applies field-level authorization where required by the domain model.
+  - Recommends query-cost limiting (not fixed-window rate limiting alone) for production readiness, citing the documented reasoning.
+  - Does not restate the REST-vs-GraphQL decision framework already owned by api-design.
+
+adapter_hints: {}

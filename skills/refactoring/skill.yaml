@@ -1,0 +1,94 @@
+id: SK-CONV-004
+slug: refactoring
+name: Refactoring
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 2
+domain: CONV
+
+purpose: >-
+  Improve the structure of existing code without changing its behavior —
+  identifying a target, applying behavior-preserving changes in small
+  steps, and verifying behavior is unchanged.
+scope: >-
+  Behavior-preserving transformation. Requires a safety net (tests) or an
+  explicit, stated acknowledgement of its absence — never proceeds
+  silently without one or the other. Not new feature work, and never
+  bundles a bug fix found along the way (hands off instead).
+expertise: Senior/principal engineer with strong refactoring discipline.
+description: >-
+  Improve existing code's structure without changing its behavior —
+  identify a target, apply changes in small steps, and verify behavior is
+  unchanged via tests or explicit equivalence reasoning. Use when asked to
+  refactor, or when a change is blocked by structural debt. Never bundles
+  feature changes or silently fixes a bug found along the way — hands off
+  instead. Requires a safety net or explicit acknowledgement of its
+  absence.
+
+activation_conditions:
+  - The user asks to refactor
+  - A change is blocked by structural debt that needs clearing first
+non_activation_conditions:
+  - New feature work (that is not refactoring)
+  - No way to verify behavior and the user hasn't explicitly accepted the risk
+activation_mode: auto
+
+inputs:
+  - name: target-code
+    description: The code being refactored.
+    required: true
+  - name: available-tests
+    description: Existing tests covering the target code, if any.
+    required: false
+outputs:
+  - name: refactored-code
+    kind: edit
+    description: Restructured code with unchanged external behavior.
+  - name: behavior-preservation-statement
+    kind: analysis
+    description: How behavior-preservation was verified (tests passing, or explicit equivalence reasoning with the risk stated).
+
+depends_on_skills: []
+# SK-QA-001 (testing-strategy, layer 3) moved to related_skills: it is a
+# related skill for verification discipline, not an unconditional hard blocking
+# sub-step of every refactor. VR-4 requires depends_on_skills to be same-or-lower
+# layer; SK-QA-001 is layer 3 while this skill is layer 2.
+related_skills: [SK-CONV-003, SK-CONV-005, SK-QA-001]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: mixed
+source_references:
+  - url: core/taxonomy/skill-catalog.md
+    title: "Skill Catalog — SK-CONV-004 refactoring taxonomy entry (behavior-preserving transformation, safety-net requirement)"
+    via: core/taxonomy/skill-catalog.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Behavior-preserving small-step transformation method
+  - Safety-net verification discipline (tests, or explicit stated equivalence reasoning)
+  - Scope-creep prevention (never bundling feature changes or silent bug fixes)
+decision_framework_present: true
+
+failure_handling:
+  - If no tests exist and the user hasn't explicitly accepted the risk, ask before proceeding rather than refactoring unverifiably.
+  - If shell/test-execution capability isn't available, degrade to reasoning-only verification with the caveat stated explicitly, per this library's capability-fallback discipline.
+verification:
+  - Existing tests still pass after the refactor, or (when none exist) an explicit equivalence-reasoning statement is provided with the risk stated.
+  - No behavior change is bundled into the refactor — a found bug is reported and handed off, never silently fixed inline.
+  - Changes are applied in small, independently-verifiable steps rather than one large rewrite.
+  - The test suite is actually run after the refactor (not just reviewed for structure) and produces a green result, confirming behavior is preserved in the real execution environment.
+escalation:
+  - If a bug is discovered during refactoring, it's reported and handed off rather than silently fixed — fixing it would bundle a behavior change into what should be a behavior-preserving change.
+  - A refactor with no available safety net proceeds only after the user explicitly accepts that risk.
+evaluation_criteria:
+  - On a fixture with tests, refactors and keeps tests green.
+  - When no tests exist, explicitly flags the unverifiable risk instead of proceeding silently.
+  - Does not bundle a feature change or a silent bug fix into a refactor.
+  - Applies changes in small, verifiable steps rather than one large unreviewable rewrite.
+
+adapter_hints: {}

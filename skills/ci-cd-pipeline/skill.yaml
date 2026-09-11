@@ -1,0 +1,97 @@
+id: SK-INFRA-002
+slug: ci-cd-pipeline
+name: CI/CD pipeline
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: INFRA
+
+purpose: >-
+  Design CI/CD pipelines — build/test/lint/deploy stage sequencing,
+  dependency caching, secrets handling via OIDC rather than static keys,
+  and least-privilege token scoping — independent of which CI platform is
+  used.
+scope: >-
+  Pipeline design. In this library's researched technology set, GitHub
+  Actions is the dominant/only profiled implementation, so this generic
+  skill and the GitHub Actions technology skill are closely paired
+  (specializing/adding implementation depth) rather than covering
+  meaningfully different platforms. Not containerization itself
+  (containerization) and not deployment/release strategy running inside
+  the pipeline (deployment-release).
+expertise: Senior/principal engineer with CI/CD and release-engineering experience.
+description: >-
+  Design a CI/CD pipeline — stage sequencing (build/test/lint/deploy),
+  dependency caching, secrets via OIDC rather than static long-lived keys,
+  least-privilege tokens, and reusable workflow structure. Use when
+  setting up or changing CI/CD. Not for containerization itself or for
+  deployment/release strategy, which are separate skills — and not
+  assumed to be directly executable, since this library's capability map
+  found no ecosystem that drives GitHub Actions natively.
+
+activation_conditions:
+  - Setting up CI/CD for a project that doesn't have it
+  - Changing an existing pipeline's stages, caching, or secrets handling
+  - A pipeline's security posture (static keys vs. OIDC, token scope) needs review
+non_activation_conditions:
+  - The workflow is local-only with no CI in scope
+  - Containerizing the app itself, distinct from how the pipeline builds/uses that image (route to containerization)
+  - Deployment/release strategy running inside the pipeline, distinct from the pipeline's own stage design (route to deployment-release)
+activation_mode: auto
+
+inputs:
+  - name: repo-and-commands
+    description: The repository, and its build/test/lint commands.
+    required: true
+  - name: deploy-target
+    description: Where the pipeline deploys to, if it does.
+    required: false
+required_context:
+  - The repo's build/test/lint commands and how they're currently run (if at all)
+optional_context:
+  - Existing pipeline configuration, if this is not greenfield
+  - The deploy target's authentication model (does it support OIDC)
+
+outputs:
+  - name: pipeline-config
+    kind: edit
+    description: Pipeline configuration — stages, caching, secrets/OIDC handling, token scoping.
+
+depends_on_skills: []
+related_skills: [SK-QA-001, SK-INFRA-001, SK-CONV-008, SK-TECH-husky, SK-DISC-004]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: research/knowledge-maps/security-knowledge-map.md
+    title: "Security Knowledge Map — CI secret handling, least-privilege CI tokens, credential-free cloud auth (OIDC) sections"
+    via: research/knowledge-maps/security-knowledge-map.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/performance-knowledge-map.md
+    title: "Performance Knowledge Map — GitHub Actions caching/matrix-strategy/concurrency sections"
+    via: research/knowledge-maps/performance-knowledge-map.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Pipeline stage-sequencing and gating method
+  - OIDC-over-static-keys and least-privilege token design
+decision_framework_present: true
+
+failure_handling:
+  - If build/test/lint commands aren't yet established, request them rather than guessing a pipeline structure.
+  - If an existing pipeline is in place, work within its structure unless the user explicitly asks to rework it.
+verification:
+  - Tests/lint/build gate the merge — the pipeline doesn't just run them advisory-only when they're meant to block.
+  - Secrets are handled via OIDC where the target supports it, not static long-lived keys, unless there's a stated reason OIDC isn't available.
+  - Tokens are scoped least-privilege (e.g. GITHUB_TOKEN default read-only, elevated only per-job) rather than broadly permissive by default.
+evaluation_criteria:
+  - Produces a pipeline that gates merge on tests/lint/build, caches dependencies, and uses OIDC/secrets correctly (no static long-lived keys in config) for a seeded repo.
+  - Correctly states that pipeline execution is external to this skill's own capabilities (this library's capability map found no ecosystem that drives CI platforms natively) rather than claiming to run the pipeline directly.
+  - Does not recommend containerization or deployment-strategy decisions that belong to the paired containerization/deployment-release skills.
+
+adapter_hints: {}

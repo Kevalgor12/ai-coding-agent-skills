@@ -1,0 +1,227 @@
+id: SK-TECH-fastify
+slug: fastify
+name: Fastify
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-BE-001, SK-BE-002]
+
+purpose: >-
+  Apply Fastify correctly and version-appropriately — the plugin/encapsulation
+  system, schema-driven validation and serialization, decorators, lifecycle
+  hooks, and the v4-to-v5 breaking-change surface.
+scope: >-
+  Fastify-specific API, configuration, and architectural detail. The generic
+  backend-structure method (layering, DI, error handling, graceful shutdown,
+  the Fastify-vs-Express framework decision) belongs to backend-architecture
+  (SK-BE-001); the generic HTTP/REST contract method belongs to api-design
+  (SK-BE-002). This skill supplies what's Fastify-specific: register()/plugin
+  mechanics and encapsulation contexts, the Ajv/fast-json-stringify
+  schema-compilation model, the decoration API, the fixed request lifecycle,
+  and the documented v5 breaking changes. The Fastify-vs-Express comparison
+  itself (benchmarks, error-handler defaults, testing-story gap) is already
+  covered by backend-architecture and is not repeated here.
+expertise: Node.js backend engineer building on Fastify.
+description: >-
+  Fastify-specific plugin system (register()/encapsulation), schema-driven
+  validation/serialization (Ajv + fast-json-stringify), decorators
+  (decorate/decorateRequest/decorateReply), the fixed request lifecycle/hooks,
+  and the v4-to-v5 breaking changes. Use when fastify appears in
+  package.json/imports or the task names Fastify specifically. Not for the
+  Fastify-vs-Express choice itself (backend-architecture), generic HTTP
+  contract design (api-design), or Node.js runtime mechanics (nodejs).
+
+activation_conditions:
+  - fastify appears in package.json, a lockfile, or an import/require statement
+  - The task names Fastify, a Fastify plugin (@fastify/*), or a Fastify-specific API (register, decorate, addHook, fastify.inject)
+  - Reviewing or extending an existing Fastify route/plugin/schema for correctness
+non_activation_conditions:
+  - The stack uses Express, Koa, Hapi, or another Node framework instead (route to that technology skill, or to Express's when authored)
+  - The Fastify-vs-Express framework decision itself, with no framework chosen yet (route to backend-architecture, SK-BE-001)
+  - Generic HTTP/REST contract design (resource modeling, versioning, pagination) with no Fastify-specific mechanism in question (route to api-design, SK-BE-002)
+  - Pure Node.js runtime/event-loop questions with no Fastify API involved (route to nodejs, SK-TECH-nodejs)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Fastify-specific task (route/plugin design, schema validation/serialization, hooks, decorators, error handling, testing, migration to v5).
+    required: true
+  - name: installed-version
+    description: The pinned fastify version/range from package.json or lockfile.
+    required: false
+required_context:
+  - The installed Fastify major version (v4 vs v5, or the v6 pre-release) — the v5 breaking-change surface (logger→loggerInstance, jsonShortHand removal, Node floor) makes guidance version-dependent.
+optional_context:
+  - Existing plugin structure and encapsulation boundaries.
+  - Whether the app is deployed serverless (Lambda/Cloud Functions/Cloud Run) vs. as a long-running container.
+
+outputs:
+  - name: route-or-plugin-code
+    kind: edit
+    description: Fastify route, plugin, schema, decorator, or hook code correct for the confirmed major version.
+  - name: error-handling-or-validation-config
+    kind: edit
+    description: setErrorHandler / onProtoPoisoning / onConstructorPoisoning / response-schema configuration.
+  - name: analysis
+    kind: analysis
+    description: Version-specific findings (e.g. v4→v5 migration items) and which caveats apply to the task at hand.
+
+depends_on_skills: []
+# depends_on_skills is reserved for hard, blocking sub-step composition, not
+# specialization of a parent (spec.md §2.5). This skill specializes SK-BE-001
+# and SK-BE-002 via `parents` above; it does not invoke either as a sub-step
+# of its own execution, so this list stays empty.
+related_skills: [SK-TECH-nodejs]
+conflicts_with: [SK-TECH-express]
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: https://fastify.dev/docs/latest/Guides/Getting-Started/
+    title: "Fastify — Getting Started"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://fastify.dev/docs/latest/Reference/Encapsulation/
+    title: "Fastify — Encapsulation"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://fastify.dev/docs/latest/Reference/Plugins/
+    title: "Fastify — Plugins"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://fastify.dev/docs/latest/Reference/Lifecycle/
+    title: "Fastify — Lifecycle"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://fastify.dev/docs/latest/Reference/Hooks/
+    title: "Fastify — Hooks"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://fastify.dev/docs/latest/Reference/Decorators/
+    title: "Fastify — Decorators"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://fastify.dev/docs/latest/Reference/Validation-and-Serialization/
+    title: "Fastify — Validation and Serialization"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://fastify.dev/docs/latest/Reference/Server/
+    title: "Fastify — Server"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://fastify.dev/docs/latest/Reference/Errors/
+    title: "Fastify — Errors"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://fastify.dev/docs/latest/Reference/Warnings/
+    title: "Fastify — Warnings (FSTDEP/FSTWRN codes)"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://fastify.dev/docs/latest/Guides/Migration-Guide-V5/
+    title: "Fastify — Migration Guide V4 to V5"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://fastify.dev/docs/latest/Guides/Prototype-Poisoning/
+    title: "Fastify — Prototype Poisoning"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://fastify.dev/docs/latest/Reference/Middleware/
+    title: "Fastify — Middleware"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://fastify.dev/docs/latest/Guides/Testing/
+    title: "Fastify — Testing"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://fastify.dev/docs/latest/Reference/TypeScript/
+    title: "Fastify — TypeScript"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://fastify.dev/docs/latest/Reference/LTS/
+    title: "Fastify — Long Term Support"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://fastify.dev/docs/latest/Guides/Recommendations/
+    title: "Fastify — Recommendations"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://fastify.dev/docs/latest/Guides/Serverless/
+    title: "Fastify — Serverless"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/fastify/fastify/releases
+    title: "GitHub — fastify/fastify Releases (v6.0.0-alpha line)"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/fastify/fastify/blob/main/SECURITY.md
+    title: "GitHub — fastify/fastify Security Policy"
+    via: research/technologies/fastify.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  fastify: ">=5.0 <6.0 (v6 in alpha, not yet stable)"
+  node: ">=20 (Fastify v5's floor; v18 dropped)"
+version_sensitive_claims:
+  - claim: "Fastify v4 is past its supported LTS window (retired 2025-06-30) — running it in production is documented as unsupported."
+    applies_to: "v4.x"
+    source_ref: "research/technologies/fastify.md §12; research/knowledge-maps/version-matrix.md (Fastify row)"
+  - claim: "The `logger` factory option no longer accepts a pre-built logger instance; use the new `loggerInstance` option instead. This is a real breaking change on upgrade from v4."
+    applies_to: ">=5.0"
+    source_ref: "research/technologies/fastify.md §4, §11, §13"
+  - claim: "v6.0.0-alpha.0 removes deprecated APIs and raises the minimum Node.js version further, but the exact new floor is not confirmed in the source research."
+    applies_to: "6.0.0-alpha.0–alpha.3 (pre-release)"
+    source_ref: "research/technologies/fastify.md §12, §13 — marked Unresolved in the source"
+  - claim: "`useSemicolonDelimiter` defaults to `false` (RFC 3986-compliant), a change from a more permissive v4 default."
+    applies_to: ">=5.0"
+    source_ref: "research/technologies/fastify.md §4, §13; research/knowledge-maps/version-matrix.md (Fastify row)"
+  - claim: "Node.js v20+ is required (v18 support dropped), justified by v20's node:test support and v18 nearing Node's own LTS end."
+    applies_to: "Fastify >=5.0"
+    source_ref: "research/technologies/fastify.md §11, §12; research/knowledge-maps/version-matrix.md (Fastify row)"
+  - claim: "Reference-type (Array/Object) Request/Reply decorators are rejected outright, not merely discouraged."
+    applies_to: ">=5.0"
+    source_ref: "research/technologies/fastify.md §6, §13"
+  - claim: "Plugins can no longer mix async/callback styles within a single plugin function."
+    applies_to: ">=5.0"
+    source_ref: "research/technologies/fastify.md §6, §11, §13"
+  - claim: "The TypeScript reference docs build corresponds to v5.12.1; tsconfig target should be es2017+ to avoid deprecation warnings."
+    applies_to: "v5.12.1 docs snapshot"
+    source_ref: "research/technologies/fastify.md §12, §16; research/knowledge-maps/version-matrix.md (Fastify row)"
+last_verified: "2026-09-10"
+reverify_triggers:
+  - Fastify v6.0.0 stable release
+  - Any change to the confirmed v6 Node.js minimum version (currently Unresolved)
+  - Fastify v5 entering its own security-only support window (12 months after v5's release per the documented LTS policy)
+
+owned_knowledge:
+  - Fastify plugin/register() mechanics and encapsulation-context rules
+  - Fastify's schema-compilation model (Ajv v8 + fast-json-stringify) and its decorator API
+  - Fastify's fixed request lifecycle and hook ordering
+  - Fastify's v4-to-v5 breaking-change surface
+decision_framework_present: true
+
+failure_handling:
+  - If the installed Fastify major (v4/v5/v6-alpha) cannot be determined, ask or explicitly state which version the guidance assumes — never silently assume "latest" (VA-3); default assumption when truly unknown is the current stable v5 line, stated explicitly.
+  - If shell is unavailable, produce advisory route/plugin/schema code and state that fastify.inject()-based verification was not run.
+verification:
+  - Any version-sensitive API used (loggerInstance vs. logger, useSemicolonDelimiter default, jsonShortHand absence) matches the confirmed installed major.
+  - Response schemas are defined for routes handling sensitive fields, not left to serialize the full object.
+  - A custom setErrorHandler is present (or its absence is explicitly flagged) before any route can leak >=500 error detail to clients.
+  - A custom setErrorHandler's behavior is confirmed by actually triggering an error in the running server and observing the client-facing response, not inferred by reading the handler registration alone.
+evaluation_criteria:
+  - Given a seeded package.json pinning fastify to ^4, does not suggest loggerInstance, the v5 useSemicolonDelimiter default, or other v5-only APIs.
+  - Given a seeded package.json pinning fastify to ^5, correctly flags that a custom logger instance must go through loggerInstance, not logger.
+  - For a route accepting untrusted JSON, proposes a JSON Schema for validation and, where the response includes sensitive fields, a response schema — not just app-level validation.
+  - Does not restate backend-architecture's Fastify-vs-Express comparison (benchmarks, error-handler-default contrast, testing-gap framing) verbatim (QR-2).
+  - When asked about v6, explicitly surfaces it as alpha/pre-release and flags the Node-floor detail as unresolved rather than guessing a number.
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]
+  cursor:
+    paths: ["**/*.js", "**/*.ts", "**/plugins/**", "**/routes/**"]
+  vscode:
+    argument_hint: "<task, e.g. 'add a response schema to this route' or 'migrate this plugin to v5'>"

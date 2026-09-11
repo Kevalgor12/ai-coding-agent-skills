@@ -1,0 +1,109 @@
+id: SK-GROW-001
+slug: seo-optimization
+name: SEO optimization
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: GROW
+
+purpose: >-
+  Improve search visibility — crawlability/indexability, structured data,
+  canonicalization, Core Web Vitals, sitemaps, and i18n hreflang —
+  reconciling rendering strategy with what search engines can actually
+  index.
+scope: >-
+  Technical SEO. Google is the dominant search engine covered by this
+  library's research, so this generic skill and Google-SEO technology
+  content are unified into one skill rather than split into a separate
+  generic-plus-tech pair. Framework-specific SEO mechanics (Next.js's
+  Metadata API, sitemap/robots generation) are covered where this
+  library's research supports them, as a specialization within this same
+  skill rather than a separate skill. Not Core-Web-Vitals implementation
+  depth itself (performance-engineering) and not the rendering-mode
+  decision (rendering-strategy, not yet authored).
+expertise: Senior/principal engineer with technical-SEO experience.
+description: >-
+  Improve search visibility — ensure crawlability/indexability, implement
+  structured data, set canonical URLs, meet Core Web Vitals thresholds,
+  build sitemaps, and use hreflang for i18n. Use when search visibility
+  matters for the work. Covers Next.js-specific SEO mechanics (Metadata
+  API, sitemap/robots generation) where researched. Not for internal
+  tools or non-public apps.
+
+activation_conditions:
+  - Search visibility matters for the work (a public-facing page or site)
+  - Structured data, canonicalization, sitemaps, or hreflang are being added or reviewed
+  - A JavaScript-rendered page's crawlability/indexability is in question
+  - Core Web Vitals thresholds are relevant to the work
+non_activation_conditions:
+  - Internal tools or non-public apps with no search-visibility need
+activation_mode: auto
+
+inputs:
+  - name: site-or-pages
+    description: The site/pages needing SEO work.
+    required: true
+  - name: seo-goals
+    description: What matters most (indexability, rich results, Core Web Vitals, i18n).
+    required: false
+outputs:
+  - name: seo-findings
+    kind: analysis
+    description: Identified SEO defects (missing meta/structured data, CSR-only content, no canonical, sitemap issues) with severity.
+  - name: seo-changes
+    kind: edit
+    description: Concrete fixes — structured data, canonical tags, sitemap/robots config, hreflang annotations.
+
+depends_on_skills: []
+related_skills:
+  - SK-FE-005
+  - SK-QA-003
+  - SK-TECH-nextjs
+  # -----------------------------------------------------------------------
+  # -----------------------------------------------------------------------
+  # SK-GROW-002 (web-monetization) is in the taxonomy but has not yet been
+  # authored in this library — forward reference.
+  - SK-GROW-002
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: official-docs
+source_references:
+  - url: research/technologies/google-seo.md
+    title: "Google SEO Research — crawling/rendering/indexing pipeline, structured data, canonicalization, Core Web Vitals, sitemaps, hreflang, spam policies"
+    via: research/technologies/google-seo.md
+    retrieved: "2026-09-10"
+  - url: research/technologies/nextjs.md
+    title: "Next.js Research — production checklist's SEO/metadata guidance (Metadata API, Open Graph images, sitemap/robots generation)"
+    via: research/technologies/nextjs.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Crawl/render/index pipeline reasoning (why JS-rendered content can lag or fail indexing)
+  - Structured-data/canonicalization/sitemap/hreflang implementation method
+  - Core Web Vitals threshold awareness tied to page-experience ranking signals
+decision_framework_present: true
+
+failure_handling:
+  - If SEO goals aren't stated, ask what matters most (indexability, rich results, Core Web Vitals, i18n) rather than optimizing everything reflexively.
+  - If a claim about ranking weight/impact isn't directly documented (e.g. exact HTTPS ranking-signal weight), state that it's unresolved rather than asserting a specific number.
+  - If asked for guidance on a search engine other than Google, state that this library's research covers Google specifically and the claim may not generalize.
+verification:
+  - No promise of guaranteed indexing/ranking is made — Google explicitly disclaims this, and this skill states that boundary too.
+  - Structured data changes are validated (Rich Results Test) rather than assumed correct.
+  - JS-rendered content is verified against the rendered DOM, not just the initial server response, when crawlability is in question.
+  - No spam-policy-violating tactic (cloaking, scaled/AI-generated low-value content, hidden text, link spam) is proposed even if it might improve a metric short-term.
+escalation:
+  - A canonical/redirect/domain-migration change with real ranking-continuity risk is presented with trade-offs for explicit confirmation.
+  - A request that would violate Google's documented spam policies (however incidentally) is flagged and declined, not implemented.
+evaluation_criteria:
+  - On a fixture page with SEO defects (missing meta/structured data, CSR-only content, no canonical), identifies and fixes them.
+  - Correctly distinguishes robots.txt blocking (prevents crawling) from noindex (allows crawling, prevents indexing) rather than conflating them.
+  - Never proposes a documented spam-policy-violating tactic.
+  - States plainly when a claim (e.g. HTTPS's exact ranking weight) isn't independently verifiable from current official docs.
+
+adapter_hints: {}

@@ -1,0 +1,111 @@
+id: SK-AI-001
+slug: llm-application-engineering
+name: LLM Application Engineering
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: AI
+
+purpose: >-
+  Decide the architecture of an LLM-powered feature — which AI/LLM
+  disciplines apply and how they compose — and own lightweight LLM-call
+  observability as an extension of general observability.
+scope: >-
+  The AI/LLM domain's root skill: decides which of prompt/context
+  engineering, structured-output/tool-calling, agent architecture, RAG,
+  model selection, evaluation, and AI security a given LLM feature actually
+  needs, and in what order — composing SK-AI-002–SK-AI-008 selectively
+  rather than reimplementing their content. Has no dominant single
+  LLM-provider technology to specialize into: model selection (SK-AI-006)
+  is itself the vendor-neutral decision layer, grounded in both Anthropic's
+  and OpenAI's documented guidance. Also owns LLM-call observability
+  (prompt/completion logging with secret/PII scrubbing, token/cost
+  tracking, per-call latency) as a lightweight extension of the
+  already-authored observability skill (SK-QA-004), not as a separate
+  skill — research found no LLM-specific observability concern deep enough
+  to warrant one.
+expertise: >-
+  Senior/principal engineer with LLM-application-architecture experience
+  across multiple model providers.
+description: >-
+  Decide which AI/LLM disciplines a feature needs — prompt/context
+  engineering, structured output/tool calling, agent architecture, RAG,
+  model selection, evaluation, AI security — and how they compose; own the
+  LLM-call observability plan (prompt/completion logging with secret/PII
+  scrubbing, token/cost/latency tracking) as a lightweight extension of
+  general observability. Use when starting a new LLM-powered feature and
+  deciding its overall shape before implementation.
+
+activation_conditions:
+  - Starting a new LLM-powered feature
+  - Deciding the overall architecture/shape of an LLM feature before implementation
+  - Determining which AI/LLM sub-disciplines (prompt engineering, structured output, agent architecture, RAG, model selection, evaluation, security) a feature actually needs
+  - Setting up or reviewing LLM-call observability (prompt/completion logging, token/cost tracking, latency)
+non_activation_conditions:
+  - No LLM involved in the feature
+  - The request is already scoped to one specific sub-discipline (e.g. "write this system prompt," "design this tool schema") — route directly to the matching SK-AI-002–SK-AI-008 skill
+  - General, non-LLM-call observability instrumentation with no LLM-specific concern — route to observability (SK-QA-004) directly
+activation_mode: auto
+
+inputs:
+  - name: feature-requirement
+    description: The LLM-powered feature or task requirement whose architecture needs deciding.
+    required: true
+  - name: target-provider-or-model
+    description: The target LLM provider/model(s), if already constrained.
+    required: false
+  - name: existing-llm-call-sites
+    description: Any existing prompts, tool definitions, or LLM call sites already in the codebase.
+    required: false
+outputs:
+  - name: llm-feature-architecture
+    kind: analysis
+    description: Which of SK-AI-002–SK-AI-008 apply to the feature, why, and in what sequence — including which ones were explicitly declined.
+  - name: llm-observability-plan
+    kind: analysis
+    description: What to log/measure for each LLM call (structured request/response logging with secret/PII scrubbing, token/cost tracking, per-call latency), as a lightweight extension of SK-QA-004.
+
+depends_on_skills: []
+related_skills: [SK-AI-002, SK-AI-003, SK-AI-004, SK-AI-005, SK-AI-006, SK-AI-007, SK-AI-008, SK-QA-004]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: research/technologies/anthropic-claude-api.md
+    title: "Anthropic Claude API Research — Messages API, four agent build-time options, model-tier defaults, prompt-caching/observability signals"
+    via: research/technologies/anthropic-claude-api.md
+    retrieved: "2026-09-10"
+  - url: research/technologies/openai-api.md
+    title: "OpenAI API Research — Responses API agentic-by-default framing, Agents SDK vs. raw loop control, reasoning-effort/model-tier defaults, usage/cache diagnostics"
+    via: research/technologies/openai-api.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Composition-decision method — a per-sub-discipline checklist (mapped to SK-AI-002–SK-AI-008's own activation conditions) for deciding which AI/LLM disciplines a feature genuinely needs, and in what sequence
+  - The over-engineering anti-pattern specific to this domain: reaching for agent-architecture or RAG composition when a single structured-output/tool call suffices
+  - The design choice to fold LLM-call observability into this root skill as a lightweight extension of SK-QA-004, rather than authoring a ninth AI-domain skill, because no LLM-specific observability concern was found deep enough to warrant one
+  - The LLM-call-log-scrubbing surface: prompts, completions, tool arguments, and retrieved documents are a richer, higher-risk free-text surface for secret/PII leakage than typical structured application logs
+decision_framework_present: true
+
+failure_handling:
+  - If the feature requirement doesn't state enough to determine which sub-disciplines apply, ask rather than composing all of them reflexively.
+  - If the request is already fully scoped to one specific sub-discipline, do not re-decide architecture here — hand off directly to the matching SK-AI-002–SK-AI-008 skill.
+verification:
+  - Every sub-discipline named in the architecture output maps to a concrete signal in the feature requirement, not reflexive inclusion of all eight.
+  - The output explicitly states which sub-disciplines were declined and why, not only which were included.
+  - The LLM-call observability plan never logs unscrubbed secrets/PII in prompts, completions, or tool arguments.
+  - For a composed architecture, at least one seeded feature requirement is actually traced end-to-end through the chosen sub-disciplines (a dry run or an eval-harness invocation), not just asserted route-by-route from the requirement text.
+escalation:
+  - A request already fully scoped to one SK-AI-002–SK-AI-008 sub-discipline is routed there directly rather than re-decided at the root.
+  - A request that is really a general (non-LLM-call) observability need is routed to SK-QA-004 directly rather than answered here.
+evaluation_criteria:
+  - Given a feature requirement, correctly identifies which sub-disciplines apply and declines the ones that don't.
+  - LLM-call observability plan never logs unscrubbed secrets/PII in prompts or completions.
+  - Correctly flags over-engineering (e.g. reaching for agent-architecture or RAG when a single structured-output call suffices).
+
+adapter_hints: {}

@@ -1,0 +1,134 @@
+# ILLUSTRATIVE EXAMPLE — demonstrates a COMPLEX, full-featured skill.yaml
+# exercising every optional field: technology kind, source grounding,
+# version-awareness, tier-B execution, dependencies/conflicts, adapter hints,
+# owned knowledge, escalation, Tier-2 references.
+# This is NOT the authored SK-TECH-postgresql skill; knowledge content is
+# abbreviated and source URLs are representative, to show structure only.
+
+id: SK-TECH-postgresql
+slug: postgresql
+name: PostgreSQL
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-DATA-001, SK-DATA-003, SK-DATA-005]   # data-modeling, db-operations, search-integration
+
+purpose: Apply PostgreSQL correctly and version-appropriately — schema, indexing, transactions, RLS, and full-text search.
+scope: PostgreSQL-specific design and operations; the generic method comes from the parent Layer-3 skills.
+expertise: PostgreSQL database engineer.
+description: >-
+  PostgreSQL-specific schema, indexing, transactions, MVCC, row-level security,
+  and full-text search. Use when the stack uses PostgreSQL (postgres:// URL,
+  pg/psycopg drivers, a Postgres-targeted ORM, or the task names it). Not for
+  MySQL/other SQL engines, generic data modeling (use data-modeling), or ORM
+  usage patterns (use orm-integration).
+
+activation_conditions:
+  - A postgres:// / postgresql:// connection string or PG driver (pg, psycopg, pgx) is present
+  - An ORM configured with a PostgreSQL provider is detected
+  - The task names PostgreSQL or a PG-specific feature (MVCC, RLS, VACUUM, LISTEN/NOTIFY)
+non_activation_conditions:
+  - The stack uses MySQL, MongoDB, or another engine (route to that skill)
+  - Purely generic schema design with no engine chosen yet (route to SK-DATA-001)
+  - ORM usage mechanics independent of engine (route to SK-DATA-002)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The database task (schema change, slow query, transaction design, RLS policy, search).
+    required: true
+  - name: schema-and-workload
+    description: Existing schema, query patterns, and (ideally) EXPLAIN output.
+    required: false
+required_context:
+  - The PostgreSQL major version in use (from server, image tag, or manifest) — needed for version-correct guidance.
+optional_context:
+  - EXPLAIN (ANALYZE, BUFFERS) output for a slow query.
+  - Existing index definitions.
+
+outputs:
+  - name: schema-or-migration
+    kind: edit
+    description: DDL / migration reflecting version-correct PostgreSQL features.
+  - name: index-or-query-change
+    kind: edit
+    description: Index definitions or query rewrites addressing an observed plan.
+  - name: analysis
+    kind: analysis
+    description: Recommendations with rationale and the version they apply to.
+
+depends_on_skills: [SK-DATA-001, SK-DATA-003, SK-DATA-005]
+related_skills: [SK-TECH-drizzle, SK-TECH-prisma, SK-TECH-typeorm, SK-DATA-004, SK-DATA-006, SK-QA-002]
+conflicts_with: [SK-TECH-mysql]   # do not co-activate for the same engine decision
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+# Tier B: proposing DDL/queries is advisory; running migrations/EXPLAIN needs shell.
+# No capability_fallbacks block required (Tier B, not C) — but if shell is
+# unavailable the skill degrades to advisory per failure_handling below.
+
+grounding: official-docs
+source_references:
+  - url: https://www.postgresql.org/docs/current/mvcc.html
+    title: PostgreSQL — Concurrency Control (MVCC)
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/docs/current/ddl-rowsecurity.html
+    title: PostgreSQL — Row Security Policies
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/docs/current/textsearch.html
+    title: PostgreSQL — Full Text Search
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+  - url: https://www.postgresql.org/docs/current/indexes-types.html
+    title: PostgreSQL — Index Types
+    via: research/technologies/postgresql.md
+    retrieved: "2026-09-09"
+
+covered_versions:
+  postgresql: ">=16 <=17"
+version_sensitive_claims:
+  - claim: Authentication method deprecations affect connection configuration.
+    applies_to: ">=16"
+    source_ref: research/technologies/postgresql.md (version registry entry)
+  - claim: Logical replication feature set differs across majors.
+    applies_to: ">=16 <=17"
+    source_ref: research/technologies/postgresql.md
+last_verified: "2026-09-09"
+reverify_triggers:
+  - A new PostgreSQL major release
+  - Any change to the deprecated-auth-method guidance in official docs
+
+owned_knowledge:
+  - PostgreSQL MVCC/VACUUM behavior
+  - PostgreSQL row-level security policy syntax
+  - PostgreSQL index-type selection (B-tree/GIN/GiST/BRIN)
+  # Cross-cutting security depth is NOT owned here — it is referenced from SK-QA-002.
+
+decision_framework_present: true
+
+failure_handling:
+  - If the PostgreSQL major version cannot be determined, ask for it or state the version its guidance assumes; never assume "latest" silently (VA-3).
+  - If shell is unavailable/denied, degrade to advisory DDL/query output and say the migration/EXPLAIN was not run.
+escalation:
+  - A destructive migration (DROP/ALTER that loses data) requires explicit user confirmation before execution (defer to SK-DATA-006 rollout discipline).
+verification:
+  - Proposed index type matches the query's access pattern (equality/range/full-text/GIS).
+  - Any version-specific claim is tagged with the range it holds for.
+  - For a migration, a rollback path exists.
+evaluation_criteria:
+  - For a seeded slow query with EXPLAIN, proposes an index/rewrite that addresses the actual plan (not a guess).
+  - Chooses a defensible isolation level for a seeded transaction scenario.
+  - Any claim about a version-gated feature is correct for the repo's PG major version.
+  - Does not restate generic ORM/data-modeling guidance owned by parent skills (QR-2).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]   # for running psql/EXPLAIN; abstract shell → CC tools
+  cursor:
+    paths: ["**/*.sql", "**/migrations/**"]
+  vscode:
+    argument_hint: "<task, e.g. 'optimize this slow query' or 'add an RLS policy'>"

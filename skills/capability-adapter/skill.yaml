@@ -1,0 +1,120 @@
+id: SK-ORCH-002
+slug: capability-adapter
+name: Capability adapter
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 0
+domain: ORCH
+
+purpose: >-
+  Reconcile a skill's abstract capability requirements against what the host
+  agent can actually do, and decide execute, degrade-to-advisory, documented
+  fallback, or not-possible-here — before the skill acts.
+scope: >-
+  The vendor-neutrality enforcement point: it owns the mapping from an abstract
+  required capability (shell, browser, container, MCP client/DB, git, sub-agent,
+  network) to the host's reality, and the four-way execution decision that
+  follows. It is a barrier before any Tier B or Tier C step, and it relates to
+  every Tier B/C skill in the library. It does not perform the work, choose
+  which skills run (skill-router, SK-ORCH-001), or stage the workflow
+  (workflow-composer, SK-ORCH-003), and it never names a host agent's tool in a
+  skill's guidance.
+expertise: >-
+  Principal engineer with cross-agent portability and graceful-degradation
+  discipline.
+description: >-
+  Reconcile a skill's declared capability requirements against what the host
+  agent can actually do, and decide execute, degrade-to-advisory, documented
+  fallback, or not-possible-here — before the skill acts. Use when any Tier B or
+  Tier C skill is about to act, or when a capability is denied or revoked
+  mid-run. Not when every active skill is Tier A. Never reports an unexecuted
+  action as executed.
+
+activation_conditions:
+  - A Tier B or Tier C skill is about to act
+  - A declared capability is denied, revoked, or discovered unavailable partway through a run
+  - A workflow step requests parallelism or sub-agent delegation the host may not support
+  - A skill's guidance needs expressing in host-neutral terms because the target host is unknown
+non_activation_conditions:
+  - Every active skill is Tier A (pure advisory or file-only) — there is nothing to adapt
+  - The request is which skills to activate (route to skill-router) or how to stage them (route to workflow-composer)
+  - The request is to configure a specific host agent's settings rather than decide a capability-conditioned execution path
+activation_mode: auto
+
+inputs:
+  - name: declared-capabilities
+    description: The required_capabilities and execution_tier of each skill about to act, plus any documented capability_fallbacks.
+    required: true
+  - name: host-capability-signals
+    description: What the host has already demonstrated this session, plus anything the user stated about the environment.
+    required: false
+  - name: step-intent
+    description: The concrete action the step would take, so the decision can be made per action rather than per capability in the abstract.
+    required: false
+outputs:
+  - name: capability-decision
+    kind: analysis
+    description: Per skill or step — execute, degrade-to-advisory, fallback route, or not-possible-here — each with the evidence the decision rests on and its confidence.
+  - name: degradation-record
+    kind: analysis
+    description: What consequently goes unexecuted or unverified, stated plainly so no downstream stage or final report treats advisory output as executed work.
+
+depends_on_skills: []
+related_skills: [SK-ORCH-001, SK-ORCH-003]
+conflicts_with: []
+
+required_capabilities: [file-read]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: research/knowledge-maps/agent-capability-map.md
+    title: "Agent Capability Map — per-capability support and gaps across seven researched agent ecosystems, including the absence of any unified capability-discovery surface"
+    via: research/knowledge-maps/agent-capability-map.md
+    retrieved: "2026-09-10"
+  - url: core/dependency-architecture/dependency-graph.md
+    title: "Dependency Graph — the documented fallback edges resolved at the capability barrier"
+    via: core/dependency-architecture/dependency-graph.md
+    retrieved: "2026-09-10"
+  - url: core/taxonomy/README.md
+    title: "Taxonomy Overview — the execution-tier model (A advisory / B shell / C specialized) and the vendor-neutrality contract"
+    via: core/taxonomy/README.md
+    retrieved: "2026-09-10"
+  - url: core/orchestrator/lifecycle.md
+    title: "Run Lifecycle — the capability barrier at P3 and the step-readiness re-check at P5 (D12, D14)"
+    via: core/orchestrator/lifecycle.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - The capability-resolution ladder (declared, observed, cheaply probed, asked, assumed-absent) and its conservative default when no evidence is obtainable
+  - The four-way execution decision — execute, degrade-to-advisory, documented fallback, not-possible-here — and the evidence each requires
+  - The never-claim-unexecuted-success rule and the degradation-record discipline that enforces it
+  - The documented fallback routes for the non-uniform host capabilities (browser automation, shell, structured database access, container execution, semantic repository search, cross-session memory, sub-agent delegation)
+  - The constraint that no researched host exposes a unified capability-discovery surface, and what that forces on any runtime capability check
+decision_framework_present: true
+
+failure_handling:
+  - If a capability cannot be confirmed and cannot be cheaply probed, ask; if asking is not possible, assume it absent and take the fallback — never assume presence.
+  - If no documented fallback exists for a missing capability, report not-possible-here with the reason rather than attempting a substitute the library has not documented.
+  - If a capability is revoked or denied mid-run, re-decide the step rather than letting it proceed on the earlier decision.
+  - If a probe would itself be destructive, outward-facing, or costly, do not probe — ask instead.
+verification:
+  - No step is reported as executed when its capability was absent or its execution was denied.
+  - Every degradation is recorded with what consequently went unexecuted or unverified.
+  - Every capability decision names the evidence it rests on and which rung of the resolution ladder produced it.
+  - No skill guidance emitted names a specific host agent's tool; capabilities stay abstract.
+  - Any probe used to establish a capability was read-only, non-destructive, and cheap.
+escalation:
+  - A missing capability with no documented fallback escalates as not-possible-here with the reason, rather than degrading silently.
+  - A capability whose presence is uncertain and unprobeable escalates to the user as a question about the environment.
+  - A denied permission that blocks a required step escalates with the specific action, why it is needed, and what happens if it stays denied.
+evaluation_criteria:
+  - Given simulated host profiles (no browser automation, no shell, an MCP database server present), routes each capability to the correct execute, fallback, or refuse decision.
+  - Never claims execution succeeded when the capability was absent or denied.
+  - Degrades a browser-dependent step to a documented fallback or advisory output rather than failing the whole workflow.
+  - Re-decides a step whose capability was revoked mid-run instead of proceeding on the stale decision.
+  - States capability requirements abstractly, naming no host agent's tool.
+
+adapter_hints: {}

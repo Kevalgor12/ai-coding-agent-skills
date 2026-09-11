@@ -1,0 +1,93 @@
+id: SK-DATA-006
+slug: data-migration
+name: Data migration
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: DATA
+
+purpose: >-
+  Evolve schemas and migrate data safely on a populated database — reversible
+  migrations, zero-downtime expand/contract, backfill strategy, and
+  destructive-operation guarding.
+scope: >-
+  Migration mechanics and safety on data that already exists. Not schema
+  design itself (data-modeling) and not whole-codebase/technology
+  modernization (legacy-modernization). Specialized by
+  the ORM technology skills for their concrete migration-tool syntax.
+expertise: Senior engineer who has run schema migrations against live production data.
+description: >-
+  Author and run safe schema/data migrations on a populated database —
+  reversible steps, zero-downtime expand/contract, backfill strategy, and
+  guarding destructive operations behind confirmation. Use for a schema
+  change on a database with existing data. Not for greenfield schema design
+  (data-modeling) or broad technology/codebase modernization.
+
+activation_conditions:
+  - A schema change is needed on a database that already has data
+  - The user asks to migrate, backfill, or evolve an existing schema
+  - A version upgrade of the database/ORM carries a breaking schema-relevant change
+non_activation_conditions:
+  - The schema is greenfield with no existing data to preserve (route to data-modeling directly)
+  - The change is a broad technology/pattern modernization beyond a single migration (route to legacy-modernization)
+activation_mode: auto
+
+inputs:
+  - name: current-and-target-schema
+    description: The existing schema and the target shape.
+    required: true
+  - name: data-characteristics
+    description: Approximate data volume and downtime tolerance.
+    required: false
+required_context:
+  - The target schema being migrated to (typically from data-modeling)
+optional_context:
+  - Which ORM/migration tool is in use
+  - Downtime tolerance and traffic patterns (to size an expand/contract rollout)
+
+outputs:
+  - name: migration-script
+    kind: edit
+    description: A reversible migration (up and down).
+  - name: rollout-plan
+    kind: analysis
+    description: The expand/contract sequence with rollback points.
+
+depends_on_skills: []
+related_skills: [SK-DATA-001, SK-DATA-002]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: mixed
+source_references:
+  - url: research/knowledge-maps/version-matrix.md
+    title: "Version Matrix — Drizzle ORM, Prisma, TypeORM, MySQL, MongoDB, ClickHouse migration/version-sensitive facts"
+    via: research/knowledge-maps/version-matrix.md
+    retrieved: "2026-09-09"
+last_verified: "2026-09-09"
+
+owned_knowledge:
+  - Expand/contract zero-downtime migration method
+  - Reversibility and rollback-point discipline for schema changes
+decision_framework_present: true
+
+failure_handling:
+  - If the target schema isn't clear, request it or hand off to data-modeling rather than migrating toward an assumption.
+  - If shell/migration-tool execution is unavailable, produce the migration script and rollout plan as advisory output, clearly marked as not executed.
+verification:
+  - The migration has a working down/rollback path, or an explicit stated reason one isn't possible.
+  - No step drops or overwrites data without being flagged and confirmed.
+  - Large backfills are batched, not run as a single blocking operation on a populated table.
+  - The migration was actually run against a staging/representative dataset (or the tool's dry-run mode) and its outcome observed, not just reasoned about from the migration script.
+escalation:
+  - Any migration step that can lose data (a DROP, a destructive ALTER, an irreversible transform) requires explicit user confirmation before it runs — never executed automatically.
+evaluation_criteria:
+  - For a seeded breaking schema change, produces an expand/contract sequence that is reversible and never drops data without explicit confirmation.
+  - Batches a backfill over a populated table rather than locking it in one pass.
+  - Surfaces the correct version-specific migration caveat when one applies (e.g. an ORM's migration-tool format change between versions).
+  - Does not execute a destructive step without confirmation, even when technically capable of running it.
+
+adapter_hints: {}

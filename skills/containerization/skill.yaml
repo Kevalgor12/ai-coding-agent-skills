@@ -1,0 +1,99 @@
+id: SK-INFRA-001
+slug: containerization
+name: Containerization
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: INFRA
+
+purpose: >-
+  Containerize applications and services — image authoring, layering and
+  build-cache design, multi-stage builds, and compose-based local
+  dependency stacks — independent of which container engine is used.
+scope: >-
+  Container-image and local-compose design. In this library's researched
+  technology set, Docker is the dominant/only profiled implementation, so
+  this generic skill and the Docker technology skill are closely paired
+  (specializing/adding implementation depth) rather than covering
+  meaningfully different engines. Not CI/CD pipeline design
+  (ci-cd-pipeline) and not deployment/release mechanics
+  (deployment-release).
+expertise: Senior/principal engineer with container/build-tooling experience.
+description: >-
+  Containerize an application or service — write efficient, secure images
+  (small base, non-root, layer caching, multi-stage builds), compose local
+  dependency stacks, and address image vulnerability scanning. Use when
+  containerizing an app or standing up local dependencies in containers.
+  Not for CI/CD pipeline design or deployment/release strategy, which are
+  separate skills.
+
+activation_conditions:
+  - Containerizing an application or service (authoring/reviewing a Dockerfile)
+  - Standing up local dependencies (databases, caches, search engines) in containers for development
+  - An existing image's size, build-cache efficiency, or security posture needs review
+non_activation_conditions:
+  - No containerization is involved
+  - CI/CD pipeline design itself, with containerization already settled (route to ci-cd-pipeline)
+  - Deployment/release strategy once an image already exists (route to deployment-release)
+activation_mode: auto
+
+inputs:
+  - name: app-runtime
+    description: The application/service and its runtime (language, framework, dependencies).
+    required: true
+  - name: existing-image-or-compose
+    description: An existing Dockerfile/compose configuration, if this is not greenfield.
+    required: false
+required_context:
+  - The application's runtime, dependencies, and any local-dev dependency stack (databases, caches) it needs
+optional_context:
+  - Target deployment environment constraints (architecture, base-image policy, registry)
+  - Existing CI/CD pipeline that will build/scan the image
+
+outputs:
+  - name: image-guidance
+    kind: edit
+    description: Dockerfile (or equivalent) authoring guidance — base image, layering/caching order, multi-stage structure, non-root user.
+  - name: compose-config
+    kind: edit
+    description: Compose configuration standing up the app plus its local dependency stack, when applicable.
+
+depends_on_skills: []
+related_skills: [SK-INFRA-002, SK-QA-002, SK-TECH-postgresql, SK-TECH-mongodb, SK-TECH-redis]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: mixed
+source_references:
+  - url: research/knowledge-maps/performance-knowledge-map.md
+    title: "Performance Knowledge Map — Docker build-cache/layering and multi-platform build sections"
+    via: research/knowledge-maps/performance-knowledge-map.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/security-knowledge-map.md
+    title: "Security Knowledge Map — Docker daemon/rootless/capability/scanning sections"
+    via: research/knowledge-maps/security-knowledge-map.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Image-authoring method (layering/caching order, multi-stage builds, non-root default)
+  - Local compose-stack design for app + dependencies
+decision_framework_present: true
+
+failure_handling:
+  - If the app's runtime/dependencies are too thin to design an image (unclear entrypoint, missing dependency list), request them rather than guessing a base image.
+  - If an image already exists, work within its structure unless the user explicitly asks to rework it.
+verification:
+  - The image runs as a non-root user unless there's a stated, justified reason not to.
+  - Layer/instruction ordering puts rarely-changing steps (dependency install) before frequently-changing ones (source copy), so cache invalidation is minimized.
+  - Multi-stage builds are used where a build toolchain would otherwise bloat the runtime image.
+  - The image is actually built and run via the project's container runtime, and its non-root user and layer/cache behavior confirmed with inspection commands (e.g. `docker history`, `id` inside the running container), not inferred by reading the Dockerfile/Containerfile alone.
+evaluation_criteria:
+  - Produces a multi-stage, non-root image with sensible layer-caching order for a seeded app.
+  - A compose file (when relevant) stands up the app plus at least one local dependency (e.g. a database) correctly.
+  - Does not recommend Docker Content Trust workflows that were removed from the CLI as of Engine 29.0.0 without flagging the break.
+
+adapter_hints: {}

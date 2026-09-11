@@ -1,0 +1,108 @@
+id: SK-AI-008
+slug: ai-security
+name: AI Security
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: AI
+
+purpose: >-
+  Defend LLM-powered applications against threat classes specific to or
+  meaningfully amplified by LLM use — prompt injection, excessive agency,
+  sensitive-information disclosure via model/embedding channels, and
+  LLM-specific supply-chain risk.
+scope: >-
+  LLM-specific security, grounded directly in the OWASP GenAI LLM Top 10
+  (2026). Genuinely distinct from security-engineering (SK-QA-002), which
+  owns traditional AppSec. Prompt injection has no architectural equivalent
+  to a parameterized-query code/data boundary, and the standard itself
+  states "no reliable prevention mechanism exists today" — so this skill
+  frames defense as bounding blast radius rather than promising prevention.
+expertise: Senior/principal AI/LLM security engineer, grounded in the OWASP GenAI LLM Top 10.
+description: >-
+  Defend LLM-powered applications against threats specific to or amplified
+  by LLM use — prompt injection, excessive agency, sensitive-info
+  disclosure, LLM-specific supply-chain risk — grounded in the OWASP GenAI
+  LLM Top 10 (2026). Frames defense as bounding blast radius, not
+  prevention: no reliable prompt-injection prevention exists today. Use
+  reviewing/designing an LLM feature with tool access, untrusted-content
+  ingestion, or user exposure. Traditional AppSec routes to
+  security-engineering.
+
+activation_conditions:
+  - Reviewing or designing an LLM feature with tool access, untrusted-content ingestion, or user-facing exposure
+  - A security review of an LLM-powered system is explicitly requested
+  - Deciding how much an LLM agent should be trusted/authorized to do on its own
+  - Assessing LLM-specific supply-chain risk (model/adapter provenance, quantization-introduced behavior changes)
+non_activation_conditions:
+  - A traditional (non-LLM-specific) AppSec concern with no LLM-specific amplification — route to security-engineering
+  - The request is specifically about authentication/authorization design with no LLM dimension — route to authentication-authorization
+activation_mode: auto
+
+inputs:
+  - name: llm-feature-or-system
+    description: The LLM feature/system and its tool/data access surface.
+    required: true
+  - name: threat-context
+    description: What untrusted content the system ingests, what actions/tools it can invoke, and who is exposed to it.
+    required: false
+outputs:
+  - name: threat-assessment
+    kind: analysis
+    description: Identified risks mapped to the applicable OWASP LLM Top 10 (2026) categories.
+  - name: mitigations
+    kind: edit
+    description: Blast-radius-bounding mitigations applied or proposed, matched to each identified risk, stated without overclaiming completeness.
+
+depends_on_skills: []
+related_skills: [SK-AI-001, SK-QA-002, SK-AI-004, SK-AI-005]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: research/technologies/owasp-llm-top10.md
+    title: "OWASP GenAI LLM Top 10 (2026) Research — full risk catalog, prompt-injection deep dive with documented mitigation limitations, excessive-agency root causes, improper-output-handling discipline, adaptive-vs-static red-teaming findings"
+    via: research/technologies/owasp-llm-top10.md
+    retrieved: "2026-09-10"
+  - url: research/technologies/anthropic-claude-api.md
+    title: "Anthropic Claude API Research — Section 7 Security: direct vs. indirect prompt-injection threat model, put-untrusted-content-only-in-tool-results guidance, computer-use-specific precautions"
+    via: research/technologies/anthropic-claude-api.md
+    retrieved: "2026-09-10"
+  - url: research/technologies/openai-api.md
+    title: "OpenAI API Research — Section 7 Security: prompt-injection red-teaming guidance, human-in-the-loop default posture, safety identifiers for abuse tracing"
+    via: research/technologies/openai-api.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Why prompt injection is architecturally distinct from SQL injection (no enforced trust boundary between instructions and content — "both are tokens on the same stream")
+  - Bounding-blast-radius framing for prompt-injection defense in place of promised prevention, including the documented adaptive-vs-static red-teaming gap
+  - The authorize-inside-the-retrieval-query pattern (document/chunk-level authorization enforced at index-query time, not filtered post-retrieval)
+  - Excessive agency's three root causes (excessive functionality, excessive permissions, excessive autonomy) and their mitigations
+  - LLM-specific supply-chain risk (model/adapter provenance, quantization-introduced behavior changes, mutable-reference resolution)
+decision_framework_present: true
+
+failure_handling:
+  - If the LLM feature's tool/data access surface isn't described, ask rather than assume a worst-case or best-case posture.
+  - If asked to certify a mitigation as complete prevention (especially for prompt injection), state the standard's own documented limitation instead of overclaiming.
+  - If the request is a traditional AppSec concern with no LLM-specific amplification, route it to security-engineering rather than answering as if it were in scope here.
+verification:
+  - Every finding is mapped to a specific OWASP LLM Top 10 (2026) category, not applied generically without cause.
+  - No mitigation is presented as complete prevention where the source material documents it as partial or bypassable (especially prompt injection).
+  - Untrusted external content is never recommended for placement in system-level instructions; it is confined to clearly-delineated, skepticism-flagged channels.
+  - High-impact or irreversible agent actions are gated on human approval or deterministic policy re-validation, not on the model's own stated intent.
+  - A claimed mitigation (an input filter, an output guardrail, a permission check) is actually exercised with a crafted adversarial payload and the observed behavior recorded, not marked effective from reading the mitigation code alone.
+escalation:
+  - A finding involving an LLM agent with simultaneous access to untrusted input, sensitive data, and state-changing capability (the "Rule of Two" coincidence) is escalated for per-action approval design, not treated as a routine finding.
+  - A request to certify prompt-injection defenses as complete is escalated back to the requester with the standard's own documented adaptive-testing gap, not silently accepted.
+evaluation_criteria:
+  - On a fixture LLM feature with a seeded prompt-injection or excessive-agency vector, identifies the risk and proposes a blast-radius-bounding mitigation rather than a false claim of complete prevention.
+  - Correctly declines to answer a traditional non-LLM-specific AppSec question as if it were in scope, routing it to security-engineering instead.
+  - Recommends authorization enforced inside the retrieval query (not post-retrieval filtering) when the fixture involves RAG or vector-store access.
+  - Recommends adaptive (not merely static) red-teaming when asked how to validate a prompt-injection mitigation.
+
+adapter_hints: {}

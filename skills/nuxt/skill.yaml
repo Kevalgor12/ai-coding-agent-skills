@@ -1,0 +1,196 @@
+id: SK-TECH-nuxt
+slug: nuxt
+name: Nuxt
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-FE-001, SK-FE-005, SK-GROW-001]   # frontend-architecture, rendering-strategy, seo-optimization
+
+purpose: >-
+  Apply Nuxt correctly and version-appropriately — the Nitro server engine,
+  file-based routing, auto-imports, and routeRules caching — specializing
+  the frontend-architecture, rendering-strategy, and seo-optimization parent
+  skills with Nuxt-specific, cited, version-aware detail.
+scope: >-
+  Nuxt implementation specifics only: Nitro, module/auto-import mechanics,
+  routeRules, the Nuxt 3→4 migration, and the v4.5 security advisories
+  (especially the cross-user payload-disclosure GHSA). The Next.js-vs-Nuxt
+  selection decision and the general React/Vue/Angular comparison belong to
+  frontend-architecture (SK-FE-001); Vue-the-base-framework specifics belong
+  to SK-TECH-vue.
+expertise: Nuxt/Nitro application engineer.
+description: >-
+  Nuxt-specific implementation: Nitro server engine, file-based routing from
+  app/pages/, auto-imports/module system, routeRules caching, Nuxt 3→4
+  migration, and the GHSA-wm8w-6qjm-cv43 cross-user payload-disclosure
+  advisory. Use when the repo has a nuxt.config.ts, depends on "nuxt", or
+  the task names Nuxt/Nitro. Not for the Next.js-vs-Nuxt framework choice
+  (frontend-architecture) or generic Vue questions (SK-TECH-vue).
+
+activation_conditions:
+  - A nuxt.config.ts/.js file is present in the repo
+  - package.json declares a dependency on "nuxt" or the task uses the nuxi CLI
+  - The task explicitly names Nuxt, Nitro, or a Nuxt-specific API (useFetch, useAsyncData, routeRules, server/api, definePageMeta)
+non_activation_conditions:
+  - No Nuxt manifest/config is present and the task doesn't name Nuxt (route to SK-TECH-vue or SK-FE-001)
+  - The task concerns Next.js or another React meta-framework (route to SK-TECH-nextjs)
+  - The framework/meta-framework choice is still open (route to SK-FE-001 frontend-architecture)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Nuxt-specific task (routing, data-fetching, server route, routeRules/caching config, security remediation, Nuxt 3→4 upgrade, deployment).
+    required: true
+  - name: existing-nuxt-app
+    description: Existing nuxt.config.ts, directory structure, and the Nuxt/Node version currently in use.
+    required: false
+required_context:
+  - The Nuxt major version in use (3.x vs 4.x) and, when relevant, the exact patch version — needed for version-correct and security-correct guidance.
+optional_context:
+  - Whether any route serves authenticated/per-user data and whether cache/swr/isr route rules are applied to it.
+  - The deployment target (Node server, static, serverless/edge) and its Nitro preset.
+
+outputs:
+  - name: nuxt-code-or-config
+    kind: edit
+    description: Version-correct Nuxt code, server routes (Nitro), or nuxt.config.ts changes (routeRules, modules, experimental/future flags).
+  - name: security-or-upgrade-analysis
+    kind: analysis
+    description: GHSA-aware route-rules/caching safety assessment, or a Nuxt 3.x(EOL)→4.x upgrade plan with the version-gated breaking changes that apply.
+
+depends_on_skills: []
+related_skills: [SK-TECH-vue]
+conflicts_with: [SK-TECH-nextjs]
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+# Tier B: proposing config/code is advisory; running nuxi build/typecheck/analyze
+# or purging CDN caches needs shell. No capability_fallbacks needed (not Tier C).
+
+grounding: official-docs
+source_references:
+  - url: https://nuxt.com/docs/4.x/getting-started/introduction
+    title: Nuxt — Introduction (core concepts, key features)
+    via: research/technologies/nuxt.md
+    retrieved: "2026-09-10"
+  - url: https://nuxt.com/docs/4.x/guide/concepts/server-engine
+    title: Nuxt — Server Engine (Nitro)
+    via: research/technologies/nuxt.md
+    retrieved: "2026-09-10"
+  - url: https://nuxt.com/docs/4.x/guide/concepts/auto-imports
+    title: Nuxt — Auto-imports
+    via: research/technologies/nuxt.md
+    retrieved: "2026-09-10"
+  - url: https://nuxt.com/docs/4.x/guide/directory-structure
+    title: Nuxt — Directory Structure
+    via: research/technologies/nuxt.md
+    retrieved: "2026-09-10"
+  - url: https://nuxt.com/docs/4.x/guide/directory-structure/server
+    title: Nuxt — server/ Directory (Nitro routes, middleware, plugins, utils)
+    via: research/technologies/nuxt.md
+    retrieved: "2026-09-10"
+  - url: https://nuxt.com/docs/4.x/guide/going-further/modules
+    title: Nuxt — Modules
+    via: research/technologies/nuxt.md
+    retrieved: "2026-09-10"
+  - url: https://nuxt.com/docs/4.x/guide/going-further/layers
+    title: Nuxt — Layers
+    via: research/technologies/nuxt.md
+    retrieved: "2026-09-10"
+  - url: https://nuxt.com/docs/4.x/guide/concepts/rendering
+    title: Nuxt — Rendering Modes & Route Rules
+    via: research/technologies/nuxt.md
+    retrieved: "2026-09-10"
+  - url: https://nuxt.com/blog/v4-5-security
+    title: Nuxt — v4.5 Security Advisory Batch (GHSA IDs, remediation)
+    via: research/technologies/nuxt.md
+    retrieved: "2026-09-10"
+  - url: https://nuxt.com/modules/security
+    title: Nuxt Modules Directory — Security (nuxt-security, community-maintained)
+    via: research/technologies/nuxt.md
+    retrieved: "2026-09-10"
+  - url: https://nuxt.com/docs/4.x/getting-started/testing
+    title: Nuxt — Testing (@nuxt/test-utils)
+    via: research/technologies/nuxt.md
+    retrieved: "2026-09-10"
+  - url: https://nuxt.com/docs/4.x/getting-started/installation
+    title: Nuxt — Installation (Node.js version requirement)
+    via: research/technologies/nuxt.md
+    retrieved: "2026-09-10"
+  - url: https://nuxt.com/docs/4.x/getting-started/upgrade
+    title: Nuxt — Upgrade Guide (3→4 migration, jiti removal, future.compatibilityVersion)
+    via: research/technologies/nuxt.md
+    retrieved: "2026-09-10"
+  - url: https://nuxt.com/docs/4.x/community/roadmap
+    title: Nuxt — Roadmap (release policy, version timeline, EOL dates)
+    via: research/technologies/nuxt.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/nuxt/nuxt/releases
+    title: Nuxt — GitHub Releases (current stable versions)
+    via: research/technologies/nuxt.md
+    retrieved: "2026-09-10"
+  - url: https://nuxt.com/docs/4.x/getting-started/deployment
+    title: Nuxt — Deployment (Node server, static, serverless/edge, Nitro presets)
+    via: research/technologies/nuxt.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  nuxt: ">=4.4 <=4.5 (3.x past EOL as of 2026-07-31)"
+version_sensitive_claims:
+  - claim: Node.js 22.x or newer (even-numbered LTS lines recommended) is required for the current Nuxt 4.x line — stricter than Nuxt 3's original requirement.
+    applies_to: "Nuxt 4.x"
+    source_ref: research/technologies/nuxt.md §12; version-matrix.md (Nuxt row)
+  - claim: Node 22.19+ is specifically required on the 3→4 upgrade path once the bundled jiti dependency is removed, since config/modules then load via native Node TS/ESM support.
+    applies_to: "Nuxt 3→4 upgrade"
+    source_ref: research/technologies/nuxt.md §11; version-matrix.md
+  - claim: hydrate-on-visible lazy-hydration is available.
+    applies_to: ">=3.16"
+    source_ref: research/technologies/nuxt.md §5/§8; version-matrix.md
+  - claim: future.compatibilityVersion:5 (Nuxt 5 preview behaviors) requires Nuxt 4.2+.
+    applies_to: ">=4.2"
+    source_ref: research/technologies/nuxt.md §4/§11; version-matrix.md
+  - claim: experimental.ssrStreaming (SSR streaming for TTFB) was introduced.
+    applies_to: ">=4.5.0"
+    source_ref: research/technologies/nuxt.md §8/§12; version-matrix.md
+  - claim: GHSA-wm8w-6qjm-cv43 cross-user payload disclosure — apps using cache/swr/isr route rules on authenticated pages could serve a cached _payload.json response to a different user; remediation requires purging CDN/edge caches after upgrading, not just bumping the package.
+    applies_to: "Nuxt >=4.4.0 (fixed in 4.5.1); the 3.21.x maintenance line was also affected (fixed in 3.21.10)"
+    source_ref: research/technologies/nuxt.md §7/§17; version-matrix.md
+  - claim: Nuxt 3.x reached end-of-life and no longer receives bug/security fixes.
+    applies_to: "3.x, as of 2026-07-31"
+    source_ref: research/technologies/nuxt.md §12; version-matrix.md
+last_verified: "2026-09-10"
+reverify_triggers:
+  - Nuxt 5.x release (~Q4 2026)
+  - A new Nuxt security advisory (GHSA) blog post
+  - A change to the Node.js minimum-version requirement or LTS schedule affecting Nuxt's stated minimum
+
+owned_knowledge:
+  - Nitro server engine specifics (server/api vs server/routes, lifecycle, presets)
+  - Nuxt auto-import/auto-registration mechanics and module system
+  - routeRules caching mechanics and the GHSA-wm8w-6qjm-cv43 advisory's precise scope
+decision_framework_present: true
+
+failure_handling:
+  - If the Nuxt major/patch version cannot be determined from nuxt.config.ts/package.json/lockfile, ask or explicitly state the version the guidance assumes — never assume "latest" silently (VA-3).
+  - If shell is unavailable/denied, degrade to advisory config/code output and state that nuxi commands (build/typecheck/analyze) or a cache purge were not executed.
+  - If a repo is still on Nuxt 3.x, state explicitly that the line is past EOL (2026-07-31) and receiving no further fixes, rather than treating it as a currently supported option.
+verification:
+  - Any cache/swr/isr route rule proposed for a route touches only non-authenticated data, or the GHSA-wm8w-6qjm-cv43 exposure and its purge-the-cache remediation step were explicitly addressed.
+  - Auto-import/file-based-routing conventions (app/pages/, server/api, server/routes) are used instead of a hand-rolled router or duplicate backend framework.
+  - Every version-specific claim in the output is tagged with the range it holds for.
+  - The cache/swr/isr route-rule behavior is confirmed by actually building and requesting the route (`nuxi build`/`nuxi preview`) and observing whether cached content leaks across users, not assumed from reading `nuxt.config` alone.
+evaluation_criteria:
+  - For a seeded route serving authenticated/per-user data, refuses or flags a cache/swr/isr route rule unless the GHSA-wm8w-6qjm-cv43 patch level and cache-purge step are confirmed.
+  - For a seeded Nuxt 3.x repo, states the 3.x EOL date and does not silently treat 3.x as an actively maintained option.
+  - Correctly distinguishes server/api (auto-/api-prefixed) from server/routes (unprefixed) Nitro route placement for a seeded server-route task.
+  - Does not restate the Next.js-vs-Nuxt comparison already owned by frontend-architecture (QR-2).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]
+  cursor:
+    paths: ["nuxt.config.*", "app/**", "server/**", "**/*.vue"]
+  vscode:
+    argument_hint: "<task, e.g. 'add a cached route rule' or 'plan the Nuxt 3-to-4 upgrade'>"

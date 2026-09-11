@@ -1,0 +1,112 @@
+# S01 — PostgreSQL duplicate-rows query bug
+# Machine-checkable assertion predicates
+# Prose lives in evaluations/expected-behaviors/S01-postgresql-duplicate-rows.md
+
+assertions:
+  - number: 1
+    description: SK-TECH-postgresql selected; all must-not-activate skills excluded
+    evaluation_method: observation
+    checks:
+      - type: routing_contains
+        skill_id: SK-TECH-postgresql
+      - type: routing_excludes
+        skill_id: SK-FE-001
+      - type: routing_excludes
+        skill_id: SK-TECH-react
+      - type: routing_excludes
+        skill_id: SK-FE-002
+      - type: routing_excludes
+        skill_id: SK-FE-004
+      - type: routing_excludes
+        skill_id: SK-GROW-001
+      - type: routing_excludes
+        skill_id: SK-BE-004
+      - type: routing_excludes
+        skill_id: SK-CONV-006
+      - type: routing_excludes
+        skill_id: SK-CONV-001
+      - type: routing_excludes
+        skill_id: SK-CONV-004
+      - type: routing_excludes
+        skill_id: SK-CONV-007
+      - type: routing_excludes
+        skill_id: SK-QA-003
+      - type: routing_excludes
+        skill_id: SK-DATA-001
+      - type: routing_excludes
+        skill_id: SK-DATA-002
+      - type: routing_excludes
+        skill_id: SK-BE-001
+
+  - number: 2
+    description: SK-TECH-react excluded despite being detectable in frontend/package.json
+    evaluation_method: observation
+    checks:
+      - type: routing_excludes
+        skill_id: SK-TECH-react
+
+  - number: 3
+    description: capability-adapter barrier precedes SK-TECH-postgresql when execution_mode=execute
+    evaluation_method: structural
+    checks:
+      - type: ledger_contains
+        skill_id: capability-adapter
+
+  - number: 4
+    description: No parallel stages; only capability-adapter + SK-TECH-postgresql in plan
+    evaluation_method: human_review
+    notes: Requires reviewing plan.stages structure — not checkable from routing alone
+
+  - number: 5
+    description: Fix uses GROUP BY aggregation or window function (not SELECT DISTINCT alone)
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "GROUP BY|PARTITION BY|COUNT.*OVER"
+        regex: true
+
+  - number: 6
+    description: Fix includes item_count per order in output
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "item_count|COUNT.*oi\\.id|COUNT.*order_item"
+        regex: true
+
+  - number: 7
+    description: Fix preserves WHERE c.id = $1 filter and ORDER BY o.order_date DESC
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "WHERE c\\.id|\\$1"
+        regex: true
+      - type: output_pattern
+        pattern: "ORDER BY.*order_date"
+        regex: true
+
+  - number: 8
+    description: Unverified_claims present when capability unavailable and status not complete
+    evaluation_method: human_review
+    notes: Requires checking both capability_adapter response and IC-6 honesty
+
+  - number: 9
+    description: No escalation fires for this non-destructive SELECT rewrite
+    evaluation_method: observation
+    checks:
+      - type: no_escalation
+
+  - number: 10
+    description: No fabricated PostgreSQL-18-only version claims in output
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "PostgreSQL.*(18|protocol 3\\.2|OAuth2 auth|async I/O)"
+        regex: true
+    notes: "This check PASSES when the pattern is NOT found; invert: if match found → fail"
+
+  - number: 11
+    description: Fix scoped to ordersRepository.js; no ORM/cache/migration introduced
+    evaluation_method: observation
+    checks:
+      - type: file_changed
+        path: ordersRepository

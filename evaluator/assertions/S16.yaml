@@ -1,0 +1,56 @@
+# S16 — Prisma repo + Drizzle feature request
+assertions:
+  - number: 1
+    description: "[CRITICAL] No wrong-rung refusal — feature implemented with Drizzle as instructed"
+    evaluation_method: observation
+    checks:
+      - type: routing_contains
+        skill_id: SK-CONV-001
+      - type: output_pattern
+        pattern: "drizzle|drizzle-orm"
+        regex: true
+
+  - number: 2
+    description: "[CRITICAL] Two-ORM state explicitly named — not silently coexisting"
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "two.ORM|both.*ORM|Prisma.*Drizzle|Drizzle.*Prisma|coexist|side.by.side"
+        regex: true
+
+  - number: 3
+    description: Two-ORM finding substantive — names concrete consequence (two migration CLIs, etc.)
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "drizzle-kit|prisma migrate|two.*migration|dual.*schema|connection.pool"
+        regex: true
+
+  - number: 4
+    description: If SK-TECH-prisma activates, status not refused/blocked on account of Drizzle request
+    evaluation_method: structural
+    checks:
+      - type: ledger_contains
+        skill_id: SK-DATA-002
+
+  - number: 5
+    description: User's Drizzle instruction preserved verbatim in user_constraints or equivalent
+    evaluation_method: human_review
+    notes: Requires reviewing whether the instruction is preserved or paraphrased into something softer
+
+  - number: 6
+    description: Drizzle version choice stated or flagged as open (0.x stable vs 1.0.0-rc)
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "drizzle.*version|0\\.[0-9]|1\\.0|rc|beta|stable"
+        regex: true
+
+  - number: 7
+    description: SK-TECH-typeorm and SK-TECH-mongoose absent from selected
+    evaluation_method: observation
+    checks:
+      - type: routing_excludes
+        skill_id: SK-TECH-typeorm
+      - type: routing_excludes
+        skill_id: SK-TECH-mongoose

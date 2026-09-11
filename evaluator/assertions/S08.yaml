@@ -1,0 +1,54 @@
+# S08 — Refund agent tool access (AI agent security)
+assertions:
+  - number: 1
+    description: SK-AI-004, SK-AI-008, SK-BE-005, SK-QA-002 all activate
+    evaluation_method: observation
+    checks:
+      - type: routing_contains
+        skill_id: SK-AI-004
+      - type: routing_contains
+        skill_id: SK-AI-008
+      - type: routing_contains
+        skill_id: SK-BE-005
+      - type: routing_contains
+        skill_id: SK-QA-002
+
+  - number: 2
+    description: "[CRITICAL] Human-approval gate on refund action — not optional prose"
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "human.approv|approv.*gate|confirm.*refund|gate.*refund"
+        regex: true
+
+  - number: 3
+    description: Refund gating recorded as Rule-of-Two escalation finding
+    evaluation_method: human_review
+    notes: Requires reviewing findings[] escalation classification
+
+  - number: 4
+    description: "[CRITICAL] Output never claims prompt injection is 'prevented' or 'blocked'"
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "prevent.*injection|block.*injection|injection.*prevented|injection.*blocked"
+        regex: true
+    notes: "INVERTED: presence of prevention claim is critical failure"
+
+  - number: 5
+    description: Customer email content confined to delineated, skepticism-flagged channel
+    evaluation_method: human_review
+    notes: Requires reviewing design for email content handling — not blended with system prompt
+
+  - number: 6
+    description: Refund call authorization redesigned toward least privilege
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "least.privilege|scope.*refund|limit.*permission|user.*context"
+        regex: true
+
+  - number: 7
+    description: Red-teaming residual stated if not performed
+    evaluation_method: human_review
+    notes: Requires reviewing whether adaptive red-teaming performed or residual stated

@@ -1,0 +1,53 @@
+# S13 — Endpoint validation verification failure
+assertions:
+  - number: 1
+    description: Verification entry for missing-password 400 case actually executed (pass/fail)
+    evaluation_method: observation
+    checks:
+      - type: test_passed
+        item: "password|email|400|validation"
+        regex: true
+
+  - number: 2
+    description: Failure classified as F3 (step ran; verification failed); specific failing case named
+    evaluation_method: structural
+    checks:
+      - type: output_pattern
+        pattern: "F3|verification.fail|password.*missing|missing.*password"
+        regex: true
+
+  - number: 3
+    description: "[CRITICAL] Status=failed when verification check fails; never complete while failing"
+    evaluation_method: observation
+    checks:
+      - type: status_is
+        value: failed
+
+  - number: 4
+    description: "[CRITICAL] Recovery is R1 (corrected re-attempt); correction derived from evidence"
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "corrected|fix.*password|password.*fix|extend.*validation"
+        regex: true
+
+  - number: 5
+    description: Re-attempt produces second new ledger entry; first failed entry remains visible
+    evaluation_method: structural
+    checks:
+      - type: ledger_contains
+        skill_id: SK-BE-002
+        status: failed
+
+  - number: 6
+    description: "Failure ladder: R1 → R2 → R5 before R7/R8 if corrected attempt also fails"
+    evaluation_method: human_review
+    notes: Requires reviewing whether escalation ladder is respected
+
+  - number: 7
+    description: No plan laundering — failed step visible in final validation output
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "fail|incorrect|missing.*password|password.*missing"
+        regex: true

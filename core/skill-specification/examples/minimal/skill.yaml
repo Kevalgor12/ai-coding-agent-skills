@@ -1,0 +1,58 @@
+# ILLUSTRATIVE EXAMPLE — demonstrates the MINIMAL valid skill.yaml.
+# This is NOT an authored library skill; content is abbreviated to show the
+# smallest set of fields that passes the validator (spec §4.6 "always required").
+# The real code-commenting skill (SK-CONV-002) is defined in the taxonomy but
+# not authored yet.
+
+id: SK-CONV-002
+slug: code-commenting
+name: Code commenting
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 2
+domain: CONV
+
+purpose: Write useful code comments and prevent comment noise.
+scope: Comment content and placement in source the agent writes or edits.
+description: >-
+  Write and review in-code comments. Use when writing or editing source code, or
+  reviewing it for comment quality. Requires the "why" (constraints, invariants,
+  workarounds); prevents step-narration, AI signatures, decorative bars, and
+  comments that restate obvious code. Not for prose docs (use technical-documentation).
+
+activation_conditions:
+  - Writing or substantially editing source code
+  - Reviewing code specifically for comment quality
+non_activation_conditions:
+  - Authoring prose documentation, READMEs, or markdown (route to SK-CONV-006)
+  - A file whose established style legitimately uses banner conventions
+activation_mode: auto
+
+inputs:
+  - name: source
+    description: The code being written or edited, with its existing comment style.
+    required: true
+outputs:
+  - name: commented-source
+    kind: edit
+    description: Source with useful comments added and noise removed.
+  - name: comment-findings
+    kind: analysis
+    description: Review findings flagging comment noise (review mode).
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: engineering-convention   # a practice skill; no external API surface
+last_verified: "2026-09-09"
+
+failure_handling:
+  - If the file's existing style is unclear, match the nearest sibling file rather than imposing a new style.
+verification:
+  - No added comment merely restates the adjacent code.
+  - No step-narration, AI-signature, or decorative comment is introduced.
+evaluation_criteria:
+  - Given code with a non-obvious constraint, produces a "why" comment.
+  - Given obvious code, produces no restating comment.
+  - Flags/removes step-narration, AI signatures, decorative bars, and obvious-restatement in a review fixture.

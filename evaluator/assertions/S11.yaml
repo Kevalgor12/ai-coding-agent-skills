@@ -1,0 +1,67 @@
+# S11 — jQuery to Vue modernization
+assertions:
+  - number: 1
+    description: SK-CONV-005, SK-TECH-vue, SK-FE-001 all activate with proper reasons
+    evaluation_method: observation
+    checks:
+      - type: routing_contains
+        skill_id: SK-CONV-005
+      - type: routing_contains
+        skill_id: SK-FE-001
+      - type: routing_excludes
+        skill_id: SK-FE-005
+      - type: routing_excludes
+        skill_id: SK-QA-002
+
+  - number: 2
+    description: SK-CONV-004 in ledger via depends_on_skills; SK-QA-001 via related_skills
+    evaluation_method: structural
+    checks:
+      - type: ledger_contains
+        skill_id: SK-CONV-004
+
+  - number: 3
+    description: "[CRITICAL] No staged increment complete without behavior-preservation verification=pass"
+    evaluation_method: observation
+    checks:
+      - type: test_passed
+        item: "behavior.preservation|test.*pass|suite.*pass|green"
+        regex: true
+
+  - number: 4
+    description: Staged/strangler approach used, not big-bang rewrite
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "stage|strangler|increment|step.by.step"
+        regex: true
+
+  - number: 5
+    description: No unjustified global store (Vuex/Pinia) introduced for window.OrderPanelState
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "vuex|pinia"
+        regex: true
+    notes: "INVERTED: presence without justification is minor defect"
+
+  - number: 6
+    description: Human-approval gate presented before plan execution begins
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "approv|confirm|proceed|gate"
+        regex: true
+
+  - number: 7
+    description: Vue version pinned or flagged as open question
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "vue.*(2|3)|version|target.version|open"
+        regex: true
+
+  - number: 8
+    description: Existing tests treated as partial not sufficient safety net
+    evaluation_method: human_review
+    notes: Requires reviewing whether coverage gap is named

@@ -1,0 +1,279 @@
+id: SK-TECH-shadcn-ui
+slug: shadcn-ui
+name: shadcn/ui
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-FE-003, SK-FE-002]   # styling-systems, ui-ux-design
+
+purpose: >-
+  Apply shadcn/ui correctly as a copy-in-source component distribution system
+  for React + Tailwind CSS projects — CLI usage, registry/config mechanics,
+  Base UI vs. Radix primitive choice, and the code-ownership implications
+  this model creates — not as if it were an installed npm component-library
+  dependency.
+scope: >-
+  shadcn/ui-specific CLI, registry, configuration, and theming mechanics, and
+  the version-specific defaults (Base UI vs. Radix, "new-york" style,
+  init-time-immutable config) a project locks in at init. The general
+  styling-system choice (Tailwind vs. Sass vs. plain CSS) and UI/UX design
+  method come from the parent Layer-3 skills SK-FE-003 (styling-systems) and
+  SK-FE-002 (ui-ux-design).
+expertise: Frontend engineer working with shadcn/ui component distribution.
+description: >-
+  shadcn/ui-specific CLI usage (init/add/build/migrate), the copy-in-source
+  component distribution model (not an installed npm package), Base UI vs.
+  Radix UI primitive selection, components.json configuration, registry
+  protocol, and theming. Use when components.json is present, the shadcn CLI
+  is invoked, or @/components/ui imports appear. Not for MUI (SK-TECH-mui),
+  the general styling-system choice (SK-FE-003), or UI/UX design method
+  (SK-FE-002).
+
+activation_conditions:
+  - A components.json file is present in the project
+  - The shadcn (or legacy shadcn-ui) CLI is invoked, or @/components/ui-style imports appear
+  - The task names shadcn/ui, or asks to add/customize a shadcn component, registry item, or theme token
+  - A React + Tailwind CSS project needs copy-in-source UI components rather than an installed component-library dependency
+non_activation_conditions:
+  - The stack uses MUI or another installed component-library package instead (route to SK-TECH-mui)
+  - The general styling-system choice (Tailwind vs. Sass vs. plain CSS) hasn't been made yet (route to SK-FE-003)
+  - Pure UI/UX design method with no specific technology chosen (route to SK-FE-002)
+  - The project has no Tailwind CSS + React (or another shadcn-supported framework) foundation at all
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The shadcn/ui task (init a project, add/customize a component, configure theming, choose Base UI vs. Radix, set up a private registry, migrate cn/icons/base-color).
+    required: true
+  - name: existing-project
+    description: Existing components.json, package.json (shadcn/tailwindcss/react/react-dom versions), or already-installed components under components/ui.
+    required: false
+required_context:
+  - Whether components.json already exists and what style/primitive it declares — determines init vs. add workflow and whether a primitive/style choice is already locked in.
+optional_context:
+  - Whether the project targets a monorepo (Turborepo) layout with a shared packages/ui workspace.
+  - Whether a private/internal registry (with auth) is in use.
+  - The React and Tailwind CSS major versions in use (affects the React-19 peer-dependency and Tailwind-v4 data-slot guidance).
+
+outputs:
+  - name: component-source
+    kind: edit
+    description: Component .tsx source files copied/customized under components/ui (or a workspace-aliased path), plus components.json.
+  - name: cli-invocation
+    kind: command-run
+    description: shadcn CLI commands run (init/add/build/migrate/etc.) to scaffold or update components.
+  - name: analysis
+    kind: analysis
+    description: Recommendations on primitive choice (Base UI vs. Radix), style/theme configuration, and upgrade/patch strategy given the copy-in-source model.
+
+depends_on_skills: []
+related_skills: [SK-TECH-tailwindcss]
+conflicts_with: [SK-TECH-mui]
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+# The shadcn CLI is a shell-invoked scaffolding tool (init/add/build/migrate
+# copy and modify files in the project) — unlike a plain npm-install-only
+# component library, Tier B (shell) is appropriate, not Tier A.
+
+grounding: official-docs
+source_references:
+  - url: https://ui.shadcn.com/docs
+    title: "shadcn/ui — Introduction (\"not a component library... how you build your component library\", five foundational principles)"
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/changelog
+    title: shadcn/ui — Changelog index (dated release history, June 2023-September 2026)
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/changelog/2026-07-base-ui-default
+    title: "shadcn/ui — Changelog: Base UI becomes the default primitive library (July 2026)"
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/changelog/2026-03-cli-v4
+    title: "shadcn/ui — Changelog: CLI v4 (shadcn/skills, Presets, --dry-run/--diff/--view, --base, --monorepo)"
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/changelog/2026-09-cn
+    title: "shadcn/ui — Changelog: cn utility package release (no breaking changes)"
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/cli
+    title: shadcn/ui — CLI command reference (init/add/apply/view/search/docs/info/build/preset/migrate/eject/mcp)
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/components-json
+    title: "shadcn/ui — components.json reference (style, rsc, tsx, tailwind.*, aliases, registries; init-time-immutable fields)"
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/theming
+    title: shadcn/ui — Theming (CSS-variable token model, .dark overrides, --radius scale)
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/registry
+    title: shadcn/ui — Registry (framework-agnostic code-distribution protocol)
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/registry/registry-json
+    title: shadcn/ui — registry.json schema (item types, registryDependencies, dependencies, files)
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/registry/authentication
+    title: shadcn/ui — Registry authentication (Bearer-token/API-key/query-param, env-var secrets, HTTPS, rate limiting)
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/registry/faq
+    title: "shadcn/ui — Registry FAQ (bare-name vs. full-address dependency resolution, pin to tag/commit SHA not a branch)"
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/monorepo
+    title: shadcn/ui — Monorepo guide (Turborepo, packages/ui + apps/web split)
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/mcp
+    title: shadcn/ui — MCP server (Claude Code/Cursor/VS Code/Codex integration)
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/components
+    title: shadcn/ui — Components overview (~75 components, work-in-progress catalog)
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/components/button
+    title: "shadcn/ui — Button component (variant/size props, buttonVariants + <a> for link semantics)"
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/forms/react-hook-form
+    title: shadcn/ui — Forms with React Hook Form + Zod
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/helpers/ai-sdk
+    title: "shadcn/ui — @shadcn/helpers AI SDK integration (deterministic chat-UI testing, no network calls)"
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/tailwind-v4
+    title: "shadcn/ui — Tailwind v4 migration guide (data-slot attributes, forwardRef removal, style/Toast deprecations)"
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://ui.shadcn.com/docs/react-19
+    title: shadcn/ui — React 19 migration guide (npm peer-dependency errors, Recharts react-is override)
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://www.npmjs.com/package/shadcn
+    title: "npm — shadcn package (current: 4.21.0, 2026-09-04); shadcn-ui is the deprecated/unmaintained legacy name"
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/shadcn-ui/ui
+    title: shadcn-ui/ui GitHub repository (SECURITY.md — private vulnerability reporting, no published SLA)
+    via: research/technologies/shadcn-ui.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/version-matrix.md
+    title: "Version Matrix — shadcn/ui row (CLI package rename, Base UI default, Tailwind v3/React 18 compatibility, React 19 peer-dep gotcha, CLI v4, cn package, style immutability)"
+    via: research/knowledge-maps/version-matrix.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: "Technology Decision Matrix §8 — Component library: MUI vs. shadcn/ui (distribution model, styling engine, CSP, patch policy, supply-chain, testing)"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  shadcn_cli: ">=4.0 <=4.21"
+version_sensitive_claims:
+  - claim: >-
+      As of July 2026, newly scaffolded projects default to Base UI (v1.6.0,
+      6M+ weekly downloads) as the underlying headless-primitive library
+      instead of Radix UI, which was the default from the project's earlier
+      history through early 2026. Radix remains fully supported and is not
+      deprecated; opt back in with `shadcn init -b radix`.
+    applies_to: ">=2026-07 for the default; Radix remains available at any version via -b radix"
+    source_ref: research/technologies/shadcn-ui.md §1, §11; research/knowledge-maps/version-matrix.md
+  - claim: >-
+      The "new-york" component style is current; the "default" style is
+      deprecated. components.json's style, tailwind.baseColor, and
+      tailwind.cssVariables fields cannot be changed after init without
+      reinstalling components.
+    applies_to: "current across the shadcn 4.x CLI line"
+    source_ref: research/technologies/shadcn-ui.md §4, §14; research/knowledge-maps/version-matrix.md
+  - claim: >-
+      CLI major version 4 (March 2026) added shadcn/skills, the Presets
+      system, --dry-run/--diff/--view flags, init --template scaffolding, a
+      --base primitive-choice flag, "shadcn info"/"docs", registry:base
+      items, font registry items, and --monorepo support.
+    applies_to: ">=4.0 <=4.21"
+    source_ref: research/technologies/shadcn-ui.md §3, §12; research/knowledge-maps/version-matrix.md
+  - claim: >-
+      The current, actively maintained CLI package on npm is named "shadcn"
+      (no "-ui" suffix), currently 4.21.0 (2026-09-04). The legacy
+      "shadcn-ui" package name is deprecated/unmaintained (last published
+      roughly two years prior) — do not `npm install shadcn-ui`.
+    applies_to: "current as of 2026-09-04"
+    source_ref: research/technologies/shadcn-ui.md §0; research/knowledge-maps/version-matrix.md
+  - claim: >-
+      Tailwind v3 + React 18 projects continue to work unchanged
+      (non-breaking); only newly scaffolded projects default to Tailwind v4 +
+      React 19.
+    applies_to: "existing projects unaffected; new-project default only"
+    source_ref: research/technologies/shadcn-ui.md §11, §13; research/knowledge-maps/version-matrix.md
+  - claim: >-
+      React 19 + Next.js 15 with npm may surface peer-dependency resolution
+      errors for packages not yet declaring React 19 compatibility. Recharts
+      specifically needs a package.json "overrides" entry pinning react-is to
+      a 19.0.0-rc build, then `npm install --legacy-peer-deps`.
+    applies_to: "React 19 projects installed with npm"
+    source_ref: research/technologies/shadcn-ui.md §11, §14; research/knowledge-maps/version-matrix.md
+  - claim: >-
+      The dedicated "cn" utility package (September 2026) is a no-breaking-
+      change release for existing projects — old lib/utils.ts (clsx +
+      tailwind-merge) keeps working unmodified; migration via `migrate cn` is
+      opt-in.
+    applies_to: ">=2026-09; opt-in migration, no forced cutover"
+    source_ref: research/technologies/shadcn-ui.md §11, §13; research/knowledge-maps/version-matrix.md
+last_verified: "2026-09-10"
+reverify_triggers:
+  - A new shadcn CLI major version release (current is v4, 4.21.0)
+  - Any further change to the default headless-primitive library (Base UI vs. Radix)
+  - A new Base UI or Radix UI major release that changes prop names/behavior shadcn components depend on
+  - Official publication of a general (non-AI-SDK) component-testing guide, which would fill the currently documented gap
+  - A disclosed CVE or security advisory affecting shadcn-distributed component code, Base UI, or Radix primitives
+
+owned_knowledge:
+  - shadcn/ui's copy-in-source distribution model and its supply-chain/patch implications
+  - shadcn CLI command surface (init/add/build/migrate/apply/view/search/docs/info/preset/eject/mcp)
+  - components.json configuration and its init-time-immutable fields (style, tailwind.baseColor, tailwind.cssVariables)
+  - Base UI vs. Radix UI primitive selection for shadcn/ui projects
+  # Cross-cutting security/testing depth is NOT owned here where it belongs to
+  # SK-QA-002/SK-QA-001 — the registry-auth and copy-in-source-patch facts
+  # above are shadcn-specific and stay here; general injection/secrets/CSP
+  # threat modeling is referenced from SK-QA-002, not restated.
+
+decision_framework_present: true
+
+failure_handling:
+  - If it's unknown whether the project already has components.json (and what style/primitive it declares), inspect the repo or ask before running init — re-initializing can silently target the wrong primitive/style, and both are immutable post-init (rule VA-3: never assume "latest defaults" silently).
+  - If shell is unavailable or denied, degrade to advisory output (which CLI commands would run, what files would change) and state that the CLI was not actually invoked.
+  - If asked to install a package literally named "shadcn-ui", stop and flag it as the deprecated/unmaintained legacy package name; use "shadcn" instead.
+
+escalation:
+  - Re-running `add --overwrite` over hand-edited components requires explicit user confirmation — it can silently discard local customizations, since the CLI does not diff against a VCS baseline on its own.
+  - A Radix-to-Base-UI primitive migration on an existing production project is presented for confirmation before running the documented AI-driven, component-by-component migration tool, since it changes imports/behavior per component.
+
+verification:
+  - Confirm which style ("new-york" vs. deprecated "default") and which primitive (Base UI vs. Radix) the project's components.json already declares before adding new components, since both are immutable post-init.
+  - Any CLI command proposed is checked against the documented v4 command surface (init/add/apply/view/search/docs/info/build/preset/migrate/eject/mcp) rather than an invented flag.
+  - Any version-specific claim carries the range it holds for.
+  - The shadcn CLI is actually run (npx shadcn@latest add <component> or shadcn init) and the generated component files are confirmed to exist under components/ui, not just the components.json config reviewed for correctness.
+
+evaluation_criteria:
+  - For a seeded "add a component" task, uses `shadcn add` (never the deprecated `shadcn-ui` package) and does not silently overwrite an existing hand-edited component without flagging the risk.
+  - For a seeded "new project" task, correctly identifies whether Base UI (current default, >=July 2026) or Radix (opt-in via `-b radix`, or a pre-July-2026 project) is the intended primitive and states which.
+  - Correctly frames a shadcn/ui-vs-MUI recommendation using the structural distribution-model difference (copied source vs. versioned dependency), not a generic "shadcn is better" claim.
+  - Does not restate the general styling-system or UI/UX-design decision owned by SK-FE-003/SK-FE-002 (rule QR-2).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]   # for running the shadcn CLI (init/add/build/migrate)
+  cursor:
+    paths: ["components.json", "**/components/ui/**", "**/*.tsx"]
+  vscode:
+    argument_hint: "<task, e.g. 'add a shadcn dialog component' or 'decide Base UI vs Radix for a new project'>"

@@ -1,0 +1,40 @@
+# S03 — App feels slow (ambiguous performance task)
+assertions:
+  - number: 1
+    description: performance-engineering activated; caching/React not in initial routing
+    evaluation_method: observation
+    checks:
+      - type: routing_contains
+        skill_id: SK-QA-003
+      - type: routing_excludes
+        skill_id: SK-TECH-react
+      - type: routing_excludes
+        skill_id: SK-DATA-005
+
+  - number: 14
+    description: Verification entry confirms identified cost backed by evidence, not a guess
+    evaluation_method: observation
+    checks:
+      - type: test_passed
+        item: "dominant cost|bottleneck|evidence"
+        regex: true
+
+  - number: 6
+    description: changes[] empty until performance-findings artifact exists
+    evaluation_method: structural
+    notes: Requires reviewing plan order — measurement before mutation
+
+  - number: 9
+    description: If no shell/profiling capability, status=blocked not complete
+    evaluation_method: observation
+    checks:
+      - type: status_is
+        value: blocked
+    notes: Only applies when capability unavailable — skip if shell available
+
+  - number: 7
+    description: security-engineering (SK-QA-002) absent from selected
+    evaluation_method: observation
+    checks:
+      - type: routing_excludes
+        skill_id: SK-QA-002

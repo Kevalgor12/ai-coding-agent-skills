@@ -1,0 +1,55 @@
+# S02 — Commit message convention
+assertions:
+  - number: 1
+    description: SK-CONV-001 selected; SK-CONV-008 absent
+    evaluation_method: observation
+    checks:
+      - type: routing_contains
+        skill_id: SK-CONV-001
+      - type: routing_excludes
+        skill_id: SK-CONV-008
+
+  - number: 2
+    description: Other must-not-activate skills absent
+    evaluation_method: observation
+    checks:
+      - type: routing_excludes
+        skill_id: SK-CONV-007
+      - type: routing_excludes
+        skill_id: SK-CONV-006
+      - type: routing_excludes
+        skill_id: SK-QA-001
+      - type: routing_excludes
+        skill_id: SK-DISC-001
+
+  - number: 3
+    description: Proposed message conforms to detected git-log convention, not generic default
+    evaluation_method: human_review
+    notes: Requires reviewing the proposed commit message against git log excerpt
+
+  - number: 4
+    description: Output is fix type with correct scope and imperative summary, no trailing period or fabricated ID
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "fix\\(.*\\):"
+        regex: true
+
+  - number: 5
+    description: Does not fall back to generic prefix set without scope
+    evaluation_method: human_review
+    notes: Requires reviewing whether the skill used its own default vs. detected convention
+
+  - number: 6
+    description: No spurious clarifying question for unambiguous bugfix
+    evaluation_method: observation
+    checks:
+      - type: no_escalation
+
+  - number: 7
+    description: If commit made, capability-adapter barrier + changes entry present
+    evaluation_method: structural
+    checks:
+      - type: ledger_contains
+        skill_id: SK-CONV-001
+        status: complete

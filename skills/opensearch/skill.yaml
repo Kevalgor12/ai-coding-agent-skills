@@ -1,0 +1,243 @@
+id: SK-TECH-opensearch
+slug: opensearch
+name: OpenSearch
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-DATA-005, SK-QA-004]   # search-integration (engine-selection method); observability (log-analytics use case, research gap)
+
+purpose: >-
+  Apply OpenSearch correctly and version-appropriately: cluster/node
+  architecture, index/mapping/analyzer design, the security plugin's
+  authentication and access-control surface, and shard/JVM/thread-pool
+  performance tuning.
+scope: >-
+  OpenSearch-specific implementation depth beyond the generic search-engine
+  selection method (SK-DATA-005, already covers DB-native-FTS-vs-dedicated-
+  engine-vs-vector decision and the Elasticsearch-research-gap caveat — not
+  repeated here) and beyond general observability instrumentation (SK-QA-004).
+  Covers cluster
+  topology, indices/mappings/analyzers, the security plugin, shard-sizing/
+  JVM/thread-pool/circuit-breaker tuning, testing, and deployment.
+expertise: OpenSearch search/cluster engineer.
+description: >-
+  OpenSearch cluster architecture, index/mapping/analyzer design and
+  mapping-explosion avoidance, the security plugin's auth surface (basic/
+  JWT/OIDC/SAML/LDAP/Kerberos/client-cert) with RBAC/document-/field-level
+  security, transport-vs-HTTP TLS and demo-cert replacement, and shard/JVM/
+  thread-pool/circuit-breaker tuning. Use when the stack runs OpenSearch.
+  Not for choosing a search engine (search-integration) or general
+  observability instrumentation (a research gap in this library).
+
+activation_conditions:
+  - An OpenSearch client library, connection config, or Docker/Helm/Kubernetes-Operator deployment referencing OpenSearch is present
+  - The task names OpenSearch or an OpenSearch-specific feature (k-NN, cluster manager node, security plugin, Data Prepper, OpenSearch Dashboards, ISM, Query DSL)
+  - An existing OpenSearch cluster's mapping, security-plugin, or shard/performance configuration needs review
+  - The search-integration skill has already selected OpenSearch as the engine and implementation-level depth is now needed
+non_activation_conditions:
+  - The search-engine choice itself is still open (route to SK-DATA-005 search-integration for the selection decision)
+  - The stack uses Elasticsearch and the task expects Elasticsearch-specific guidance — this library has no first-party Elasticsearch research; do not answer as if OpenSearch and Elasticsearch are interchangeable
+  - The task is general application logging/metrics/tracing instrumentation unrelated to OpenSearch's own log-analytics role (route to SK-QA-004, a documented research gap — do not fabricate observability guidance here)
+  - A simple full-text need already covered by a database already in use (route to SK-TECH-postgresql or SK-TECH-redis)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The OpenSearch task (cluster/node setup, index/mapping/analyzer design, security-plugin config, shard/JVM/thread-pool tuning, query design, upgrade).
+    required: true
+  - name: cluster-and-version
+    description: The existing cluster's OpenSearch version, node topology, and current mappings/security config, if not greenfield.
+    required: false
+required_context:
+  - The OpenSearch major.minor version in use — needed for version-correct guidance (e.g. JDK/Lucene requirements changed at 3.0).
+optional_context:
+  - Expected document/query volume and latency requirements (drives shard-sizing decisions).
+  - The deployment's existing identity infrastructure (LDAP/AD, SAML/OIDC IdP, or none) — drives the authentication-method decision.
+
+outputs:
+  - name: index-mapping-or-security-config
+    kind: edit
+    description: Index/mapping/analyzer JSON, or security-plugin role/TLS/auth-backend configuration.
+  - name: cluster-or-shard-tuning
+    kind: edit
+    description: Thread-pool, circuit-breaker/admission-control, or shard-sizing settings addressing an observed workload.
+  - name: analysis
+    kind: analysis
+    description: Recommendations (auth method, shard strategy, benchmark-before-rollout) with rationale and the OpenSearch version they apply to.
+
+depends_on_skills: []
+related_skills: [SK-TECH-postgresql, SK-TECH-redis]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+# Proposing mapping/security/tuning config is advisory (file-only); running
+# opensearch-testcontainers, OpenSearch Benchmark, or cluster API calls needs
+# shell. No capability_fallbacks block required (Tier B, not C) — degrades to
+# advisory per failure_handling if shell is unavailable.
+
+grounding: official-docs
+source_references:
+  - url: https://docs.opensearch.org/latest/getting-started/concepts/
+    title: OpenSearch — Core Concepts (cluster, node, index, shard, replica, document, mapping)
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://docs.opensearch.org/latest/about/
+    title: OpenSearch — About (component suite; OpenSearch, Dashboards, Data Prepper, clients)
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://docs.opensearch.org/latest/tuning-your-cluster/
+    title: OpenSearch — Tuning Your Cluster (node roles, thread pools, index/search workload separation)
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://docs.opensearch.org/latest/api-reference/
+    title: OpenSearch — API Reference (REST API groups)
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://docs.opensearch.org/latest/install-and-configure/configuring-opensearch/
+    title: OpenSearch — Configuration and System Settings
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://raw.githubusercontent.com/opensearch-project/documentation-website/main/_security/configuration/index.md
+    title: OpenSearch — Security Plugin Configuration (TLS cert paths, permissions, securityadmin)
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://docs.opensearch.org/latest/security/
+    title: OpenSearch — Security (authentication backends, RBAC, TLS, audit logging)
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://opensearch.org/blog/optimize-opensearch-index-shard-size/
+    title: OpenSearch Blog — Optimize OpenSearch Index/Shard Size
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://docs.opensearch.org/latest/mappings/mapping-explosion/
+    title: OpenSearch — Avoiding Mapping Explosion
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://docs.opensearch.org/latest/mappings/supported-field-types/flat-object/
+    title: OpenSearch — Flat Object Field Type
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://docs.opensearch.org/latest/mappings/
+    title: 'OpenSearch — Mappings (dynamic mapping modes, "dynamic": "strict")'
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://docs.opensearch.org/latest/tools/benchmark/
+    title: OpenSearch — OpenSearch Benchmark
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/opensearch-project/opensearch-testcontainers
+    title: opensearch-project/opensearch-testcontainers (official Testcontainers module for JUnit 4/5)
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://docs.opensearch.org/latest/install-and-configure/install-opensearch/index/
+    title: OpenSearch — Install OpenSearch (Docker, Helm, tarball, RPM, deb, Windows, Kubernetes Operator, Ansible)
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://docs.opensearch.org/latest/install-and-configure/install-opensearch/docker/
+    title: OpenSearch — Install via Docker (vm.max_map_count, Docker Desktop memory)
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://docs.opensearch.org/latest/migrate-or-upgrade/
+    title: OpenSearch — Migrate or Upgrade (rolling upgrades, snapshot/restore, Migration Assistant, breaking changes)
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/opensearch-project/OpenSearch/issues/3351
+    title: "OpenSearch — [META] Breaking changes in 3.0 (JDK 21, Lucene 10, JSM disabled)"
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://opensearch.org/releases/
+    title: OpenSearch — Releases (current stable, RC windows, cadence, maintenance policy)
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://raw.githubusercontent.com/opensearch-project/documentation-website/main/_about/version-history.md
+    title: OpenSearch — Version History
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: https://docs.opensearch.org/latest/troubleshoot/
+    title: OpenSearch — Troubleshooting (Dev Tools, Query Profiler, Grok Debugger, audit logs)
+    via: research/technologies/opensearch.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/version-matrix.md
+    title: "Version Matrix — OpenSearch row (JDK/Lucene floor, current stable, support lifecycle, commitment)"
+    via: research/knowledge-maps/version-matrix.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  opensearch: ">=2.19 <=3.8 (1.x EOL; 2.x maintenance-only; 3.x actively developed)"
+version_sensitive_claims:
+  - claim: >-
+      Three-tier support lifecycle: 1.x reached end-of-life (maintenance
+      ended 2025-05-06) and is unsupported; 2.x is in maintenance-only mode
+      until 4.0 reaches GA, with 2.19.x patches scheduled through December
+      2026 (latest patch as of the research date: 2.19.6, 2026-07-02); 3.x is
+      the actively-developed major line, currently at 3.8.0 (2026-08-04).
+    applies_to: "as of research date 2026-09-09/10"
+    source_ref: "research/knowledge-maps/version-matrix.md; research/technologies/opensearch.md §12 (opensearch.org/releases)"
+  - claim: >-
+      Support commitment: versions stay under maintenance until the next
+      major enters maintenance, or 1 year passes, whichever is longer;
+      medium-or-higher-severity vulnerabilities are patched within 60 days of
+      public disclosure in actively-maintained versions.
+    applies_to: "all actively-maintained versions"
+    source_ref: "research/knowledge-maps/version-matrix.md; research/technologies/opensearch.md §12 (opensearch.org/releases)"
+  - claim: >-
+      Custom (non-demo) TLS certificates must be stored with private keys at
+      file mode 600 and public certificates at 644; replacing the bundled
+      demo certificates with trusted ones before production is documented as
+      "critical."
+    applies_to: "all covered versions (>=2.19 <=3.8) — not version-gated, a standing production requirement"
+    source_ref: "research/technologies/opensearch.md §7, §17 (security configuration doc)"
+  - claim: >-
+      OpenSearch 3.0 raised the minimum supported Java runtime to JDK 21
+      (a hard break from the 1.x/2.x baseline), upgraded the search core to
+      Apache Lucene 10, permanently disabled the Java Security Manager, and
+      moved the transport layer to Apache HttpClient 5.x.
+    applies_to: ">=3.0"
+    source_ref: "research/technologies/opensearch.md §2, §12, §13 (GitHub issue #3351)"
+last_verified: "2026-09-10"
+reverify_triggers:
+  - 4.0 GA release (changes the 2.x maintenance-until date)
+  - A new OpenSearch minor/major release changing the current-stable version or RC schedule
+  - Any change to the documented breaking-changes list for a version pair relevant to an upgrade
+
+owned_knowledge:
+  - OpenSearch cluster/node-role architecture (cluster manager, data, ingest, coordinating nodes) and shard/replica mechanics
+  - OpenSearch index/mapping/analyzer design and mapping-explosion avoidance
+  - OpenSearch security-plugin authentication/access-control surface and transport-vs-HTTP TLS configuration
+  - OpenSearch shard-sizing, JVM heap, thread-pool, and circuit-breaker tuning parameters
+  # Cross-cutting security/performance/testing method is NOT owned here — referenced, not restated.
+  # Search-engine selection and index-sync-drift risk are owned by SK-DATA-005, referenced not repeated.
+
+decision_framework_present: true
+
+failure_handling:
+  - If the OpenSearch major.minor version cannot be determined, ask for it or explicitly state the version the guidance assumes — never assume "latest" silently (rule VA-3).
+  - If shell is unavailable or denied, degrade to advisory mapping/security/tuning config output and state that no cluster/testcontainer command was actually run.
+  - If the request is really about choosing a search engine (not yet decided on OpenSearch), route to SK-DATA-005 rather than assuming OpenSearch.
+  - If the request is Elasticsearch-specific, state plainly that this library has no first-party Elasticsearch research rather than answering as if the two engines are interchangeable.
+escalation:
+  - Replacing a production cluster's TLS certificates or disabling the security plugin (`plugins.security.disabled: true`) is flagged and confirmed before applying — both are trust-boundary changes.
+  - A shard-count/topology change on an existing populated index (requires reindexing) is presented with trade-offs for explicit confirmation, not applied unilaterally.
+verification:
+  - The proposed shard size/count matches the workload shape (10-30GB for search-latency-sensitive, 30-50GB for write-heavy/analytics), not a default guess.
+  - Every version-specific claim is tagged with the OpenSearch range it holds for.
+  - A production-bound security config does not leave demo TLS certificates or `plugins.security.disabled: true` in place.
+  - A mapping/query change proposed for production is checked against a benchmark or explicit rationale for skipping one.
+  - When a benchmark is the chosen path, the query is actually run against the current mapping/index and its timing/relevance measured, not estimated from the mapping diff alone.
+evaluation_criteria:
+  - For a seeded workload description (search-latency-sensitive vs. write-heavy), proposes a shard-sizing strategy in the documented 10-30GB / 30-50GB ranges with rationale, not a default.
+  - For a seeded identity-infrastructure scenario (existing LDAP/AD vs. SAML/OIDC IdP vs. none), recommends a defensible authentication method from the security plugin's documented backends.
+  - Flags a production deployment still on demo TLS certificates as a finding requiring remediation, citing the "critical to replace" guidance.
+  - Any claim about a 3.0-gated feature (JDK 21, Lucene 10) is correctly scoped to ">=3.0" and not presented as universally true.
+  - Does not restate the search-engine-selection decision framework or the Elasticsearch-research-gap caveat owned by SK-DATA-005 (rule QR-2).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]   # for running opensearch-testcontainers/OpenSearch Benchmark/cluster API calls; abstract shell -> CC tools
+  cursor:
+    paths: ["**/*mapping*.json", "**/opensearch*.yml", "**/docker-compose*.yml"]
+  vscode:
+    argument_hint: "<task, e.g. 'design an index mapping' or 'size shards for this workload'>"

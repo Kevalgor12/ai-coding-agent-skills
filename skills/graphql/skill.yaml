@@ -1,0 +1,179 @@
+id: SK-TECH-graphql
+slug: graphql
+name: GraphQL
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-BE-003]   # graphql-api-design
+# Note: the parent skill (SK-BE-003) owns the design-level decisions (type
+# modeling, N+1-safe resolver structure, pagination, field-level auth, schema
+# evolution). This skill specializes it with graphql-js implementation
+# mechanics and version-correct API detail.
+
+purpose: >-
+  Implement GraphQL APIs correctly against the graphql-js reference
+  implementation and the GraphQL specification — SDL schema authoring,
+  resolver chains, DataLoader N+1 prevention, subscriptions, schema
+  evolution, typed codegen, and production hardening.
+scope: >-
+  graphql-js-specific implementation mechanics: Schema Definition Language
+  (SDL) types, resolver chains and context threading, DataLoader-based N+1
+  prevention, authorization via context/business-logic layer, subscriptions
+  over WebSocket, additive schema evolution via @deprecated, GraphQL Code
+  Generator for typed clients, persisted queries for caching, and production
+  hardening (depth/cost limits, error masking, introspection posture). The
+  REST-vs-GraphQL paradigm decision and design-level concerns (type modeling,
+  pagination shape, field-level auth design) are owned by the parent skill
+  graphql-api-design (SK-BE-003). Federation/gateway architecture and
+  Apollo-specific API details that are not in this library's research
+  (research/technologies/graphql.md) require verification against Apollo's
+  official docs — this skill does not assert Apollo-specific claims beyond
+  what appears in the cited research.
+expertise: Senior TypeScript/Node.js engineer specializing in GraphQL API implementation with graphql-js.
+description: >-
+  Implement GraphQL schemas and resolvers correctly — SDL types, resolver
+  chains, N+1 prevention via DataLoader, subscriptions over WebSocket, schema
+  evolution, typed codegen via GraphQL Code Generator, persisted queries, and
+  production hardening (depth/cost limits, error masking). Use when the tech
+  is GraphQL and the task is implementation, not for the REST-vs-GraphQL
+  choice (graphql-api-design).
+
+activation_conditions:
+  - A .graphql or .gql schema file, or SDL type definitions in a JS/TS module, is present in the project
+  - The graphql npm package, Apollo Server, or a GraphQL middleware package is a project dependency
+  - The task involves writing or modifying GraphQL resolvers, schema types, subscriptions, or DataLoader batch functions
+  - A GraphQL Code Generator config (codegen.ts or codegen.yml) is present or being set up
+non_activation_conditions:
+  - The REST-vs-GraphQL paradigm choice is still open (route to graphql-api-design, SK-BE-003)
+  - A GraphQL schema design question about type modeling, pagination shape, or field-level authorization design with no implementation detail involved (route to graphql-api-design, SK-BE-003)
+  - The task is non-GraphQL API work (route to api-design, SK-BE-002)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The GraphQL implementation task (schema authoring, resolver writing, subscription setup, codegen config, production hardening, or a v16-to-v17 upgrade).
+    required: true
+  - name: schema-and-resolvers
+    description: Existing .graphql SDL files, resolver modules, and the graphql-js (or Apollo Server) version pinned in package.json.
+    required: false
+required_context:
+  - The graphql-js (or Apollo Server) version in use — resolver API shapes, execute() return type, GraphQLError constructor, and development-mode configuration differ materially between v16 and v17.
+optional_context:
+  - Whether subscriptions are needed (WebSocket transport adds per-connection state and horizontal-scaling constraints).
+  - The client technology (plain HTTP, Apollo Client, Relay) — affects schema conventions such as the Relay cursor-pagination shape and Node interface.
+  - Whether GraphQL Code Generator is in use or planned.
+
+outputs:
+  - name: schema-or-resolver-code
+    kind: edit
+    description: SDL type definitions and/or resolver implementations with DataLoader batch functions, version-correct for the pinned graphql-js release.
+  - name: codegen-config
+    kind: edit
+    description: GraphQL Code Generator configuration producing typed TypeScript operation types or client hooks, where applicable.
+  - name: analysis
+    kind: analysis
+    description: Production-readiness assessment covering depth/cost limits, error masking, introspection posture, and caching strategy, with rationale.
+
+depends_on_skills: []
+# Policy: depends_on_skills is reserved for hard, blocking sub-step composition.
+# The relationship to the parent (SK-BE-003) is specialization, captured by the
+# parents field. SK-BE-003 is not a blocking sub-step of this skill's execution.
+related_skills: [SK-BE-003, SK-BE-004]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+# Tier B: writing schema/resolver code is advisory; running GraphQL Code
+# Generator, schema introspection (graphql-inspector), or the graphql()
+# execution function in a test requires shell. No capability_fallbacks block
+# required (Tier B, not C) — degrades to advisory per failure_handling below.
+
+grounding: official-docs
+source_references:
+  - url: https://graphql.org/learn/
+    title: "GraphQL Learn — queries, schema, execution, best practices, security, performance, pagination, authorization, caching, subscriptions"
+    via: research/technologies/graphql.md
+    retrieved: "2026-09-09"
+  - url: https://www.graphql-js.org/docs/
+    title: "graphql-js Docs — getting started, constructing types, going to production (v17)"
+    via: research/technologies/graphql.md
+    retrieved: "2026-09-09"
+  - url: https://www.graphql-js.org/upgrade-guides/v16-v17/
+    title: "graphql-js — v16 to v17 upgrade guide (breaking changes, new APIs, Node/TS requirements)"
+    via: research/technologies/graphql.md
+    retrieved: "2026-09-09"
+  - url: https://spec.graphql.org/
+    title: "GraphQL Specification — September 2025 edition (current ratified)"
+    via: research/technologies/graphql.md
+    retrieved: "2026-09-09"
+  - url: https://graphql.org/blog/2026-06-15-introducing-graphql-js-v17/
+    title: "GraphQL Blog — Introducing graphql-js v17 (release announcement)"
+    via: research/technologies/graphql.md
+    retrieved: "2026-09-09"
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: "Technology Decision Matrix — §7 API spec tooling: OpenAPI vs. GraphQL (N+1, caching, rate limiting)"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  graphql-spec: "June 2018 (first edition with formal SDL and subscription definitions, first marked production-suitable) through September 2025 (current ratified edition)"
+  graphql-js: "16.x (legacy, still in use) and 17.x (current, released 2026-06-15 — requires Node.js 22/24/25/26+, TypeScript 4.4+)"
+
+version_sensitive_claims:
+  - claim: "graphql-js v17 requires Node.js 22, 24, 25, or 26+ and TypeScript typings target TS 4.4+."
+    applies_to: "graphql-js >=17.0.0"
+    source_ref: research/technologies/graphql.md §4, §12 (via www.graphql-js.org/upgrade-guides/v16-v17/)
+  - claim: "graphql-js v17 execute() may return synchronously or as a Promise — callers must handle both return shapes, unlike v16 which always returned a Promise."
+    applies_to: "graphql-js >=17.0.0"
+    source_ref: research/technologies/graphql.md §13 (via www.graphql-js.org/upgrade-guides/v16-v17/)
+  - claim: "graphql-js v17 removes the GraphQLError positional constructor; callers must use (message, options) object form."
+    applies_to: "graphql-js >=17.0.0"
+    source_ref: research/technologies/graphql.md §13 (via www.graphql-js.org/upgrade-guides/v16-v17/)
+  - claim: "graphql-js v17 development mode is no longer implicitly driven by NODE_ENV; it must be enabled explicitly via a package condition or enableDevelopmentMode()."
+    applies_to: "graphql-js >=17.0.0"
+    source_ref: research/technologies/graphql.md §4, §13 (via www.graphql-js.org/upgrade-guides/v16-v17/)
+  - claim: "In the GraphQL September 2025 spec, @skip/@include are disallowed on a root subscription operation's selection set; @deprecated was extended to field arguments, directive arguments, and input object fields."
+    applies_to: "GraphQL spec September 2025 edition"
+    source_ref: research/technologies/graphql.md §13 (via spec.graphql.org and github.com/graphql/graphql-spec/releases)
+last_verified: "2026-09-09"
+reverify_triggers:
+  - A new graphql-js major release (v18 or later)
+  - A new ratified GraphQL specification edition beyond September 2025
+  - An official testing guide appearing at www.graphql-js.org/docs/testing/ (currently 404 as of research date)
+  - Any change to the graphql-js Node.js minimum version requirement
+
+owned_knowledge:
+  - graphql-js SDL and programmatic schema authoring mechanics and version-correct API surface
+  - graphql-js v16-to-v17 breaking-change inventory (execute() return shape, GraphQLError constructor, development mode, removed APIs)
+  - DataLoader batching pattern as applied to graphql-js resolver context
+decision_framework_present: true
+
+failure_handling:
+  - If the graphql-js (or Apollo Server) version is unknown, ask or check package.json before giving resolver or API guidance — v17 and v16 differ materially in execute() return type, GraphQLError constructor form, and development-mode configuration.
+  - If shell is unavailable, produce advisory schema and resolver code and state explicitly that GraphQL Code Generator, schema introspection, and test execution were not run.
+  - If asked for Apollo Server or Apollo Client specifics (datasource API, response-cache directives, InMemoryCache normalization policy) that are not in this library's research (research/technologies/graphql.md covers graphql-js and the spec, not Apollo), state that gap and direct to the official Apollo documentation rather than asserting Apollo-specific API detail.
+
+escalation:
+  - Disabling introspection or adding depth/cost limits to an already-public API is a consumer-facing breaking change — surface for explicit confirmation before applying.
+  - A subscription architecture requiring horizontal scaling (clients distributed across multiple server instances) is a significant infrastructure choice — surface for explicit confirmation and route to realtime-communication (SK-BE-004) for scaling-topology guidance.
+
+verification:
+  - Run at least one representative query via the graphql-js graphql({ schema, source }) function in a test or via npx graphql-inspector introspect <endpoint> and confirm the schema validates without errors and the query returns the expected data shape — not just reviewed for SDL correctness.
+  - Any graphql-js API used (execute() return-type handling, GraphQLError constructor form, development-mode flag) matches the version line actually in use (v16 vs. v17).
+  - Nested-relationship resolvers use DataLoader-style batching (IDs collected per tick, dispatched as one batch) rather than per-item backend fetches inside the resolver body.
+
+evaluation_criteria:
+  - For a seeded schema with an N+1 resolver (per-item child fetch in a loop), identifies the pattern and replaces it with a DataLoader batch function.
+  - For a v17 project, applies the correct execute() return-type handling (both sync and async) and uses the (message, options) GraphQLError constructor, not the removed positional form.
+  - Correctly distinguishes claims backed by this library's graphql-js/spec research from Apollo-specific claims that require verification against Apollo's own documentation.
+  - Does not restate the schema design method (type modeling, pagination shape, field-level auth design) owned by graphql-api-design (SK-BE-003).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]   # for running codegen, schema introspection, and graphql-js tests; abstract shell → CC tools
+  cursor:
+    paths: ["**/*.graphql", "**/*.gql", "**/schema/**", "**/resolvers/**", "**/codegen*", "**/graphql/**"]
+  vscode:
+    argument_hint: "<task, e.g. 'add a resolver with DataLoader' or 'configure graphql-codegen for typed hooks'>"

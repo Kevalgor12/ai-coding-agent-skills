@@ -1,0 +1,218 @@
+id: SK-TECH-mysql
+slug: mysql
+name: MySQL
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-DATA-001, SK-DATA-003]   # data-modeling, database-operations
+
+purpose: >-
+  Apply MySQL correctly and version-appropriately — storage-engine choice,
+  indexing, replication topology, authentication/encryption, and safe upgrade
+  paths across MySQL's dual-track (LTS/Innovation) and now dual-numbering
+  (MAJOR.MINOR.PATCH vs. calendar YY.M.P) release model.
+scope: >-
+  MySQL-specific design and operations: pluggable storage engines, indexing
+  and EXPLAIN-driven tuning, replication/HA topology, authentication and
+  at-rest encryption, and version-gated upgrade hazards. The generic
+  schema-design method comes from the parent Layer-3 skill (data-modeling);
+  query/index tuning depth beyond MySQL-specific facts is owned by
+  database-operations.
+expertise: MySQL database engineer.
+description: >-
+  MySQL-specific storage-engine choice, indexing, replication, authentication,
+  and at-rest encryption. Use when the stack uses MySQL (mysql:// URL, mysql2/
+  Connector driver, a MySQL-targeted ORM provider, or the task names MySQL/
+  InnoDB/binlog/GTID/an LTS-to-LTS upgrade). Not for PostgreSQL/other engines,
+  generic data modeling (use data-modeling), or ORM usage mechanics (use
+  orm-integration).
+
+activation_conditions:
+  - A mysql:// connection string or a MySQL driver (mysql2, Connector/J, Connector/Python, Connector/Node.js, Connector/ODBC, libmysqlclient) is present
+  - An ORM/ODM configured with a MySQL provider/dialect is detected
+  - The task names MySQL or a MySQL-specific feature (InnoDB, storage engine, binlog, GTID, Group Replication, InnoDB Cluster, the Keyring)
+  - A MySQL version upgrade is being planned (e.g. 8.0 → 8.4, 8.4 → 9.7, or onto a 26.x calendar-versioned Innovation release)
+non_activation_conditions:
+  - The stack uses PostgreSQL, MongoDB, or another engine (route to that engine's skill)
+  - Purely generic relational schema design with no relational engine chosen yet (route to SK-DATA-001 data-modeling)
+  - ORM usage mechanics independent of the underlying engine (route to SK-DATA-002 orm-integration)
+  - The task is safely evolving an already-populated schema's data, not MySQL-specific facts (route to SK-DATA-006 data-migration)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The MySQL task (schema/engine change, slow query, replication/HA design, auth/encryption setup, version upgrade).
+    required: true
+  - name: schema-and-workload
+    description: Existing schema, storage engine(s) in use, query patterns, EXPLAIN output, and the current MySQL version.
+    required: false
+required_context:
+  - The MySQL version in use (server, image tag, or manifest) — required for version-correct guidance given the 8.0/8.4/9.7/26.x split.
+optional_context:
+  - EXPLAIN (including JSON format) output for a slow query.
+  - Existing storage-engine assignment per table (ENGINE=...).
+  - Replication topology (standalone, source/replica, Group Replication/InnoDB Cluster, NDB Cluster).
+
+outputs:
+  - name: schema-or-migration
+    kind: edit
+    description: DDL / migration reflecting version-correct MySQL syntax and storage-engine choice.
+  - name: engine-or-index-change
+    kind: edit
+    description: Storage-engine assignment, index definitions, or query rewrites addressing an observed EXPLAIN plan.
+  - name: analysis
+    kind: analysis
+    description: Recommendations (engine choice, replication topology, upgrade plan) with rationale and the version they apply to.
+
+depends_on_skills: []
+# Policy fix (2026-09-09, applied consistently with the solution-architecture
+# fix from the DISC-domain batch): depends_on_skills is reserved for hard
+# composition (invoking another skill as a blocking sub-step of this skill's
+# own execution). The relationship to the generic parent skill(s) above is
+# specialization, already fully captured by the `parents` field -- duplicating
+# it into depends_on_skills was redundant and conflated the two relationship
+# types. Cleared here; parents is the single source of truth for this edge.
+related_skills: [SK-TECH-drizzle, SK-TECH-prisma, SK-TECH-typeorm, SK-DATA-002, SK-DATA-006]
+conflicts_with: [SK-TECH-postgresql]   # alternative primary relational engine; do not co-activate for the same engine decision
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+# Tier B: proposing DDL/engine/index changes is advisory; running EXPLAIN,
+# mysqld/mysqlsh, or migrations needs shell. No capability_fallbacks block
+# required (Tier B, not C) — degrades to advisory per failure_handling below.
+
+grounding: official-docs
+source_references:
+  - url: https://dev.mysql.com/doc/refman/9.7/en/mysql-releases.html
+    title: "MySQL Reference Manual — MySQL Releases: Innovation and LTS"
+    via: research/technologies/mysql.md
+    retrieved: "2026-09-09"
+  - url: https://dev.mysql.com/doc/refman/9.7/en/pluggable-storage-overview.html
+    title: "MySQL Reference Manual — Pluggable Storage Engine Architecture"
+    via: research/technologies/mysql.md
+    retrieved: "2026-09-09"
+  - url: https://dev.mysql.com/doc/refman/9.7/en/replication.html
+    title: "MySQL Reference Manual — Replication"
+    via: research/technologies/mysql.md
+    retrieved: "2026-09-09"
+  - url: https://dev.mysql.com/doc/refman/9.7/en/group-replication.html
+    title: "MySQL Reference Manual — Group Replication"
+    via: research/technologies/mysql.md
+    retrieved: "2026-09-09"
+  - url: https://dev.mysql.com/doc/refman/9.7/en/security.html
+    title: "MySQL Reference Manual — Chapter 8, Security"
+    via: research/technologies/mysql.md
+    retrieved: "2026-09-09"
+  - url: https://dev.mysql.com/doc/refman/9.7/en/optimization.html
+    title: "MySQL Reference Manual — Chapter 10, Optimization"
+    via: research/technologies/mysql.md
+    retrieved: "2026-09-09"
+  - url: https://dev.mysql.com/doc/refman/9.7/en/upgrade-paths.html
+    title: "MySQL Reference Manual — Upgrade Paths"
+    via: research/technologies/mysql.md
+    retrieved: "2026-09-09"
+  - url: https://dev.mysql.com/doc/relnotes/mysql/8.4/en/news-8-4-0.html
+    title: "MySQL 8.4 Release Notes — Changes in MySQL 8.4.0"
+    via: research/technologies/mysql.md
+    retrieved: "2026-09-09"
+  - url: https://dev.mysql.com/doc/refman/9.7/en/docker-mysql-getting-started.html
+    title: "MySQL Reference Manual — Getting Started with MySQL Server on Docker"
+    via: research/technologies/mysql.md
+    retrieved: "2026-09-09"
+  - url: https://dev.mysql.com/doc/refman/9.7/en/backup-and-recovery.html
+    title: "MySQL Reference Manual — Backup and Recovery"
+    via: research/technologies/mysql.md
+    retrieved: "2026-09-09"
+  - url: https://dev.mysql.com/doc/refman/9.7/en/innodb-limits.html
+    title: "MySQL Reference Manual — InnoDB Limits"
+    via: research/technologies/mysql.md
+    retrieved: "2026-09-09"
+  - url: https://dev.mysql.com/doc/dev/mysql-server/latest/PAGE_MYSQL_TEST_RUN_PL.html
+    title: "MySQL Internals — mysql-test-run.pl (server-codebase test framework)"
+    via: research/technologies/mysql.md
+    retrieved: "2026-09-09"
+  - url: https://www.mysql.com/support/eol-notice.html
+    title: "MySQL — End of Life (Oracle Lifetime Sustaining Support) Notice"
+    via: research/technologies/mysql.md
+    retrieved: "2026-09-09"
+  - url: https://blogs.oracle.com/mysql/a-more-predictable-mysql-release-model-calendar-versions-lts-and-innovation
+    title: "Oracle MySQL Blog — A More Predictable MySQL Release Model: Calendar Versions, LTS, and Innovation"
+    via: research/technologies/mysql.md
+    retrieved: "2026-09-09"
+  - url: https://blogs.oracle.com/mysql/mysql-july-2026-ga-releases-now-available
+    title: "Oracle MySQL Blog — MySQL July 2026 GA Releases Now Available"
+    via: research/technologies/mysql.md
+    retrieved: "2026-09-09"
+  - url: research/knowledge-maps/version-matrix.md
+    title: "Version Matrix — MySQL row (versioning scheme, upgrade paths, EOL, 8.4.0 breaking changes)"
+    via: research/knowledge-maps/version-matrix.md
+    retrieved: "2026-09-09"
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: "Technology Decision Matrix — §2 Database model: PostgreSQL vs. MySQL vs. MongoDB vs. ClickHouse"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-09"
+
+covered_versions:
+  mysql: ">=8.0 <=9.7 LTS / 26.x Innovation (calendar-versioned, from 26.7.0)"
+version_sensitive_claims:
+  - claim: 9.7 is the last MySQL release on traditional MAJOR.MINOR.PATCH numbering; Innovation releases from 26.7.0 onward use calendar-based YY.M.P versioning.
+    applies_to: ">=26.7.0 (scheme change); 9.7 is the last pre-change release"
+    source_ref: research/knowledge-maps/version-matrix.md (MySQL row, "Versioning scheme")
+  - claim: mysql_native_password authentication is disabled by default; default_authentication_plugin was removed in favor of authentication_policy.
+    applies_to: ">=8.4.0"
+    source_ref: research/technologies/mysql.md §7, §13
+  - claim: AUTO_INCREMENT on FLOAT/DOUBLE columns is removed (error, not warning); affected tables must be altered before upgrading or the table cannot be upgraded.
+    applies_to: ">=8.4.0"
+    source_ref: research/technologies/mysql.md §6, §11, §13
+  - claim: Replication SQL syntax renamed (START SLAVE → START REPLICA, etc.); old syntax errors rather than warns.
+    applies_to: ">=8.4.0"
+    source_ref: research/technologies/mysql.md §13
+  - claim: Upgrade paths cannot skip a bugfix/LTS series (5.7 → 8.0 → 8.4, not direct); Innovation-to-Innovation upgrades cannot skip across an LTS boundary.
+    applies_to: "all documented upgrade paths through 9.7"
+    source_ref: research/technologies/mysql.md §11
+  - claim: MySQL 5.7 reached Oracle Lifetime Sustaining Support (EOL) 2023-10-25; MySQL 8.0 reached Lifetime Sustaining Support 2026-04-21, with users pushed to 8.4 LTS or 9.7 LTS.
+    applies_to: "5.7 as of 2023-10-25; 8.0 as of 2026-04-21"
+    source_ref: research/technologies/mysql.md §12 (dates derived from a search summary of mysql.com/support/eol-notice.html, flagged for direct re-verification)
+  - claim: As of the July 2026 GA wave, MySQL 26.7.0 (Innovation), MySQL 9.7.2 LTS, and MySQL 8.4.11 LTS are concurrently current — old and new numbering schemes coexist.
+    applies_to: "July 2026 GA wave and after"
+    source_ref: research/technologies/mysql.md §12
+last_verified: "2026-09-09"
+reverify_triggers:
+  - A new MySQL LTS or Innovation release (any 8.4.x, 9.7.x, or 26.x patch/minor beyond what's cited here)
+  - Publication of an official "Changes in MySQL 9.x" or "Changes in MySQL 26.7.0" breaking-changes page (not yet enumerated in the underlying research — currently a documented gap)
+  - Clarification of whether MySQL 9.7 LTS is itself renumbered under calendar versioning, or remains a permanent legacy-numbered LTS line
+  - Any change to the official EOL dates for MySQL 8.4 LTS / 9.7 LTS (currently derived from a search summary, not a direct fetch)
+
+owned_knowledge:
+  - MySQL pluggable storage-engine selection (InnoDB vs. MyISAM/MEMORY/CSV/ARCHIVE/BLACKHOLE/MERGE/FEDERATED)
+  - MySQL replication/HA topology selection (async replication, GTID, Group Replication/InnoDB Cluster, NDB Cluster)
+  - MySQL version-numbering transition and upgrade-path restrictions
+  - MySQL authentication-plugin and Keyring at-rest-encryption specifics
+decision_framework_present: true
+
+failure_handling:
+  - If the MySQL version cannot be determined, ask for it or state the version its guidance assumes; never assume "latest" silently (VA-3) — this matters more than usual given the concurrent 8.4/9.7/26.x numbering.
+  - If shell is unavailable/denied, degrade to advisory DDL/engine/index output and state that EXPLAIN or the migration was not run.
+  - If a claim would depend on the still-unresearched 9.7→26.x breaking-changes page, say so explicitly ("verify against current 26.x release notes") rather than assert behavior by analogy to 8.0→8.4.
+escalation:
+  - A destructive migration (DROP/ALTER that loses data), a storage-engine change on a populated table, or an in-place major-version upgrade requires explicit user confirmation before execution (defer to SK-DATA-006 rollout discipline).
+verification:
+  - Any proposed index is checked against an EXPLAIN actually run against the target table, not a guess or a plan reasoned about from the query text alone.
+  - Any storage-engine choice is justified against the table's actual workload (transactional vs. read-only/temp/archival), not left at the InnoDB default by inertia or changed from it without cause.
+  - Any version-specific claim is tagged with the range it holds for, and the target MySQL version is confirmed before recommending a version-gated feature.
+  - For an upgrade, the path respects the documented no-skip-a-series restriction and the AUTO_INCREMENT FLOAT/DOUBLE pre-upgrade check when crossing into 8.4+.
+evaluation_criteria:
+  - For a seeded slow query with EXPLAIN output, proposes an index/rewrite that addresses the actual plan, not a generic guess.
+  - For a seeded upgrade scenario (e.g. 8.0 → 8.4), correctly flags at least one version-gated breaking change (auth default, AUTO_INCREMENT FLOAT/DOUBLE, or replication syntax) relevant to the seeded schema.
+  - Chooses a defensible storage engine and replication topology for a seeded workload, including the "just use InnoDB + default async replication" simplest branch when nothing justifies more.
+  - Does not restate generic schema-design method owned by SK-DATA-001, or claim an unresearched MySQL-vs-PostgreSQL performance comparison as fact (QR-2).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]   # for running mysqlsh/EXPLAIN/mysqldump; abstract shell → CC tools
+  cursor:
+    paths: ["**/*.sql", "**/migrations/**"]
+  vscode:
+    argument_hint: "<task, e.g. 'pick a storage engine for this table' or 'plan the 8.0 to 8.4 upgrade'>"

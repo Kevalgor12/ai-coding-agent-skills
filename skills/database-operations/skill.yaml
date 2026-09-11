@@ -1,0 +1,87 @@
+id: SK-DATA-003
+slug: database-operations
+name: Database operations
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: DATA
+
+purpose: >-
+  Operate a database well — indexing strategy, query optimization and N+1
+  avoidance, transaction/isolation-level choices, connection-pool sizing,
+  and replication/HA awareness — independent of which database or ORM is
+  used.
+scope: >-
+  Database operational concerns beyond schema design. Specialized by each
+  database technology skill (PostgreSQL/MySQL/MongoDB/ClickHouse) and ORM
+  technology skill (Mongoose/Drizzle/Prisma/TypeORM) for engine-specific
+  mechanics. Not schema/data-model design itself (data-modeling) and not
+  caching design (caching-strategy).
+expertise: Senior/principal engineer with database operations experience.
+description: >-
+  Operate a database well — index strategy, query-plan analysis and N+1
+  avoidance, transaction/isolation-level choices, connection-pool sizing,
+  and replication/backup/PITR awareness. Use when query performance,
+  transactions, indexing, or pooling are in play. Not for schema design
+  itself (data-modeling) or caching design (caching-strategy).
+
+activation_conditions:
+  - Query performance is a concern (slow query, missing index, full table scan)
+  - A transaction/isolation-level decision is needed
+  - Connection-pool sizing or exhaustion is a concern
+  - N+1 query patterns are suspected or present
+non_activation_conditions:
+  - Pure schema design with no operational question (route to data-modeling)
+  - Caching design specifically (route to caching-strategy)
+activation_mode: auto
+
+inputs:
+  - name: schema-and-workload
+    description: The schema, workload shape, and chosen database/ORM.
+    required: true
+  - name: query-plan-or-symptom
+    description: A query plan, slow-query report, or performance symptom, if diagnosing an existing issue.
+    required: false
+outputs:
+  - name: index-query-recommendations
+    kind: analysis
+    description: Index/query-rewrite recommendations addressing the identified plan or N+1 pattern.
+  - name: transaction-pooling-design
+    kind: analysis
+    description: Transaction/isolation-level choice and connection-pool sizing, with rationale.
+
+depends_on_skills: []
+related_skills: [SK-DATA-001, SK-DATA-004, SK-QA-003, SK-TECH-postgresql, SK-TECH-mysql, SK-TECH-mongodb, SK-TECH-clickhouse]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: research/knowledge-maps/performance-knowledge-map.md
+    title: "Performance Knowledge Map — §2 Query Optimization & N+1 Risk, §3 Indexing, §4 Connection Pooling & Client Lifecycle"
+    via: research/knowledge-maps/performance-knowledge-map.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - N+1 detection and fix method (batch-or-join, the shared pattern across every data-access layer)
+  - Index-strategy selection across relational, document, and columnar engines
+  - Connection-pool sizing method
+decision_framework_present: true
+
+failure_handling:
+  - If no query plan or workload evidence is available, ask for it rather than guessing at the dominant cost.
+  - If the target database/ORM has no documented first-party operational guidance for a specific concern, state that gap rather than inventing one.
+verification:
+  - An index/query-rewrite recommendation is checked against an EXPLAIN/query-plan actually run against the database (or a captured N+1 query trace), not applied speculatively from the query text alone.
+  - Connection-pool sizing is based on actual concurrency, not an arbitrary default.
+  - A transaction/isolation-level choice states its rationale (consistency vs. throughput trade-off), not left implicit.
+evaluation_criteria:
+  - For a seeded slow query, proposes an index/rewrite that addresses the actual plan.
+  - Chooses a defensible isolation level for a seeded transaction scenario, stating the trade-off.
+  - Recognizes an N+1 pattern and proposes the batch-or-join fix appropriate to the ORM/data layer in use.
+
+adapter_hints: {}

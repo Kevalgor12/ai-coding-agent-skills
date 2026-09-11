@@ -1,0 +1,93 @@
+id: SK-FE-002
+slug: ui-ux-design
+name: UI/UX design
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: FE
+
+purpose: >-
+  Apply interaction and visual-design judgment to UI work — information
+  hierarchy, responsive behavior, interaction states, consistency — as
+  distinct from implementation-specific styling syntax or frontend
+  application structure.
+scope: >-
+  UX/visual-design decisions. Not implementation-specific styling syntax
+  (styling-systems) and not component/state architecture
+  (frontend-architecture). Honest about a real grounding boundary: this
+  library's research is technology-documentation-shaped, not an
+  independently deep UX-research corpus — what's grounded here is what
+  component-library/markup research actually documents (native-element
+  affordances, component-variant systems, responsive/dark-mode variant
+  conventions), applied alongside professional design judgment for the
+  rest.
+expertise: Senior product/UX designer with frontend implementation fluency.
+description: >-
+  Apply interaction and visual-design judgment — information hierarchy,
+  responsive layout, interaction states (hover/focus/loading/empty/
+  error), and consistency — to UI work. Use when designing or improving a
+  user-facing interface, or reviewing one for design quality. Not for
+  styling implementation syntax (styling-systems) or component/state
+  architecture (frontend-architecture).
+
+activation_conditions:
+  - Designing or improving a user-facing interface
+  - A UI's hierarchy, layout, or interaction states need review
+  - A frontend design review is requested
+non_activation_conditions:
+  - Non-visual/backend tasks
+  - Implementation-specific styling syntax with design decisions already made (route to styling-systems)
+  - Component/state architecture with no visual/interaction-design question (route to frontend-architecture)
+activation_mode: auto
+
+inputs:
+  - name: feature-intent
+    description: What the UI needs to accomplish for the user.
+    required: true
+  - name: brand-design-constraints
+    description: Existing brand/design-system constraints, if any.
+    required: false
+outputs:
+  - name: ux-layout-decisions
+    kind: analysis
+    description: Information hierarchy, responsive layout, and interaction-state design, with rationale.
+
+depends_on_skills: []
+related_skills: [SK-FE-003, SK-FE-004, SK-TECH-mui, SK-TECH-shadcn-ui]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: research/knowledge-maps/concept-knowledge-map.md
+    title: "Concept Knowledge Map — D. Styling, Design Systems & UI Components (Design System/Theming, Responsive Design, Dark Mode Theming sections)"
+    via: research/knowledge-maps/concept-knowledge-map.md
+    retrieved: "2026-09-10"
+  - url: research/technologies/html.md
+    title: "HTML Research — native-element affordances (keyboard/focus/screen-reader behavior 'for free') as the accessible, usable default"
+    via: research/technologies/html.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Information-hierarchy and layout judgment
+  - Interaction-state design (hover/focus/loading/empty/error) as a first-class design responsibility, not an afterthought
+  - Sensible-defaults-over-novelty design discipline
+decision_framework_present: true
+
+failure_handling:
+  - If feature intent or design constraints aren't clear, ask rather than assume a visual direction.
+  - If a request needs deep UX-research-backed guidance (formal usability-testing methodology, quantitative UX research) beyond what this library's technology-documentation-shaped research covers, state that boundary rather than fabricating research-backed claims.
+verification:
+  - Interaction states (loading, empty, error, hover, focus) are designed explicitly, not left as an afterthought discovered during implementation.
+  - Responsive behavior is addressed, not assumed to "just work" at one viewport size.
+  - The design favors sensible, consistent defaults over novelty for novelty's sake.
+evaluation_criteria:
+  - For a seeded UI task, produces a layout/hierarchy a designer would accept and handles at least the responsive and empty/loading/error states.
+  - Correctly routes implementation-syntax questions to styling-systems and component/state-architecture questions to frontend-architecture rather than answering them itself.
+  - States plainly when a request needs UX-research depth (formal usability testing, quantitative research) this library hasn't researched.
+
+adapter_hints: {}

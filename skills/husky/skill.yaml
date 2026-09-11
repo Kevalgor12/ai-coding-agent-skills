@@ -1,0 +1,150 @@
+id: SK-TECH-husky
+slug: husky
+name: Husky
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-INFRA-002, SK-CONV-001]
+
+purpose: >-
+  Install, configure, and troubleshoot Git hooks with Husky — the
+  core.hooksPath install mechanism, per-package-manager install wiring,
+  and its deliberate scope as a hook trigger rather than a staged-file
+  filter.
+scope: >-
+  Husky's own hook-installation and hook-execution mechanics only. Not
+  CI/CD pipeline design (ci-cd-pipeline, SK-INFRA-002) and not
+  commit-message/branch-name text conventions (git-conventions,
+  SK-CONV-001) — Husky is the mechanism that fires a commit-msg hook
+  (e.g. invoking commitlint) to enforce whatever text convention is
+  already in place, it does not define that convention itself.
+expertise: Git tooling / developer-experience engineer.
+description: >-
+  Husky-specific Git hooks mechanics: the core.hooksPath install
+  mechanism, per-package-manager install wiring (prepare for npm/pnpm/
+  Bun vs. Yarn's postinstall), and Husky's scope as a hook trigger, not a
+  staged-file filter (pair with lint-staged for that). Use when a repo
+  has or needs a .husky/ directory, a husky devDependency, or a
+  prepare/postinstall script invoking husky, or when hooks aren't firing.
+  Not for CI/CD pipeline design or commit-message/branch-name text
+  conventions themselves.
+
+activation_conditions:
+  - A `.husky/` directory or a `husky` devDependency is present in the repo
+  - The task is to set up, add, or fix a Git hook (pre-commit, commit-msg, pre-push, etc.) in a Node/JS-ecosystem project
+  - A `prepare` or `postinstall` script invoking `husky` is present or being added
+  - Hooks aren't firing and the cause may be `core.hooksPath`, hook-file naming, or install wiring
+non_activation_conditions:
+  - The task is CI/CD pipeline design itself (stage sequencing, caching, secrets/OIDC) — route to ci-cd-pipeline
+  - The task is commit-message or branch-name text/convention content with no hook-mechanism question involved — route to git-conventions
+  - The project uses a different hooks manager (pre-commit, lefthook, simple-git-hooks) and Husky is not present — this library has no researched grounding for those alternatives
+  - The task is staged-file-specific linting/formatting filtering logic itself — that is lint-staged's scope, not Husky's
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Husky-related task (install hooks, add/fix a hook, wire commitlint, diagnose hooks not firing, skip hooks in CI).
+    required: true
+  - name: repo-state
+    description: Presence of .husky/, relevant package.json scripts (prepare/postinstall), the package manager in use, and the installed Git version.
+    required: false
+required_context:
+  - Which package manager the project uses (npm, pnpm, Yarn, or Bun) — determines prepare-vs-postinstall wiring.
+optional_context:
+  - Existing `.husky/` hook file contents, especially if migrated from Husky v4.
+  - The installed Git version, when hooks aren't firing.
+
+outputs:
+  - name: hook-config
+    kind: edit
+    description: .husky/<hook-name> files and the package.json script wiring (prepare or postinstall) implementing the requested hook behavior.
+  - name: analysis
+    kind: analysis
+    description: Diagnosis of why a hook isn't firing, or a stated decision on Husky-alone vs. Husky+lint-staged, or on v4-era hook-file cleanup ahead of v10.0.0.
+
+depends_on_skills: []
+related_skills: [SK-TECH-github-actions]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: https://typicode.github.io/husky/
+    title: "Husky — home page (core concepts, performance claims, adoption)"
+    via: research/technologies/husky.md
+    retrieved: "2026-09-10"
+  - url: https://typicode.github.io/husky/get-started.html
+    title: "Husky — Get Started (husky init, prepare script, staged-file example pointing to lint-staged)"
+    via: research/technologies/husky.md
+    retrieved: "2026-09-10"
+  - url: https://typicode.github.io/husky/how-to.html
+    title: "Husky — How To (HUSKY=0, CI/Docker skip, init.sh, pinst, monorepo/non-root setup)"
+    via: research/technologies/husky.md
+    retrieved: "2026-09-10"
+  - url: https://typicode.github.io/husky/troubleshoot.html
+    title: "Husky — Troubleshoot (core.hooksPath check, Git >2.9 requirement, hook-naming pitfalls)"
+    via: research/technologies/husky.md
+    retrieved: "2026-09-10"
+  - url: https://typicode.github.io/husky/migrate-from-v4.html
+    title: "Husky — Migrate from v4 (commit-msg / commitlint --edit $1 pattern, removed HUSKY_GIT_PARAMS)"
+    via: research/technologies/husky.md
+    retrieved: "2026-09-10"
+  - url: https://raw.githubusercontent.com/typicode/husky/main/index.js
+    title: "Husky source — index.js (install routine: core.hooksPath, .. rejection, v4 legacy-line deprecation message)"
+    via: research/technologies/husky.md
+    retrieved: "2026-09-10"
+  - url: https://raw.githubusercontent.com/typicode/husky/main/husky
+    title: "Husky source — dispatcher script (PATH prepending, HUSKY=0/2 handling, failure messages)"
+    via: research/technologies/husky.md
+    retrieved: "2026-09-10"
+  - url: https://raw.githubusercontent.com/typicode/husky/main/package.json
+    title: "Husky source — package.json (engines.node >=18, current version)"
+    via: research/technologies/husky.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  husky: ">=9.1 (Node >=18, Git >2.9); v10.0.0 announced/unreleased as of research date"
+version_sensitive_claims:
+  - claim: Husky's core.hooksPath mechanism requires Git > 2.9, the version that introduced core.hooksPath; Husky cannot function on older Git.
+    applies_to: "all current Husky versions (v6+ architecture, includes current stable v9.1.7)"
+    source_ref: research/technologies/husky.md (Section 14, troubleshoot.html)
+  - claim: Installing/running the husky CLI requires Node >=18 (engines.node), but hook execution itself has no Node runtime presence unless the hook script invokes node/npm/npx.
+    applies_to: "v9.1.7 (current stable, published 2024-11-18)"
+    source_ref: research/technologies/husky.md (package.json engines field; Section 2)
+  - claim: v10.0.0 will remove the compatibility shim that currently auto-strips two legacy v4-era hook lines (the shebang and the ". .../husky.sh" sourcing line); those lines "WILL FAIL" once the shim is removed.
+    applies_to: "v10.0.0 (announced, unreleased as of research date 2026-09-09)"
+    source_ref: research/technologies/husky.md (Section 13, index.js deprecation message)
+last_verified: "2026-09-10"
+reverify_triggers:
+  - Husky v10.0.0 releases
+  - A new npm publish changes engines.node away from >=18
+  - Official docs change the HUSKY=0 CI-skip pattern or the core.hooksPath install mechanism
+
+owned_knowledge:
+  - Husky's core.hooksPath install mechanism and POSIX-sh dispatcher execution model
+  - Per-package-manager install wiring (prepare for npm/pnpm/Bun vs. Yarn's postinstall+pinst)
+  - Husky's trigger-not-filter scope boundary relative to lint-staged
+
+decision_framework_present: true
+
+failure_handling:
+  - If the installed Git version can't be confirmed as >2.9, state that Husky's core.hooksPath mechanism requires it and verify rather than assuming it's met.
+  - If shell access is unavailable, degrade to advisory: propose the .husky/<hook> file contents and the package.json script change as edits, and state plainly that install (the git config core.hooksPath mutation) was not actually run.
+  - If the package manager can't be determined, ask rather than guessing prepare-vs-postinstall wiring, since Yarn's wiring is genuinely different.
+verification:
+  - The `.husky/<hook-name>` file uses the exact Git hook name (no `precommit`/`pre-commit.sh`-style typos).
+  - "`git config core.hooksPath` is actually run after install and its output confirmed to point to the Husky-managed directory — not assumed from reading `.husky/` or `package.json` alone."
+  - "`package.json`'s `prepare` script (or Yarn's `postinstall`) actually invokes `husky`."
+  - Any CI workflow that shouldn't install hooks sets `HUSKY=0`.
+evaluation_criteria:
+  - "For a seeded npm/pnpm/Bun project, wires the prepare script to run husky (prepare: husky); for a seeded Yarn project, wires postinstall instead and does not claim prepare works for Yarn."
+  - Correctly states hook execution requires no Node runtime unless the hook script itself invokes node/npm/npx.
+  - Given a request for staged-file-specific linting, recommends pairing with lint-staged rather than reimplementing filtering in a raw Husky hook, citing Husky's own "basic" staged-file example.
+  - Flags legacy v4-era hook files (shebang + sourcing line) as needing cleanup ahead of v10.0.0 rather than relying on the compatibility shim indefinitely.
+  - Does not restate git-conventions' text-convention rules or ci-cd-pipeline's general pipeline-design content (QR-2).
+
+adapter_hints: {}

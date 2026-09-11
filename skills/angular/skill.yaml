@@ -1,0 +1,244 @@
+id: SK-TECH-angular
+slug: angular
+name: Angular
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-FE-001, SK-FE-005]
+# SK-FE-001 (frontend-architecture) and SK-FE-005 (rendering-strategy) are authored.
+
+purpose: >-
+  Apply Angular correctly and version-appropriately — dependency injection,
+  standalone-vs-NgModule component architecture, the Signals API, and
+  zoneless change detection — while tracking Angular's unusually strict
+  per-major TypeScript/Node.js version coupling.
+scope: >-
+  Angular-specific implementation detail: DI (inject(), hierarchical
+  injectors, @Service()/@Injectable()), standalone components vs NgModules,
+  signal()/computed()/effect()/resource()/httpResource(), zoneless change
+  detection, and the version-gated TS/Node/RxJS floors per major. The
+  generic frontend-structure method and the React-vs-Vue-vs-Angular
+  framework-selection decision belong to the parent, frontend-architecture
+  (SK-FE-001) — not repeated here. The SSR/SSG rendering-mode decision
+  belongs to rendering-strategy (SK-FE-005).
+expertise: Senior Angular engineer navigating the v20-v22 signal-first transition.
+description: >-
+  Angular-specific implementation: dependency injection (inject(),
+  @Service()/@Injectable()), standalone-vs-NgModule architecture, the
+  Signals API (signal/computed/effect/resource/httpResource), zoneless
+  change detection, and per-major TypeScript/Node.js version floors. Use
+  when the stack is Angular (angular.json, @angular/core, ng CLI) or the
+  task names Angular. Not for an open framework choice or React/Vue
+  specifics (route to frontend-architecture or their skills).
+
+activation_conditions:
+  - An angular.json workspace file, @angular/core in package.json/a lockfile, or ng CLI usage is present
+  - The task names Angular or a specific Angular mechanism (signals, DI, standalone components, zoneless change detection, @defer)
+  - An existing Angular codebase needs a DI, change-detection, or component-architecture change, or a version-upgrade question
+non_activation_conditions:
+  - The stack uses React, Vue, or another frontend framework instead (route to that technology skill)
+  - The framework choice is still open, with no Angular commitment yet (route to frontend-architecture, SK-FE-001)
+  - Generic component/state-management structure with no Angular-specific mechanism involved (route to SK-FE-001)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Angular-specific task (DI/service design, standalone-vs-NgModule structure, signals/change-detection, template/forms work, version upgrade).
+    required: true
+  - name: installed-version
+    description: The Angular major version in use, from package.json/angular.json.
+    required: false
+required_context:
+  - The Angular major version in use — TypeScript/Node.js floors are raised as a breaking change on each major, so version-specific guidance is wrong without it.
+optional_context:
+  - Whether zone.js is still present (angular.json polyfills, package.json) vs already removed for zoneless
+  - Whether the codebase is standalone-based or still NgModule-based
+
+outputs:
+  - name: component-or-service-code
+    kind: edit
+    description: Component/service/DI code using version-correct Angular APIs (standalone components, inject(), signals).
+  - name: change-detection-or-structure-change
+    kind: edit
+    description: A zoneless-migration step, change-detection configuration, or standalone/NgModule structural change.
+  - name: analysis
+    kind: analysis
+    description: Version-gated recommendations (TS/Node floor, zoneless default, OnPush default) tagged with the Angular major they apply to.
+
+depends_on_skills: []
+# Per specification.md §2.5: the relationship to SK-FE-001/SK-FE-005 is
+# specialization, already fully captured by `parents` above. It is NOT hard,
+# blocking composition, so it does not belong in depends_on_skills too —
+# duplicating it there would conflate "I am a more specific version of that
+# method" with "I invoke that skill as a sub-step," which the spec explicitly
+# calls out as a repeat mistake to avoid (audits/2026-09-09-data-domain-validation.md).
+related_skills: [SK-TECH-typescript]
+conflicts_with: [SK-TECH-react, SK-TECH-vue]
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: https://angular.dev/overview
+    title: "Angular — Overview"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/guide/components
+    title: "Angular — Components (standalone-by-default since v19)"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/guide/signals
+    title: "Angular — Signals (signal/computed/effect)"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/guide/di
+    title: "Angular — Dependency Injection"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/guide/di/creating-and-using-services
+    title: "Angular — Creating and Using Services (inject(), @Service() vs @Injectable())"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/guide/ngmodules/overview
+    title: "Angular — NgModules Overview"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/guide/zoneless
+    title: "Angular — Zoneless Change Detection"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/guide/signals/resource
+    title: "Angular — resource() / httpResource()"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/ecosystem/rxjs-interop
+    title: "Angular — @angular/core/rxjs-interop"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/guide/http
+    title: "Angular — HttpClient"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/style-guide
+    title: "Angular — Style Guide"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/best-practices/security
+    title: "Angular — Security (sanitization, XSRF, CSP, Trusted Types)"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/best-practices/runtime-performance
+    title: "Angular — Runtime Performance"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/best-practices/images
+    title: "Angular — NgOptimizedImage"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/guide/templates/defer
+    title: "Angular — @defer"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/guide/testing
+    title: "Angular — Testing (Vitest default v21+, Karma-to-Vitest migration)"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/reference/releases
+    title: "Angular — Releases (versioning scheme, cadence, support windows)"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/reference/versions
+    title: "Angular — Version Compatibility (Node/TypeScript/RxJS table, Baseline policy)"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://raw.githubusercontent.com/angular/angular/main/CHANGELOG.md
+    title: "angular/angular — CHANGELOG.md (v20/v21/v22 breaking changes)"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/reference/migrations
+    title: "Angular — Migration Schematics"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/best-practices/error-handling
+    title: "Angular — Error Handling (TestBed rethrows by default)"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+  - url: https://angular.dev/ai/agent-skills
+    title: "Angular — Agent Skills (official angular-developer/angular-new-app)"
+    via: research/technologies/angular.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  angular: ">=20.0 <=22.1"
+version_sensitive_claims:
+  - claim: "Angular 22.0.x requires TypeScript >=6.0.0 <6.1.0."
+    applies_to: "22.0.x"
+    source_ref: "research/technologies/angular.md §12; research/knowledge-maps/version-matrix.md (Angular row)"
+  - claim: "Angular 21.0.x-21.2.x requires TypeScript >=5.9.0 <6.0.0."
+    applies_to: "21.0.x-21.2.x"
+    source_ref: "research/technologies/angular.md §12; research/knowledge-maps/version-matrix.md (Angular row)"
+  - claim: "Angular 20.0.x-20.3.x requires TypeScript >=5.8.0 <6.0.0."
+    applies_to: "20.0.x-20.3.x"
+    source_ref: "research/technologies/angular.md §12; research/knowledge-maps/version-matrix.md (Angular row)"
+  - claim: "Angular 22.0.x requires Node.js ^22.22.3 || ^24.15.0 || ^26.0.0."
+    applies_to: "22.0.x"
+    source_ref: "research/technologies/angular.md §12; research/knowledge-maps/version-matrix.md (Angular row)"
+  - claim: "Angular 20.0.x-21.2.x requires Node.js ^20.19.0 || ^22.12.0 || ^24.0.0."
+    applies_to: "20.0.x-21.2.x"
+    source_ref: "research/technologies/angular.md §12; research/knowledge-maps/version-matrix.md (Angular row)"
+  - claim: "RxJS ^6.5.3 || ^7.4.0 is required across the entire 20.x-22.x window."
+    applies_to: "20.0.x-22.x"
+    source_ref: "research/technologies/angular.md §12"
+  - claim: "Zoneless change detection is stable and the default; in v20 it required opt-in via provideZonelessChangeDetection(), renamed from the Experimental-tier provideExperimentalZonelessChangeDetection() as part of the v20.0.0 breaking changes (status became Developer Preview)."
+    applies_to: "v20 (opt-in, renamed API) vs v21+ (stable/default)"
+    source_ref: "research/technologies/angular.md §2, §13"
+  - claim: "The standalone option on @Component defaults to false before Angular 19.0.0; components are standalone by default from 19.0.0 onward."
+    applies_to: "<19.0.0 vs >=19.0.0"
+    source_ref: "research/technologies/angular.md §1"
+  - claim: "Components with an undefined changeDetection property default to OnPush as of v22 (previously the Zone-checked 'Default' strategy); the prior default is retained via changeDetection: ChangeDetectionStrategy.Eager."
+    applies_to: ">=22.0.0"
+    source_ref: "research/technologies/angular.md §2, §13"
+  - claim: "Browser support targets the 'widely available' Baseline standard (a 30-month window from a per-major date) as of v20+; pre-v20 releases targeted a fixed '2 most recent versions' policy instead."
+    applies_to: "<20.0 vs >=20.0"
+    source_ref: "research/technologies/angular.md §12"
+  - claim: "Release cadence changed at v22: prior majors shipped every 6 months with 1-3 minors; v22+ targets a major every 12 months with 4-6 minors."
+    applies_to: ">=22.0"
+    source_ref: "research/technologies/angular.md §12"
+last_verified: "2026-09-10"
+reverify_triggers:
+  - A new Angular major release (next expected ~June 2027, v23)
+  - The TypeScript or Node.js floor changing again for a new major
+  - The npm/CLI default test runner or change-detection default changing again
+  - Angular's official Agent Skills (angular-developer, angular-new-app) changing scope in a way that overlaps this skill's content
+
+owned_knowledge:
+  - "Angular's DI system (inject(), hierarchical injectors, providedIn: 'root', @Service() vs @Injectable())"
+  - Standalone-component vs NgModule architecture and the migration path between them
+  - Angular's Signals API (signal/computed/effect/resource/httpResource) and zoneless change detection
+  - Angular's per-major TypeScript/Node.js/RxJS version-floor coupling
+decision_framework_present: true
+
+failure_handling:
+  - If the Angular major version cannot be determined, ask for it or state explicitly which major the guidance assumes — never assume "latest" silently, since the TS/Node floor, zoneless default, and OnPush default are all breaking changes gated per major.
+  - If shell is unavailable/denied, produce advisory component/service/config code and state explicitly that ng generate/ng update/tests were not run.
+verification:
+  - Any TypeScript/Node.js/RxJS version claim matches the confirmed Angular major's floor (see version_sensitive_claims).
+  - Zoneless-vs-Zone.js guidance matches the codebase's actual provider configuration (provideZonelessChangeDetection vs provideZoneChangeDetection), not assumed.
+  - Standalone-vs-NgModule guidance matches the codebase's actual structure, not assumed to be standalone-by-default for a pre-v19 codebase.
+  - The zoneless/Zone.js provider change is confirmed by actually running the project's build (`ng build`) or test suite against the configured providers, not inferred from reading the provider registration alone.
+evaluation_criteria:
+  - For a seeded package.json pinning a specific Angular major (20, 21, or 22), states the correct TypeScript/Node.js/RxJS floor for that major without guessing.
+  - Given a v20-era codebase using provideExperimentalZonelessChangeDetection, correctly identifies the v20 rename to provideZonelessChangeDetection and the v21+ default-on-change.
+  - Recommends inject() over constructor-parameter injection and standalone components over NgModule for new code, citing the official style guide.
+  - Does not restate frontend-architecture's React-vs-Vue-vs-Angular comparison (QR-2).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]
+  cursor:
+    paths: ["**/*.component.ts", "**/*.service.ts", "angular.json", "**/app.routes*.ts"]
+  vscode:
+    argument_hint: "<task, e.g. 'migrate to zoneless change detection' or 'add a DI-based service with inject()'>"

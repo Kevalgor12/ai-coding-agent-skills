@@ -1,0 +1,212 @@
+id: SK-TECH-tailwindcss
+slug: tailwindcss
+name: Tailwind CSS
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-FE-003]   # styling-systems
+
+purpose: >-
+  Apply Tailwind CSS correctly and version-appropriately — the utility-first
+  model, v4's CSS-first @theme configuration and Oxide engine, content
+  detection, arbitrary-value/variant syntax, and the v3-vs-v4 browser-support
+  and migration decision.
+scope: >-
+  Tailwind-specific facts and mechanics: utility-class composition, the
+  @theme/@utility/@variant/@custom-variant at-rule family, content-detection
+  and its dynamic-class-name limitation, the v3→v4 breaking-change surface,
+  and the concurrently-live v3.4/v4.x version lines. The generic method for
+  choosing/architecting a project's styling system (tokens, theming
+  architecture, when to reach for a framework at all) comes from the parent
+  Layer-3 skill (styling-systems).
+expertise: Frontend engineer specializing in utility-first CSS with Tailwind CSS.
+description: >-
+  Tailwind CSS utility-first styling: v4's CSS-first @theme config, Oxide
+  engine, content detection, arbitrary-value/variant syntax, and the
+  v3-vs-v4 browser-floor/migration decision. Use when the stack has a
+  tailwind.config.js, "@import \"tailwindcss\"", a Tailwind dependency, or
+  utility-class markup, or the task names Tailwind/@theme/utility-first CSS.
+  Not for generic styling-system architecture (styling-systems), Sass syntax
+  with no Tailwind involved (sass), or shadcn/ui mechanics (shadcn-ui).
+
+activation_conditions:
+  - A tailwind.config.js/tailwind.config.ts, an "@import \"tailwindcss\";" CSS entry, or a @tailwindcss/vite|postcss|cli dependency is present
+  - Markup contains Tailwind utility-class patterns (e.g. flex, text-*, bg-*, and stacked responsive/state/dark variant prefixes)
+  - The task names Tailwind, utility-first CSS, or a Tailwind-specific mechanism (@theme, @utility, @custom-variant, the Oxide engine, content detection)
+  - A Tailwind v3→v4 upgrade, browser-support-floor decision, or Play CDN production-readiness question is being evaluated
+non_activation_conditions:
+  - No Tailwind dependency/config, and the task is generic styling-system architecture with no framework chosen yet (route to SK-FE-003 styling-systems)
+  - The task is Sass-specific syntax or module-system work with no Tailwind involved (route to SK-TECH-sass)
+  - The task is shadcn/ui component installation/registry mechanics beyond Tailwind's own utility classes (route to SK-TECH-shadcn-ui)
+  - Plain hand-authored CSS/HTML semantics with no utility-class framework involved (route to SK-TECH-web-standards)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The Tailwind task (utility-class implementation, theme/token setup via @theme, v3→v4 upgrade, browser-support decision).
+    required: true
+  - name: existing-config
+    description: Existing tailwind.config.js or CSS @theme block, the target browser support matrix, and the currently installed Tailwind version.
+    required: false
+required_context:
+  - The Tailwind major version in use (v3.4.x vs. v4.x) — required given both lines are simultaneously live and their syntax/config model differ.
+optional_context:
+  - The project's target browser support matrix (needed to validate the v4.0 floor of Safari 16.4+/Chrome 111+/Firefox 128+).
+  - Whether a CSS preprocessor (Sass/Less/Stylus) is already in the build pipeline.
+
+outputs:
+  - name: styles-or-config
+    kind: edit
+    description: Utility-class markup, an @theme block (v4) or tailwind.config.js (v3) change, reflecting version-correct syntax.
+  - name: migration-edit
+    kind: edit
+    description: v3→v4 migration changes, produced via the official codemod and reviewed diff-by-diff, or a manual equivalent.
+  - name: analysis
+    kind: analysis
+    description: A v3-vs-v4, utility-first-vs-component-library, or browser-floor recommendation with rationale and the version it applies to.
+
+depends_on_skills: []
+# depends_on_skills stays empty: this skill's relationship to SK-FE-003
+# (styling-systems) is specialization, not hard sub-step composition — that
+# relationship is already fully captured by `parents` above. Putting SK-FE-003
+# here too would be redundant and would assert a stronger claim (blocking
+# invocation) than "I am a more specific version of that skill's method"
+# actually is (spec §2.5). This exact mistake happened in an earlier batch
+# (see audits/2026-09-09-data-domain-validation.md) — not repeating it here.
+related_skills: [SK-TECH-shadcn-ui, SK-TECH-web-standards]
+conflicts_with: []
+# Deliberately empty, not [SK-TECH-sass]: this project's dependency
+# architecture treats Sass and Tailwind as independent, non-conflicting
+# project-level styling choices at the skill-composition level, even though
+# Tailwind v4 itself declines to support Sass as a preprocessing step used
+# alongside it. That is a narrow technical incompatibility (stated in Security
+# note below and in the Knowledge/When-to-use sections), not a skill-level
+# "must not co-activate" conflict — a project could still consult both skills
+# (e.g. migrating away from Sass toward Tailwind, or running Sass for a
+# non-Tailwind part of a codebase).
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+# Tier A: this skill's work is advisory/file-only — editing markup, @theme
+# blocks, or config, and reasoning about version/browser-floor tradeoffs.
+# Running the actual build or the @tailwindcss/upgrade codemod needs shell,
+# which is outside this skill's required capabilities; failure_handling below
+# states the advisory-only degrade explicitly for that case.
+
+grounding: official-docs
+source_references:
+  - url: https://tailwindcss.com/docs/styling-with-utility-classes
+    title: "Tailwind CSS Docs — Styling with Utility Classes"
+    via: research/technologies/tailwind.md
+    retrieved: "2026-09-10"
+  - url: https://tailwindcss.com/docs/theme
+    title: "Tailwind CSS Docs — Theme Variables (@theme, arbitrary-value syntax)"
+    via: research/technologies/tailwind.md
+    retrieved: "2026-09-10"
+  - url: https://tailwindcss.com/docs/detecting-classes-in-source-files
+    title: "Tailwind CSS Docs — Detecting Classes in Source Files"
+    via: research/technologies/tailwind.md
+    retrieved: "2026-09-10"
+  - url: https://tailwindcss.com/docs/functions-and-directives
+    title: "Tailwind CSS Docs — Functions and Directives (@config/@plugin bridge)"
+    via: research/technologies/tailwind.md
+    retrieved: "2026-09-10"
+  - url: https://tailwindcss.com/docs/compatibility
+    title: "Tailwind CSS Docs — Compatibility (Lightning CSS, CSS Modules)"
+    via: research/technologies/tailwind.md
+    retrieved: "2026-09-10"
+  - url: https://tailwindcss.com/docs/upgrade-guide
+    title: "Tailwind CSS Docs — Upgrade Guide (v3→v4 breaking changes, browser floor)"
+    via: research/technologies/tailwind.md
+    retrieved: "2026-09-10"
+  - url: https://tailwindcss.com/blog/tailwindcss-v4
+    title: "Tailwind CSS Blog — Tailwind CSS v4.0 (Oxide engine, performance benchmarks)"
+    via: research/technologies/tailwind.md
+    retrieved: "2026-09-10"
+  - url: https://tailwindcss.com/blog/tailwindcss-v4-3
+    title: "Tailwind CSS Blog — Tailwind CSS v4.3 (v4.2.0 color palettes, v4.3 features)"
+    via: research/technologies/tailwind.md
+    retrieved: "2026-09-10"
+  - url: https://tailwindcss.com/docs/installation/play-cdn
+    title: "Tailwind CSS Docs — Play CDN (dev-only, unsuitable for production)"
+    via: research/technologies/tailwind.md
+    retrieved: "2026-09-10"
+  - url: https://tailwindcss.com/docs/editor-setup
+    title: "Tailwind CSS Docs — Editor Setup (IntelliSense, Prettier plugin)"
+    via: research/technologies/tailwind.md
+    retrieved: "2026-09-10"
+  - url: https://registry.npmjs.org/tailwindcss
+    title: "npm registry — tailwindcss package (dist-tags, version metadata)"
+    via: research/technologies/tailwind.md
+    retrieved: "2026-09-10"
+  - url: https://github.com/tailwindlabs/tailwindcss/blob/main/CHANGELOG.md
+    title: "tailwindlabs/tailwindcss — CHANGELOG.md (release history, @custom-variant rename)"
+    via: research/technologies/tailwind.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/version-matrix.md
+    title: "Version Matrix — Tailwind CSS row (browser floor, dist-tags, breaking syntax changes)"
+    via: research/knowledge-maps/version-matrix.md
+    retrieved: "2026-09-10"
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: "Technology Decision Matrix — §9 Styling: Sass vs. Tailwind CSS vs. plain CSS"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  tailwindcss: ">=3.4 <=4.3 (v3-LTS and v4 both simultaneously live)"
+version_sensitive_claims:
+  - claim: v4.0 requires Safari 16.4+, Chrome 111+, Firefox 128+ due to its dependence on @property and color-mix(); teams needing older-browser support must stay on the v3.4 line. This is a hard compatibility gate, not a soft recommendation.
+    applies_to: ">=4.0"
+    source_ref: research/technologies/tailwind.md §13 (Breaking Changes); research/knowledge-maps/version-matrix.md
+  - claim: v4.2.0 added four new default color palettes (mauve, olive, mist, taupe) that do not exist in any earlier v4.x release or in v3.x — code/snapshots referencing them fail on earlier v4.x or any v3.x.
+    applies_to: ">=4.2.0"
+    source_ref: research/technologies/tailwind.md §12; research/knowledge-maps/version-matrix.md
+  - claim: Arbitrary CSS-variable-value syntax changed from bracket form (bg-[--brand-color]) in v3 to parenthesis form (bg-(--brand-color)) in v4.
+    applies_to: "v3.x uses bracket form; >=4.0 uses parenthesis form"
+    source_ref: research/technologies/tailwind.md §3, §13
+  - claim: The official v3→v4 migration codemod (npx @tailwindcss/upgrade) requires Node.js 20+.
+    applies_to: "upgrade tooling, current as of tailwindcss 4.3.3"
+    source_ref: research/technologies/tailwind.md §11; research/knowledge-maps/version-matrix.md
+  - claim: The @config/@plugin legacy-JS-config compatibility bridge does not support the corePlugins, safelist, or separator options.
+    applies_to: "confirmed for 4.0.0; unconfirmed whether later 4.x patches expanded this — Unresolved"
+    source_ref: research/technologies/tailwind.md §4, §14; research/knowledge-maps/version-matrix.md
+last_verified: "2026-09-10"
+reverify_triggers:
+  - Whether the @config/@plugin corePlugins/safelist/separator gap has been confirmed resolved (or is still present) in a later 4.x patch beyond 4.3.3
+  - A new Tailwind major release (v5), or a new v4.x minor that changes default theme content the way v4.2.0's color-palette addition did
+  - Any official statement establishing a formal v3-LTS end-of-life date (currently an informal, observed-only pattern from the v3-lts npm dist-tag and changelog activity, not a documented policy)
+
+owned_knowledge:
+  - Tailwind utility-class composition, variant-stacking syntax, and arbitrary-value/variable syntax (bracket vs. parenthesis)
+  - The v4 CSS-first @theme/@utility/@variant/@custom-variant configuration model and its v3 tailwind.config.js equivalent
+  - Tailwind's content-detection/class-scanning mechanism and its dynamic-class-name limitation
+  - The documented v3→v4 breaking-change catalogue and browser-support floor
+decision_framework_present: true
+
+failure_handling:
+  - If the target browser support matrix is unknown, ask for it or explicitly state that v4's floor (Safari 16.4+/Chrome 111+/Firefox 128+) is assumed — never silently assume v4 support for an unstated audience (VA-3).
+  - If the installed Tailwind major/minor version cannot be determined, ask for it or state the version the guidance assumes, since features (e.g. v4.2.0's color palettes) and syntax (bracket vs. parenthesis arbitrary values) are not uniform across the live v3.4/v4.x lines.
+  - If shell/build execution is unavailable, degrade to advisory class/config edits and state that the codemod (npx @tailwindcss/upgrade) or a real build was not run.
+escalation:
+  - A v3→v4 upgrade touching a shared/production config requires explicit user confirmation before running the codemod, since it rewrites config and template files across the project and the official guide itself recommends reviewing every diff before merging.
+  - Introducing Tailwind v4 into a project that currently relies on Sass/Less/Stylus as a preprocessing step requires explicit user confirmation before removing/bypassing the preprocessor, since v4 does not support using it alongside Tailwind.
+verification:
+  - Every version-specific claim in the output (browser floor, color-palette availability, arbitrary-value syntax) is tagged with the range it holds for.
+  - A proposed v3→v4 migration is run via the official codemod on a branch with the diff reviewed, not applied blind.
+  - No dynamically-constructed class-name string is introduced (e.g. template-interpolated utility classes); only a static lookup map is used for data-driven styling.
+evaluation_criteria:
+  - For a seeded project with an unstated browser target, does not silently assume v4 support; asks or states the assumption explicitly.
+  - For a seeded v3 codebase being touched, correctly identifies at least one real, version-tagged v3→v4 breaking change relevant to the seeded code (e.g. bracket-to-parenthesis arbitrary-variable syntax, or the border/ring default-color change).
+  - For a seeded "add Tailwind to a project that already uses Sass" task, states the narrow v4 preprocessing incompatibility precisely rather than treating Sass and Tailwind as universally conflicting, and does not recommend abandoning Sass project-wide without cause.
+  - Chooses a defensible v3-vs-v4 and utility-first-vs-component-library decision for a seeded scenario, including the "plain CSS, no framework" simplest branch when nothing justifies more (QR-4).
+  - Does not restate generic styling-token/theming-architecture guidance owned by the parent styling-systems skill (QR-2).
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]   # for running the @tailwindcss/upgrade codemod or a build; abstract shell → CC tools
+  cursor:
+    paths: ["**/*.css", "tailwind.config.*", "**/*.{jsx,tsx,vue,svelte,html}"]
+  vscode:
+    argument_hint: "<task, e.g. 'convert this component to utility classes' or 'plan the v3 to v4 upgrade'>"

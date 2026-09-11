@@ -1,0 +1,126 @@
+id: SK-DISC-002
+slug: solution-architecture
+name: Solution architecture
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 1
+domain: DISC
+
+purpose: >-
+  Choose a system architecture and technology approach that fits stated
+  requirements and constraints, with recorded trade-offs rather than an
+  unstated default preference.
+scope: >-
+  System decomposition, component boundaries, cross-cutting-concern
+  identification, and technology-selection rationale. Consumes the
+  technology decision matrix and does not re-derive per-technology facts
+  (that belongs to the relevant Layer-3/Layer-4 skill); does not decompose
+  the agreed approach into an execution-ordered task list (that's
+  technical-planning).
+expertise: Senior / principal engineer acting as a solution architect.
+description: >-
+  Decompose a system into components, identify cross-cutting concerns, and
+  choose a technology approach with explicit trade-offs — using the technology
+  decision matrix as the source of truth for alternatives. Use for a new
+  system/feature of non-trivial size or an open significant technology
+  choice. Not for elaborating already-fixed architecture, or for the
+  technology-specific how-to once a choice is made (route to the matching
+  Layer-3/Layer-4 skill).
+
+activation_conditions:
+  - A new system or non-trivial feature needs a component/service structure
+  - A significant technology choice is open (framework, database, API paradigm, realtime transport, etc.)
+  - Cross-cutting concerns (auth, caching, observability) need to be placed before implementation starts
+  - The user asks for an architecture, a design, or "how should we build this"
+non_activation_conditions:
+  - The architecture and stack are already fixed and the task is implementation within it
+  - The task is a technology-specific how-to question with no open architectural decision (route to the relevant Layer-3/Layer-4 skill)
+  - Requirements are not yet gathered for a non-trivial system (route to requirements-engineering first)
+activation_mode: auto
+
+inputs:
+  - name: requirements
+    description: Structured requirements and constraints (ideally from requirements-engineering).
+    required: true
+  - name: existing-architecture
+    description: Any existing system structure the new work must fit into.
+    required: false
+required_context:
+  - The functional and non-functional requirements the architecture must satisfy
+optional_context:
+  - Existing system architecture / stack already in place
+  - Organizational technology constraints or preferences
+  - Team's existing expertise (a real, if soft, cost input to a technology choice)
+
+outputs:
+  - name: architecture-description
+    kind: analysis
+    description: Component/service decomposition, boundaries, and data flow.
+  - name: technology-choices
+    kind: analysis
+    description: Selected stack per decision point, each with recorded trade-offs and the alternatives considered.
+  - name: risks-and-cross-cutting-concerns
+    kind: analysis
+    description: Identified failure modes, cross-cutting concerns (auth/caching/observability/etc.), and open risks.
+
+depends_on_skills: []
+# Policy fix (2026-09-09, resolves audit "Unresolved question #1" from the
+# DISC-domain audit): depends_on_skills is reserved for hard composition
+# (this skill invokes another as a blocking sub-step of its own execution).
+# The relationship to requirements-engineering is a soft prerequisite — this
+# skill needs its output but degrades gracefully if absent (see
+# required_context + failure_handling below) — so it belongs in
+# related_skills, not depends_on_skills.
+related_skills: [SK-DISC-001, SK-DISC-003, SK-CONV-005]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: Technology Decision Matrix — head-to-head comparisons for genuine "pick one" decision points
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-09"
+  - url: research/knowledge-maps/integration-map.md
+    title: Integration Map — direct technology-to-technology integration pairs and named stacks
+    via: research/knowledge-maps/integration-map.md
+    retrieved: "2026-09-09"
+  - url: research/knowledge-maps/technology-knowledge-map.md
+    title: Technology Knowledge Map — dependency/complement/conflict graph across the 44 researched technologies
+    via: research/knowledge-maps/technology-knowledge-map.md
+    retrieved: "2026-09-09"
+  - url: research/knowledge-maps/agent-capability-map.md
+    title: Agent Capability Map — what execution capabilities are and are not portable across coding-agent ecosystems
+    via: research/knowledge-maps/agent-capability-map.md
+    retrieved: "2026-09-09"
+last_verified: "2026-09-09"
+# Note: these are internal library research artifacts, not external vendor
+# docs — they are this skill's decision-support source of truth per its
+# scope (it does not itself assert technology API/config facts; those are
+# owned by Layer-3/Layer-4 skills, which carry their own official-docs
+# source_references per spec rule SG-1/SG-2).
+
+owned_knowledge:
+  - Architecture decomposition method and technology-selection decision framework
+decision_framework_present: true
+
+failure_handling:
+  - If requirements are missing or too thin to support a real decision, request them (or hand off to requirements-engineering) rather than architecting against assumptions.
+  - If the decision matrix and knowledge map are silent on a needed comparison, say so explicitly and reason from first principles rather than presenting a silence as a researched conclusion.
+escalation:
+  - A technology choice that is expensive or slow to reverse (a primary datastore, a core framework, a public API paradigm) is presented with trade-offs for explicit user confirmation before being treated as decided.
+  - A requirement gap or contradiction discovered while architecting is escalated back to requirements-engineering / the user rather than silently resolved by picking an interpretation.
+verification:
+  - Every stated requirement is covered by some part of the proposed architecture.
+  - At least the trade-offs the decision matrix documents for the relevant category are recorded, not just the chosen option.
+  - No technology combination the research flags as a conflict or inappropriate pairing is selected without an explicit, stated reason.
+evaluation_criteria:
+  - For a seeded requirement set, proposes an architecture whose components cover all requirements.
+  - Records real trade-offs (not just the winner) for each significant technology decision, sourced from the decision matrix where it applies.
+  - Does not select a technology combination the research records as conflicting or inappropriate without explicitly justifying the exception.
+  - Identifies at least the architectural failure modes (single points of failure, cascading-failure risk) relevant to the proposed shape.
+
+adapter_hints: {}

@@ -1,0 +1,190 @@
+id: SK-TECH-websocket-api
+slug: websocket-api
+name: WebSocket API
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-BE-004]   # realtime-communication
+
+purpose: >-
+  Implement the WebSocket API correctly — RFC 6455 handshake mechanics, the
+  Sec-WebSocket-* headers, subprotocol/extension negotiation, close codes,
+  and the browser/Node.js API surface — as the technology-level
+  specialization of realtime-communication's transport method.
+scope: >-
+  WebSocket-API-specific implementation depth: handshake mechanics, framing,
+  Sec-WebSocket-* headers, close codes, the browser WebSocket/WebSocketStream
+  interfaces, and Node.js's client-only support. Not transport selection
+  (WebSocket vs. Socket.IO vs. WebRTC vs. SSE), not the generic
+  connection-lifecycle/scaling/handshake-auth design, and not CORS/Origin
+  threat modeling depth — all owned by the parent skill SK-BE-004
+  (realtime-communication).
+expertise: Web-platform/protocol engineer implementing RFC 6455 WebSocket connections.
+description: >-
+  WebSocket-API-specific implementation: opening handshake mechanics,
+  Sec-WebSocket-* headers, subprotocol/extension negotiation, close codes,
+  and the browser WebSocket/WebSocketStream vs. Node.js WebSocket client API
+  surface. Use once WebSocket is the chosen transport (see
+  realtime-communication for that choice) and implementation-level detail is
+  needed. Not for choosing between WebSocket/Socket.IO/WebRTC, or generic
+  connection/scaling/auth design.
+
+activation_conditions:
+  - WebSocket has already been selected as the realtime transport and implementation detail is needed (handshake, headers, close codes, subprotocols)
+  - The task references the WebSocket() constructor, ws:// / wss:// URLs, Sec-WebSocket-* headers, or RFC 6455 directly
+  - Implementing or debugging a raw WebSocket client (browser or Node.js) or a WebSocket server (e.g. via the `ws` npm package)
+non_activation_conditions:
+  - The transport choice itself is still open (WebSocket vs. Socket.IO vs. WebRTC vs. SSE) — route to SK-BE-004
+  - Connection-lifecycle/reconnection, horizontal-scaling, or handshake-authentication design in the abstract — route to SK-BE-004
+  - Socket.IO-specific API usage (rooms, namespaces, acknowledgements, the Socket.IO wire protocol) — route to SK-TECH-socketio
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The WebSocket implementation task (client connection, server handshake handling, close-code/error handling, subprotocol negotiation).
+    required: true
+  - name: runtime-target
+    description: Whether the code runs in a browser, Node.js, or another server runtime — determines which API surface applies (browser WebSocket, Node's client-only global, or a server library such as `ws`).
+    required: false
+required_context:
+  - Whether WebSocket has already been chosen as the transport (this skill assumes that decision was made; if not, defer to SK-BE-004)
+optional_context:
+  - The Node.js version in use, relevant to the client-global support cutover (v21.0.0 experimental → v22.4.0 stable)
+  - Whether a server-side WebSocket implementation is needed, since Node.js provides none built-in
+
+outputs:
+  - name: client-or-server-code
+    kind: edit
+    description: WebSocket client/server connection code, handshake handling, close-code/error handling, or subprotocol negotiation logic.
+  - name: analysis
+    kind: analysis
+    description: Version/compatibility notes relevant to the implementation (e.g. the Node.js client-only gap, the http(s)-URL normalization date).
+
+depends_on_skills: []
+related_skills: [SK-TECH-socketio]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API
+    title: MDN — WebSocket API overview
+    via: research/technologies/websocket-api.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/API/WebSocket
+    title: MDN — WebSocket interface reference
+    via: research/technologies/websocket-api.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/API/WebSocket/WebSocket
+    title: MDN — WebSocket() constructor reference
+    via: research/technologies/websocket-api.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/API/WebSocket/send
+    title: MDN — WebSocket.send() method reference
+    via: research/technologies/websocket-api.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
+    title: MDN — CloseEvent interface reference
+    via: research/technologies/websocket-api.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent/code
+    title: MDN — WebSocket close-code registry
+    via: research/technologies/websocket-api.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/API/WebSocketStream
+    title: MDN — WebSocketStream (experimental) reference
+    via: research/technologies/websocket-api.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_client_applications
+    title: MDN — Writing WebSocket client applications
+    via: research/technologies/websocket-api.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers
+    title: MDN — Writing WebSocket servers
+    via: research/technologies/websocket-api.md
+    retrieved: "2026-09-10"
+  - url: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/connect-src
+    title: MDN — CSP connect-src directive reference
+    via: research/technologies/websocket-api.md
+    retrieved: "2026-09-10"
+  - url: https://websockets.spec.whatwg.org/
+    title: WHATWG — WebSockets Living Standard
+    via: research/technologies/websocket-api.md
+    retrieved: "2026-09-10"
+  - url: https://www.rfc-editor.org/rfc/rfc6455.html
+    title: IETF RFC 6455 — The WebSocket Protocol
+    via: research/technologies/websocket-api.md
+    retrieved: "2026-09-10"
+  - url: https://www.rfc-editor.org/rfc/rfc7692.html
+    title: IETF RFC 7692 — Compression Extensions for WebSocket (permessage-deflate)
+    via: research/technologies/websocket-api.md
+    retrieved: "2026-09-10"
+  - url: https://www.rfc-editor.org/rfc/rfc8441.html
+    title: IETF RFC 8441 — Bootstrapping WebSockets with HTTP/2
+    via: research/technologies/websocket-api.md
+    retrieved: "2026-09-10"
+  - url: https://nodejs.org/api/globals.html
+    title: Node.js official docs — global WebSocket client class
+    via: research/technologies/websocket-api.md
+    retrieved: "2026-09-10"
+  - url: https://firefox-source-docs.mozilla.org/devtools-user/network_monitor/inspecting_web_sockets/index.html
+    title: Firefox DevTools — WebSocket frame inspector documentation
+    via: research/technologies/websocket-api.md
+    retrieved: "2026-09-10"
+
+covered_versions:
+  websocket-api: "RFC 6455 (STD 34, no version number); Node.js client-only support stable v22.4.0+, no built-in server"
+version_sensitive_claims:
+  - claim: Node.js ships a global browser-compatible WebSocket client but no built-in WebSocket server at all; a separate server implementation (e.g. the `ws` npm package) is required.
+    applies_to: "All Node.js versions (client global specifically: introduced v21.0.0 / backported to v20.10.0 behind --experimental-websocket; flag removed v22.0.0; stable as of v22.4.0)"
+    source_ref: research/knowledge-maps/version-matrix.md (WebSocket API section); research/technologies/websocket-api.md §12, §16
+  - claim: The WebSocket() constructor accepts http/https URLs and auto-normalizes them to ws/wss.
+    applies_to: "Browser/runtime engines implementing the change dated May 2023; older engines may only accept ws/wss literally"
+    source_ref: research/knowledge-maps/version-matrix.md (WebSocket API section); research/technologies/websocket-api.md §3, §13
+  - claim: WebSocketStream provides backpressure but is experimental/non-standard, not broadly available.
+    applies_to: "Implemented in one rendering engine only as of research date (2026-09-09/10)"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/websocket-api.md §3, §12
+  - claim: Baseline WebSocket interface support is "Widely available."
+    applies_to: "Across major browsers, dating to July 2015"
+    source_ref: research/knowledge-maps/version-matrix.md; research/technologies/websocket-api.md §12
+last_verified: "2026-09-10"
+reverify_triggers:
+  - The WHATWG WebSockets Living Standard's next substantive revision
+  - A new RFC superseding or amending RFC 6455
+  - WebSocketStream reaching broader, cross-engine implementation status
+  - Node.js shipping a built-in WebSocket server
+
+owned_knowledge:
+  - RFC 6455 handshake mechanics (Sec-WebSocket-* headers, Sec-WebSocket-Accept computation)
+  - WebSocket close-code registry and CloseEvent semantics
+  - Browser WebSocket/WebSocketStream and Node.js WebSocket client API surface
+  - Subprotocol/extension negotiation mechanics (Sec-WebSocket-Protocol / Sec-WebSocket-Extensions)
+decision_framework_present: true
+
+failure_handling:
+  - If the transport choice (WebSocket vs. Socket.IO vs. WebRTC) is still open, defer to SK-BE-004 rather than assuming WebSocket.
+  - If the runtime target (browser vs. Node.js vs. other server runtime) is unknown, ask, since the available API surface differs (Node ships no built-in server).
+  - If shell is unavailable/denied, output advisory client/server code and state that it was not run or tested.
+escalation:
+  - A server accepting non-browser clients with no connection-level authentication beyond Origin checking is escalated to SK-BE-004's handshake-auth guidance, not re-decided here.
+verification:
+  - Handshake code validates Sec-WebSocket-Version and required headers, returning 400 on malformed/unsupported requests.
+  - Server-side code enforces the client-must-mask / server-must-not-mask rule and disconnects clients sending unmasked frames.
+  - Close-code handling distinguishes codes never actually sent on the wire (1005, 1006, 1015) from real remote-sent codes.
+  - Every version-specific claim (Node client-only gap, http(s) normalization date, WebSocketStream status) is tagged with its applicable range.
+  - A WebSocket client is actually connected and frames are exchanged with the server, then a proper close with the expected close code is confirmed, not just the handshake and frame-handling code reviewed.
+evaluation_criteria:
+  - For a seeded "implement a WebSocket client/server" task, produces handshake-correct code (proper headers, Sec-WebSocket-Accept, masking rule) grounded in RFC 6455.
+  - Correctly states that Node.js has no built-in WebSocket server when the task involves a Node.js server.
+  - Does not restate SK-BE-004's transport-comparison table or its connection-lifecycle/scaling/auth framework (no-duplication rule QR-2).
+  - Surfaces the no-backpressure/bufferedAmount limitation and the lack of an official testing story when relevant to the task.
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]
+  vscode:
+    argument_hint: "<task, e.g. 'implement WebSocket close-code handling' or 'add subprotocol negotiation'>"

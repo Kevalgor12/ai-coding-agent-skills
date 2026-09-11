@@ -1,0 +1,76 @@
+# S05 — Realtime multiplayer browser game (large multi-skill project)
+assertions:
+  - number: 1
+    description: All required skills activate — discovery, architecture, frontend, Three.js, realtime, backend, DB, QA, security, perf
+    evaluation_method: observation
+    checks:
+      - type: routing_contains
+        skill_id: SK-DISC-001
+      - type: routing_contains
+        skill_id: SK-DISC-002
+      - type: routing_contains
+        skill_id: SK-DISC-003
+      - type: routing_contains
+        skill_id: SK-ORCH-003
+      - type: routing_contains
+        skill_id: SK-ORCH-002
+      - type: routing_contains
+        skill_id: SK-QA-002
+      - type: routing_contains
+        skill_id: SK-TECH-threejs
+
+  - number: 2
+    description: Technology skills added only after architecture produces output
+    evaluation_method: human_review
+    notes: Requires reviewing ledger ordering — technology skills must appear after SK-DISC-002
+
+  - number: 3
+    description: Parallel stages in plan or documented reason for serialization
+    evaluation_method: human_review
+    notes: Requires reviewing plan.stages for parallel edges
+
+  - number: 4
+    description: QA and review loop placed AFTER implementation; status not complete while pending
+    evaluation_method: observation
+    checks:
+      - type: routing_contains
+        skill_id: SK-QA-001
+
+  - number: 5
+    description: Three distinct escalation gates surfaced separately
+    evaluation_method: human_review
+    notes: Requires reviewing plan.gates[] for three separate entries
+
+  - number: 6
+    description: SK-QA-002 activation grounded in multiplayer untrusted-client reasoning
+    evaluation_method: observation
+    checks:
+      - type: routing_contains
+        skill_id: SK-QA-002
+
+  - number: 7
+    description: Excluded skills absent with reasons
+    evaluation_method: observation
+    checks:
+      - type: routing_excludes
+        skill_id: SK-GROW-001
+      - type: routing_excludes
+        skill_id: SK-GROW-002
+      - type: routing_excludes
+        skill_id: SK-BE-003
+      - type: routing_excludes
+        skill_id: SK-DATA-002
+      - type: routing_excludes
+        skill_id: SK-TECH-webrtc
+
+  - number: 8
+    description: Performance reasoning grounded in actual latency budget
+    evaluation_method: human_review
+    notes: Requires reviewing SK-QA-003 findings for specific latency budget
+
+  - number: 9
+    description: Three.js output uses r-number versioning, no semver claim
+    evaluation_method: observation
+    checks:
+      - type: routing_contains
+        skill_id: SK-TECH-threejs

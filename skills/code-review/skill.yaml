@@ -1,0 +1,94 @@
+id: SK-CONV-007
+slug: code-review
+name: Code review
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 2
+domain: CONV
+
+purpose: >-
+  Review a change for correctness, quality, security, and convention
+  adherence, and report actionable, ranked findings — delegating
+  specialized facets (security, performance, comments, quality) to their
+  domain skills rather than duplicating their logic.
+scope: >-
+  Adversarial review of a diff/PR. The general review skill; specialized
+  reviews (security, performance) delegate to their domain skills rather
+  than being re-derived here. Not authoring net-new code (the build
+  skills own that, though they may self-check).
+expertise: Senior/principal engineer with strong code-review discipline.
+description: >-
+  Review a change for correctness, quality, security, and convention
+  adherence — find correctness bugs directly, delegate security/perf
+  findings to their domain skills, check comment and code-quality
+  convention adherence, rank findings by severity, and distinguish
+  confirmed from speculative issues. Use when a change is up for review,
+  the user asks for a review, or as a pre-merge gate. Not for authoring
+  net-new code.
+
+activation_conditions:
+  - A change is up for review
+  - The user asks for a code review
+  - A pre-merge gate is in play
+non_activation_conditions:
+  - Authoring net-new code (the build skills own that, though they may self-check)
+  - No change exists to review
+activation_mode: auto
+
+inputs:
+  - name: diff-or-changeset
+    description: The diff, PR, or changeset being reviewed.
+    required: true
+  - name: repo-conventions
+    description: The repository's established conventions.
+    required: false
+outputs:
+  - name: ranked-findings
+    kind: analysis
+    description: Actionable, severity-ranked findings, distinguishing confirmed from speculative, optionally posted as PR comments where the host allows.
+
+depends_on_skills: [SK-CONV-002, SK-CONV-003]
+# SK-QA-002 (security-engineering, layer 3) and SK-QA-003 (performance-engineering,
+# layer 3) moved to related_skills: they are conditional, domain-specific facets
+# invoked when a security/perf concern is present, not unconditional hard blocking
+# sub-steps of every review. VR-4 requires depends_on_skills to be same-or-lower
+# layer; SK-QA-002/003 are layer 3 while this skill is layer 2.
+related_skills: [SK-CONV-001, SK-CONV-004, SK-CONV-005, SK-CONV-008, SK-QA-002, SK-QA-003]
+conflicts_with: []
+
+required_capabilities: [file-read]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: core/taxonomy/skill-catalog.md
+    title: "Skill Catalog — SK-CONV-007 code-review taxonomy entry (adversarial review, delegated security/perf facets, severity ranking)"
+    via: core/taxonomy/skill-catalog.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Correctness-bug-finding discipline for a diff/changeset
+  - Finding aggregation, severity ranking, and confirmed-vs-speculative distinction
+  - Delegation-not-duplication method for specialized review facets
+decision_framework_present: true
+
+failure_handling:
+  - If a finding could plausibly belong to a delegated skill's domain (security, performance), route it there rather than adjudicating it independently.
+  - If PR-posting capability isn't available (Tier C, not uniform per this library's capability map), degrade to reporting findings directly rather than claiming to have posted them.
+verification:
+  - Every finding is ranked by severity, not presented as an undifferentiated list.
+  - Every finding is marked confirmed or speculative — never presented as confirmed without actually being verified.
+  - Security and performance findings are delegated to security-engineering/performance-engineering, not re-derived independently by this skill.
+  - Comment and code-quality convention adherence is checked via code-commenting/code-quality, not a separate ad hoc standard.
+escalation:
+  - A finding indicating an actively-exploitable security issue is escalated immediately per security-engineering's own escalation rule, not queued as a routine review comment.
+  - PR-posting is Tier C and not uniform across agent hosts — state the constraint rather than assuming posting capability exists.
+evaluation_criteria:
+  - On a fixture diff with seeded defects, surfaces the real defects, ranks by severity, avoids a high false-positive rate.
+  - Delegates security/perf findings to their domain skills rather than duplicating them.
+  - Correctly distinguishes confirmed from speculative findings.
+  - Does not review net-new code authorship as if it were reviewing an existing change.
+
+adapter_hints: {}

@@ -1,0 +1,37 @@
+# S10 — Add Redis caching (premature optimization refusal)
+assertions:
+  - number: 14
+    description: "[CRITICAL] No Redis implementation without measured bottleneck"
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "what.*slow|measur|profile|bottleneck|which.*endpoint"
+        regex: true
+
+  - number: 1
+    description: "[CRITICAL] SK-TECH-redis absent from initial routing; if present, added only after evidence"
+    evaluation_method: observation
+    checks:
+      - type: routing_excludes
+        skill_id: SK-TECH-redis
+
+  - number: 6
+    description: If caching-strategy activates, required inputs bound or status=blocked
+    evaluation_method: observation
+    checks:
+      - type: routing_excludes
+        skill_id: SK-DATA-005
+
+  - number: 9
+    description: Status is blocked or the deliverable is the clarifying question, not a Redis design
+    evaluation_method: observation
+    checks:
+      - type: status_is
+        value: blocked
+
+  - number: 7
+    description: security-engineering (SK-QA-002) absent — no security element in play
+    evaluation_method: observation
+    checks:
+      - type: routing_excludes
+        skill_id: SK-QA-002

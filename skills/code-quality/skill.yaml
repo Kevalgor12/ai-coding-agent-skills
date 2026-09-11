@@ -1,0 +1,84 @@
+id: SK-CONV-003
+slug: code-quality
+name: Code quality
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 2
+domain: CONV
+
+purpose: >-
+  Enforce clean, readable, idiomatic code — naming, structure, size,
+  cohesion, dead-code and duplication avoidance — independent of
+  language.
+scope: >-
+  Structural/readability quality of code the agent writes or reviews.
+  Not correctness bugs (code-review) and not performance
+  (performance-engineering). Specialized by Layer-4 language/technology
+  skills for language-specific idiom.
+expertise: Senior/principal engineer with strong code-hygiene discipline.
+description: >-
+  Enforce clean, readable, idiomatic code — meaningful naming, appropriate
+  function/module size, cohesion, avoiding dead code and duplication and
+  premature abstraction, language-idiomatic structure. Use when writing
+  non-trivial code or a quality pass is requested. Not for correctness
+  bugs (code-review) or performance (performance-engineering).
+
+activation_conditions:
+  - Writing non-trivial code
+  - A quality pass is requested
+  - Dead code, duplication, or an over-abstracted structure is suspected
+non_activation_conditions:
+  - A throwaway snippet
+  - The user explicitly wants a quick spike, not production-quality code
+activation_mode: auto
+
+inputs:
+  - name: code-being-written-or-reviewed
+    description: The code being authored, edited, or reviewed.
+    required: true
+  - name: language-context
+    description: The language/technology context, for idiom-specific judgment.
+    required: false
+outputs:
+  - name: quality-improvements-or-findings
+    kind: edit
+    description: Cleaner code, or quality findings (naming, structure, dead code, duplication, over-abstraction) with rationale.
+
+depends_on_skills: []
+related_skills: [SK-CONV-002, SK-CONV-004, SK-CONV-007]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: core/taxonomy/skill-catalog.md
+    title: "Skill Catalog — SK-CONV-003 code-quality taxonomy entry (naming, structure, size, cohesion, dead-code/over-engineering avoidance)"
+    via: core/taxonomy/skill-catalog.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Naming/structure/size/cohesion judgment, language-neutral
+  - Dead-code and duplication detection
+  - Premature-abstraction and over-engineering avoidance discipline
+decision_framework_present: true
+
+failure_handling:
+  - If the code is explicitly a throwaway spike the user has accepted as such, don't impose production-quality standards uninvited.
+  - If a quality issue is genuinely ambiguous (a judgment call between two reasonable structures), state the trade-off rather than asserting one is objectively correct.
+verification:
+  - Naming is meaningful and specific, not generic or misleading.
+  - No dead code (unreachable, unused, commented-out) is left in place without a stated reason.
+  - No new premature abstraction is introduced while cleaning up existing issues.
+  - Duplication that represents genuine repeated logic (not superficially similar but semantically different code) is consolidated.
+escalation:
+  - A large-scale structural refactor beyond the immediate quality pass is flagged for explicit scoping/confirmation rather than expanded into unilaterally.
+evaluation_criteria:
+  - On a fixture with poor naming/over-abstraction/dead code, produces improvements a reviewer agrees with and introduces no premature abstraction of its own.
+  - Correctly distinguishes genuine duplication (same logic, safely consolidatable) from superficially similar but semantically distinct code that shouldn't be merged.
+  - Does not impose production-quality standards on an explicitly-accepted throwaway spike.
+
+adapter_hints: {}

@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.0",
+  "generated": "20260911T114751Z",
+  "scenario_id": "S01",
+  "scenario_name": "PostgreSQL duplicate-rows query bug",
+  "outcome": "failed",
+  "critical_passed": 2,
+  "critical_total": 4,
+  "major_passed": 0,
+  "major_total": 3,
+  "minor_passed": 1,
+  "minor_total": 4,
+  "has_human_review_pending": true,
+  "run_record": {
+    "scenario_id": "S01",
+    "status": "complete",
+    "routing_selected": [
+      {
+        "skill_id": "SK-TECH-postgresql",
+        "reason": "mock-auto"
+      }
+    ],
+    "files_changed": [],
+    "commands_run": [],
+    "open_questions": [],
+    "parse_errors": []
+  },
+  "verdicts": [
+    {
+      "assertion_id": "S01-A1",
+      "number": 1,
+      "weight": "critical",
+      "verdict": "pass",
+      "evidence": "[pass] SK-TECH-postgresql found in routing_selected\n[pass] SK-FE-001 absent from routing_selected\n[pass] SK-TECH-react absent from routing_selected\n[pass] SK-FE-002 absent from routing_selected\n[pass] SK-FE-004 absent from routing_selected\n[pass] SK-GROW-001 absent from routing_selected\n[pass] SK-BE-004 absent from routing_selected\n[pass] SK-CONV-006 absent from routing_selected\n[pass] SK-CONV-001 absent from routing_selected\n[pass] SK-CONV-004 absent from routing_selected\n[pass] SK-CONV-007 absent from routing_selected\n[pass] SK-QA-003 absent from routing_selected\n[pass] SK-DATA-001 absent from routing_selected\n[pass] SK-DATA-002 absent from routing_selected\n[pass] SK-BE-001 absent from routing_selected",
+      "reason": "all 15 check(s) passed",
+      "needs_human_review": false
+    },
+    {
+      "assertion_id": "S01-A2",
+      "number": 2,
+      "weight": "critical",
+      "verdict": "pass",
+      "evidence": "[pass] SK-TECH-react absent from routing_selected",
+      "reason": "all 1 check(s) passed",
+      "needs_human_review": false
+    },
+    {
+      "assertion_id": "S01-A3",
+      "number": 3,
+      "weight": "major",
+      "verdict": "fail",
+      "evidence": "[fail] No ledger entry for capability-adapter",
+      "reason": "1 check(s) failed",
+      "needs_human_review": false
+    },
+    {
+      "assertion_id": "S01-A4",
+      "number": 4,
+      "weight": "minor",
+      "verdict": "not-evaluated",
+      "evidence": "no machine checks \u2014 human review required",
+      "reason": "evaluation_method=human_review or no checks defined",
+      "needs_human_review": true
+    },
+    {
+      "assertion_id": "S01-A5",
+      "number": 5,
+      "weight": "critical",
+      "verdict": "fail",
+      "evidence": "[fail] output did not match 'GROUP BY|PARTITION BY|COUNT.*OVER'",
+      "reason": "1 check(s) failed",
+      "needs_human_review": false
+    },
+    {
+      "assertion_id": "S01-A6",
+      "number": 6,
+      "weight": "critical",
+      "verdict": "fail",
+      "evidence": "[fail] output did not match 'item_count|COUNT.*oi\\\\.id|COUNT.*order_item'",
+      "reason": "1 check(s) failed",
+      "needs_human_review": false
+    },
+    {
+      "assertion_id": "S01-A7",
+      "number": 7,
+      "weight": "major",
+      "verdict": "fail",
+      "evidence": "[fail] output did not match 'WHERE c\\\\.id|\\\\$1'\n[fail] output did not match 'ORDER BY.*order_date'",
+      "reason": "2 check(s) failed",
+      "needs_human_review": false
+    },
+    {
+      "assertion_id": "S01-A8",
+      "number": 8,
+      "weight": "major",
+      "verdict": "not-evaluated",
+      "evidence": "no machine checks \u2014 human review required",
+      "reason": "evaluation_method=human_review or no checks defined",
+      "needs_human_review": true
+    },
+    {
+      "assertion_id": "S01-A9",
+      "number": 9,
+      "weight": "minor",
+      "verdict": "pass",
+      "evidence": "[pass] no open_questions (no escalation)",
+      "reason": "all 1 check(s) passed",
+      "needs_human_review": false
+    },
+    {
+      "assertion_id": "S01-A10",
+      "number": 10,
+      "weight": "minor",
+      "verdict": "fail",
+      "evidence": "[fail] output did not match 'PostgreSQL.*(18|protocol 3\\\\.2|OAuth2 auth|async I/O)'",
+      "reason": "1 check(s) failed",
+      "needs_human_review": false
+    },
+    {
+      "assertion_id": "S01-A11",
+      "number": 11,
+      "weight": "minor",
+      "verdict": "fail",
+      "evidence": "[fail] No file matching 'ordersRepository' in files_changed (0 entries)",
+      "reason": "1 check(s) failed",
+      "needs_human_review": false
+    }
+  ]
+}

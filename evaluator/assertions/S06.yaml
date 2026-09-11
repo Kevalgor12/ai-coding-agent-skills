@@ -1,0 +1,76 @@
+# S06 — User auth + email verification
+assertions:
+  - number: 1
+    description: SK-QA-002 co-activates with SK-BE-005; both present in selected
+    evaluation_method: observation
+    checks:
+      - type: routing_contains
+        skill_id: SK-BE-005
+      - type: routing_contains
+        skill_id: SK-QA-002
+
+  - number: 2
+    description: SK-QA-002 inclusion traceable to a declared activation condition (not vibe)
+    evaluation_method: human_review
+    notes: Requires reviewing the stated reason for SK-QA-002 activation
+
+  - number: 3
+    description: SK-DATA-002 (ORM) absent — no ORM in repo signals
+    evaluation_method: observation
+    checks:
+      - type: routing_excludes
+        skill_id: SK-DATA-002
+
+  - number: 4
+    description: Schema design before auth-flow design; not parallelized
+    evaluation_method: human_review
+    notes: Requires reviewing plan sequencing
+
+  - number: 5
+    description: SK-QA-001 and SK-CONV-006 parallel or serialized with reason
+    evaluation_method: human_review
+    notes: Requires reviewing plan stages for test/doc parallelization
+
+  - number: 6
+    description: Explicit decisions recorded for password hashing, token expiry, session model
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "bcrypt|argon2|scrypt|hash"
+        regex: true
+      - type: output_pattern
+        pattern: "expir|ttl|timeout"
+        regex: true
+
+  - number: 7
+    description: SK-QA-002 findings address token unguessability, enumeration, rate-limiting
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "entropy|unguessable|rate.limit|brute.forc|enumerat"
+        regex: true
+
+  - number: 8
+    description: Test plan covers expired token, used token reuse, unverified user login refusal
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "expired|reuse|already.used|unverified"
+        regex: true
+
+  - number: 9
+    description: No invented skill IDs (e.g. email-technology) in routing
+    evaluation_method: observation
+    checks:
+      - type: routing_excludes
+        skill_id: SK-EMAIL-001
+
+  - number: 10
+    description: Migration not gated but PR post is
+    evaluation_method: human_review
+    notes: Requires reviewing escalation gates in plan
+
+  - number: 11
+    description: Documentation describes actual endpoint shapes + status codes
+    evaluation_method: human_review
+    notes: Requires reviewing SK-CONV-006 output quality

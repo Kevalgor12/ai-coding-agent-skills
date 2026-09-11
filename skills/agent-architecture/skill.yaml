@@ -1,0 +1,104 @@
+id: SK-AI-004
+slug: agent-architecture
+name: Agent Architecture
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: AI
+
+purpose: >-
+  Architect multi-step, tool-using LLM agent loops — the orchestration layer
+  above a single tool call — provider-neutral across hand-rolled and
+  managed-framework approaches.
+scope: >-
+  Agent loop design (the while-loop-on-stop-reason pattern both researched
+  vendors document), state-management strategy across turns, multi-agent
+  patterns (handoffs, subagents) where supported, and hand-rolled-loop vs.
+  managed-framework choice per each vendor's own documented criteria.
+  Distinct from structured-output-tool-calling (a single tool call's
+  mechanics) and from excessive-agency risk management (owned by
+  ai-security).
+expertise: >-
+  Senior/staff engineer designing LLM agent orchestration, tool-execution
+  loops, and multi-agent composition across model providers.
+description: >-
+  Architect multi-step, tool-using LLM agent loops — the orchestration layer
+  above a single tool call. Covers agent-loop/termination design, conversation
+  state-management strategy, hand-rolled-loop vs. managed-framework choice,
+  and multi-agent composition (handoffs, subagents) where supported. Use when
+  a feature needs an LLM to autonomously sequence multiple tool calls or
+  sub-tasks. Not a single tool call (structured-output-tool-calling) or
+  bounding agent authority/blast radius (ai-security).
+
+activation_conditions:
+  - A feature requires an LLM to autonomously sequence multiple tool calls or sub-tasks
+  - Designing or reviewing a multi-step agent tool-execution loop and its termination conditions
+  - Choosing between a hand-rolled agent loop and a managed agent framework/runtime
+  - Choosing a conversation-state/persistence strategy across agent turns
+  - Designing multi-agent composition (handoffs, subagents, agents-as-tools)
+non_activation_conditions:
+  - A single tool call or single structured-output response suffices (route to structured-output-tool-calling)
+  - The concern is really about bounding what the agent is authorized to do — blast radius, permissions, excessive agency (route to ai-security)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The multi-step or tool-using task requiring an LLM agent.
+    required: true
+  - name: target-platform
+    description: The target LLM platform/vendor and its documented agent-build options, if already constrained.
+    required: false
+outputs:
+  - name: agent-loop-design
+    kind: analysis
+    description: The agent's tool-execution loop design, including explicit termination/step-limit conditions and loop ownership (hand-rolled vs. managed framework/runtime).
+  - name: state-management-strategy
+    kind: analysis
+    description: The chosen conversation-persistence/state strategy across agent turns and why it fits the task.
+  - name: orchestration-implementation
+    kind: edit
+    description: Agent loop, state-management, and multi-agent composition code applied to the codebase, where implementation is in scope.
+
+depends_on_skills: []
+related_skills: [SK-AI-001, SK-AI-003, SK-AI-008]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: official-docs
+source_references:
+  - url: research/technologies/anthropic-claude-api.md
+    title: "Anthropic Claude API Research — client-tool agentic loop, server-tool internal loop, pause_turn iteration limit, four agent build-time options, Managed Agents' Agent/Environment/Session/Events model, subagent orchestration guidance"
+    via: research/technologies/anthropic-claude-api.md
+    retrieved: "2026-09-10"
+  - url: research/technologies/openai-api.md
+    title: "OpenAI API Research — Agents SDK vs. raw Responses API loop control, runner per-turn loop, handoffs and agents-as-tools, four state-persistence strategies, approval/pause-as-paused-run semantics"
+    via: research/technologies/openai-api.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - Agent tool-execution loop design method (while-loop-on-stop-reason pattern, explicit termination/step-limit design)
+  - Hand-rolled-loop vs. managed-framework vs. fully-managed-runtime decision method, per each vendor's own documented control-vs-convenience criteria
+  - Conversation-state/persistence strategy selection across agent turns, including the local-replay-vs-server-managed-state reconciliation hazard
+  - Multi-agent composition patterns (handoffs, agents-as-tools, subagents) and when they're genuinely warranted vs. over-delegation
+decision_framework_present: true
+
+failure_handling:
+  - If the target platform/vendor isn't stated, ask rather than assume one vendor's loop semantics, stop-reason vocabulary, or state-persistence API.
+  - If the task is actually a single tool call or single structured-output response, decline to add orchestration and route to structured-output-tool-calling (SK-AI-003) rather than building a loop reflexively.
+verification:
+  - The designed loop has an explicit, stated termination condition (a stop-reason/output check, an iteration/step cap, or both) — never an open-ended loop.
+  - Autonomy is bounded (step/recursion/cost limits) and coordinated with ai-security (SK-AI-008) wherever the loop grants tools real-world effects.
+  - Multi-agent composition (subagents/handoffs/agents-as-tools) is justified by genuine task decomposition into specialist roles, not added reflexively to a task a single agent could complete.
+  - The termination condition is exercised by an actual trial run (a real invocation or an existing eval trace) and observed to stop as designed, not confirmed by reading the control-flow code alone.
+escalation:
+  - A request that is really about restricting what tools/actions the agent may take (authorization, blast radius, excessive agency) is escalated to ai-security (SK-AI-008) rather than answered as loop design.
+evaluation_criteria:
+  - On a fixture multi-step task, designs a bounded agent loop with an explicit termination/step-limit condition.
+  - Correctly declines to add agent orchestration when a single tool call or structured-output response would do.
+  - Chooses a state-management strategy appropriate to the task's control/resumability/state-sharing needs and states the trade-off, rather than defaulting to one strategy regardless of task.
+
+adapter_hints: {}

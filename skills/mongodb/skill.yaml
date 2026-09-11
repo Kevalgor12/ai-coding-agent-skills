@@ -1,0 +1,258 @@
+id: SK-TECH-mongodb
+slug: mongodb
+name: MongoDB
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: technology
+layer: 4
+domain: TECH
+parents: [SK-DATA-001, SK-DATA-005]   # data-modeling, search-integration
+
+purpose: >-
+  Apply MongoDB correctly and version-appropriately — document schema design
+  (embedding vs. referencing), the aggregation pipeline, sharding, ESR-rule
+  indexing, transactions, and RBAC/field-level encryption.
+scope: >-
+  MongoDB-specific implementation detail. Specializes the generic method from
+  data-modeling (SK-DATA-001) with MongoDB's concrete document-model API,
+  aggregation framework, sharding/replication architecture, indexing rules,
+  and security/deployment specifics. Not the generic store-shape decision or
+  entity/relationship design method (data-modeling), not ODM/driver usage
+  mechanics (orm-integration / mongoose), not full-text/vector search
+  integration depth (search-integration).
+expertise: MongoDB database engineer.
+description: >-
+  MongoDB-specific document modeling (embedding vs. referencing), aggregation
+  pipeline, sharding, the ESR indexing rule, multi-document transactions, and
+  RBAC/field-level encryption. Use when the stack uses MongoDB
+  (mongodb://+mongodb+srv:// URI, an official MongoDB driver, Mongoose/another
+  ODM, or the task names MongoDB). Not for generic schema design
+  (data-modeling), ODM usage mechanics (orm-integration/mongoose), or other
+  database engines (postgresql/mysql).
+
+activation_conditions:
+  - A mongodb:// / mongodb+srv:// connection string or an official MongoDB driver is present
+  - Mongoose or another MongoDB ODM is configured in the project
+  - The task names MongoDB or a MongoDB-specific concept (aggregation pipeline, sharding, WiredTiger, replica set, $lookup, BSON)
+non_activation_conditions:
+  - The stack uses PostgreSQL, MySQL, or another engine (route to that engine's technology skill)
+  - Purely generic schema design with no engine chosen yet (route to SK-DATA-001 data-modeling)
+  - ODM/driver usage mechanics independent of MongoDB-specific behavior (route to SK-DATA-002 orm-integration or SK-TECH-mongoose)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The MongoDB task (schema/document design, aggregation pipeline, indexing, sharding, transaction design, security hardening).
+    required: true
+  - name: schema-and-workload
+    description: Existing collections, sample documents, access patterns, and (ideally) explain() or aggregation pipeline output.
+    required: false
+required_context:
+  - The MongoDB major version and deployment form in use (self-managed Community/Enterprise vs. Atlas) — needed for version-correct guidance.
+optional_context:
+  - explain() output or the database profiler's slow-op log for a slow query/pipeline.
+  - Existing index definitions and their usage stats.
+  - Whether the deployment is a single replica set or a sharded cluster.
+
+outputs:
+  - name: schema-or-validator
+    kind: edit
+    description: Document/collection schema (embedding vs. referencing decision) and/or a $jsonSchema validator reflecting version-correct MongoDB features.
+  - name: index-or-pipeline-change
+    kind: edit
+    description: Index definitions (ESR-ordered) or aggregation pipeline changes addressing an observed access pattern or slow op.
+  - name: analysis
+    kind: analysis
+    description: Recommendations (embed/reference, sharding, transactions) with rationale and the version they apply to.
+
+depends_on_skills: []
+# Policy fix (2026-09-09, applied consistently with the solution-architecture
+# fix from the DISC-domain batch): depends_on_skills is reserved for hard
+# composition (invoking another skill as a blocking sub-step of this skill's
+# own execution). The relationship to the generic parent skill(s) above is
+# specialization, already fully captured by the `parents` field -- duplicating
+# it into depends_on_skills was redundant and conflated the two relationship
+# types. Cleared here; parents is the single source of truth for this edge.
+related_skills: [SK-TECH-mongoose, SK-TECH-postgresql, SK-TECH-mysql, SK-DATA-002, SK-DATA-006]
+conflicts_with: []
+# MongoDB is a decision-matrix alternative to relational stores, not a hard
+# mutual exclusion — polyglot persistence (e.g. PostgreSQL + MongoDB for
+# different purposes) is a legitimate pattern in this library.
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+# Tier B: proposing schema/aggregation/index changes is advisory; running
+# mongosh/aggregate/explain or creating indexes needs shell.
+
+grounding: official-docs
+source_references:
+  - url: https://www.mongodb.com/docs/manual/core/document/
+    title: MongoDB Manual — Documents, BSON, _id, dot notation
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/manual/crud/
+    title: MongoDB Manual — CRUD API
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/manual/aggregation/
+    title: MongoDB Manual — Aggregation Framework
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/manual/core/wiredtiger/
+    title: MongoDB Manual — WiredTiger Storage Engine
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/manual/core/replica-set-architectures/
+    title: MongoDB Manual — Replica Set Architectures
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/manual/sharding/
+    title: MongoDB Manual — Sharding
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/manual/applications/indexes/
+    title: MongoDB Manual — Indexing Strategies (ESR rule)
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/manual/data-modeling/design-patterns/
+    title: MongoDB Manual — Schema Design Patterns
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/manual/data-modeling/design-antipatterns/
+    title: MongoDB Manual — Schema Design Anti-Patterns
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/manual/data-modeling/schema-validation/specify-json-schema/
+    title: MongoDB Manual — $jsonSchema Validation
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/manual/core/transactions/
+    title: MongoDB Manual — Multi-Document ACID Transactions
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/manual/security/
+    title: MongoDB Manual — Security Overview
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/manual/administration/security-checklist/
+    title: MongoDB Manual — Production Security Checklist
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/drivers/client-libraries-best-practices/
+    title: MongoDB Drivers — Client Library Security Best Practices
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/manual/administration/production-notes/
+    title: MongoDB Manual — Production Notes (OS, hardware, Transparent Hugepages)
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/manual/administration/analyzing-mongodb-performance/
+    title: MongoDB Manual — Analyzing MongoDB Performance
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/manual/reference/limits/
+    title: MongoDB Manual — Limits and Thresholds
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/manual/tutorial/upgrade-revision/
+    title: MongoDB Manual — Upgrade a Deployment / featureCompatibilityVersion
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/manual/reference/versioning/
+    title: MongoDB Manual — Release Versioning
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/legal/support-policy/lifecycles
+    title: MongoDB — Software Lifecycle Schedules (EOL table, driver-compatibility guarantee)
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/manual/tutorial/deploy-replica-set-for-testing/
+    title: MongoDB Manual — Deploy a Replica Set for Testing/Development
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+  - url: https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-docker/
+    title: MongoDB Atlas CLI — Deploy a Local Atlas Environment with Docker
+    via: research/technologies/mongodb.md
+    retrieved: "2026-09-09"
+
+covered_versions:
+  mongodb: ">=7.0 <=8.3"
+version_sensitive_claims:
+  - claim: MongoDB 5.0+ requires AVX CPU instruction-set support (Intel Haswell+ / AMD Bulldozer+ / ARMv8.2-A+).
+    applies_to: ">=5.0"
+    source_ref: research/knowledge-maps/version-matrix.md (MongoDB section)
+  - claim: MongoDB is incompatible with Linux kernel 6.19–7.0.13 (TCMalloc incompatibility causing crashes, across all package forms including Docker images); fix is upgrading to kernel 7.0.14+.
+    applies_to: "all currently-supported MongoDB versions running on kernel 6.19–7.0.13"
+    source_ref: research/knowledge-maps/version-matrix.md (MongoDB section)
+  - claim: Multi-document ACID transactions are available on replica sets since 4.0 and on sharded clusters since 4.2.
+    applies_to: ">=4.0 (replica sets); >=4.2 (sharded clusters)"
+    source_ref: research/knowledge-maps/version-matrix.md (MongoDB section)
+  - claim: featureCompatibilityVersion (FCV) must be fully raised to the current version before upgrading binaries to a new major version; restarting with a newer binary before FCV finishes upgrading can crash nodes.
+    applies_to: "all major-version upgrades"
+    source_ref: research/knowledge-maps/version-matrix.md (MongoDB section)
+  - claim: Drivers released more than 3 years after a server version's EOL date will not be compatible with that server version.
+    applies_to: "all versions"
+    source_ref: research/knowledge-maps/version-matrix.md (MongoDB section)
+  - claim: Transparent Hugepages should be enabled as of MongoDB 8.0+, but disabled on MongoDB 7.0 and earlier.
+    applies_to: "8.0+ (enable); <=7.0 (disable)"
+    source_ref: research/knowledge-maps/version-matrix.md (MongoDB section)
+  - claim: Field names may contain dots (.) and dollar signs ($), with restrictions, as of MongoDB 5.0.
+    applies_to: ">=5.0"
+    source_ref: research/knowledge-maps/version-matrix.md (MongoDB section)
+  - claim: As of MongoDB 8.3, DDL operations and applyOps run only on mongos for all sharded clusters (tightening a restriction already introduced in 8.0).
+    applies_to: ">=8.3"
+    source_ref: research/knowledge-maps/version-matrix.md (MongoDB section)
+  - claim: Since MongoDB 8.2, minor releases (8.2, 8.3, …) are production-suitable but may not support Atlas Live Migration/mongosync; upgrades through minor releases must be sequential, no skipping.
+    applies_to: ">=8.2"
+    source_ref: research/knowledge-maps/version-matrix.md (MongoDB section)
+  - claim: A dynamic algorithm auto-tunes storage-engine concurrent-transaction tickets (capped at 128 read / 128 write) as of MongoDB 7.0.
+    applies_to: ">=7.0"
+    source_ref: research/technologies/mongodb.md (§2 Architecture, WiredTiger)
+last_verified: "2026-09-09"
+reverify_triggers:
+  - A new MongoDB major release reaches General Availability (e.g. 9.0 GA — unconfirmed as of this skill's research date).
+  - Any change to the minor-release (8.2+) production-suitability or Atlas Live Migration/mongosync support matrix.
+  - Any change to the FCV upgrade mechanics or direct-to-shard DDL restrictions in official docs.
+  - A new documented schema anti-pattern or design pattern added to MongoDB's official data-modeling docs.
+
+owned_knowledge:
+  - MongoDB document-model API specifics (BSON, _id, dot notation, document/field limits)
+  - MongoDB aggregation pipeline mechanics and stage limits
+  - MongoDB sharding and replica-set architecture, and the ESR indexing rule
+  - MongoDB version-specific upgrade/FCV mechanics and breaking-change history
+  # Generic embedding-vs-referencing/store-shape reasoning is owned by SK-DATA-001
+  # and referenced, not restated, here.
+decision_framework_present: true
+
+failure_handling:
+  - If the MongoDB major version and deployment form (self-managed vs. Atlas) cannot be determined, ask for them or state the version the guidance assumes — never assume "latest" silently (VA-3).
+  - If shell is unavailable/denied, degrade to advisory schema/pipeline/index output and say that indexes, aggregation, or explain() were not actually run.
+  - If the underlying store-shape decision (document vs. relational) is still open, hand off to SK-DATA-001 rather than assuming MongoDB is already the right choice.
+
+escalation:
+  - A sharding-topology decision, or moving a $jsonSchema validationAction from warn to error on a populated collection, requires explicit user confirmation before being treated as decided (defer to SK-DATA-006 rollout discipline).
+  - Raising FCV as part of a major-version upgrade removes the easy downgrade path within that major — confirm with the user before doing so.
+  - A change to authentication/authorization configuration (enabling/relaxing RBAC) on a production deployment requires explicit confirmation.
+
+verification:
+  - Compound indexes follow the ESR rule (Equality, Sort, Range) unless deliberately deviated from, with a stated reason.
+  - The embedding-vs-referencing choice is justified by the access pattern and by MongoDB's own limits (16 MiB document size, unbounded-array anti-pattern), not chosen by default.
+  - Any version-gated claim is tagged with the range it holds for.
+  - For a schema-validation change, a staged rollout path exists (warn before error) rather than a hard cutover on a populated collection.
+  - A proposed transaction is justified against MongoDB's own guidance to prefer denormalized/embedded design over multi-document transactions where feasible.
+  - A compound index's actual effectiveness is confirmed via `explain()` run against a representative query, not assumed from the ESR ordering alone.
+
+evaluation_criteria:
+  - For a seeded access pattern, proposes embed vs. reference per MongoDB's own documented design patterns (Computed, Bucket/Group, Polymorphic, Schema Versioning, Archive, Single Collection), not a guess.
+  - Flags excessive cross-collection $lookup as a denormalization signal when the seeded pipeline exhibits it, per MongoDB's documented anti-patterns.
+  - Orders a seeded compound index per the ESR rule and explains the ordering.
+  - Any claim about a version-gated MongoDB feature (FCV, sharding DDL routing, Transparent Hugepages guidance, AVX requirement, minor-release sequencing) is correct for the stated MongoDB version.
+  - Does not restate the generic schema-design/store-shape method owned by SK-DATA-001 (QR-2); references it instead.
+
+adapter_hints:
+  claude-code:
+    allowed_tools: [Bash, Read, Edit]   # for running mongosh/aggregate/explain/createIndex; abstract shell → CC tools
+  cursor:
+    paths: ["**/*.js", "**/*.ts", "**/models/**", "**/schemas/**"]
+  vscode:
+    argument_hint: "<task, e.g. 'design the schema for this aggregate' or 'add a compound index for this query'>"

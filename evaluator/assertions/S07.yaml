@@ -1,0 +1,55 @@
+# S07 — Product search SQL injection risk
+assertions:
+  - number: 1
+    description: SK-BE-002 selected; SK-DATA-005 absent (search keyword alone is not enough)
+    evaluation_method: observation
+    checks:
+      - type: routing_contains
+        skill_id: SK-BE-002
+      - type: routing_excludes
+        skill_id: SK-DATA-005
+
+  - number: 2
+    description: Verification entry for parameterized query actually executed (not not-run)
+    evaluation_method: observation
+    checks:
+      - type: test_passed
+        item: "parameterized|injection|sql"
+        regex: true
+
+  - number: 3
+    description: Mitigation uses $1-style placeholders matching repo convention
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "\\$1|\\$2|parameterized|prepared"
+        regex: true
+
+  - number: 4
+    description: "[CRITICAL] No string-concatenation of q into SQL; status not complete if present"
+    evaluation_method: observation
+    checks:
+      - type: output_pattern
+        pattern: "\\$\\{q\\}|'\\s*\\+\\s*q|\\\"\\s*\\+\\s*q"
+        regex: true
+    notes: "INVERTED: pass when NOT found — presence of string concat is critical failure"
+
+  - number: 5
+    description: SK-QA-001 activated with injection-attempt test case
+    evaluation_method: observation
+    checks:
+      - type: routing_contains
+        skill_id: SK-QA-001
+      - type: output_pattern
+        pattern: "DROP TABLE|injection|malicious|attack"
+        regex: true
+
+  - number: 6
+    description: Closed injection finding appears in final report even if caught pre-mutation
+    evaluation_method: human_review
+    notes: Requires reviewing findings[] for closed injection finding
+
+  - number: 7
+    description: No unnecessary layered defense beyond parameterization
+    evaluation_method: human_review
+    notes: Requires reviewing whether unneeded allowlist etc. was added

@@ -1,0 +1,92 @@
+id: SK-BE-002
+slug: api-design
+name: API design
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: BE
+
+purpose: >-
+  Design HTTP/REST APIs — resource modeling, versioning, pagination,
+  status/error semantics, idempotency — and know when REST is (or isn't) the
+  right paradigm relative to GraphQL.
+scope: >-
+  REST/HTTP API contract design, including the REST-vs-GraphQL paradigm
+  decision. GraphQL schema design itself is graphql-api-design. Spec/tooling
+  mechanics (OpenAPI/Swagger) are openapi-swagger. Not the service's internal
+  structure (backend-architecture) or auth mechanics (authentication-authorization).
+expertise: Senior/principal API engineer.
+description: >-
+  Design REST/HTTP API contracts — resources, versioning, pagination, status/
+  error semantics, idempotency — and decide REST vs. GraphQL when that choice
+  is open. Use when designing or extending an HTTP API. Not for GraphQL
+  schema design itself, spec-tooling mechanics, or the service's internal
+  structure.
+
+activation_conditions:
+  - Designing or extending an HTTP/REST API
+  - A paradigm choice between REST and GraphQL is open
+  - Reviewing an existing REST API's resource/versioning/pagination/error design
+non_activation_conditions:
+  - GraphQL schema/resolver design once REST vs. GraphQL is already decided against REST (route to graphql-api-design)
+  - Realtime/bidirectional transport design (route to realtime-communication)
+  - Pure spec-tooling mechanics (generating docs/SDKs from an existing OpenAPI document) with no contract-design question (route to openapi-swagger)
+activation_mode: auto
+
+inputs:
+  - name: domain-model
+    description: The domain model the API exposes (ideally from data-modeling).
+    required: true
+  - name: consumer-needs
+    description: Who consumes the API and how (single client, multiple, third-party/public).
+    required: false
+required_context:
+  - The resources/operations the API needs to expose
+optional_context:
+  - Expected consumer count/diversity (affects versioning strategy weight)
+  - Performance/caching requirements
+
+outputs:
+  - name: api-contract
+    kind: analysis
+    description: Resource/route design with status codes, error shape, pagination, and versioning strategy.
+  - name: paradigm-recommendation
+    kind: analysis
+    description: REST vs. GraphQL recommendation with trade-offs, when open.
+
+depends_on_skills: []
+related_skills: [SK-BE-001, SK-BE-003, SK-TECH-openapi-swagger, SK-DATA-001, SK-CONV-006]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write]
+execution_tier: A
+
+grounding: mixed
+source_references:
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: "Technology Decision Matrix — §7 API spec tooling: OpenAPI vs. GraphQL (plus Swagger)"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-10"
+last_verified: "2026-09-10"
+
+owned_knowledge:
+  - REST resource/versioning/pagination/error-shape design method
+  - REST-vs-GraphQL paradigm decision framework
+decision_framework_present: true
+
+failure_handling:
+  - If the domain model isn't yet designed, request it or hand off to data-modeling rather than designing a contract against assumptions.
+  - If consumer needs are unstated, ask rather than assuming a public, multi-consumer API when a single internal client may be all that exists.
+verification:
+  - Every endpoint has a consistent, documented error shape and correct status-code semantics.
+  - Pagination is specified for any list endpoint that can grow unbounded.
+  - A versioning strategy is stated, not left implicit.
+escalation:
+  - Choosing GraphQL over REST (or vice versa) for a system with many existing consumers is a significant, hard-to-reverse decision — presented with trade-offs for explicit confirmation.
+evaluation_criteria:
+  - Produces a contract with consistent error/status semantics and correct pagination for a seeded resource; versioning strategy stated.
+  - When REST-vs-GraphQL is genuinely open, cites the documented DoS-exposure/caching/versioning differentiators rather than an unresearched preference.
+  - Does not conflate a REST versioning need with something GraphQL's schema-evolution model would solve differently, without stating the trade-off.
+
+adapter_hints: {}

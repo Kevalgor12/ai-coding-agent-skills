@@ -1,0 +1,98 @@
+id: SK-DATA-002
+slug: orm-integration
+name: ORM integration
+spec_version: "1.0"
+skill_version: "0.1.0"
+kind: generic
+layer: 3
+domain: DATA
+
+purpose: >-
+  Use an ORM/ODM correctly and safely regardless of which one — relation
+  modeling, N+1 avoidance, transaction handling, and knowing when to drop to
+  raw SQL — and choose the right ORM/ODM for the job when that choice is open.
+scope: >-
+  Tech-neutral ORM/ODM usage patterns and the ORM-selection decision.
+  Specialized by the Drizzle/Prisma/TypeORM/Mongoose technology skills, which
+  carry the concrete, version-correct API detail. Not schema design itself
+  (data-modeling) and not the mechanics of safely migrating a populated
+  database (data-migration).
+expertise: Senior engineer who has shipped and debugged production systems on more than one ORM.
+description: >-
+  Model relations through an ORM/ODM, avoid N+1 and other ORM pitfalls, handle
+  transactions correctly, and choose between Mongoose/TypeORM/Prisma/Drizzle
+  when that choice is open. Use when working through an ORM/ODM. Not for
+  schema design itself (data-modeling), not for raw-SQL-only work with no ORM,
+  and not for migration mechanics (data-migration).
+
+activation_conditions:
+  - Code is being written or reviewed against an ORM/ODM (Mongoose/TypeORM/Prisma/Drizzle or similar)
+  - An ORM/ODM choice is open and needs a recommendation
+  - N+1 queries, relation-loading strategy, or ORM-mediated transactions are in question
+non_activation_conditions:
+  - No ORM is in use and the work is raw SQL / a direct driver
+  - The schema itself is what's being designed, with no ORM-mapping question yet (route to data-modeling)
+  - The task is authoring/running a migration once the ORM/schema choice is settled (route to data-migration)
+activation_mode: auto
+
+inputs:
+  - name: task
+    description: The ORM-mediated task (model relations, fix an N+1, choose an ORM, handle a transaction).
+    required: true
+  - name: schema
+    description: The data model being mapped, if already designed.
+    required: false
+required_context:
+  - Which database/store family is in use (SQL vs. MongoDB) — this determines which ORMs are even eligible
+optional_context:
+  - Existing ORM already in use in the codebase
+  - Performance/edge-runtime constraints relevant to ORM choice
+
+outputs:
+  - name: orm-choice
+    kind: analysis
+    description: The recommended ORM/ODM with trade-offs, when the choice is open.
+  - name: relation-mapping
+    kind: edit
+    description: Correctly modeled relations avoiding N+1.
+  - name: transaction-handling
+    kind: edit
+    description: Correct transaction/atomicity handling through the ORM.
+
+depends_on_skills: []
+related_skills: [SK-DATA-001, SK-DATA-006]
+conflicts_with: []
+
+required_capabilities: [file-read, file-write, shell]
+execution_tier: B
+
+grounding: mixed
+source_references:
+  - url: research/knowledge-maps/technology-decision-matrix.md
+    title: "Technology Decision Matrix — §1 ORM: Mongoose vs. TypeORM vs. Prisma vs. Drizzle ORM"
+    via: research/knowledge-maps/technology-decision-matrix.md
+    retrieved: "2026-09-09"
+last_verified: "2026-09-09"
+
+owned_knowledge:
+  - ORM/ODM selection decision framework
+  - Cross-ORM N+1 mitigation and transaction-handling method
+decision_framework_present: true
+
+failure_handling:
+  - If the database/store family isn't yet known, ask before recommending an ORM — Mongoose is MongoDB-only; the other three target SQL, so the store choice gates the ORM choice.
+  - If the codebase already has an ORM in place, work within it rather than proposing a switch unless the user asks for one.
+verification:
+  - No N+1 query pattern is introduced by the relation-loading strategy chosen.
+  - A multi-step write that must be atomic is wrapped in the ORM's transaction mechanism, not left as separate calls.
+  - Any raw-SQL escape hatch used is parameterized, never string-concatenated.
+  - The relation-loading strategy is confirmed by actually running the query against a seeded dataset and counting the executed statements (a query log or APM trace), not inferred from reading the ORM call alone.
+escalation:
+  - Recommending a switch away from the codebase's existing ORM is a significant, hard-to-reverse decision — surfaced with trade-offs for explicit confirmation, not applied unilaterally.
+evaluation_criteria:
+  - On a seeded nested-relation query, produces an N+1-free access pattern appropriate to the ORM in use.
+  - Given an open ORM choice with a known store family, recommends from the technology decision matrix's comparison, not from unresearched preference.
+  - Correctly identifies when a task needs to drop to raw SQL (an ORM limitation) rather than forcing an awkward ORM-only solution.
+  - Does not recommend Mongoose for a SQL store, or a SQL-targeting ORM for MongoDB, without flagging the mismatch.
+
+adapter_hints: {}
